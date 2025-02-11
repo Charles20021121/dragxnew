@@ -1,0 +1,61 @@
+.fade_in_bck {
+  animation: fade-in-bck 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@keyframes fade-in-bck {
+  0% {
+    transform: translateZ(80px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateZ(0);
+    opacity: 1;
+  }
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.ImgScalling:hover {
+  transform: scale(1.05);
+}
+
+.productCard {
+  position: relative;
+  transition: transform 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.productCard:hover {
+  transform: translateY(-5px);
+}
+
+.productOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.productTitle {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  color: white;
+}
+
+.dxBrand {
+  color: #9FE870;
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+} 
