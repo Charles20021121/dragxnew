@@ -35,8 +35,6 @@ export default function GalleryCategory() {
 
   return (
     <div className="min-h-screen">
-
-      
       <GalleryCategoryPage 
         title={category.toUpperCase()}
         products={products.map(item => ({

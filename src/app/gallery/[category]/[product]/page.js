@@ -141,7 +141,7 @@ export default function GalleryProduct() {
               <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
             </a>
             <a
-              href="https://wa.me/+60162XX0000"
+              href="https://wa.me/60192776056?text=Hi Dragx, Can you recommend a product that suits my needs?"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#709c44] text-white text-xs font-bold px-6 py-1.5 hover:bg-[#648c3d] transition-colors duration-300 relative"
@@ -303,7 +303,7 @@ export default function GalleryProduct() {
                 <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
               </a>
               <a
-                href="https://wa.me/+60162XX0000"
+                href="https://wa.me/60192776056?text=Hi Dragx, Can you recommend a product that suits my needs?"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 bg-[#709c44] text-white text-xs font-bold py-1.5 text-center hover:bg-[#648c3d] transition-colors duration-300 relative"

@@ -65,6 +65,86 @@ export default function GalleryCategoryPage({
     return <LoadingSpinner />;
   }
 
+  // 如果沒有產品，顯示空狀態
+  if (!products || products.length === 0) {
+    return (
+      <main className="min-h-screen bg-[#f8f4ec]">
+        {/* Breadcrumb */}
+        <nav className="py-4 px-5">
+          <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
+            <li>
+              <Link href="/" className="text-black hover:text-[#1c5434]">
+                Home
+              </Link>
+            </li>
+            <span>/</span>
+            <li>
+              <Link href="/gallery" className="text-black hover:text-[#1c5434]">
+                Gallery
+              </Link>
+            </li>
+            <span>/</span>
+            <li className="text-black capitalize">
+              {categoryPath}
+            </li>
+          </ol>
+        </nav>
+
+        <div className="px-5">
+          {/* Title Section */}
+          <div className="mb-8">
+            <motion.h2 
+              className="text-[#023f1b] font-bold text-[clamp(18px,2vw,24px)] uppercase mb-5"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              {title}
+            </motion.h2>
+            <motion.div 
+              className="h-[1px] bg-[#023f1b] w-full opacity-50"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              style={{ transformOrigin: 'left' }}
+            />
+          </div>
+
+          {/* Empty State */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center justify-center py-20"
+          >
+            <div className="w-24 h-24 mb-6 text-gray-300">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+                className="w-full h-full"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" 
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              No Images Yet
+            </h3>
+            <p className="text-gray-500 text-center max-w-md">
+              There are currently no images in this gallery. Please check back later for updates.
+            </p>
+          </motion.div>
+        </div>
+      </main>
+    );
+  }
+
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', page);
