@@ -9,7 +9,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import LoadingSpinner from './LoadingSpinner';
 
-export default function ProductDetail({ product }) {
+export default function ProductDetail({ product, isAdmin, onEdit }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [relatedImages, setRelatedImages] = useState([
@@ -31,17 +31,25 @@ export default function ProductDetail({ product }) {
         
         // 找到所有相同 same 值的產品圖片
         const sameProducts = products.filter(p => 
-          p.same === product.same && p.id !== product.id
+          p.same === product.same
         );
 
-        // 設置所有圖片（主圖 + 相關圖片）
-        const allImages = [
-          { src: product.image, alt: product.name },
-          ...sameProducts.map(p => ({
-            src: p.image,
-            alt: p.name || `Related product image ${p.id}`
-          }))
-        ];
+        
+
+        // 按日期排序（較早的日期排在前面）
+        const sortedProducts = sameProducts.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateA - dateB;
+        });
+
+        
+
+        // 設置所有圖片
+        const allImages = sortedProducts.map(p => ({
+          src: p.image,
+          alt: p.name || `Product image ${p.id}`
+        }));
 
         setRelatedImages(allImages);
         setLoading(false);
@@ -54,81 +62,46 @@ export default function ProductDetail({ product }) {
     fetchRelatedImages();
   }, [product]);
 
-  const handleScroll = (direction) => {
-    if (sliderRef.current) {
-      const scrollAmount = 300;
-      sliderRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  // 修改拖拽相關的處理函數
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.type === 'mousedown' ? e.pageX : e.touches[0].pageX);
-    setScrollLeft(sliderRef.current.scrollLeft);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.type === 'mousemove' ? e.pageX : e.touches[0].pageX;
-    const walk = (x - startX); // 減小滾動速度
-    sliderRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  // 滑動處理函數
-  const handleDragStart = (e) => {
-    setIsDragging(true);
-    const pageX = 'touches' in e ? e.touches[0].pageX : e.pageX;
-    setStartX(pageX - sliderRef.current.offsetLeft);
-    setScrollLeft(sliderRef.current.scrollLeft);
-  };
-
-  const handleDragEnd = () => {
-    setIsDragging(false);
-  };
-
-  const handleDragMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const pageX = 'touches' in e ? e.touches[0].pageX : e.pageX;
-    const x = pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX);
-    sliderRef.current.scrollLeft = scrollLeft - walk;
-  };
 
   if (loading) {
     return <LoadingSpinner />;
   }
 
   return (
-    <div className="">
-      <div className="bg-[#f8f4ec] px-[5%]">
+    <div className="min-h-screen bg-[#f8f4ec] py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 添加編輯按鈕 */}
+        {isAdmin && (
+          <div className="fixed bottom-8 right-8 z-50">
+            <button
+              onClick={onEdit}
+              className="bg-[#1c5434] hover:bg-[#143a25] text-white p-4 rounded-full shadow-lg flex items-center gap-2 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </button>
+          </div>
+        )}
+
         {/* Breadcrumb */}
         <nav className="py-2">
           <ol className="flex items-center gap-2 text-xs">
             <li>
-              <Link href="/" className="text-black hover:text-[#1c5434]">
-                Home
+              <Link href={isAdmin ? "/admin" : "/"} className="text-black hover:text-[#1c5434]">
+                {isAdmin ? "Admin" : "Home"}
               </Link>
             </li>
             <span>/</span>
             <li>
-              <Link href="/products" className="text-black hover:text-[#1c5434]">
+              <Link href={isAdmin ? "/admin/products" : "/products"} className="text-black hover:text-[#1c5434]">
                 Products
               </Link>
             </li>
             <span>/</span>
             <li>
               <Link
-                href={`/products/${product.categories}`}
+                href={isAdmin ? `/admin/products/${product.categories}` :   `/products/${product.categories}`}
                 className="text-black hover:text-[#1c5434] capitalize"
               >
                 {product.categories}
@@ -373,6 +346,25 @@ export default function ProductDetail({ product }) {
             </a>
           </div>
         </div>
+      </div>
+
+      {/* 產品詳情 */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* ... 其他詳情保持不變 ... */}
+
+        {/* 只在特定類別顯示 filter 和 filter1 */}
+        {(product.categories.toLowerCase() === 'contidecoder' || 
+          product.categories.toLowerCase() === 'androidplayer') && (
+          <div className="space-y-4">
+            {product.categories.toLowerCase() === 'contidecoder' && product.filter && (
+              <div>
+                <h3 className="text-lg font-semibold">Car Brand</h3>
+                <p>{product.filter.charAt(0).toUpperCase() + product.filter.slice(1)}</p>
+              </div>
+            )}
+
+          </div>
+        )}
       </div>
     </div>
   );

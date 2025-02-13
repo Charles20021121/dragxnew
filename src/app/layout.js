@@ -10,6 +10,12 @@ export const metadata = {
   description: "Car Accessories",
 };
 
+// 添加 Cloudinary 配置到 metadata
+export const cloudinaryConfig = {
+  cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  uploadPreset: "newdragx"
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

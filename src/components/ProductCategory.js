@@ -19,11 +19,42 @@ const categoryVariants = {
   }
 };
 
-export default function ProductCategory({ name, link, products, index }) {
+export default function ProductCategory({ name, link, products, index ,isAdmin}) {
+  console.log(name);
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1
   });
+
+  // 格式化類別名稱的函數
+  const formatCategoryName = (name) => {
+    if (name.toLowerCase() === 'androidplayer') {
+      return 'ANDROID PLAYER';
+    }
+    if (name.toLowerCase() === 'alphardvellfire') {
+      return 'ALPHARD/VELLFIRE';
+    }
+    if (name.toLowerCase() === 'ambientlight') {
+      return 'AMBIENT LIGHT';
+    }
+    if (name.toLowerCase() === '360camera') {
+      return '360 CAMERA';
+    }
+    if (name.toLowerCase() === 'powerboot') {
+      return 'POWER BOOT';
+    }
+    if (name.toLowerCase() === 'contidecoder') {
+      return 'CONTI DECODER';
+    }
+    if (name.toLowerCase() === 'mercedes') {
+      return 'MERCEDES-BENZ';
+    }
+    if (name.toLowerCase() === 'bmw') {
+      return 'BMW';
+    }
+    
+    return name.toUpperCase();
+  };
 
   // 過濾出主圖（Id 和 same 相同的產品）
   const mainProducts = products.filter(product => 
@@ -51,7 +82,7 @@ export default function ProductCategory({ name, link, products, index }) {
               className="no-underline group"
             >
               <h2 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(12px,2vw,32px)] relative">
-                {name}
+                {formatCategoryName(name)}
                 <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-[#1c5434] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
               </h2>
             </Link>
@@ -80,7 +111,7 @@ export default function ProductCategory({ name, link, products, index }) {
               >
                 <div className="aspect-square relative rounded-lg overflow-hidden bg-gray-50">
                   <Link 
-                    href={`/products/${product.categories}/${product.slug}`}
+                    href={isAdmin ? `/admin/products/${product.categories}/${product.slug}` : `/products/${product.categories}/${product.slug}`}
                     className="block"
                   >
                     {inView && (

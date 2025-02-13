@@ -1,0 +1,655 @@
+"use client"
+import { useParams, useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { CldImage } from 'next-cloudinary'
+import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
+import LoadingSpinner from '@/components/LoadingSpinner'
+
+export default function GalleryProductPage() {
+  const params = useParams()
+  const router = useRouter()
+  const [product, setProduct] = useState(null)
+  const [relatedImages, setRelatedImages] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [showEditOffcanvas, setShowEditOffcanvas] = useState(false)
+  const [showAddImageOffcanvas, setShowAddImageOffcanvas] = useState(false)
+  const [editFormData, setEditFormData] = useState({
+    Name: '',
+    buy: '',
+    Specifications: '',
+    description: ''
+  })
+  const [selectedNewImages, setSelectedNewImages] = useState([])
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [isUploading, setIsUploading] = useState(false)
+
+  const fetchData = async () => {
+    try {
+      // 獲取主產品數據
+      const productRes = await fetch(`/api/admin/gallery/${params.category}/${params.product}`)
+      if (!productRes.ok) throw new Error('Network response was not ok')
+      const productData = await productRes.json()
+      setProduct(productData)
+
+      // 獲取相同 same 值的所有產品
+      const imagesRes = await fetch(`/api/admin/gallery/related?same=${productData.same}`)
+      if (!imagesRes.ok) throw new Error('Network response was not ok')
+      const imagesData = await imagesRes.json()
+      const validImages = imagesData.filter(img => img.Url && img.Url.trim() !== '')
+      setRelatedImages(validImages)
+      
+      setLoading(false)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (params.category && params.product) {
+      fetchData()
+    }
+  }, [params.category, params.product])
+
+  useEffect(() => {
+    if (product) {
+      setEditFormData({
+        Name: product.Name || '',
+        buy: product.buy || '',
+        Specifications: product.Specifications || '',
+        description: product.description || ''
+      })
+    }
+  }, [product])
+
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target
+    setEditFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleNewImageChange = (e) => {
+    const files = Array.from(e.target.files)
+    setSelectedNewImages(files)
+  }
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch(`/api/admin/gallery/${params.category}/${params.product}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editFormData)
+      })
+
+      const data = await response.json()
+      
+      if (response.ok) {
+        // 生成新的 URL slug
+        const newSlug = editFormData.Name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        
+        // 關閉編輯面板
+        setShowEditOffcanvas(false)
+        
+        // 重新導向到新的 URL
+        router.push(`/admin/gallery/${params.category}/${newSlug}`)
+      } else {
+        throw new Error(data.message || 'Failed to update')
+      }
+    } catch (error) {
+      console.error('Error updating product:', error)
+      alert(error.message || 'Failed to update product')
+    }
+  }
+
+  const handleAddImages = async () => {
+    if (!selectedNewImages.length) return;
+    setIsUploading(true)
+    setUploadProgress(0)
+
+    try {
+      const totalFiles = selectedNewImages.length
+      let completedFiles = 0
+
+      // 並行上傳所有圖片
+      const uploadPromises = selectedNewImages.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'newdragx');
+
+        const uploadRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          {
+            method: 'POST',
+            body: formData
+          }
+        );
+
+        if (!uploadRes.ok) throw new Error('Failed to upload image');
+        const uploadData = await uploadRes.json();
+
+        // 創建新的圖片記錄
+        const createResponse = await fetch('/api/admin/gallery', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            categories: params.category,
+            Url: uploadData.secure_url,
+            publicId: uploadData.public_id,
+            same: product.same,
+            date: new Date().toISOString().split('T')[0]
+          })
+        });
+
+        if (!createResponse.ok) throw new Error('Failed to create image');
+
+        completedFiles++;
+        setUploadProgress((completedFiles / totalFiles) * 100);
+      });
+
+      await Promise.all(uploadPromises);
+
+      // 重新獲取圖片列表
+      await fetchData();
+      setShowAddImageOffcanvas(false);
+      setSelectedNewImages([]);
+      setIsUploading(false);
+      alert('All images uploaded successfully!');
+    } catch (error) {
+      console.error('Error adding images:', error);
+      alert(error.message || 'Failed to upload images');
+      setIsUploading(false);
+    }
+  };
+
+  if (loading) return <LoadingSpinner />
+  if (!product || !product.Url) return null
+
+  // 確保主圖有有效的 URL
+  const mainImage = product
+
+  // 所有相關圖片按日期排序
+  const allImages = relatedImages
+    .filter(img => img.Id !== product.Id)
+    .sort((a, b) => {
+      const dateA = new Date(a.date || 0)
+      const dateB = new Date(b.date || 0)
+      return dateA - dateB
+    })
+
+  // 圖片模態框組件
+  const ImageModal = ({ image, onClose }) => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.5 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0.5 }}
+        className="relative w-[90vw] h-[90vh]"
+        onClick={e => e.stopPropagation()}
+      >
+        <CldImage
+          src={image.Url}
+          alt={image.Name || 'Gallery Image'}
+          fill
+          className="object-contain"
+          sizes="90vw"
+        />
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white p-2 rounded-full bg-black/50 hover:bg-black/70"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </motion.div>
+    </motion.div>
+  )
+
+  return (
+    <div className="bg-[#f8f4ec]">
+      <div style={{ backgroundColor: '#f8f4ec', padding: '0 5% 0 5%' }}>
+        {/* Breadcrumb */}
+        <nav className="py-2 px-5">
+          <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
+            <li>
+              <Link href="/admin" className="text-black hover:text-[#1c5434]">
+                Admin
+              </Link>
+            </li>
+            <span>/</span>
+            <li>
+              <Link href="/admin/gallery" className="text-black hover:text-[#1c5434]">
+                Gallery
+              </Link>
+            </li>
+            <span>/</span>
+            <li>
+              <Link
+                href={`/admin/gallery/${params.category}`}
+                className="text-black hover:text-[#1c5434] capitalize"
+              >
+                {params.category}
+              </Link>
+            </li>
+            <span>/</span>
+            <li className="text-black capitalize truncate">
+              {product.Name}
+            </li>
+          </ol>
+        </nav>
+
+        {/* Product Title & Shop Now Button - Desktop */}
+        <div className="hidden md:flex justify-between items-center py-4 px-5">
+          <h1 className="text-[clamp(12.5px,2vw,25px)] font-bold capitalize w-4/5">
+            {product.Name}
+          </h1>
+
+          <div className="rounded-full flex overflow-hidden">
+            <a
+              href={product.buy}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#88bc04] text-white text-xs font-bold px-6 py-1.5 hover:bg-[#7aa703] transition-colors duration-300 relative"
+            >
+              Shop Now
+              <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
+            </a>
+            <a
+              href="https://wa.me/60192776056?text=Hi Dragx, Can you recommend a product that suits my needs?"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#709c44] text-white text-xs font-bold px-6 py-1.5 hover:bg-[#648c3d] transition-colors duration-300 relative"
+            >
+              Chat Now
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
+            </a>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="pb-5">
+          <div className="bg-white rounded-t-3xl p-5">
+            {/* Desktop Layout */}
+            <div className="hidden md:block">
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {/* Main Image - Left Side */}
+                <motion.div 
+                  className="relative aspect-square cursor-pointer"
+                  onClick={() => setSelectedImage(mainImage)}
+                >
+                  <CldImage
+                    src={mainImage.Url}
+                    alt={mainImage.Name || 'Product Image'}
+                    fill
+                    className="object-cover rounded-lg"
+                    sizes="50vw"
+                  />
+                </motion.div>
+
+                {/* First Four Images - Right Side */}
+                {allImages.length > 0 && (
+                  <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full">
+                    {allImages.slice(0, 4).map((image, index) => (
+                      <motion.div
+                        key={`${image.Id}-${index}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="relative aspect-square cursor-pointer"
+                        onClick={() => setSelectedImage(image)}
+                      >
+                        <CldImage
+                          src={image.Url}
+                          alt={image.Name || 'Product View'}
+                          fill
+                          className="object-cover rounded-lg"
+                          sizes="25vw"
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Remaining Images for Desktop */}
+              {allImages.length > 4 && (
+                <div className="mt-8">
+                  <div className="grid grid-cols-3 gap-4">
+                    {allImages.slice(4).map((image, index) => (
+                      <motion.div
+                        key={`${image.Id}-${index}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="relative aspect-square w-full cursor-pointer"
+                        onClick={() => setSelectedImage(image)}
+                      >
+                        <CldImage
+                          src={image.Url}
+                          alt={image.Name || 'Product View'}
+                          fill
+                          className="object-cover rounded-lg"
+                          sizes="400px"
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Layout */}
+            <div className="md:hidden">
+              <div className="grid grid-cols-2 gap-4">
+                {/* Main Image First */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="relative aspect-square cursor-pointer"
+                  onClick={() => setSelectedImage(mainImage)}
+                >
+                  <CldImage
+                    src={mainImage.Url}
+                    alt={mainImage.Name || 'Product Image'}
+                    fill
+                    className="object-cover rounded-lg"
+                    sizes="33vw"
+                  />
+                </motion.div>
+
+                {/* All Other Images */}
+                {allImages.map((image, index) => (
+                  <motion.div
+                    key={`${image.Id}-${index}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="relative aspect-square cursor-pointer"
+                    onClick={() => setSelectedImage(image)}
+                  >
+                    <CldImage
+                      src={image.Url}
+                      alt={image.Name || 'Product View'}
+                      fill
+                      className="object-cover rounded-lg"
+                      sizes="33vw"
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Admin Floating Buttons */}
+      <div className="fixed bottom-6 right-6 flex flex-col gap-4">
+        {/* Edit Button */}
+        <button
+          onClick={() => setShowEditOffcanvas(true)}
+          className="p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-6 w-6" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
+
+        {/* Add Image Button */}
+        <button
+          onClick={() => setShowAddImageOffcanvas(true)}
+          className="p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Image Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <ImageModal 
+            image={selectedImage} 
+            onClose={() => setSelectedImage(null)} 
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#f8f4ec] shadow-[0_5px_15px_rgba(0,0,0,1)] px-[5%] py-3 z-10">
+        <div className="flex justify-between items-center">
+          <div className="w-3/5">
+            <h2 className="text-[clamp(10px,2vw,20px)] font-bold capitalize truncate">
+              {product.Name}
+            </h2>
+          </div>
+          <div className="w-2/5">
+            <div className="rounded-full flex overflow-hidden">
+              <a
+                href={product.buy}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-[#88bc04] text-white text-xs font-bold py-1.5 text-center hover:bg-[#7aa703] transition-colors duration-300 relative"
+              >
+                Shop Now
+                <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
+              </a>
+              <a
+                href="https://wa.me/60192776056?text=Hi Dragx, Can you recommend a product that suits my needs?"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-[#709c44] text-white text-xs font-bold py-1.5 text-center hover:bg-[#648c3d] transition-colors duration-300 relative"
+              >
+                Chat Now
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Edit Offcanvas */}
+      {showEditOffcanvas && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-hidden">
+          <div className="absolute right-0 top-0 h-full w-full max-w-2xl bg-white flex flex-col">
+            {/* Header */}
+            <div className="bg-[#1c5434] text-white px-6 py-4 flex justify-between items-center flex-shrink-0">
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <h2 className="text-xl font-semibold">Edit Product</h2>
+              </div>
+              <button
+                onClick={() => setShowEditOffcanvas(false)}
+                className="text-white hover:text-gray-200 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Content Area */}
+            <div className="flex-1 overflow-y-auto">
+              <form className="p-6">
+                {/* Basic Information */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Product Name
+                      </label>
+                      <input
+                        type="text"
+                        name="Name"
+                        value={editFormData.Name}
+                        onChange={handleEditInputChange}
+                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1c5434] focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Buy Link
+                      </label>
+                      <input
+                        type="url"
+                        name="buy"
+                        value={editFormData.buy}
+                        onChange={handleEditInputChange}
+                        placeholder="https://example.com"
+                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1c5434] focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+
+            {/* Footer */}
+            <div className="bg-white border-t p-4 flex justify-end gap-3 flex-shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowEditOffcanvas(false)}
+                className="px-6 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleEditSubmit}
+                className="px-6 py-2 bg-[#1c5434] text-white rounded hover:bg-[#143a25] transition-colors flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Image Offcanvas */}
+      {showAddImageOffcanvas && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-hidden">
+          <div className="absolute right-0 top-0 h-full w-full max-w-2xl bg-white flex flex-col">
+            {/* Header */}
+            <div className="bg-[#1c5434] text-white px-6 py-4 flex justify-between items-center">
+              <div className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+                <h2 className="text-xl font-semibold">Add New Images</h2>
+              </div>
+              <button onClick={() => setShowAddImageOffcanvas(false)} className="text-white hover:text-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 flex-1 overflow-y-auto">
+              <div className="space-y-4">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleNewImageChange}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  <label
+                    htmlFor="image-upload"
+                    className="cursor-pointer flex flex-col items-center justify-center gap-2"
+                  >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+                    <span className="text-gray-600">Click to select images</span>
+                  </label>
+                </div>
+
+                {selectedNewImages.length > 0 && (
+                  <div className="mt-4">
+                    <h3 className="font-medium text-gray-900 mb-2">Selected Images ({selectedNewImages.length})</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      {selectedNewImages.map((file, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`Selected ${index + 1}`}
+                            className="w-full h-32 object-cover rounded"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {isUploading && (
+                  <div className="mt-4">
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                      <div
+                        className="bg-[#1c5434] h-2.5 rounded-full transition-all duration-300"
+                        style={{ width: `${uploadProgress}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2 text-center">
+                      Uploading... {Math.round(uploadProgress)}%
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="border-t p-4 flex justify-end gap-3">
+              <button
+                onClick={() => setShowAddImageOffcanvas(false)}
+                className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddImages}
+                disabled={!selectedNewImages.length || isUploading}
+                className={`px-4 py-2 bg-[#1c5434] text-white rounded hover:bg-[#143a25] flex items-center gap-2 ${
+                  (!selectedNewImages.length || isUploading) ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+                Upload Images
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

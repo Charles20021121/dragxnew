@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import LoadingSpinner from '@/components/LoadingSpinner'
 
-export default function GalleryProduct() {
+export default function GalleryProductPage() {
   const params = useParams()
   const [product, setProduct] = useState(null)
   const [relatedImages, setRelatedImages] = useState([])

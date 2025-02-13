@@ -31,6 +31,6 @@ export default function Home() {
       <ProductSection />
       <SpecialistSection />
       <FeaturesSection />
-    </main>
+      </main>
   );
 }

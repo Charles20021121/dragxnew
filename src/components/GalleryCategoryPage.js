@@ -26,11 +26,17 @@ const ITEMS_PER_PAGE = 30;
 export default function GalleryCategoryPage({ 
   title, 
   products,
-  categoryPath 
+  categoryPath,
+  isAdmin,
+  onDelete,
+  isDeleting,
+  onAdd
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page')) || 1;
+  console.log(isAdmin)
+  
 
   // 過濾出主圖（Id 和 same 相同的產品）
   const mainProducts = products.filter(product => 
@@ -69,26 +75,43 @@ export default function GalleryCategoryPage({
   if (!products || products.length === 0) {
     return (
       <main className="min-h-screen bg-[#f8f4ec]">
+                {/* Add Button - Fixed to bottom right */}
+                {isAdmin && onAdd && (
+          <button
+            onClick={onAdd}
+            className="fixed bottom-6 right-6 z-50 p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-6 w-6 transform group-hover:rotate-90 transition-transform duration-300" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+        )}
         {/* Breadcrumb */}
         <nav className="py-4 px-5">
-          <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
-            <li>
-              <Link href="/" className="text-black hover:text-[#1c5434]">
-                Home
-              </Link>
-            </li>
-            <span>/</span>
-            <li>
-              <Link href="/gallery" className="text-black hover:text-[#1c5434]">
-                Gallery
-              </Link>
-            </li>
-            <span>/</span>
-            <li className="text-black capitalize">
-              {categoryPath}
-            </li>
-          </ol>
-        </nav>
+        <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
+          <li>
+            <Link href={isAdmin ? "/admin" : "/"} className="text-black hover:text-[#1c5434]">
+            {isAdmin ? "Admin" : "Home"}
+            </Link>
+          </li>
+          <span>/</span>
+          <li>
+            <Link href={isAdmin ? "/admin/gallery" : "/gallery"} className="text-black hover:text-[#1c5434]">
+              Gallery
+            </Link>
+          </li>
+          <span>/</span>
+          <li className="text-black capitalize">
+            {categoryPath}
+          </li>
+        </ol>
+      </nav>
 
         <div className="px-5">
           {/* Title Section */}
@@ -152,18 +175,18 @@ export default function GalleryCategoryPage({
   };
 
   return (
-    <main className="min-h-screen bg-[#f8f4ec]">
+    <main className="min-h-screen bg-[#f8f4ec] relative pb-20">
       {/* 添加 Breadcrumb */}
       <nav className="py-4 px-5">
         <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
           <li>
-            <Link href="/" className="text-black hover:text-[#1c5434]">
-              Home
+            <Link href={isAdmin ? "/admin" : "/"} className="text-black hover:text-[#1c5434]">
+            {isAdmin ? "Admin" : "Home"}
             </Link>
           </li>
           <span>/</span>
           <li>
-            <Link href="/gallery" className="text-black hover:text-[#1c5434]">
+            <Link href={isAdmin ? "/admin/gallery" : "/gallery"} className="text-black hover:text-[#1c5434]">
               Gallery
             </Link>
           </li>
@@ -196,7 +219,7 @@ export default function GalleryCategoryPage({
 
         {/* Products Grid */}
         <motion.div
-          variants={containerVariants}
+          
           initial="hidden"
           animate="visible"
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
@@ -204,11 +227,40 @@ export default function GalleryCategoryPage({
           {currentProducts.map((product) => (
             <motion.div
               key={product.id}
-              variants={itemVariants}
-              className="flex flex-col"
+              
+              className="flex flex-col relative group"
             >
+              {isAdmin && onDelete && (
+                <button
+                  onClick={() => {
+                    console.log('Product data:', {
+                      id: product.id,
+                      same: product.same,
+                      publicId: product.publicId
+                    })
+                    
+                    if (!product.id || !product.same) {
+                      console.error('Missing required data:', product)
+                      return
+                    }
+                    
+                    try {
+                      onDelete(product.id, product.same, product.publicId)
+                    } catch (error) {
+                      console.error('Error in delete handler:', error)
+                    }
+                  }}
+                  disabled={isDeleting}
+                  className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                </button>
+              )}
+              
               <Link 
-                href={`/gallery/${categoryPath}/${encodeURIComponent((product.name || '').toLowerCase().replace(/\s+/g, '-'))}`}
+                href={isAdmin ? `/admin/gallery/${categoryPath}/${encodeURIComponent((product.name || '').toLowerCase().replace(/\s+/g, '-'))}` : `/gallery/${categoryPath}/${encodeURIComponent((product.name || '').toLowerCase().replace(/\s+/g, '-'))}`}
                 className="group"
               >
                 <div className="relative overflow-hidden rounded-lg">
@@ -233,6 +285,24 @@ export default function GalleryCategoryPage({
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Add Button - Fixed to bottom right */}
+        {isAdmin && onAdd && (
+          <button
+            onClick={onAdd}
+            className="fixed bottom-6 right-6 z-50 p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-6 w-6 transform group-hover:rotate-90 transition-transform duration-300" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+        )}
 
         {/* Pagination */}
         {totalPages > 1 && (
