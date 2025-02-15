@@ -264,7 +264,7 @@ export default function GalleryCategoryPage({
                 className="group"
               >
                 <div className="relative overflow-hidden rounded-lg">
-                  <div className="relative aspect-[4/3]">
+                  <div className="relative aspect-[1/1]">
                     <CldImage
                       src={product.image}
                       alt={`${product.name} - DragX Gallery Image`}

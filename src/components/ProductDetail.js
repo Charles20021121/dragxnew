@@ -68,7 +68,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f4ec] py-8">
+    <div className="min-h-screen bg-[#f8f4ec] ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 添加編輯按鈕 */}
         {isAdmin && (
@@ -85,7 +85,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
         )}
 
         {/* Breadcrumb */}
-        <nav className="py-2">
+        <nav className="py-4">
           <ol className="flex items-center gap-2 text-xs">
             <li>
               <Link href={isAdmin ? "/admin" : "/"} className="text-black hover:text-[#1c5434]">
@@ -241,12 +241,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
 
               {/* Right Side - Product Info */}
               <div className="space-y-8 hidden md:block">
-                {/* Specifications Section */}
-                <div>
-                  <div className="prose max-w-none whitespace-pre-line" 
-                    dangerouslySetInnerHTML={{ __html: product.specifications }} 
-                  />
-                </div>
+ 
 
                 {/* Description Section */}
                 <div>
@@ -257,7 +252,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
               </div>
             </div>
             {/* Divider Line */}
-            <div className="w-full h-[1px] bg-gray-200 my-8" />
+            {relatedImages.length > 4 && <div className="w-full h-[1px] bg-gray-200 my-8" />}
 
             {/* Bottom Extra Images */}
             <div className="mt-8 w-full ">

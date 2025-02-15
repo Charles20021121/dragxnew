@@ -26,26 +26,48 @@ export default function GalleryCategory() {
   const [uploadProgress, setUploadProgress] = useState(0)
   const router = useRouter()
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
     fetchProducts()
   }, [category])
 
-    const fetchProducts = async () => {
-      try {
+  const fetchProducts = async () => {
+    try {
       const response = await fetch(`/api/admin/gallery?category=${category}`)
-        if (!response.ok) throw new Error('Network response was not ok')
-        const data = await response.json()
-        setProducts(data)
-        setLoading(false)
-      } catch (error) {
-        console.error('Error fetching gallery:', error)
-        setLoading(false)
-      }
+      if (!response.ok) throw new Error('Network response was not ok')
+      const data = await response.json()
+      setProducts(data)
+      setLoading(false)
+    } catch (error) {
+      console.error('Error fetching gallery:', error)
+      setLoading(false)
     }
+  }
+
+  const showNotification = (type, message) => {
+    setNotification({ show: true, type, message });
+    setTimeout(() => {
+      setNotification({ show: false, type: '', message: '' });
+    }, 3000);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    // 檢查是否選擇了文件
+    if (!selectedFile) {
+      showNotification('error', 'Please select an image file')
+      return
+    }
+
+    // 檢查產品名稱
+    if (!formData.Name.trim()) {
+      showNotification('error', 'Please enter a product name')
+      return
+    }
+
+    setIsUploading(true)
     setUploadProgress(0)
     
     try {
@@ -77,7 +99,7 @@ export default function GalleryCategory() {
         }
       }
 
-      // 創建產品，使用最新的圖片數據
+      // 創建產品
       const createResponse = await fetch('/api/admin/gallery', {
         method: 'POST',
         headers: {
@@ -92,12 +114,7 @@ export default function GalleryCategory() {
 
       if (!createResponse.ok) throw new Error('Failed to create product')
 
-      // 成功通知
-      setNotification({
-        show: true,
-        type: 'success',
-        message: 'Product created successfully!'
-      })
+      showNotification('success', 'Product created successfully!')
 
       // 重置表單
       setFormData({
@@ -113,22 +130,14 @@ export default function GalleryCategory() {
       setSelectedFile(null)
       setShowOffcanvas(false)
 
-      // 重新獲取產品列表
       fetchProducts()
 
     } catch (error) {
       console.error('Error:', error)
-      setNotification({
-        show: true,
-        type: 'error',
-        message: 'Failed to create product'
-      })
+      showNotification('error', 'Failed to create product')
+    } finally {
+      setIsUploading(false)
     }
-
-    // 3秒後隱藏通知
-    setTimeout(() => {
-      setNotification(prev => ({ ...prev, show: false }))
-    }, 3000)
   }
 
   const handleDelete = async (productId, same, publicId) => {
@@ -136,51 +145,28 @@ export default function GalleryCategory() {
     
     setIsDeleting(true)
     try {
-      const data = { id: productId, same, publicId }
-      const url = `/api/admin/gallery/${category}`
-      console.log('Delete request URL:', url)
-      console.log('Delete request data:', data)
-
-      const response = await fetch(url, {
+      const response = await fetch(`/api/admin/gallery/${category}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({ id: productId, same, publicId })
       })
 
-      // 检查响应状态和类型
-      console.log('Response status:', response.status)
-      console.log('Response type:', response.headers.get('content-type'))
-
-      // 如果响应不是 JSON，记录原始响应
-      if (!response.headers.get('content-type')?.includes('application/json')) {
-        const text = await response.text()
-        console.error('Non-JSON response:', text)
-        throw new Error('Server returned non-JSON response')
-      }
+      if (!response.ok) throw new Error('Failed to delete product')
 
       const result = await response.json()
-      console.log('Delete response:', result)
-
+      
       if (!result.success) {
         throw new Error(result.message || 'Failed to delete product')
       }
 
-      setNotification({
-        show: true,
-        type: 'success',
-        message: 'Product deleted successfully!'
-      })
+      showNotification('success', 'Product deleted successfully!')
 
       fetchProducts()
     } catch (error) {
       console.error('Delete error:', error)
-      setNotification({
-        show: true,
-        type: 'error',
-        message: error.message || 'Failed to delete product'
-      })
+      showNotification('error', error.message || 'Failed to delete product')
     } finally {
       setIsDeleting(false)
     }
@@ -188,9 +174,6 @@ export default function GalleryCategory() {
 
   return (
     <div className="min-h-screen">
-      
-
-
       {/* Gallery Category Page */}
       <GalleryCategoryPage 
         title={category.toUpperCase()}
@@ -235,7 +218,7 @@ export default function GalleryCategory() {
 
             {/* Content Area */}
             <div className="flex-1 overflow-y-auto">
-              <form onSubmit={handleSubmit} className="p-6">
+              <form onSubmit={handleSubmit} className="p-6 h-full flex flex-col">
                 {/* Product Image */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold mb-4">Product Image</h3>
@@ -280,36 +263,76 @@ export default function GalleryCategory() {
                   </div>
                 </div>
 
-
+                {/* Footer */}
+                <div className="mt-auto bg-white border-t p-4 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowOffcanvas(false)}
+                    className="px-6 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-[#1c5434] text-white rounded hover:bg-[#143a25] transition-colors flex items-center gap-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Create Product
+                  </button>
+                </div>
               </form>
             </div>
+          </div>
+        </div>
+      )}
 
-            {/* Footer */}
-            <div className="bg-white border-t p-4 flex justify-end gap-3 flex-shrink-0">
-              <button
-                type="button"
-                onClick={() => setShowOffcanvas(false)}
-                className="px-6 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="px-6 py-2 bg-[#1c5434] text-white rounded hover:bg-[#143a25] transition-colors flex items-center gap-2"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Create Product
-              </button>
+      {/* Upload Loading Overlay */}
+      {isUploading && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <div className="relative">
+              {/* 主要加載圈 */}
+              <div className="w-16 h-16 rounded-full border-4 border-[#1c5434]/20">
+                <div className="w-full h-full rounded-full border-4 border-[#88bc04] border-t-transparent animate-[spin_0.8s_linear_infinite]">
+                </div>
+              </div>
+              {/* 脈衝效果 */}
+              <div className="absolute top-0 left-0 w-full h-full">
+                <div className="w-16 h-16 rounded-full border-4 border-[#88bc04] opacity-0 animate-[ping_1.5s_ease-out_infinite]">
+                </div>
+              </div>
             </div>
+            <p className="mt-4 text-gray-600 font-medium">Uploading product...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Loading Overlay */}
+      {isDeleting && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <div className="relative">
+              {/* 主要加載圈 */}
+              <div className="w-16 h-16 rounded-full border-4 border-[#1c5434]/20">
+                <div className="w-full h-full rounded-full border-4 border-[#88bc04] border-t-transparent animate-[spin_0.8s_linear_infinite]">
+                </div>
+              </div>
+              {/* 脈衝效果 */}
+              <div className="absolute top-0 left-0 w-full h-full">
+                <div className="w-16 h-16 rounded-full border-4 border-[#88bc04] opacity-0 animate-[ping_1.5s_ease-out_infinite]">
+                </div>
+              </div>
+            </div>
+            <p className="mt-4 text-gray-600 font-medium">Deleting product...</p>
           </div>
         </div>
       )}
 
       {/* Notification */}
       {notification.show && (
-        <div className={`fixed bottom-4 right-4 p-4 rounded-md ${
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
           notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
         } text-white`}>
           {notification.message}

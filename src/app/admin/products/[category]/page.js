@@ -28,6 +28,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const router = useRouter()
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
     fetchProducts();
@@ -63,6 +64,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
     e.preventDefault();
     
     try {
+      setIsUploading(true); // 開始上傳時顯示 loading
       let updatedFormData = { ...formData };
 
       // 如果有選擇文件，先上傳圖片
@@ -132,6 +134,9 @@ export default function CategoryProducts({ params: paramsPromise }) {
       console.error('Error creating product:', error);
       showNotification('error', 'Error creating product');
       setUploadProgress(0);
+    }
+    finally {
+      setIsUploading(false); // 結束上傳時隱藏 loading
     }
   };
 
@@ -313,6 +318,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                           type="file"
                           accept="image/*"
                           onChange={(e) => setSelectedFile(e.target.files[0])}
+                          required
                           className="block w-full text-sm text-gray-500
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-full file:border-0
@@ -323,14 +329,39 @@ export default function CategoryProducts({ params: paramsPromise }) {
                         />
 
                         {/* 上傳進度條 */}
-                        {uploadProgress > 0 && (
-                          <div className="w-full bg-gray-200 rounded-full h-2.5">
-                            <div
-                              className="bg-[#1c5434] h-2.5 rounded-full transition-all duration-300"
-                              style={{ width: `${uploadProgress}%` }}
-                            />
-                          </div>
-                        )}
+      {/* Upload Loading Overlay */}
+      {isUploading && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <div className="relative">
+              {/* 主要加載圈 */}
+              <div className="w-16 h-16 rounded-full border-4 border-[#1c5434]/20">
+                <div className="w-full h-full rounded-full border-4 border-[#88bc04] border-t-transparent animate-[spin_0.8s_linear_infinite]">
+                </div>
+              </div>
+              {/* 脈衝效果 */}
+              <div className="absolute top-0 left-0 w-full h-full">
+                <div className="w-16 h-16 rounded-full border-4 border-[#88bc04] opacity-0 animate-[ping_1.5s_ease-out_infinite]">
+                </div>
+              </div>
+            </div>
+            <p className="mt-4 text-gray-600 font-medium">Uploading product...</p>
+            {uploadProgress > 0 && (
+              <div className="w-full mt-4 max-w-[200px]">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-[#88bc04] h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+                <p className="text-sm text-gray-500 text-center mt-2">
+                  {uploadProgress}%
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
                         {/* 預覽已選擇的圖片 */}
                         {selectedFile && (
@@ -364,6 +395,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                     </div>
 
                     {/* Description and Specifications */}
+                    {category.toLowerCase() !== "silence" && (  
                     <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                       <h3 className="font-medium text-gray-900">Description & Specifications</h3>
                       <div className="space-y-4">
@@ -389,6 +421,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                         </div>
                       </div>
                     </div>
+                    )}
 
                     {/* Additional Information */}
                     <div className="bg-gray-50 p-4 rounded-lg space-y-4">
@@ -414,6 +447,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                               value={formData.filter1}
                               onChange={handleChange}
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                              required
                             >
                               <option value="">Select System Type</option>
                               {category.toLowerCase() === 'contidecoder' ? (
@@ -447,6 +481,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                               value={formData.filter}
                               onChange={handleChange}
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                              required
                             >
                               <option value="">Select Car Brand</option>
                               <option value="audi">Audi</option>

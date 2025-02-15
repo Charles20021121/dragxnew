@@ -5,13 +5,14 @@ import { CldImage } from 'next-cloudinary'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import ImageModal from '@/components/ImageModal'
 
 export default function GalleryProductPage() {
   const params = useParams()
   const [product, setProduct] = useState(null)
   const [relatedImages, setRelatedImages] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,40 +57,8 @@ export default function GalleryProductPage() {
       return dateA - dateB
     })
 
-  // 圖片模態框組件
-  const ImageModal = ({ image, onClose }) => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.5 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 0.5 }}
-        className="relative w-[90vw] h-[90vh]"
-        onClick={e => e.stopPropagation()}
-      >
-        <CldImage
-          src={image.Url}
-          alt={image.Name || 'Gallery Image'}
-          fill
-          className="object-contain"
-          sizes="90vw"
-        />
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-white p-2 rounded-full bg-black/50 hover:bg-black/70"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </motion.div>
-    </motion.div>
-  )
+  // 將所有圖片整理成一個數組
+  const allImagesArray = [mainImage, ...allImages]
 
   return (
     <div className=" bg-[#f8f4ec]">
@@ -158,13 +127,11 @@ export default function GalleryProductPage() {
           <div className="bg-white rounded-t-3xl p-5">
             {/* Desktop Layout */}
             <div className="hidden md:block">
-
-
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {/* Main Image - Left Side */}
                 <motion.div 
                   className="relative aspect-square cursor-pointer"
-                  onClick={() => setSelectedImage(mainImage)}
+                  onClick={() => setSelectedImageIndex(0)}
                 >
                   <CldImage
                     src={mainImage.Url}
@@ -185,7 +152,7 @@ export default function GalleryProductPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                         className="relative aspect-square cursor-pointer"
-                        onClick={() => setSelectedImage(image)}
+                        onClick={() => setSelectedImageIndex(index + 1)}
                       >
                         <CldImage
                           src={image.Url}
@@ -211,7 +178,7 @@ export default function GalleryProductPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                         className="relative aspect-square w-full cursor-pointer"
-                        onClick={() => setSelectedImage(image)}
+                        onClick={() => setSelectedImageIndex(index + 5)}
                       >
                         <CldImage
                           src={image.Url}
@@ -229,15 +196,13 @@ export default function GalleryProductPage() {
 
             {/* Mobile Layout */}
             <div className="md:hidden">
-
-
               <div className="grid grid-cols-2 gap-4">
                 {/* Main Image First */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="relative aspect-square cursor-pointer"
-                  onClick={() => setSelectedImage(mainImage)}
+                  onClick={() => setSelectedImageIndex(0)}
                 >
                   <CldImage
                     src={mainImage.Url}
@@ -256,7 +221,7 @@ export default function GalleryProductPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                     className="relative aspect-square cursor-pointer"
-                    onClick={() => setSelectedImage(image)}
+                    onClick={() => setSelectedImageIndex(index + 1)}
                   >
                     <CldImage
                       src={image.Url}
@@ -275,10 +240,11 @@ export default function GalleryProductPage() {
 
       {/* Image Modal */}
       <AnimatePresence>
-        {selectedImage && (
-          <ImageModal 
-            image={selectedImage} 
-            onClose={() => setSelectedImage(null)} 
+        {selectedImageIndex !== null && (
+          <ImageModal
+            images={allImagesArray}
+            currentIndex={selectedImageIndex}
+            onClose={() => setSelectedImageIndex(null)}
           />
         )}
       </AnimatePresence>

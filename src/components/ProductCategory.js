@@ -78,7 +78,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
           <div className="h-[2px] bg-gradient-to-r from-transparent via-[#023f1b] to-transparent w-[15%]" />
           <div className="mx-[2%]">
             <Link 
-              href={ name.toLowerCase() === "silence" ? `/silence` : link}
+              href={ name.toLowerCase() === "silence" && !isAdmin ? `/silence` : link}
               className="no-underline group"
             >
               <h2 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(12px,2vw,32px)] relative">
@@ -111,7 +111,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
               >
                 <div className="aspect-square relative rounded-lg overflow-hidden bg-gray-50">
                   <Link 
-                    href={ product.categories === "silence" ? `/silence` : isAdmin ? `/admin/products/${product.categories}/${product.slug}` : `/products/${product.categories}/${product.slug}`}
+                    href={ product.categories === "silence" && !isAdmin ? `/silence` : isAdmin ? `/admin/products/${product.categories}/${product.slug}` : `/products/${product.categories}/${product.slug}`}
                     className="block"
                   >
                     {inView && (

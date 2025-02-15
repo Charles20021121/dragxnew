@@ -1,15 +1,26 @@
 "use client"
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import ImageModal from './ImageModal'
 
 export default function GalleryDetailPage({
   product,
+  relatedImages,
   category,
   isAdmin,
   onEdit,
   onAddImage
 }) {
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null)
+  
+  // 將所有圖片整理成一個數組
+  const allImages = [
+    { Id: product.Id, Name: product.Name, Url: product.Url },
+    ...relatedImages.filter(img => img.Id !== product.Id)
+  ]
+
   return (
     <main className="min-h-screen bg-[#f8f4ec] relative pb-20">
       {/* Breadcrumb */}
@@ -109,6 +120,36 @@ export default function GalleryDetailPage({
             )}
           </div>
         </div>
+
+        {/* 圖片網格 */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          {allImages.map((image, index) => (
+            <div
+              key={image.Id}
+              className="relative aspect-square cursor-pointer group"
+              onClick={() => setSelectedImageIndex(index)}
+            >
+              <CldImage
+                src={image.Url}
+                alt={image.Name || "Gallery image"}
+                fill
+                className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 50vw, 33vw"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Image Modal */}
+        <AnimatePresence>
+          {selectedImageIndex !== null && (
+            <ImageModal
+              images={allImages}
+              currentIndex={selectedImageIndex}
+              onClose={() => setSelectedImageIndex(null)}
+            />
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Admin Buttons */}
