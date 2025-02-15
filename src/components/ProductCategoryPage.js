@@ -43,13 +43,18 @@ export default function ProductCategoryPage({
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page')) || 1;
   const [androidFilter, setAndroidFilter] = useState('androidPlayer');
+  const [silenceFilter, setSilenceFilter] = useState('hatchback');
   const [contiFilter, setContiFilter] = useState('appleCarplay');
   const [carFilter, setCarFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // 根據類別和過濾條件處理產品列表
   const displayProducts =
-    categoryPath === "androidplayer"
+    categoryPath === "silence"
+      ? products
+        .filter(product => product.filter1 === silenceFilter)
+        .sort((a, b) => a.name.localeCompare(b.name))
+    : categoryPath === "androidplayer"
       ? products
         .filter(product => product.filter1 === androidFilter)
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -112,6 +117,7 @@ export default function ProductCategoryPage({
 
   return (
     <main className="min-h-screen bg-[#f8f4ec] ">
+      
       {/* 添加 Breadcrumb */}
       <nav className="py-4 px-5">
         <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
@@ -158,6 +164,50 @@ export default function ProductCategoryPage({
             </div>
           </div>
         )}
+
+        {categoryPath === "silence" && (
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
+              <button
+                onClick={() => setSilenceFilter('hatchback')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'hatchback'
+                    ? 'bg-[#1c5434] text-white'
+                    : 'text-gray-500 hover:text-[#1c5434]'
+                  }`}
+              >
+                HATCHBACK
+              </button>
+              <button
+                onClick={() => setSilenceFilter('sedan')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'sedan'
+                    ? 'bg-[#1c5434] text-white'
+                    : 'text-gray-500 hover:text-[#1c5434]'
+                  }`}
+              >
+                    SEDAN
+              </button>
+              <button
+                onClick={() => setSilenceFilter('suv')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'suv'
+                    ? 'bg-[#1c5434] text-white'
+                    : 'text-gray-500 hover:text-[#1c5434]'
+                  }`}
+              >
+                SUV
+              </button>
+              <button
+                onClick={() => setSilenceFilter('mpv')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'mpv'
+                    ? 'bg-[#1c5434] text-white'
+                    : 'text-gray-500 hover:text-[#1c5434]'
+                  }`}
+              >
+                MPV
+              </button>
+            </div>
+          </div>
+        )}
+
 
         {/* contidecoder 的分類切換按鈕 */}
         {categoryPath === "contidecoder" && (
@@ -300,8 +350,11 @@ export default function ProductCategoryPage({
               className="flex flex-col"
             >
               <div className="group relative">
+                
                 <Link
-                  href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
+                  href={
+                   
+                    isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
                   className="block"
                 >
                   <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">

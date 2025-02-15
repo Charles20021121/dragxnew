@@ -29,6 +29,11 @@ const products = [
     Name: "POWER BOOT",
     ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977940/hhtep5dkd3wdixyn8fsv_rdiujs?_a=BAVFB+DW0",
     domainUrl: "/products/powerboot"
+  },
+  {
+    Name: "SILENCE",
+    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/v1739512778/i3nqmuukuo4nvq5puo6u.jpg",
+    domainUrl: "/silence"
   }
 ];
 
@@ -65,7 +70,7 @@ export default function ProductSection() {
 
 
           {/* Products Grid */}
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-3 md:gap-x-8 md:gap-y-12">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-x-8 md:gap-y-12">
             {products.map((product, index) => (
               <motion.div
                 key={index}

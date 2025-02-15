@@ -7,6 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Image from 'next/image';
 import { motion, AnimatePresence } from "framer-motion";
+import CldImage from 'next/image';
 
 // 添加自定義樣式
 const swiperStyles = {
@@ -18,67 +19,38 @@ const swiperStyles = {
   }
 };
 
-export default function HeroSection({ image, aspectRatio = "3333/1458" }) {
+export default function HeroSection({ image, mobileImage, aspectRatio, mobileAspectRatio }) {
   return (
-    <section className="relative z-0">
-      <style jsx global>{`
-        .swiper {
-          width: 100%;
-          height: 100%;
-        }
-        .swiper-pagination-bullet {
-          background: white;
-        }
-        .swiper-pagination-bullet-active {
-          background: #88bc04;
-        }
-      `}</style>
-      <AnimatePresence>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ 
-            duration: 1.2,
-            ease: "easeOut"
-          }}
-        >
-          <Swiper
-            speed={800}
-            autoplay={{
-              delay: 10000,
-              disableOnInteraction: false,
-            }}
-            pagination={{
-              dynamicBullets: true,
-              clickable: true,
-            }}
-            navigation={true}
-            modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper"
-          >
-            <SwiperSlide>
-              <motion.div 
-                className="relative w-full"
-                style={{ aspectRatio }}
-                initial={{ scale: 1.1 }}
-                animate={{ scale: 1 }}
-                transition={{ 
-                  duration: 1.5,
-                  ease: "easeOut"
-                }}
-              >
-                <Image
-                  src={image || 'https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp'}
-                  alt='Hero Image'
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </motion.div>
-            </SwiperSlide>
-          </Swiper>
-        </motion.div>
-      </AnimatePresence>
-    </section>
+    <div className="w-full">
+      {/* 桌面版圖片 */}
+      <div 
+        className="hidden md:block relative w-full"
+        style={{ aspectRatio }}
+      >
+        <CldImage
+          src={image}
+          alt="Hero Image"
+          fill
+          className="object-cover"
+          sizes="100vw"
+          priority
+        />
+      </div>
+
+      {/* 手機版圖片 */}
+      <div 
+        className="block md:hidden relative w-full"
+        style={{ aspectRatio: mobileAspectRatio || aspectRatio }}
+      >
+        <CldImage
+          src={mobileImage || image}
+          alt="Hero Image"
+          fill
+          className="object-cover"
+          sizes="100vw"
+          priority
+        />
+      </div>
+    </div>
   );
 } 

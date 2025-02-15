@@ -31,18 +31,18 @@ export default function GalleryCategory() {
     fetchProducts()
   }, [category])
 
-  const fetchProducts = async () => {
-    try {
+    const fetchProducts = async () => {
+      try {
       const response = await fetch(`/api/admin/gallery?category=${category}`)
-      if (!response.ok) throw new Error('Network response was not ok')
-      const data = await response.json()
-      setProducts(data)
-      setLoading(false)
-    } catch (error) {
-      console.error('Error fetching gallery:', error)
-      setLoading(false)
+        if (!response.ok) throw new Error('Network response was not ok')
+        const data = await response.json()
+        setProducts(data)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching gallery:', error)
+        setLoading(false)
+      }
     }
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -280,55 +280,7 @@ export default function GalleryCategory() {
                   </div>
                 </div>
 
-                {/* Description & Specifications */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Description & Specifications</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Specifications
-                      </label>
-                      <textarea
-                        value={formData.specifications}
-                        onChange={(e) => setFormData(prev => ({ 
-                          ...prev, 
-                          specifications: e.target.value 
-                        }))}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1c5434] focus:border-transparent"
-                        rows={4}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Description
-                      </label>
-                      <textarea
-                        value={formData.description}
-                        onChange={(e) => setFormData(prev => ({ 
-                          ...prev, 
-                          description: e.target.value 
-                        }))}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1c5434] focus:border-transparent"
-                        rows={4}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Buy Link
-                      </label>
-                      <input
-                        type="url"
-                        value={formData.buy}
-                        onChange={(e) => setFormData(prev => ({ 
-                          ...prev, 
-                          buy: e.target.value 
-                        }))}
-                        placeholder="https://example.com"
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1c5434] focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
+
               </form>
             </div>
 

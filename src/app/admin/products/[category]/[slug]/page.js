@@ -411,7 +411,7 @@ export default function ProductPage({ params: paramsPromise }) {
                       </div>
                       
                       {/* 只在特定類別顯示 filter1 選項 */}
-                      {(formData.categories.toLowerCase() === 'androidplayer' || formData.categories.toLowerCase() === 'contidecoder') && (
+                      {(formData.categories.toLowerCase() === 'androidplayer' || formData.categories.toLowerCase() === 'contidecoder' || formData.categories.toLowerCase() === 'silence') && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700">System Type</label>
                           <select
@@ -430,6 +430,13 @@ export default function ProductPage({ params: paramsPromise }) {
                               <>
                                 <option value="contiAndroid">Conti Android</option>
                                 <option value="androidPlayer">Android Player</option>
+                              </>
+                            ) : formData.categories.toLowerCase() === 'silence' ? (
+                              <>
+                                <option value="hatchback">Hatchback</option>
+                                <option value="sedan">Sedan</option>
+                                <option value="suv">SUV</option>
+                                <option value="mpv">MPV</option>
                               </>
                             ) : null}
                           </select>
