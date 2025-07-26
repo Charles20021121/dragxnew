@@ -124,49 +124,90 @@ export async function PUT(request, { params: paramsPromise }) {
 }
 
 // 刪除產品
-export async function DELETE(request, { params: paramsPromise }) {
-  const params = await paramsPromise;
-  const connection = await pool.getConnection()
+export async function DELETE(request, { params }) {
+  const { id } = params;
+  const connection = await pool.getConnection();
+  
   try {
-    const { same, publicId } = await request.json()
+    await connection.beginTransaction();
     
-    await connection.beginTransaction()
+    // 1. 檢查產品是否存在並獲取相關信息
+    const [productCheck] = await connection.query(
+      'SELECT * FROM products WHERE Id = ?',
+      [id]
+    );
 
-    // 1. 獲取所有相關產品的 publicId
-    const [relatedProducts] = await connection.query(
-      'SELECT publicId FROM products WHERE same = ?',
-      [same]
-    )
+    if (!productCheck.length) {
+      throw new Error('Product not found');
+    }
 
-    // 2. 從 Cloudinary 刪除所有相關圖片
-    for (const product of relatedProducts) {
+    const product = productCheck[0];
+
+    // 2. 如果是主圖（Id 和 same 相同），刪除所有相關圖片
+    if (product.Id === product.same) {
+      // 獲取所有相關圖片
+      const [relatedImages] = await connection.query(
+        'SELECT * FROM products WHERE same = ?',
+        [product.same]
+      );
+
+      // 從 Cloudinary 刪除所有相關圖片
+      for (const image of relatedImages) {
+        if (image.publicId) {
+          try {
+            await cloudinary.uploader.destroy(image.publicId);
+          } catch (error) {
+            console.error('Cloudinary delete error:', error);
+          }
+        }
+      }
+
+      // 從數據庫刪除所有相關圖片
+      const [deleteResult] = await connection.query(
+        'DELETE FROM products WHERE same = ?',
+        [product.same]
+      );
+
+      if (deleteResult.affectedRows === 0) {
+        throw new Error('Failed to delete related images');
+      }
+    } else {
+      // 如果不是主圖，只刪除單張圖片
       if (product.publicId) {
         try {
-          await cloudinary.uploader.destroy(product.publicId)
+          await cloudinary.uploader.destroy(product.publicId);
         } catch (error) {
-          console.error('Error deleting image from Cloudinary:', error)
-          // 繼續執行，不中斷流程
+          console.error('Cloudinary delete error:', error);
         }
+      }
+
+      const [deleteResult] = await connection.query(
+        'DELETE FROM products WHERE Id = ?',
+        [id]
+      );
+
+      if (deleteResult.affectedRows === 0) {
+        throw new Error('Failed to delete image');
       }
     }
 
-    // 3. 從數據庫刪除所有相關產品
-    await connection.query(
-      'DELETE FROM products WHERE same = ?',
-      [same]
-    )
-
-    await connection.commit()
-    return NextResponse.json({ success: true })
+    await connection.commit();
+    return NextResponse.json({ 
+      success: true,
+      message: 'Product(s) deleted successfully'
+    });
 
   } catch (error) {
-    await connection.rollback()
-    console.error('Database error:', error)
+    await connection.rollback();
+    console.error('Delete operation failed:', error);
     return NextResponse.json(
-      { message: 'Server error' },
+      { 
+        success: false, 
+        message: error.message || 'Failed to delete product(s)'
+      },
       { status: 500 }
-    )
+    );
   } finally {
-    connection.release()
+    connection.release();
   }
 } 

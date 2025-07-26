@@ -29,6 +29,15 @@ export default function GalleryCategory() {
     }
   }, [category])
 
+  useEffect(() => {
+    if (window.fbq) {
+      window.fbq('track', 'ViewGallery', {
+        content_category: category,
+        content_name: `${category.toUpperCase()} Gallery`
+      });
+    }
+  }, [category]);
+
   if (loading) {
     return null // 或者顯示載入動畫
   }

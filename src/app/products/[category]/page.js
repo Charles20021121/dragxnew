@@ -32,6 +32,15 @@ export default function CategoryProducts({ params: paramsPromise }) {
     fetchProducts();
   }, [category]);
 
+  useEffect(() => {
+    if (window.fbq) {
+      window.fbq('track', 'ViewCategory', {
+        content_category: category,
+        content_name: `${category.toUpperCase()} Products`
+      });
+    }
+  }, [category]);
+
   if (loading) {
     return <LoadingSpinner />;
   }

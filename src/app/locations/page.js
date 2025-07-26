@@ -34,6 +34,11 @@ const locations = [
     mapLink: "https://maps.app.goo.gl/kuKH2Zs33TUWWFZ28"
   },
   {
+    name: "DragX Puchong",
+    address: "22a, Jalan Puteri 4/8, Bandar Puteri, 47100 Puchong, Selangor",
+    mapLink: "https://maps.app.goo.gl/W7iTewJV5RDpQw496"
+  },
+  {
     name: "COMING SOON",
     address: "",
     mapLink: ""
@@ -62,13 +67,26 @@ const itemVariants = {
   }
 }
 
+const handleLocationClick = (location) => {
+  if (window.fbq) {
+    window.fbq('track', 'FindLocation', {
+      content_name: location.name,
+      content_category: 'Store Location'
+    });
+  }
+  // 原有的位置點擊邏輯...
+};
+
 export default function Locations() {
   return (
     <div className="min-h-screen">
       <HeroSection 
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1732875214/iqdgpdyiobmuiiu5hgd1.jpg"
-        aspectRatio="3333 / 1562"
+        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1740112223/ildqqqcvicpztbb0tkas.webp"
+        aspectRatio="3334 / 1562"
+        mobileImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1740112224/xpne8khqmo2iczb7yte4.webp"
+        mobileAspectRatio="3334/2929"
       />
+
       
       <div 
         className="relative bg-cover bg-center py-5"
@@ -116,6 +134,7 @@ export default function Locations() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center text-[#7DBF3F] hover:text-[#9ed867] transition-colors duration-300 group"
+                        onClick={() => handleLocationClick(location)}
                       >
                         Direction
                         <svg 

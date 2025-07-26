@@ -18,7 +18,7 @@ export default function SilencePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/products?category=silence')
+        const response = await fetch('/api/products?category=soundproof')
         if (!response.ok) throw new Error('Failed to fetch products')
         const data = await response.json()
         

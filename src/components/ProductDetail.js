@@ -8,13 +8,16 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import LoadingSpinner from './LoadingSpinner';
+import { PIXEL_IDS } from '@/components/MetaPixel';
 
-export default function ProductDetail({ product, isAdmin, onEdit }) {
+export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [relatedImages, setRelatedImages] = useState([
     { src: product.image, alt: product.name }
   ]);
+
+  console.log(relatedImages)
   const sliderRef = useRef(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,6 +25,9 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  // 在文件頂部添加 useState
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     async function fetchRelatedImages() {
@@ -43,13 +49,20 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
           return dateA - dateB;
         });
 
+        console.log(sortedProducts)
+
         
 
         // 設置所有圖片
         const allImages = sortedProducts.map(p => ({
           src: p.image,
-          alt: p.name || `Product image ${p.id}`
+          alt: p.name || `Product image ${p.id}`,
+          publicId:p.publicId,
+          id:p.id,
+          same:p.same
         }));
+        console.log('all',allImages)
+        console.log('related',relatedImages)
 
         setRelatedImages(allImages);
         setLoading(false);
@@ -62,13 +75,42 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
     fetchRelatedImages();
   }, [product]);
 
+  // 添加購買事件追蹤函數
+  const handleShopNowClick = (e) => {
+    e.preventDefault();
+    const shopUrl = product.buy;
+
+    if (window.fbq) {
+      try {
+        // 對每個 Pixel ID 發送事件
+        PIXEL_IDS.forEach(pixelId => {
+          window.fbq('trackSingle', pixelId, 'InitiateCheckout', {
+            content_type: 'product',
+            content_name: product.name,
+            content_category: product.categories,
+            content_ids: [product.Id],
+            value: product.price || 0,
+            currency: 'MYR'
+          });
+        });
+        console.log('Purchase event tracked successfully');
+      } catch (error) {
+        console.error('Error tracking purchase event:', error);
+      }
+    }
+
+    // 延遲跳轉確保事件被發送
+    setTimeout(() => {
+      window.open(shopUrl, '_blank');
+    }, 300);
+  };
 
   if (loading) {
     return <LoadingSpinner />;
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f4ec] ">
+    <div className="min-h-screen bg-[#f8f4ec] pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 添加編輯按鈕 */}
         {isAdmin && (
@@ -124,6 +166,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#88bc04] text-white font-bold px-20 py-2 rounded-full hover:bg-[#7aa703] transition-colors duration-300"
+            onClick={handleShopNowClick}
           >
             Shop Now
           </a>
@@ -191,7 +234,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
                   </div>
 
                   {/* Bottom Thumbnails */}
-                  <div className="flex gap-2 mt-4">
+                  <div className="grid grid-cols-4 gap-1 mt-4 w-full">
                     {relatedImages.slice(0, 4).map((image, index) => (
                       <button
                         key={index}
@@ -199,7 +242,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
                           setCurrentImageIndex(index);
                           setSelectedImage(image.src);
                         }}
-                        className={`relative aspect-square w-1/4 ${
+                        className={`relative w-full aspect-square ${
                           currentImageIndex === index
                             ? 'border-2 border-[#1c5434]'
                             : 'border border-gray-200'
@@ -209,7 +252,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
                           src={image.src}
                           alt={image.alt || `Product thumbnail ${index + 1}`}
                           fill
-                          className="object-contain p-1"
+                          className="object-cover p-1"
                           sizes="25vw"
                         />
                       </button>
@@ -222,12 +265,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
                       {product.name}
                     </h1>
                     
-                    {/* Specifications */}
-                    <div className="space-y-2">
-                      <div className="prose max-w-none text-[clamp(12px,3.5vw,16px)] whitespace-pre-line" 
-                        dangerouslySetInnerHTML={{ __html: product.specifications }} 
-                      />
-                    </div>
+  
 
                     {/* Description */}
                     <div className="space-y-2">
@@ -336,6 +374,7 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
               target="_blank"
               rel="noopener noreferrer"
               className="block bg-[#88bc04] text-white text-sm font-bold px-5 py-1.5 rounded-full text-center hover:bg-[#7aa703] transition-colors duration-300"
+              onClick={handleShopNowClick}
             >
               Shop Now
             </a>
@@ -348,19 +387,93 @@ export default function ProductDetail({ product, isAdmin, onEdit }) {
         {/* ... 其他詳情保持不變 ... */}
 
         {/* 只在特定類別顯示 filter 和 filter1 */}
-        {(product.categories.toLowerCase() === 'contidecoder' || 
-          product.categories.toLowerCase() === 'androidplayer') && (
-          <div className="space-y-4">
-            {product.categories.toLowerCase() === 'contidecoder' && product.filter && (
-              <div>
-                <h3 className="text-lg font-semibold">Car Brand</h3>
-                <p>{product.filter.charAt(0).toUpperCase() + product.filter.slice(1)}</p>
-              </div>
-            )}
 
-          </div>
-        )}
       </div>
+
+      {/* 管理員懸浮刪除按鈕 */}
+      {isAdmin && (
+        <button
+          onClick={() => setShowDeleteModal(true)}
+          className="fixed fixed  right-8 p-4 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors duration-300 z-50"
+          title="Delete Images"
+          style={{bottom:'180px'}}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-6 w-6" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+            />
+          </svg>
+        </button>
+      )}
+
+      {/* 刪除圖片模態框 */}
+      {showDeleteModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+      <div className="p-4 bg-[#1c5434] text-white flex justify-between items-center">
+        <h3 className="text-lg font-semibold">Delete Images</h3>
+        <button 
+          onClick={() => setShowDeleteModal(false)}
+          className="hover:text-gray-200"
+        >
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div className="p-6 overflow-y-auto max-h-[70vh]"> {/* 限制高度并启用滚动 */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {relatedImages.slice(1).map((image, index) => (
+            <div key={index} className="relative group">
+              {image.Id}
+              <div className="aspect-square relative rounded-lg overflow-hidden border border-gray-200">
+                <CldImage
+                  src={image.src}
+                  alt={image.alt || `Product image ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                />
+              </div>
+              {relatedImages.length > 1 && (
+                <button
+                  onClick={() => {
+                    if (confirm('Are you sure you want to delete this image?')) {
+                      onDeleteImage(
+                        image.id,          // 数据库中的 ID
+                        image.same,        // same 值（如果需要）
+                        image.publicId     // Cloudinary 的 public ID
+                      );
+                      if (relatedImages.length <= 2) {
+                        setShowDeleteModal(false);
+                      }
+                    }
+                  }}
+                  className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 } 

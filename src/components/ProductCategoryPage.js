@@ -50,7 +50,7 @@ export default function ProductCategoryPage({
 
   // 根據類別和過濾條件處理產品列表
   const displayProducts =
-    categoryPath === "silence"
+    categoryPath === "soundproof"
       ? products
         .filter(product => product.filter1 === silenceFilter)
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -61,10 +61,10 @@ export default function ProductCategoryPage({
       : categoryPath === "contidecoder"
         ? products
           .filter(product => {
-            const typeMatch = contiFilter === 'appleCarplay'
-              ? (product.filter1 === 'appleCarplay' || !product.filter1)
+            const typeMatch = contiFilter === 'appleCarplay' 
+              ? (product.filter1 === 'appleCarplay'  )
               : product.filter1 === contiFilter;
-            const carMatch = carFilter === 'all' || product.filter === carFilter;
+            const carMatch = carFilter === 'all' || product.filter === carFilter ;
             return typeMatch && carMatch;
           })
           .sort((a, b) => a.name.localeCompare(b.name))
@@ -165,7 +165,7 @@ export default function ProductCategoryPage({
           </div>
         )}
 
-        {categoryPath === "silence" && (
+        {categoryPath === "soundproof" && (
           <div className="flex justify-center mb-8">
             <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
               <button

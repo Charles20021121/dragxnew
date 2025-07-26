@@ -6,14 +6,9 @@ import { motion } from "framer-motion";
 
 const products = [
   {
-    Name: "360CAMERA",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977940/damwcrijnzpulm62k7ce_b31nnw?_a=BAVFB+DW0",
-    domainUrl: "/products/360camera"
-  },
-  {
-    Name: "AMBIENTLIGHT",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977943/m75j3e1uy8kqdc0iiyzy_dnk0kb?_a=BAVFB+DW0",
-    domainUrl: "/products/ambientlight"
+    Name: "SOUNDPROOF",
+    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/v1739512778/i3nqmuukuo4nvq5puo6u.jpg",
+    domainUrl: "/silence"
   },
   {
     Name: "ANDROID PLAYER",
@@ -21,20 +16,25 @@ const products = [
     domainUrl: "/products/androidplayer"
   },
   {
+    Name: "AMBIENTLIGHT",
+    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977943/m75j3e1uy8kqdc0iiyzy_dnk0kb?_a=BAVFB+DW0",
+    domainUrl: "/products/ambientlight"
+  },
+  {
     Name: "CONTI DECODER",
     ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1729013791/gcpdyz9k7cs9pgdcggen?_a=BAVFB+DW0",
     domainUrl: "/products/contidecoder"
+  },
+  {
+    Name: "360CAMERA",
+    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977940/damwcrijnzpulm62k7ce_b31nnw?_a=BAVFB+DW0",
+    domainUrl: "/products/360camera"
   },
   {
     Name: "POWER BOOT",
     ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977940/hhtep5dkd3wdixyn8fsv_rdiujs?_a=BAVFB+DW0",
     domainUrl: "/products/powerboot"
   },
-  {
-    Name: "SILENCE",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/v1739512778/i3nqmuukuo4nvq5puo6u.jpg",
-    domainUrl: "/silence"
-  }
 ];
 
 const fadeInUp = {

@@ -24,6 +24,8 @@ export default function GalleryProductPage() {
   const [selectedNewImages, setSelectedNewImages] = useState([])
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
+  const [notification, setNotification] = useState({ show: false, type: '', message: '' })
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const fetchData = async () => {
     try {
@@ -77,8 +79,16 @@ export default function GalleryProductPage() {
     setSelectedNewImages(files)
   }
 
+  const showNotification = (type, message) => {
+    setNotification({ show: true, type, message });
+    setTimeout(() => {
+      setNotification({ show: false, type: '', message: '' });
+    }, 3000);
+  }
+
   const handleEditSubmit = async (e) => {
     e.preventDefault()
+    setIsUploading(true)
     try {
       const response = await fetch(`/api/admin/gallery/${params.category}/${params.product}`, {
         method: 'PUT',
@@ -91,20 +101,28 @@ export default function GalleryProductPage() {
       const data = await response.json()
       
       if (response.ok) {
-        // 生成新的 URL slug
         const newSlug = editFormData.Name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-        
-        // 關閉編輯面板
         setShowEditOffcanvas(false)
+        showNotification('success', 'Product updated successfully!')
         
-        // 重新導向到新的 URL
-        router.push(`/admin/gallery/${params.category}/${newSlug}`)
+        // 更新本地 product 數據
+        setProduct(prev => ({
+          ...prev,
+          ...editFormData
+        }))
+        
+        // 如果產品名稱改變了，才需要重新導向
+        if (product.Name !== editFormData.Name) {
+          router.push(`/admin/gallery/${params.category}/${newSlug}`)
+        }
       } else {
         throw new Error(data.message || 'Failed to update')
       }
     } catch (error) {
       console.error('Error updating product:', error)
-      alert(error.message || 'Failed to update product')
+      showNotification('error', error.message || 'Failed to update product')
+    } finally {
+      setIsUploading(false)
     }
   }
 
@@ -143,7 +161,7 @@ export default function GalleryProductPage() {
             Url: uploadData.secure_url,
             publicId: uploadData.public_id,
             same: product.same,
-            date: new Date().toISOString().split('T')[0]
+            date: new Date().toISOString().replace('T', ' ').split('.')[0]
           })
         });
 
@@ -159,11 +177,45 @@ export default function GalleryProductPage() {
       await fetchData();
       setShowAddImageOffcanvas(false);
       setSelectedNewImages([]);
-      setIsUploading(false);
-      alert('All images uploaded successfully!');
+      showNotification('success', 'Images uploaded successfully!');
     } catch (error) {
       console.error('Error adding images:', error);
-      alert(error.message || 'Failed to upload images');
+      showNotification('error', error.message || 'Failed to upload images');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeleteImage = async (id, same, publicId) => {
+    try {
+      setIsUploading(true);
+
+      // 修改 API 路徑，使用 category 參數
+      const response = await fetch(`/api/admin/gallery/${params.category}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          id,        // 將 id 移到請求體中
+          publicId,
+          same 
+        })
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || 'Failed to delete image');
+      }
+
+      // 重新獲取數據
+      await fetchData();
+      showNotification('success', 'Image deleted successfully');
+
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      showNotification('error', error.message || 'Failed to delete image');
+    } finally {
       setIsUploading(false);
     }
   };
@@ -217,6 +269,132 @@ export default function GalleryProductPage() {
       </motion.div>
     </motion.div>
   )
+
+  // 在主圖片網格部分添加刪除按鈕
+  const ImageGrid = ({ images }) => (
+    <div className="grid grid-cols-2  md:grid-cols-3 gap-4">
+      {images.slice(4).map((image, index) => (
+        <div key={index} className="relative group">
+          {/* 圖片容器 */}
+          <div 
+            className="aspect-square relative rounded-lg overflow-hidden cursor-pointer"
+            onClick={() => setSelectedImage(image)}
+          >
+            <CldImage
+              src={image.Url}
+              alt={image.Name || 'Gallery Image'}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-110"
+              sizes="(max-width: 768px) 50vw, 33vw"
+            />
+            
+            {/* 懸浮刪除按鈕 */}
+            {image.Id !== product.Id && ( // 不是主圖才顯示刪除按鈕
+            
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // 防止觸發圖片點擊
+                  if (window.confirm('Are you sure you want to delete this image?')) {
+                    handleDeleteImage(image.Id, image.same, image.publicId);
+                  }
+                }}
+                className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full 
+                           opacity-0 group-hover:opacity-100 transition-opacity duration-300 
+                           hover:bg-red-600 flex items-center justify-center"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M6 18L18 6M6 6l12 12" 
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  // 添加刪除模態框組件
+  const DeleteImagesModal = ({ isOpen, onClose, images }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-hidden">
+        <div className="absolute right-0 top-0 h-full w-full max-w-2xl bg-white flex flex-col">
+          {/* Header */}
+          <div className="bg-[#1c5434] text-white px-6 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              <h2 className="text-xl font-semibold">Delete Images</h2>
+            </div>
+            <button onClick={onClose} className="text-white hover:text-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto p-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {images.map((image, index) => (
+                <div key={index} className="relative group">
+                  <div className="aspect-square relative rounded-lg overflow-hidden">
+                    <CldImage
+                      src={image.Url}
+                      alt={image.Name || 'Gallery Image'}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                    />
+                    {image.Id !== product.Id && (
+                      <button
+                        onClick={() => {
+                          if (window.confirm('Are you sure you want to delete this image?')) {
+                            handleDeleteImage(image.Id, image.same, image.publicId);
+                          }
+                        }}
+                        className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 
+                                 transition-all duration-300 flex items-center justify-center"
+                      >
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+ 
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="bg-[#f8f4ec]">
@@ -327,26 +505,7 @@ export default function GalleryProductPage() {
               {/* Remaining Images for Desktop */}
               {allImages.length > 4 && (
                 <div className="mt-8">
-                  <div className="grid grid-cols-3 gap-4">
-                    {allImages.slice(4).map((image, index) => (
-                      <motion.div
-                        key={`${image.Id}-${index}`}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="relative aspect-square w-full cursor-pointer"
-                        onClick={() => setSelectedImage(image)}
-                      >
-                        <CldImage
-                          src={image.Url}
-                          alt={image.Name || 'Product View'}
-                          fill
-                          className="object-cover rounded-lg"
-                          sizes="400px"
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
+                  <ImageGrid images={allImages} />
                 </div>
               )}
             </div>
@@ -397,26 +556,32 @@ export default function GalleryProductPage() {
 
       {/* Admin Floating Buttons */}
       <div className="fixed bottom-6 right-6 flex flex-col gap-4">
+                {/* Delete Images Button */}
+                <button
+          onClick={() => setShowDeleteModal(true)}
+          className="p-4 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+        
         {/* Edit Button */}
         <button
           onClick={() => setShowEditOffcanvas(true)}
-          className="p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
+          className="p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300"
         >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-6 w-6" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
           </svg>
         </button>
 
+
+
         {/* Add Image Button */}
         <button
           onClick={() => setShowAddImageOffcanvas(true)}
-          className="p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
+          className="p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -650,6 +815,56 @@ export default function GalleryProductPage() {
           </div>
         </div>
       )}
+
+      {/* Upload Loading Overlay */}
+      {isUploading && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <div className="relative">
+              {/* 主要加載圈 */}
+              <div className="w-16 h-16 rounded-full border-4 border-[#1c5434]/20">
+                <div className="w-full h-full rounded-full border-4 border-[#88bc04] border-t-transparent animate-[spin_0.8s_linear_infinite]">
+                </div>
+              </div>
+              {/* 脈衝效果 */}
+              <div className="absolute top-0 left-0 w-full h-full">
+                <div className="w-16 h-16 rounded-full border-4 border-[#88bc04] opacity-0 animate-[ping_1.5s_ease-out_infinite]">
+                </div>
+              </div>
+            </div>
+            <p className="mt-4 text-gray-600 font-medium">Uploading product...</p>
+            {uploadProgress > 0 && (
+              <div className="w-full mt-4 max-w-[200px]">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-[#88bc04] h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+                <p className="text-sm text-gray-500 text-center mt-2">
+                  {uploadProgress}%
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Notification */}
+      {notification.show && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+          } text-white transition-all duration-500 transform translate-y-0 animate-slide-in`}>
+          {notification.message}
+        </div>
+      )}
+
+      {/* Delete Images Modal */}
+      <DeleteImagesModal 
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        images={[mainImage, ...allImages]}
+      />
     </div>
   )
 }

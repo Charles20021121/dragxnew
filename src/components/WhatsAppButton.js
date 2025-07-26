@@ -6,6 +6,16 @@ import { usePathname } from 'next/navigation'
 export default function WhatsAppButton() {
   const pathname = usePathname()
   
+  const handleWhatsAppClick = () => {
+    // 追蹤 WhatsApp 聯繫事件
+    if (window.fbq) {
+      window.fbq('track', 'Contact', {
+        content_category: 'WhatsApp',
+        content_name: 'WhatsApp Inquiry'
+      });
+    }
+  }
+
   // 如果路徑包含 'admin' 或 'login'，不顯示按鈕
   if (pathname.includes('/admin') || pathname.includes('/login')) {
     return null
@@ -13,7 +23,7 @@ export default function WhatsAppButton() {
 
   return (
     <motion.div
-      className="fixed bottom-6 right-6 z-50"
+      className="fixed bottom-16 right-6 z-50"
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{
@@ -36,6 +46,7 @@ export default function WhatsAppButton() {
         className="relative z-10 flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg  transition-colors duration-300"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
+        onClick={handleWhatsAppClick}
       >
         <FaWhatsapp className="text-white text-3xl" />
       </motion.a>

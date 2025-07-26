@@ -71,6 +71,12 @@ export default function SearchDrawer() {
   }, [isOpen]);
 
   const handleSearch = (e) => {
+    if (window.fbq) {
+      window.fbq('track', 'Search', {
+        search_string: e.target.value,
+        content_category: 'Product Search'
+      });
+    }
     setSearchTerm(e.target.value)
   }
 
@@ -131,7 +137,7 @@ export default function SearchDrawer() {
                 onChange={handleSearch}
                 type="search" 
                 placeholder="Type to search..." 
-                className="bg-transparent border-white/20 text-white pr-10 focus:ring-[#88bc04] focus:border-[#88bc04]"
+                className="bg-transparent border-white/20 text-white pr-10 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-[#88bc04] focus:ring-[#88bc04]"
                 autoFocus
               />
               {searchTerm && (

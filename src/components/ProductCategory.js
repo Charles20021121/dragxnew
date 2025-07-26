@@ -69,7 +69,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
       ref={ref}
     >
       <motion.div 
-        className="mx-1 md:mx-2 bg-white rounded-[25px] px-1 md:px-4 py-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+        className="mx-1 md:mx-2 bg-white rounded-[25px] px-4 py-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
         whileHover={{ scale: 1.01 }}
         transition={{ duration: 0.3 }}
       >
@@ -78,7 +78,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
           <div className="h-[2px] bg-gradient-to-r from-transparent via-[#023f1b] to-transparent w-[15%]" />
           <div className="mx-[2%]">
             <Link 
-              href={ name.toLowerCase() === "silence" && !isAdmin ? `/silence` : link}
+              href={ name.toLowerCase() === "soundproof" && !isAdmin ? `/silence` : link}
               className="no-underline group"
             >
               <h2 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(12px,2vw,32px)] relative">
@@ -94,7 +94,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
         <Swiper
           speed={1000}
           slidesPerView={3}
-          spaceBetween={4}
+          spaceBetween={10}
           breakpoints={{
             768: { slidesPerView: 4, spaceBetween: 10 },
             1024: { slidesPerView: 5, spaceBetween: 12 },
@@ -111,7 +111,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
               >
                 <div className="aspect-square relative rounded-lg overflow-hidden bg-gray-50">
                   <Link 
-                    href={ product.categories === "silence" && !isAdmin ? `/silence` : isAdmin ? `/admin/products/${product.categories}/${product.slug}` : `/products/${product.categories}/${product.slug}`}
+                    href={ product.categories === "soundproof" && !isAdmin ? `/silence` : isAdmin ? `/admin/products/${product.categories}/${product.slug}` : `/products/${product.categories}/${product.slug}`}
                     className="block"
                   >
                     {inView && (

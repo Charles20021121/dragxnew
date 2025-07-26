@@ -11,7 +11,7 @@ export default function ProductPage({ params: paramsPromise }) {
   const params = use(paramsPromise);
   const { category, slug } = params;
   const [product, setProduct] = useState(null);
-  console.log('product',product)
+  
   const [loading, setLoading] = useState(true);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: '', message: '' });
@@ -20,12 +20,12 @@ export default function ProductPage({ params: paramsPromise }) {
     categories: category,
     Url: '',
     description: '',
-    date: new Date().toISOString().split('T')[0],
+    Specifications: '',
     buy: '',
     publicId: '',
     filter: '',
     filter1: '',
-    Specifications: ''
+    date: new Date().toISOString().replace('T', ' ').split('.')[0]
   });
   const [showImageOffcanvas, setShowImageOffcanvas] = useState(false);
   const [newImageData, setNewImageData] = useState({
@@ -33,49 +33,72 @@ export default function ProductPage({ params: paramsPromise }) {
     categories: category,
     Url: '',
     same: '',  // 會自動填充當前產品的 ID
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().replace('T', ' ').split('.')[0],
   });
   const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
-
-
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     fetchProduct();
   }, [category, slug]);
 
   const fetchProduct = async () => {
-      try {
-        const res = await fetch(`/api/products?category=${category}`);
-        const products = await res.json();
-        console.log(products)
-        console.log(slug)
-        
-        const foundProduct = products.find(p => 
-          p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
-        );
+    try {
+      const res = await fetch(`/api/products?category=${category}`);
+      const products = await res.json();
+      const foundProduct = products.find(p => 
+        p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
+      );
 
-        setProduct(foundProduct);
       if (foundProduct) {
-        setFormData({
-          Name: foundProduct.name,
-          categories: foundProduct.categories,
-          Url: foundProduct.image,
-          description: foundProduct.description,
-          date: foundProduct.date,
-          buy: foundProduct.buy,
-          publicId: foundProduct.publicId,
-          filter: foundProduct.filter,
-          filter1: foundProduct.filter1,
-          Specifications: foundProduct.specifications
+        // 確保每個圖片對象都有必要的字段
+        const relatedImages = [
+          {
+            id: foundProduct.Id,
+            src: foundProduct.Url,
+            alt: foundProduct.Name,
+            publicId: foundProduct.publicId,
+            same: foundProduct.same
+          },
+          ...foundProduct.additionalImages.map(img => ({
+            id: img.Id,
+            src: img.Url,
+            alt: img.Name,
+            publicId: img.publicId,
+            same: img.same
+          }))
+        ];
+        
+        setProduct({
+          ...foundProduct,
+          relatedImages
         });
       }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching product:', error);
-        setLoading(false);
-      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        Name: product.name || '',
+        categories: product.categories || category,
+        Url: product.image || '',
+        description: product.description || '',
+        Specifications: product.specifications || '',
+        buy: product.buy || '',
+        publicId: product.publicId || '',
+        filter: product.filter || '',
+        filter1: product.filter1 || '',
+        date: product.date || new Date().toISOString().replace('T', ' ').split('.')[0]
+      });
+    }
+  }, [product, category]);
 
   const showNotification = (type, message) => {
     setNotification({ show: true, type, message });
@@ -143,8 +166,12 @@ export default function ProductPage({ params: paramsPromise }) {
   const handleAddImages = async (e) => {
     e.preventDefault();
     
+    setIsUploading(true);
+    setUploadProgress(0);
+    
     try {
-      showNotification('info', 'Uploading images...');
+      const totalFiles = selectedFiles.length;
+      let completedFiles = 0;
 
       // 先上傳到 Cloudinary
       const uploadPromises = selectedFiles.map(async file => {
@@ -162,6 +189,10 @@ export default function ProductPage({ params: paramsPromise }) {
 
         if (!res.ok) throw new Error('Upload failed');
         const data = await res.json();
+        
+        completedFiles++;
+        setUploadProgress((completedFiles / totalFiles) * 100);
+        
         return {
           Url: data.secure_url,
           publicId: data.public_id
@@ -182,7 +213,7 @@ export default function ProductPage({ params: paramsPromise }) {
             categories: product.categories,
             Url: uploadedImages[0].Url,
             publicId: uploadedImages[0].publicId,
-            date: new Date().toISOString().split('T')[0],
+            date: new Date().toISOString().replace('T', ' ').split('.')[0],
             Specifications: '',
             description: '',
             buy: '',
@@ -208,7 +239,7 @@ export default function ProductPage({ params: paramsPromise }) {
               Url: image.Url,
               publicId: image.publicId,
               same: mainProduct.id,
-              date: new Date().toISOString().split('T')[0],
+              date: new Date().toISOString().replace('T', ' ').split('.')[0],
               Specifications: '',
               description: '',
               buy: '',
@@ -225,9 +256,7 @@ export default function ProductPage({ params: paramsPromise }) {
           setShowImageOffcanvas(false);
           setSelectedFiles([]);
           showNotification('success', 'All images added successfully!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          await fetchProduct();
         }
       } else {
         // 如果是已存在的產品，直接使用 product.id 作為 same
@@ -243,7 +272,7 @@ export default function ProductPage({ params: paramsPromise }) {
               Url: image.Url,
               publicId: image.publicId,
               same: product.id,
-              date: new Date().toISOString().split('T')[0],
+              date: new Date().toISOString().replace('T', ' ').split('.')[0],
               Specifications: '',
               description: '',
               buy: '',
@@ -260,14 +289,46 @@ export default function ProductPage({ params: paramsPromise }) {
           setShowImageOffcanvas(false);
           setSelectedFiles([]);
           showNotification('success', 'All images added successfully!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          await fetchProduct();
         }
       }
     } catch (error) {
       console.error('Error adding images:', error);
       showNotification('error', 'Error adding images');
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const handleDeleteImage = async (id, same, publicId) => {
+    try {
+      // 顯示加載狀態
+      setLoading(true);
+      
+      const response = await fetch(`/api/admin/products/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ publicId })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete image');
+      }
+
+      // 刪除成功後重新獲取產品數據
+      await fetchProduct();
+      
+      // 顯示成功通知
+      showNotification('success', 'Image deleted successfully');
+
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      showNotification('error', 'Failed to delete image');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -312,7 +373,12 @@ export default function ProductPage({ params: paramsPromise }) {
       )}
 
     <Suspense fallback={<div>Loading...</div>}>
-        <ProductDetail product={product} isAdmin={true} onEdit={() => setShowOffcanvas(true)} />
+        <ProductDetail 
+          product={product} 
+          isAdmin={true}
+          onEdit={() => setShowOffcanvas(true)}
+          onDeleteImage={handleDeleteImage}
+        />
     </Suspense>
 
       {/* Edit Offcanvas */}
@@ -369,7 +435,7 @@ export default function ProductPage({ params: paramsPromise }) {
 
 
                   {/* Description and Specifications */}
-                  {category.toLowerCase() !== "silence" && (
+                  {category.toLowerCase() !== "soundproof" && (
                   <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                     <h3 className="font-medium text-gray-900">Description & Specifications</h3>
                     <div className="space-y-4">
@@ -413,7 +479,7 @@ export default function ProductPage({ params: paramsPromise }) {
                       </div>
                       
                       {/* 只在特定類別顯示 filter1 選項 */}
-                      {(formData.categories.toLowerCase() === 'androidplayer' || formData.categories.toLowerCase() === 'contidecoder' || formData.categories.toLowerCase() === 'silence') && (
+                      {(formData.categories.toLowerCase() === 'androidplayer' || formData.categories.toLowerCase() === 'contidecoder' || formData.categories.toLowerCase() === 'soundproof') && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700">System Type</label>
                           <select
@@ -433,7 +499,7 @@ export default function ProductPage({ params: paramsPromise }) {
                                 <option value="contiAndroid">Conti Android</option>
                                 <option value="androidPlayer">Android Player</option>
                               </>
-                            ) : formData.categories.toLowerCase() === 'silence' ? (
+                            ) : formData.categories.toLowerCase() === 'soundproof' ? (
                               <>
                                 <option value="hatchback">Hatchback</option>
                                 <option value="sedan">Sedan</option>
@@ -517,7 +583,7 @@ export default function ProductPage({ params: paramsPromise }) {
         </button>
 
         {/* 添加圖片按鈕 */}
-        {category.toLowerCase() !== "silence" && (
+        {category.toLowerCase() !== "soundproof" && (
         <button
           onClick={() => setShowImageOffcanvas(true)}
           className="bg-[#1c5434] hover:bg-[#143a25] text-white p-4 rounded-full shadow-lg flex items-center gap-2 transition-colors"
@@ -637,6 +703,40 @@ export default function ProductPage({ params: paramsPromise }) {
                 </form>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Upload Loading Overlay */}
+      {isUploading && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <div className="relative">
+              {/* 主要加載圈 */}
+              <div className="w-16 h-16 rounded-full border-4 border-[#1c5434]/20">
+                <div className="w-full h-full rounded-full border-4 border-[#88bc04] border-t-transparent animate-[spin_0.8s_linear_infinite]">
+                </div>
+              </div>
+              {/* 脈衝效果 */}
+              <div className="absolute top-0 left-0 w-full h-full">
+                <div className="w-16 h-16 rounded-full border-4 border-[#88bc04] opacity-0 animate-[ping_1.5s_ease-out_infinite]">
+                </div>
+              </div>
+            </div>
+            <p className="mt-4 text-gray-600 font-medium">Uploading images...</p>
+            {uploadProgress > 0 && (
+              <div className="w-full mt-4 max-w-[200px]">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-[#88bc04] h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+                <p className="text-sm text-gray-500 text-center mt-2">
+                  {Math.round(uploadProgress)}%
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

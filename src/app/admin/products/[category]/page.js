@@ -17,7 +17,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
     categories: category,
     Url: '',
     description: '',
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().replace('T', ' ').split('.')[0],
     buy: '',
     publicId: '',
     filter: '',
@@ -113,7 +113,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
           categories: category,
           Url: '',
           description: '',
-          date: new Date().toISOString().split('T')[0],
+          date: new Date().toISOString().replace('T', ' ').split('.')[0],
           buy: '',
           publicId: '',
           filter: '',
@@ -395,7 +395,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                     </div>
 
                     {/* Description and Specifications */}
-                    {category.toLowerCase() !== "silence" && (  
+                    {category.toLowerCase() !== "soundproof" && (  
                     <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                       <h3 className="font-medium text-gray-900">Description & Specifications</h3>
                       <div className="space-y-4">
@@ -439,7 +439,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                         </div>
                         
                         {/* 只在特定類別顯示 filter1 選項 */}
-                        {(category.toLowerCase() === 'androidplayer' || category.toLowerCase() === 'contidecoder' || category.toLowerCase() === 'silence') && (
+                        {(category.toLowerCase() === 'androidplayer' || category.toLowerCase() === 'contidecoder' || category.toLowerCase() === 'soundproof') && (
                           <div>
                             <label className="block text-sm font-medium text-gray-700">System Type</label>
                             <select
@@ -460,7 +460,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                                   <option value="contiAndroid">Conti Android</option>
                                   <option value="androidPlayer">Android Player</option>
                                 </>
-                              ) : category.toLowerCase() === 'silence' ? (
+                              ) : category.toLowerCase() === 'soundproof' ? (
                                 <>
                                   <option value="hatchback">Hatchback</option>
                                   <option value="sedan">Sedan</option>

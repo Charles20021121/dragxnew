@@ -62,7 +62,7 @@ export async function POST(request) {
         data.Specifications || '',
         data.buy || '',
         data.publicId || '',
-        data.date || new Date().toISOString().split('T')[0]
+        data.date || new Date().toISOString().replace('T', ' ').split('.')[0]
       ]
     )
 

@@ -64,7 +64,7 @@ export default function GalleryProductPage() {
     <div className=" bg-[#f8f4ec]">
       <div style={{ backgroundColor: '#f8f4ec', padding: '0 5% 0 5%' }}>
         {/* Breadcrumb */}
-        <nav className="py-2 px-5">
+        <nav className="py-4 px-5">
           <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
             <li>
               <Link href="/" className="text-black hover:text-[#1c5434]">

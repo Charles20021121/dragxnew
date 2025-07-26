@@ -19,7 +19,7 @@ export default function GalleryCategory() {
     description: '',
     specifications: '',
     buy: '',
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().replace('T', ' ').split('.')[0],
     publicId: '',
   })
   const [selectedFile, setSelectedFile] = useState(null)
@@ -32,18 +32,18 @@ export default function GalleryCategory() {
     fetchProducts()
   }, [category])
 
-  const fetchProducts = async () => {
-    try {
+    const fetchProducts = async () => {
+      try {
       const response = await fetch(`/api/admin/gallery?category=${category}`)
-      if (!response.ok) throw new Error('Network response was not ok')
-      const data = await response.json()
-      setProducts(data)
-      setLoading(false)
-    } catch (error) {
-      console.error('Error fetching gallery:', error)
-      setLoading(false)
+        if (!response.ok) throw new Error('Network response was not ok')
+        const data = await response.json()
+        setProducts(data)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching gallery:', error)
+        setLoading(false)
+      }
     }
-  }
 
   const showNotification = (type, message) => {
     setNotification({ show: true, type, message });
@@ -124,7 +124,7 @@ export default function GalleryCategory() {
         description: '',
         specifications: '',
         buy: '',
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().replace('T', ' ').split('.')[0],
         publicId: '',
       })
       setSelectedFile(null)

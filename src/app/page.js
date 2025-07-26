@@ -6,12 +6,12 @@ import FeaturesSection from "@/components/FeaturesSection";
 
 // 添加 metadata
 export const metadata = {
-  title: 'DRAGX - Car Accessories & Automotive Solutions',
-  description: 'Professional car accessories and automotive solutions provider in Malaysia. Specializing in Android players, ambient lights, power boots, and more.',
-  keywords: 'car accessories, android player, ambient light, power boot, automotive, Malaysia',
+  title: 'DRAGX - Malaysia\'s #1 Car Accessories & Automotive Solutions',
+  description: 'Malaysia\'s leading car accessories and automotive solutions provider. Specializing in Android players, ambient lights, power boots, and more. Experience the best in automotive upgrades.',
+  keywords: 'No.1 car accessories Malaysia, best android player, premium ambient light, power boot, automotive solutions, DRAGX Malaysia, leading brand',
   openGraph: {
-    title: 'DRAGX - Car Accessories & Automotive Solutions',
-    description: 'Professional car accessories and automotive solutions provider in Malaysia',
+    title: 'DRAGX - Malaysia\'s #1 Car Accessories & Automotive Solutions',
+    description: 'Malaysia\'s leading car accessories and automotive solutions provider',
     images: ['https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp'],
   }
 };

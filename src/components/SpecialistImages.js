@@ -8,8 +8,8 @@ const images = {
       aspect: '3333/1248'
     },
     {
-      src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1732875214/iqdgpdyiobmuiiu5hgd1.jpg',
-      aspect: '3333/1562'
+      src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1740112223/ildqqqcvicpztbb0tkas.webp',
+      aspect: '3334/1562'
     }
   ],
   mobile: [
@@ -18,8 +18,8 @@ const images = {
       aspect: '3333/3034'
     },
     {
-      src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1732874577/zigofkatcxkt9cqm4jew.jpg',
-      aspect: '3333/2927'
+      src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1740112224/xpne8khqmo2iczb7yte4.webp',
+      aspect: '3334/2929'
     }
   ]
 }

@@ -37,65 +37,95 @@ export async function GET(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const { category } = params
-  let connection;
+  const { category } = params;
+  const { id, publicId, same } = await request.json();
+  const connection = await pool.getConnection();
   
   try {
-    // 解析请求体
-    const body = await request.json()
-    const { id, same, publicId } = body
+    await connection.beginTransaction();
     
-    console.log('Delete request:', { category, id, same, publicId })
+    console.log('Delete request:', { category, id, publicId, same });
 
-    if (!same) {
-      return NextResponse.json(
-        { success: false, message: 'Same parameter is required' },
-        { status: 400 }
-      )
+    // 檢查圖片是否存在
+    const [galleryCheck] = await connection.query(
+      'SELECT * FROM gallery WHERE Id = ? AND categories = ?',
+      [id, category]
+    );
+
+    if (!galleryCheck.length) {
+      throw new Error('Image not found');
     }
 
-    connection = await pool.getConnection()
-    await connection.beginTransaction()
+    const image = galleryCheck[0];
 
-    // 1. 获取所有相关图片的 publicId
-    const [relatedImages] = await connection.query(
-      'SELECT publicId FROM gallery WHERE same = ?',
-      [same]
-    )
-    console.log('Related images:', relatedImages)
+    // 如果是主圖片（Id 和 same 相同），刪除所有相關圖片
+    if (image.Id === image.same) {
+      // 獲取所有相關圖片的 publicId
+      const [relatedImages] = await connection.query(
+        'SELECT publicId FROM gallery WHERE same = ?',
+        [image.same]
+      );
 
-    // 2. 从 Cloudinary 删除所有相关图片
-    for (const image of relatedImages) {
-      if (image.publicId) {
-        try {
-          await cloudinary.uploader.destroy(image.publicId)
-        } catch (cloudinaryError) {
-          console.error('Error deleting from Cloudinary:', cloudinaryError)
+      // 從 Cloudinary 刪除所有相關圖片
+      for (const relatedImage of relatedImages) {
+        if (relatedImage.publicId) {
+          try {
+            const cloudinaryResult = await cloudinary.uploader.destroy(relatedImage.publicId);
+            console.log('Cloudinary delete result:', cloudinaryResult);
+          } catch (error) {
+            console.error('Cloudinary delete error:', error);
+            // 繼續刪除其他圖片，不中斷流程
+          }
         }
+      }
+
+      // 從數據庫刪除所有相關圖片
+      const [deleteResult] = await connection.query(
+        'DELETE FROM gallery WHERE same = ?',
+        [image.same]
+      );
+
+      console.log(`Deleted ${deleteResult.affectedRows} related images`);
+    } else {
+      // 如果不是主圖片，只刪除單張圖片
+      if (publicId) {
+        try {
+          const cloudinaryResult = await cloudinary.uploader.destroy(publicId);
+          console.log('Cloudinary delete result:', cloudinaryResult);
+        } catch (error) {
+          console.error('Cloudinary delete error:', error);
+          throw new Error('Failed to delete image from Cloudinary');
+        }
+      }
+
+      // 從數據庫刪除單張圖片
+      const [result] = await connection.query(
+        'DELETE FROM gallery WHERE Id = ? AND categories = ?',
+        [id, category]
+      );
+
+      if (result.affectedRows === 0) {
+        throw new Error('Failed to delete from database');
       }
     }
 
-    // 3. 从数据库删除所有相关图片
-    const [deleteResult] = await connection.query(
-      'DELETE FROM gallery WHERE same = ?',
-      [same]
-    )
-
-    await connection.commit()
-    return NextResponse.json({ success: true })
+    await connection.commit();
+    return NextResponse.json({ 
+      success: true,
+      message: 'Image(s) deleted successfully'
+    });
 
   } catch (error) {
-    console.error('Delete operation failed:', error)
-    if (connection) {
-      await connection.rollback()
-    }
+    await connection.rollback();
+    console.error('Delete operation failed:', error);
     return NextResponse.json(
-      { success: false, message: 'Server error' },
+      { 
+        success: false, 
+        message: error.message || 'Failed to delete image(s)'
+      },
       { status: 500 }
-    )
+    );
   } finally {
-    if (connection) {
-      connection.release()
-    }
+    connection.release();
   }
 } 
