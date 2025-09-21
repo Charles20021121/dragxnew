@@ -1,0 +1,1 @@
+Two layout options available, top and bottom layout/left and right layout

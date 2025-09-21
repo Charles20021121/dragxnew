@@ -1,0 +1,1 @@
+Accessing a USB stick or deleting and adding music requires a rescan.

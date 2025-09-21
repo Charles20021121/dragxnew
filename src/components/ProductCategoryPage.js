@@ -4,8 +4,33 @@ import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingSpinner from './LoadingSpinner';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaFilter } from "react-icons/fa";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, FreeMode } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/free-mode';
+
+// 添加 Swiper 自定义样式
+if (typeof window !== 'undefined') {
+  const swiperStyle = document.createElement('style');
+  swiperStyle.textContent = `
+    .swiper-button-next, .swiper-button-prev {
+      display: none !important;
+    }
+    .swiper-slide {
+      transition: transform 0.3s ease;
+    }
+    .swiper-slide:hover {
+      transform: translateY(-2px);
+    }
+  `;
+  document.head.appendChild(swiperStyle);
+}
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -31,6 +56,22 @@ const carModels = [
   'toyota', 'volvo', 'alphard', 'vellfire'
 ];
 
+// 定義 Android Series 選項
+const androidSeries = [
+  { value: 'all', label: 'All Series' },
+  { value: 'uncategorized', label: 'Uncategorized' },
+  { value: 'Advance_series', label: 'Advance series' },
+  { value: 'Android_Ai_Box', label: 'Android Ai Box' },
+  { value: 'Cyber_series', label: 'Cyber series' },
+  { value: 'Diamond_series', label: 'Diamond series' },
+  { value: 'Exclusive_series', label: 'Exclusive series' },
+  { value: 'Luxury_series', label: 'Luxury series' },
+  { value: 'Performance_series', label: 'Performance series' },
+  { value: 'TRONMMEXT_EI_series', label: 'TRONMMEXT EI series' },
+  { value: 'TRONMMEXT_ES_series', label: 'TRONMMEXT ES series' },
+  { value: 'Ultra_series', label: 'Ultra series' }
+];
+
 export default function ProductCategoryPage({
   title,
   products,
@@ -53,11 +94,10 @@ export default function ProductCategoryPage({
     categoryPath === "soundproof"
       ? products
         .filter(product => product.filter1 === silenceFilter)
-        .sort((a, b) => a.name.localeCompare(b.name))
-    : categoryPath === "androidplayer"
-      ? products
-        .filter(product => product.filter1 === androidFilter)
-        .sort((a, b) => a.name.localeCompare(b.name))
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        }))
       : categoryPath === "contidecoder"
         ? products
           .filter(product => {
@@ -67,10 +107,72 @@ export default function ProductCategoryPage({
             const carMatch = carFilter === 'all' || product.filter === carFilter ;
             return typeMatch && carMatch;
           })
-          .sort((a, b) => a.name.localeCompare(b.name))
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, {
+            numeric: true,
+            sensitivity: 'base'
+          }))
         : products
           .filter(product => product.id == product.same)
-          .sort((a, b) => a.name.localeCompare(b.name));
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, {
+            numeric: true,
+            sensitivity: 'base'
+          }));
+
+  // Android Player 专用：按系列分组产品
+  const getAndroidProductsBySeries = () => {
+    if (categoryPath !== "androidplayer") return {};
+    
+    // 确保 products 是数组
+    if (!Array.isArray(products)) {
+      console.error('Products is not an array:', products);
+      return {};
+    }
+    
+    const filteredProducts = products
+      .filter(product => product && product.filter1 === androidFilter)
+      .sort((a, b) => {
+        const nameA = (a.name || '');
+        const nameB = (b.name || '');
+        
+        // 智能排序：正确处理包含数字的字符串
+        return nameA.localeCompare(nameB, undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        });
+      });
+    
+    const productsBySeries = {};
+    
+    // 为每个系列创建分组
+    androidSeries.forEach(series => {
+      if (series.value === 'all') return; // 跳过 "All Series"
+      
+      if (series.value === 'uncategorized') {
+        productsBySeries[series.value] = {
+          label: series.label,
+          products: filteredProducts.filter(product => 
+            !product.android_series || product.android_series === '' || product.android_series === null
+          )
+        };
+      } else {
+        productsBySeries[series.value] = {
+          label: series.label,
+          products: filteredProducts.filter(product => product.android_series === series.value)
+        };
+      }
+    });
+    
+    // 只返回有产品的系列
+    return Object.fromEntries(
+      Object.entries(productsBySeries).filter(([key, value]) => value.products.length > 0)
+    );
+  };
+
+  const androidProductsBySeries = getAndroidProductsBySeries();
+  
+  // 调试信息
+  console.log('Products in ProductCategoryPage:', products);
+  console.log('Android products by series:', androidProductsBySeries);
 
   const totalPages = Math.ceil(displayProducts.length / ITEMS_PER_PAGE);
 
@@ -141,28 +243,35 @@ export default function ProductCategoryPage({
       <div className="px-5 pb-5">
         {/* androidplayer 的分類切換按鈕 */}
         {categoryPath === "androidplayer" && (
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
-              <button
-                onClick={() => setAndroidFilter('androidPlayer')}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${androidFilter === 'androidPlayer'
-                    ? 'bg-[#1c5434] text-white'
-                    : 'text-gray-500 hover:text-[#1c5434]'
-                  }`}
-              >
-                ANDROID PLAYER
-              </button>
-              <button
-                onClick={() => setAndroidFilter('contiAndroid')}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${androidFilter === 'contiAndroid'
-                    ? 'bg-[#1c5434] text-white'
-                    : 'text-gray-500 hover:text-[#1c5434]'
-                  }`}
-              >
-                CONTI ANDROID
-              </button>
+            <div className="flex justify-center mb-8">
+              <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
+              <Link
+                  href="/lyno"
+                  className="w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors text-gray-500 hover:text-[#1c5434] text-center whitespace-nowrap"
+                >
+                  LYNO
+                </Link>
+                <button
+                  onClick={() => setAndroidFilter('androidPlayer')}
+                  className={`w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'androidPlayer'
+                      ? 'bg-[#1c5434] text-white'
+                      : 'text-gray-500 hover:text-[#1c5434]'
+                    }`}
+                >
+                  ANDROID PLAYER
+                </button>
+                <button
+                  onClick={() => setAndroidFilter('contiAndroid')}
+                  className={`w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'contiAndroid'
+                      ? 'bg-[#1c5434] text-white'
+                      : 'text-gray-500 hover:text-[#1c5434]'
+                    }`}
+                >
+                  ANDROID SCREEN
+                </button>
+ 
+              </div>
             </div>
-          </div>
         )}
 
         {categoryPath === "soundproof" && (
@@ -306,7 +415,7 @@ export default function ProductCategoryPage({
               transition={{ duration: 0.6 }}
             >
               {categoryPath === "androidplayer"
-                ? (androidFilter === 'androidPlayer' ? 'ANDROID PLAYER' : 'CONTI ANDROID')
+                ? (androidFilter === 'androidPlayer' ? 'ANDROID PLAYER' : 'ANDROID SCREEN')
                 : categoryPath === "contidecoder"
                   ? `${contiFilter === 'appleCarplay' ? 'APPLE CARPLAY' : 'ANDROID SYSTEM'}`
                   : formatCategoryName(title)
@@ -336,69 +445,200 @@ export default function ProductCategoryPage({
           />
         </div>
 
-        {/* Products Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-        >
-          {currentProducts.map((product) => (
-            <motion.div
-              key={product.id}
-              variants={itemVariants}
-              className="flex flex-col"
-            >
-              <div className="group relative">
-                
-                <Link
-                  href={
-                   
-                    isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
-                  className="block"
-                >
-                  <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                    <div className="relative aspect-square bg-white">
-                      <CldImage
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-contain p-2"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-3 text-center">
-                    <h3 className="text-[#1c5434] font-bold text-[clamp(14px,1.5vw,16px)] group-hover:text-[#023f1b] transition-colors duration-300">
-                      {product.name}
+        {/* Products Display - Android Player 使用分层显示，其他使用网格 */}
+        {categoryPath === "androidplayer" ? (
+          /* Android Player 分层显示 */
+          <div>
+            {loading ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="text-lg text-gray-600">Loading products...</div>
+              </div>
+            ) : Object.entries(androidProductsBySeries || {}).length === 0 ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="text-lg text-gray-600">No products found</div>
+              </div>
+            ) : (
+              Object.entries(androidProductsBySeries || {}).map(([seriesKey, seriesData], index) => (
+              <motion.div
+                key={seriesKey}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="mb-12"
+              >
+                {/* 系列标题 - 移除装饰线 */}
+                <div className="mb-6">
+                  <div className="mb-4">
+                    <h3 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(20px,2.5vw,28px)]">
+                      {seriesData.label.toUpperCase()}
                     </h3>
                   </div>
-                </Link>
+                </div>
 
-                {/* Admin Controls */}
-                {isAdmin && (
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
+                {/* Swiper 产品滑动容器 */}
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="swiper-container"
+                >
+                  <Swiper
+                    modules={[Navigation, FreeMode]}
+                    spaceBetween={16}
+                    slidesPerView="auto"
+                    freeMode={true}
+                    navigation={{
+                      nextEl: `.swiper-button-next-${seriesKey}`,
+                      prevEl: `.swiper-button-prev-${seriesKey}`,
+                    }}
+                    breakpoints={{
+                      320: {
+                        slidesPerView: 1.2,
+                        spaceBetween: 12,
+                      },
+                      640: {
+                        slidesPerView: 2.2,
+                        spaceBetween: 16,
+                      },
+                      768: {
+                        slidesPerView: 3.2,
+                        spaceBetween: 16,
+                      },
+                      1024: {
+                        slidesPerView: 4.2,
+                        spaceBetween: 16,
+                      },
+                    }}
+                    
+                  >
+                    {(seriesData.products || []).map((product) => (
+                      <SwiperSlide key={product.id} className="!w-auto">
+                        <motion.div
+                          variants={itemVariants}
+                          className="w-[240px] sm:w-[260px] md:w-[280px]"
+                        >
+                          <div className="group relative">
+                            <Link
+                              href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
+                              className="block"
+                            >
+                              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                <div className="relative aspect-square bg-white">
+                                  <CldImage
+                                    src={product.image}
+                                    alt={product.name}
+                                    fill
+                                    className="object-contain p-2"
+                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                  />
+                                </div>
+                              </div>
+                              <div className="mt-3 text-center">
+                                <h3 className="text-[#1c5434] font-bold text-[clamp(14px,1.5vw,16px)] group-hover:text-[#023f1b] transition-colors duration-300">
+                                  {product.name}
+                                </h3>
+                              </div>
+                            </Link>
 
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        onDelete(product.id)
-                      }}
-                      className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            {/* Admin Controls */}
+                            {isAdmin && (
+                              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    onDelete(product.id)
+                                  }}
+                                  className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      </SwiperSlide>
+                    ))}
+
+                    {/* 自定义导航按钮 */}
+                    <div className={`swiper-button-prev-${seriesKey} absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#1c5434] p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                       </svg>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+                    </div>
+                    <div className={`swiper-button-next-${seriesKey} absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#1c5434] p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </Swiper>
+                </motion.div>
+              </motion.div>
+              ))
+            )}
+          </div>
+        ) : (
+          /* 其他类别使用原来的网格显示 */
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          >
+            {(currentProducts || []).map((product) => (
+              <motion.div
+                key={product.id}
+                variants={itemVariants}
+                className="flex flex-col"
+              >
+                <div className="group relative">
+                  <Link
+                    href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
+                    className="block"
+                  >
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                      <div className="relative aspect-square bg-white">
+                        <CldImage
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          className="object-contain p-2"
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-3 text-center">
+                      <h3 className="text-[#1c5434] font-bold text-[clamp(14px,1.5vw,16px)] group-hover:text-[#023f1b] transition-colors duration-300">
+                        {product.name}
+                      </h3>
+                    </div>
+                  </Link>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
+                  {/* Admin Controls */}
+                  {isAdmin && (
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          onDelete(product.id)
+                        }}
+                        className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+
+        {/* Pagination - 只在非 Android Player 页面显示 */}
+        {categoryPath !== "androidplayer" && totalPages > 1 && (
           <div className="flex justify-center items-center gap-4 mt-8 ">
             <button
               onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}

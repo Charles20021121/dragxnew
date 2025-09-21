@@ -26,6 +26,8 @@ export default function GalleryProductPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [notification, setNotification] = useState({ show: false, type: '', message: '' })
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [draggedIndex, setDraggedIndex] = useState(null)
+  const [dragOverIndex, setDragOverIndex] = useState(null)
 
   const fetchData = async () => {
     try {
@@ -78,6 +80,48 @@ export default function GalleryProductPage() {
     const files = Array.from(e.target.files)
     setSelectedNewImages(files)
   }
+
+  // 拖拽处理函数
+  const moveImage = (fromIndex, toIndex) => {
+    const newImages = [...selectedNewImages];
+    const [draggedImage] = newImages.splice(fromIndex, 1);
+    newImages.splice(toIndex, 0, draggedImage);
+    setSelectedNewImages(newImages);
+  };
+
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = (e) => {
+    // 只有当鼠标真正离开元素时才清除拖拽状态
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverIndex(null);
+    }
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    
+    if (draggedIndex !== null && draggedIndex !== dropIndex) {
+      moveImage(draggedIndex, dropIndex);
+    }
+    
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
 
   const showNotification = (type, message) => {
     setNotification({ show: true, type, message });
@@ -134,9 +178,14 @@ export default function GalleryProductPage() {
     try {
       const totalFiles = selectedNewImages.length
       let completedFiles = 0
+      
+      // 设置统一的基准时间
+      const baseTime = Date.now();
 
-      // 並行上傳所有圖片
-      const uploadPromises = selectedNewImages.map(async (file) => {
+      // 顺序上传所有图片，确保时间戳正确
+      for (let index = 0; index < selectedNewImages.length; index++) {
+        const file = selectedNewImages[index];
+        
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'newdragx');
@@ -152,7 +201,10 @@ export default function GalleryProductPage() {
         if (!uploadRes.ok) throw new Error('Failed to upload image');
         const uploadData = await uploadRes.json();
 
-        // 創建新的圖片記錄
+        // 使用基准时间 + 索引来确保准确的顺序
+        const imageDate = new Date(baseTime + index * 3000); // 3秒间隔确保足够的时间差
+        console.log(`Upload image ${index + 1}: ${file.name}, timestamp: ${imageDate.toISOString()}`);
+        
         const createResponse = await fetch('/api/admin/gallery', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -161,7 +213,7 @@ export default function GalleryProductPage() {
             Url: uploadData.secure_url,
             publicId: uploadData.public_id,
             same: product.same,
-            date: new Date().toISOString().replace('T', ' ').split('.')[0]
+            date: imageDate.toISOString().replace('T', ' ').split('.')[0]
           })
         });
 
@@ -169,9 +221,7 @@ export default function GalleryProductPage() {
 
         completedFiles++;
         setUploadProgress((completedFiles / totalFiles) * 100);
-      });
-
-      await Promise.all(uploadPromises);
+      }
 
       // 重新獲取圖片列表
       await fetchData();
@@ -226,13 +276,13 @@ export default function GalleryProductPage() {
   // 確保主圖有有效的 URL
   const mainImage = product
 
-  // 所有相關圖片按日期排序
+  // 所有相關圖片按日期排序（升序，保持用户拖拽排序的顺序）
   const allImages = relatedImages
     .filter(img => img.Id !== product.Id)
     .sort((a, b) => {
       const dateA = new Date(a.date || 0)
       const dateB = new Date(b.date || 0)
-      return dateA - dateB
+      return dateA - dateB  // 升序排列：早上传的在前，晚上传的在后
     })
 
   // 圖片模態框組件
@@ -760,15 +810,69 @@ export default function GalleryProductPage() {
 
                 {selectedNewImages.length > 0 && (
                   <div className="mt-4">
-                    <h3 className="font-medium text-gray-900 mb-2">Selected Images ({selectedNewImages.length})</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-medium text-gray-900">Selected Images ({selectedNewImages.length})</h3>
+                      <p className="text-xs text-gray-500">
+                        Drag & drop to reorder images
+                      </p>
+                    </div>
+                    <div className="space-y-2">
                       {selectedNewImages.map((file, index) => (
-                        <div key={index} className="relative">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Selected ${index + 1}`}
-                            className="w-full h-32 object-cover rounded"
-                          />
+                        <div
+                          key={`${file.name}-${index}`}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, index)}
+                          onDragOver={(e) => handleDragOver(e, index)}
+                          onDragLeave={handleDragLeave}
+                          onDrop={(e) => handleDrop(e, index)}
+                          onDragEnd={handleDragEnd}
+                          className={`relative border rounded-lg p-3 transition-all duration-200 cursor-move ${
+                            draggedIndex === index 
+                              ? 'bg-blue-50 border-blue-300 opacity-50 scale-95' 
+                              : dragOverIndex === index 
+                                ? 'bg-green-50 border-green-300 border-2' 
+                                : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            {/* 拖拽图标 */}
+                            <div className="flex-shrink-0 text-gray-400">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                              </svg>
+                            </div>
+                            
+                            {/* 序号 */}
+                            <div className="flex-shrink-0 w-6 h-6 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
+                              {index + 1}
+                            </div>
+                            
+                            {/* 图片预览 */}
+                            <div className="flex-shrink-0">
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt={`Preview ${index + 1}`}
+                                className="w-12 h-12 rounded-lg object-cover"
+                              />
+                            </div>
+                            
+                            {/* 文件名 */}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                {file.name}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                              </p>
+                            </div>
+                            
+                            {/* 拖拽提示 */}
+                            {dragOverIndex === index && draggedIndex !== index && (
+                              <div className="absolute inset-0 bg-green-100 border-2 border-green-300 rounded-lg flex items-center justify-center">
+                                <span className="text-green-600 font-medium text-sm">Drop here</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>

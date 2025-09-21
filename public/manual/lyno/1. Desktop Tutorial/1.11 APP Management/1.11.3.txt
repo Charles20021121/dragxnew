@@ -1,0 +1,1 @@
+Drag the APP to adjust the sorting, tick to show the app in the list/uncheck to hide it

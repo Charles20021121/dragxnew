@@ -25,6 +25,7 @@ export default function ProductPage({ params: paramsPromise }) {
     publicId: '',
     filter: '',
     filter1: '',
+    android_series: '',
     date: new Date().toISOString().replace('T', ' ').split('.')[0]
   });
   const [showImageOffcanvas, setShowImageOffcanvas] = useState(false);
@@ -95,6 +96,7 @@ export default function ProductPage({ params: paramsPromise }) {
         publicId: product.publicId || '',
         filter: product.filter || '',
         filter1: product.filter1 || '',
+        android_series: product.android_series || '',
         date: product.date || new Date().toISOString().replace('T', ' ').split('.')[0]
       });
     }
@@ -162,6 +164,70 @@ export default function ProductPage({ params: paramsPromise }) {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
+  // 拖拽状态
+  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+
+  // 移动图片顺序的函数
+  const moveImage = (fromIndex, toIndex) => {
+    setSelectedFiles(prev => {
+      const newFiles = [...prev];
+      const [movedItem] = newFiles.splice(fromIndex, 1);
+      newFiles.splice(toIndex, 0, movedItem);
+      return newFiles;
+    });
+  };
+
+  // 向前移动图片
+  const moveImageUp = (index) => {
+    if (index > 0) {
+      moveImage(index, index - 1);
+    }
+  };
+
+  // 向后移动图片
+  const moveImageDown = (index) => {
+    if (index < selectedFiles.length - 1) {
+      moveImage(index, index + 1);
+    }
+  };
+
+  // 拖拽事件处理
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.target);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = (e) => {
+    // 只有当鼠标真正离开元素时才清除拖拽状态
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverIndex(null);
+    }
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    
+    if (draggedIndex !== null && draggedIndex !== dropIndex) {
+      moveImage(draggedIndex, dropIndex);
+    }
+    
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
   // 批量添加圖片的處理函數
   const handleAddImages = async (e) => {
     e.preventDefault();
@@ -218,7 +284,8 @@ export default function ProductPage({ params: paramsPromise }) {
             description: '',
             buy: '',
             filter: '',
-            filter1: ''
+            filter1: '',
+            android_series: ''
           }),
         });
 
@@ -227,8 +294,10 @@ export default function ProductPage({ params: paramsPromise }) {
         
         // 使用新創建的產品 ID 作為 same
         const remainingImages = uploadedImages.slice(1);
-        const savePromises = remainingImages.map(image => 
-          fetch('/api/admin/products', {
+        const savePromises = remainingImages.map((image, index) => {
+          // 每張圖片延遲 1 秒，確保時間戳不同
+          const imageDate = new Date(Date.now() + (index + 1) * 1000);
+          return fetch('/api/admin/products', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -239,15 +308,16 @@ export default function ProductPage({ params: paramsPromise }) {
               Url: image.Url,
               publicId: image.publicId,
               same: mainProduct.id,
-              date: new Date().toISOString().replace('T', ' ').split('.')[0],
+              date: imageDate.toISOString().replace('T', ' ').split('.')[0],
               Specifications: '',
               description: '',
               buy: '',
               filter: '',
-              filter1: ''
+              filter1: '',
+              android_series: ''
             }),
-          })
-        );
+          });
+        });
 
         const results = await Promise.all(savePromises);
         const allSuccessful = results.every(res => res.ok);
@@ -260,8 +330,10 @@ export default function ProductPage({ params: paramsPromise }) {
         }
       } else {
         // 如果是已存在的產品，直接使用 product.id 作為 same
-        const savePromises = uploadedImages.map(image => 
-          fetch('/api/admin/products', {
+        const savePromises = uploadedImages.map((image, index) => {
+          // 每張圖片延遲 1 秒，確保時間戳不同
+          const imageDate = new Date(Date.now() + index * 1000);
+          return fetch('/api/admin/products', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -272,15 +344,16 @@ export default function ProductPage({ params: paramsPromise }) {
               Url: image.Url,
               publicId: image.publicId,
               same: product.id,
-              date: new Date().toISOString().replace('T', ' ').split('.')[0],
+              date: imageDate.toISOString().replace('T', ' ').split('.')[0],
               Specifications: '',
               description: '',
               buy: '',
               filter: '',
-              filter1: ''
+              filter1: '',
+              android_series: ''
             }),
-          })
-        );
+          });
+        });
 
         const results = await Promise.all(savePromises);
         const allSuccessful = results.every(res => res.ok);
@@ -496,7 +569,7 @@ export default function ProductPage({ params: paramsPromise }) {
                               </>
                             ) : formData.categories.toLowerCase() === 'androidplayer' ? (
                               <>
-                                <option value="contiAndroid">Conti Android</option>
+                                <option value="contiAndroid">Android Screen</option>
                                 <option value="androidPlayer">Android Player</option>
                               </>
                             ) : formData.categories.toLowerCase() === 'soundproof' ? (
@@ -538,6 +611,31 @@ export default function ProductPage({ params: paramsPromise }) {
                             <option value="volvo">Volvo</option>
                             <option value="alphard">Alphard</option>
                             <option value="vellfire">Vellfire</option>
+                          </select>
+                        </div>
+                      )}
+
+                      {/* 只在 androidplayer 類別顯示 android series 選項 */}
+                      {formData.categories.toLowerCase() === 'androidplayer' && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Android Series</label>
+                          <select
+                            name="android_series"
+                            value={formData.android_series}
+                            onChange={handleChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                          >
+                            {!formData.android_series && <option value="">Select Android Series</option>}
+                            <option value="Advance_series">Advance series</option>
+                            <option value="Android_Ai_Box">Android Ai Box</option>
+                            <option value="Cyber_series">Cyber series</option>
+                            <option value="Diamond_series">Diamond series</option>
+                            <option value="Exclusive_series">Exclusive series</option>
+                            <option value="Luxury_series">Luxury series</option>
+                            <option value="Performance_series">Performance series</option>
+                            <option value="TRONMMEXT_EI_series">TRONMMEXT EI series</option>
+                            <option value="TRONMMEXT_ES_series">TRONMMEXT ES series</option>
+                            <option value="Ultra_series">Ultra series</option>
                           </select>
                         </div>
                       )}
@@ -650,25 +748,124 @@ export default function ProductPage({ params: paramsPromise }) {
 
                     {/* 預覽選擇的文件 */}
                     {selectedFiles.length > 0 && (
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium text-gray-700">
+                            Selected Images ({selectedFiles.length})
+                          </h4>
+                          <p className="text-xs text-gray-500">
+                            Drag & drop to reorder images
+                          </p>
+                        </div>
+                        <div className="space-y-2">
                         {selectedFiles.map((file, index) => (
-                          <div key={index} className="relative">
+                            <div
+                              key={`${file.name}-${index}`}
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, index)}
+                              onDragOver={(e) => handleDragOver(e, index)}
+                              onDragLeave={handleDragLeave}
+                              onDrop={(e) => handleDrop(e, index)}
+                              onDragEnd={handleDragEnd}
+                              className={`relative border rounded-lg p-3 transition-all duration-200 cursor-move ${
+                                draggedIndex === index 
+                                  ? 'bg-blue-50 border-blue-300 opacity-50 scale-95' 
+                                  : dragOverIndex === index 
+                                    ? 'bg-green-50 border-green-300 border-2' 
+                                    : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                {/* 拖拽图标 */}
+                                <div className="flex-shrink-0 text-gray-400">
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                                  </svg>
+                                </div>
+                                
+                                {/* 序号 */}
+                                <div className="flex-shrink-0 w-6 h-6 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
+                                  {index + 1}
+                                </div>
+                                
+                                {/* 图片预览 */}
+                                <div className="flex-shrink-0">
                             <img
                               src={URL.createObjectURL(file)}
                               alt={`Preview ${index + 1}`}
-                              className="rounded-lg object-cover w-full aspect-square"
-                            />
+                                    className="w-12 h-12 rounded-lg object-cover"
+                                  />
+                                </div>
+                                
+                                {/* 图片信息 */}
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-gray-900">
+                                    {file.name}
+                                  </p>
+                                  <p className="text-xs text-gray-500">
+                                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                                  </p>
+                                </div>
+                                
+                                {/* 控制按钮 */}
+                                <div className="flex items-center gap-1">
+                                  {/* 上移按钮 */}
+                                  <button
+                                    type="button"
+                                    onClick={() => moveImageUp(index)}
+                                    disabled={index === 0}
+                                    className={`p-1 rounded transition-colors ${
+                                      index === 0 
+                                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                                    }`}
+                                    title="Move up"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                    </svg>
+                                  </button>
+                                  
+                                  {/* 下移按钮 */}
+                                  <button
+                                    type="button"
+                                    onClick={() => moveImageDown(index)}
+                                    disabled={index === selectedFiles.length - 1}
+                                    className={`p-1 rounded transition-colors ${
+                                      index === selectedFiles.length - 1 
+                                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                                    }`}
+                                    title="Move down"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                  </button>
+                                  
+                                  {/* 删除按钮 */}
                             <button
                               type="button"
                               onClick={() => handleRemoveFile(index)}
-                              className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                                    className="p-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                                    title="Remove image"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                               </svg>
                             </button>
+                                </div>
+                              </div>
+                              
+                              {/* 拖拽提示 */}
+                              {dragOverIndex === index && draggedIndex !== index && (
+                                <div className="absolute inset-0 bg-green-100 bg-opacity-75 rounded-lg flex items-center justify-center">
+                                  <p className="text-green-600 font-medium text-sm">Drop here</p>
+                                </div>
+                              )}
                           </div>
                         ))}
+                        </div>
                       </div>
                     )}
                   </div>

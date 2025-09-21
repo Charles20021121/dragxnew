@@ -1,0 +1,1 @@
+Synchronization of cell phone contacts (Bluetooth setting of cell phone, synchronization of contacts needs to be turned on)

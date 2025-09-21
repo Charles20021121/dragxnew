@@ -72,7 +72,7 @@ export default function Navbar() {
       <div className="max-w-[1400px] mx-auto px-4 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <Link className="navbar-brand" href="/" style={{ margin: '0' }}>
+          <Link className="navbar-brand" href="/" >
             <CldImage
               priority
               width="150"

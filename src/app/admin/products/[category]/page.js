@@ -457,7 +457,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                                 </>
                               ) : category.toLowerCase() === 'androidplayer' ? (
                                 <>
-                                  <option value="contiAndroid">Conti Android</option>
+                                  <option value="contiAndroid">Android Screen</option>
                                   <option value="androidPlayer">Android Player</option>
                                 </>
                               ) : category.toLowerCase() === 'soundproof' ? (

@@ -1,0 +1,1 @@
+Switching display mode (full or half screen)

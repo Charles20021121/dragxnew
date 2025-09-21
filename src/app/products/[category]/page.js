@@ -13,7 +13,25 @@ export default function CategoryProducts({ params: paramsPromise }) {
     async function fetchProducts() {
       try {
         const res = await fetch(`/api/products?category=${category}`);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
         const data = await res.json();
+        
+        // 调试信息
+        console.log('API Response:', data);
+        console.log('Data type:', typeof data);
+        console.log('Is array:', Array.isArray(data));
+        
+        // 确保 data 是数组
+        if (!Array.isArray(data)) {
+          console.error('API did not return an array:', data);
+          setProducts([]);
+          setLoading(false);
+          return;
+        }
         
         // 處理產品數據，添加 slug
         const processedProducts = data.map(product => ({
@@ -25,6 +43,8 @@ export default function CategoryProducts({ params: paramsPromise }) {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
+        console.error('Error details:', error.message);
+        setProducts([]); // 确保设置为空数组而不是 undefined
         setLoading(false);
       }
     }
@@ -41,15 +61,12 @@ export default function CategoryProducts({ params: paramsPromise }) {
     }
   }, [category]);
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <ProductCategoryPage 
       title={category.toUpperCase()}
       products={products}
       categoryPath={category}
+      loading={loading}
       heroImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp"
     />
   );

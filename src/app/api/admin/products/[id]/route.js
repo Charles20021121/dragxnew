@@ -83,6 +83,7 @@ export async function PUT(request, { params: paramsPromise }) {
           buy = ?,
           filter = ?,
           filter1 = ?,
+          android_series = ?,
           date = ?
         WHERE Id = ?`,
         [
@@ -92,6 +93,7 @@ export async function PUT(request, { params: paramsPromise }) {
           data.buy,
           data.filter,
           data.filter1,
+          data.android_series,
           data.date,
           params.id
         ]

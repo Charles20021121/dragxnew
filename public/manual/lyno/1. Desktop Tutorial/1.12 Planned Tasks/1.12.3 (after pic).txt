@@ -1,0 +1,1 @@
+For reference only, if it can work or not, please check the description of trigger condition and action in detail

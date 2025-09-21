@@ -1,21 +1,25 @@
-import Sidebar from '@/components/manual/Sidebar';
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import LynoSidebar from '@/components/manual/Sidebar';
 
 export default function LynoManualLayout({ children }) {
   return (
     <div className="min-h-screen bg-background">
-      {/* Main Content */}
-      <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10 px-4">
-        <aside className="fixed top-0 z-30 hidden h-screen w-[220px] lg:w-[240px] shrink-0 overflow-y-auto border-r md:sticky md:block custom-scrollbar pl-4">
-          <div className="relative py-6 px-4">
-            <Sidebar />
-          </div>
-        </aside>
-        <main className="relative py-6 lg:gap-10 lg:py-8 xl:grid">
-          <div className="mx-auto w-full min-w-0">
-            {children}
-          </div>
-        </main>
-      </div>
+      <SidebarProvider>
+        <div className="flex w-full" style={{ minHeight: 'calc(100vh - 80px - 200px)' }}>
+          <LynoSidebar />
+          <SidebarInset className="flex-1">
+            <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 backdrop-blur px-4">
+              <SidebarTrigger className="lg:hidden -ml-1" />
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-semibold">Lyno Android Player Manual</h1>
+              </div>
+            </header>
+            <main className="flex-1 p-6">
+              {children}
+            </main>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
     </div>
   );
 }

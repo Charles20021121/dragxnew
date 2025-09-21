@@ -1,0 +1,1 @@
+Bluetooth music interface click to play (if there is no sound, the mobile phone to open the music player)

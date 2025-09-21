@@ -1,0 +1,1 @@
+If the system starts - after 2 seconds - play music

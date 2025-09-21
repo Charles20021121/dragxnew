@@ -14,8 +14,10 @@ export async function GET(request) {
           p1.*,
           GROUP_CONCAT(
             CASE 
-              WHEN p2.same = p1.same THEN p2.Url 
-            END
+              WHEN p2.same = p1.same THEN CONCAT(p2.Id, '|', p2.Name, '|', p2.Url, '|', p2.publicId, '|', p2.date)
+            END 
+            ORDER BY p2.date ASC
+            SEPARATOR '|||'
           ) as additional_images
         FROM products p1
         LEFT JOIN products p2 ON p2.same = p1.same AND p2.Id != p1.Id
@@ -34,7 +36,10 @@ export async function GET(request) {
         image: product.Url,
         date: product.date,
         additionalImages: product.additional_images 
-          ? product.additional_images.split(',').filter(Boolean)
+          ? product.additional_images.split('|||').filter(Boolean).map(imgData => {
+              const [Id, Name, Url, publicId, date] = imgData.split('|');
+              return { Id, Name, Url, publicId, date };
+            })
           : [],
         buy: product.buy,
         specifications: product.Specifications,
@@ -42,6 +47,7 @@ export async function GET(request) {
         publicId: product.publicId,
         filter: product.filter,
         filter1: product.filter1,
+        android_series: product.android_series,
         same: product.same
       }));
 
@@ -52,8 +58,10 @@ export async function GET(request) {
           p1.*,
           GROUP_CONCAT(
             CASE 
-              WHEN p2.same = p1.same THEN p2.Url 
-            END
+              WHEN p2.same = p1.same THEN CONCAT(p2.Id, '|', p2.Name, '|', p2.Url, '|', p2.publicId, '|', p2.date)
+            END 
+            ORDER BY p2.date ASC
+            SEPARATOR '|||'
           ) as additional_images
         FROM products p1
         LEFT JOIN products p2 ON p2.same = p1.same AND p2.Id != p1.Id
@@ -71,7 +79,10 @@ export async function GET(request) {
         image: product.Url,
         date: product.date,
         additionalImages: product.additional_images 
-          ? product.additional_images.split(',').filter(Boolean)
+          ? product.additional_images.split('|||').filter(Boolean).map(imgData => {
+              const [Id, Name, Url, publicId, date] = imgData.split('|');
+              return { Id, Name, Url, publicId, date };
+            })
           : [],
         buy: product.buy,
         specifications: product.Specifications,
@@ -79,6 +90,7 @@ export async function GET(request) {
         publicId: product.publicId,
         filter: product.filter,
         filter1: product.filter1,
+        android_series: product.android_series,
         same: product.same
       }));
 

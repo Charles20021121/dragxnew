@@ -1,0 +1,1 @@
+For example, the plugin click action is set to switch the main plugin.

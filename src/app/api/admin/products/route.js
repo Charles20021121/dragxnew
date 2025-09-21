@@ -17,9 +17,10 @@ export async function POST(request) {
         buy,
         filter,
         filter1,
+        android_series,
         publicId,
         date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.Name || '',           // 如果沒有值，使用空字符串
         data.categories || '',
@@ -29,6 +30,7 @@ export async function POST(request) {
         data.buy || '',
         data.filter || '',
         data.filter1 || '',
+        data.android_series || '',
         data.publicId || '',
         data.date || new Date().toISOString().replace('T', ' ').split('.')[0]
       ]
