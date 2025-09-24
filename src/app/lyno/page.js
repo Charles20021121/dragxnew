@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Separator } from '@/components/ui/separator'
@@ -35,7 +35,7 @@ const productDetails = {
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '13 (API=33)',
-      'Screen': '12.3" → 1920×1200',
+      'Screen': '12.3" → 1920*1200/2400*896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
@@ -63,7 +63,7 @@ const productDetails = {
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '13 (API=33)',
-      'Screen': '12.3" → 1920×1200',
+      'Screen': '12.3" → 1920*1200/2400*896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
@@ -91,7 +91,7 @@ const productDetails = {
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '10 (API=29)',
-      'Screen': '12.3" A/B/C → 1920×720 / 2400×896',
+      'Screen': '12.3" → 1920×720 / 2400×896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
@@ -120,7 +120,7 @@ const productDetails = {
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '13 (API=33)',
-      'Screen': '2.3" → 1920×1200',
+      'Screen': '11.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
@@ -148,7 +148,7 @@ const productDetails = {
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '13 (API=33)',
-      'Screen': '2.3" → 1920×1200',
+      'Screen': '11.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
@@ -176,7 +176,7 @@ const productDetails = {
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '10 (API=29)',
-      'Screen': '12.3" A/B/C → 1920×720 / 2400×896',
+      'Screen': '11.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
@@ -205,7 +205,7 @@ const productDetails = {
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '13 (API=33)',
-      'Screen': '12.3" → 1920×1200',
+      'Screen': '10.36" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
@@ -233,7 +233,7 @@ const productDetails = {
       'Bluetooth': 'Realtek 8761',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '10 (API=29)',
-      'Screen': '9.5"/10.36" → 1280×720',
+      'Screen': '10.36" → 1280*720',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
@@ -261,7 +261,7 @@ const productDetails = {
       'Bluetooth': 'Realtek 8761',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '10 (API=29)',
-      'Screen': '9.5"/10.36" → 1280×720',
+      'Screen': '10.36" → 1280*720',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
@@ -290,7 +290,7 @@ const productDetails = {
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '13 (API=33)',
-      'Screen': '2.3" → 1920×1200',
+      'Screen': '9.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
@@ -318,7 +318,7 @@ const productDetails = {
       'Bluetooth': 'Realtek 8761',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '10 (API=29)',
-      'Screen': '9.5"/10.36" → 1280×720',
+      'Screen': '9.5" → 1280*720',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
@@ -346,7 +346,7 @@ const productDetails = {
       'Bluetooth': 'Realtek 8761',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'Android Version': '10 (API=29)',
-      'Screen': '9.5"/10.36" → 1280×720',
+      'Screen': '9.5" → 1280*720',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
@@ -445,6 +445,26 @@ export default function LynoPage() {
   const [isDesktop, setIsDesktop] = useState(false)
   const [showProductOptions, setShowProductOptions] = useState(true) // 默认显示产品选项
   const [selectedProduct, setSelectedProduct] = useState(productOptions['12.3'][0].id) // 默认选中12.3英寸的第一个产品
+  const [indicatorPosition, setIndicatorPosition] = useState({ left: 0, width: 0 })
+  const screenRefs = useRef({})
+
+  // 计算指示器位置
+  const updateIndicatorPosition = () => {
+    const selectedElement = screenRefs.current[selectedScreen]
+    if (selectedElement) {
+      const containerElement = selectedElement.parentElement.parentElement // 获取容器元素
+      const containerRect = containerElement.getBoundingClientRect()
+      const elementRect = selectedElement.getBoundingClientRect()
+      
+      const left = elementRect.left - containerRect.left + (elementRect.width / 2)
+      const width = isDesktop ? 80 : 32
+      
+      setIndicatorPosition({
+        left: left - (width / 2),
+        width: width
+      })
+    }
+  }
 
   useEffect(() => {
     // 只在客户端设置实际的屏幕宽度状态
@@ -459,6 +479,26 @@ export default function LynoPage() {
     window.addEventListener('resize', checkScreenSize)
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
+
+  // 更新指示器位置当选中屏幕或窗口大小改变时
+  useEffect(() => {
+    // 延迟一点时间确保DOM已经更新
+    const timer = setTimeout(() => {
+      updateIndicatorPosition()
+    }, 100)
+    
+    return () => clearTimeout(timer)
+  }, [selectedScreen, isDesktop])
+
+  // 监听窗口resize事件来更新指示器位置
+  useEffect(() => {
+    const handleResize = () => {
+      updateIndicatorPosition()
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [selectedScreen, isDesktop])
 
   // 处理屏幕尺寸点击
   const handleScreenClick = (screenId) => {
@@ -509,7 +549,10 @@ export default function LynoPage() {
                 className="flex flex-col items-center py-0 px-2 md:px-12 space-y-4 cursor-pointer transition-all duration-300"
                 onClick={() => handleScreenClick(screen.id)}
               >
-                <div className="relative w-16 h-10 md:w-40 md:h-24">
+                <div 
+                  ref={(el) => screenRefs.current[screen.id] = el}
+                  className="relative w-16 h-10 md:w-40 md:h-24"
+                >
                   <Image
                     src={screen.image}
                     alt={`LYNO ${screen.name} Android Car Display - Premium In-Car Entertainment System`}
@@ -537,24 +580,8 @@ export default function LynoPage() {
               layoutId="screenIndicator"
               className="absolute -bottom-4 h-[4px] bg-black"
               style={{
-                 width: '48px', // 调整粗线宽度匹配手机端照片宽度 (w-16 = 64px)
-                 left: (() => {
-                   const index = screenSizes.findIndex(s => s.id === selectedScreen);
-                   
-                   if (isDesktop) {
-                     // 桌面版本 - 每个screen的x轴位置可以单独调整
-                     const desktopPositions = [
-                       'calc(25% * 0 + 12.5% - 30px + 20px)',   // 第1个screen (12.3 INCH)
-                       'calc(25% * 1 + 12.5% - 30px + 10px)',   // 第2个screen (11.5 INCH)
-                       'calc(25% * 2 + 12.5% - 30px - 5px)',    // 第3个screen (10.36 INCH)
-                       'calc(25% * 3 + 12.5% - 30px - 20px)'    // 第4个screen (8.5 INCH)
-                     ];
-                     return desktopPositions[index] || desktopPositions[0];
-                   } else {
-                     // 手机版本 - 调整为匹配w-16的图片宽度
-                     return `calc(${index * 25}% + 12.5% - 24px)`;
-                   }
-                 })()
+                width: indicatorPosition.width,
+                left: indicatorPosition.left
               }}
               initial={false}
               transition={{

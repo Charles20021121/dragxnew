@@ -243,17 +243,17 @@ export default function ProductCategoryPage({
       <div className="px-5 pb-5">
         {/* androidplayer 的分類切換按鈕 */}
         {categoryPath === "androidplayer" && (
-            <div className="flex justify-center mb-8">
-              <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
+            <div className="flex justify-center mb-8 px-2">
+              <div className="inline-flex rounded-md bg-white p-1 shadow-sm w-full max-w-2xl">
               <Link
                   href="/lyno"
-                  className="w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors text-gray-500 hover:text-[#1c5434] text-center whitespace-nowrap"
+                  className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors text-gray-500 hover:text-[#1c5434] text-center whitespace-nowrap"
                 >
                   LYNO
                 </Link>
                 <button
                   onClick={() => setAndroidFilter('androidPlayer')}
-                  className={`w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'androidPlayer'
+                  className={`flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'androidPlayer'
                       ? 'bg-[#1c5434] text-white'
                       : 'text-gray-500 hover:text-[#1c5434]'
                     }`}
@@ -262,14 +262,14 @@ export default function ProductCategoryPage({
                 </button>
                 <button
                   onClick={() => setAndroidFilter('contiAndroid')}
-                  className={`w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'contiAndroid'
+                  className={`flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'contiAndroid'
                       ? 'bg-[#1c5434] text-white'
                       : 'text-gray-500 hover:text-[#1c5434]'
                     }`}
                 >
                   ANDROID SCREEN
                 </button>
- 
+      
               </div>
             </div>
         )}

@@ -19,14 +19,15 @@ const containerVariants = {
 const categoryOrder = {
   'androidplayer': 1,
   'ambientlight': 2,
-  '360camera': 3,
-  'powerboot': 4,
-  'contidecoder': 5,
-  'alphardvellfire': 6,
-  'bmw': 7,
-  'mercedes': 8,
-  'other': 9
-};
+  'contidecoder': 3,
+  'alphardvellfire': 4,
+  'bmw': 5,
+  'mercedes': 6,
+  'other': 7
+}
+
+// 排除的類別
+const excludedCategories = ['360camera', 'powerboot'];
 
 export default function Products() {
   const [categories, setCategories] = useState([]);
@@ -41,6 +42,12 @@ export default function Products() {
         if (Array.isArray(products)) {
           const categorizedProducts = products.reduce((acc, product) => {
             const category = product.categories;
+            
+            // 排除指定的類別
+            if (excludedCategories.includes(category)) {
+              return acc;
+            }
+            
             if (!acc[category]) {
               acc[category] = {
                 name: category.toUpperCase(),
