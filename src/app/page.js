@@ -20,7 +20,11 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       <HeroSection 
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp"
+        images={[
+          "/home/lynobanner.webp",
+          "https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp"
+          
+        ]}
         aspectRatio="3333/1458"
         
       />

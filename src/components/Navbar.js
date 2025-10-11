@@ -21,8 +21,6 @@ const outfit = Outfit({ subsets: ["latin"] })
 const menuItems = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Product" },
-  { href: "/dx360", label: "DX360" },
-  { href: "/powerboot", label: "PowerBoot" },
   { href: "/gallery", label: "Gallery" },
   { href: "/locations", label: "Locations" },
 ]

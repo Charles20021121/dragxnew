@@ -4,7 +4,22 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Separator } from '@/components/ui/separator'
+import { Quicksand, Manrope } from 'next/font/google'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
 import './fonts.css'
+
+const quicksand = Quicksand({ 
+  subsets: ['latin'],
+  weight: '400'
+})
+
+const manrope = Manrope({ 
+  subsets: ['latin'],
+  weight: '500'
+})
 
 const screenSizes = [
   { id: '12.3', name: '12.3 INCH', image: '/lyno/screen/12.3 INCH.jpg' },
@@ -446,6 +461,7 @@ export default function LynoPage() {
   const [showProductOptions, setShowProductOptions] = useState(true) // 默认显示产品选项
   const [selectedProduct, setSelectedProduct] = useState(productOptions['12.3'][0].id) // 默认选中12.3英寸的第一个产品
   const [indicatorPosition, setIndicatorPosition] = useState({ left: 0, width: 0 })
+  const [showMoreDetails, setShowMoreDetails] = useState(false) // 控制是否显示产品选择和详情
   const screenRefs = useRef({})
 
   // 计算指示器位置
@@ -537,134 +553,6 @@ export default function LynoPage() {
       </div>
 
 
-
-      {/* Screen Sizes Section */}
-      <div className="bg-white py-16">
-       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-         {/* Screen Grid with Separators */}
-         <div className="flex flex-row items-center justify-center divide-x divide-gray-300 gap-1 md:gap-8 relative">
-            {screenSizes.map((screen) => (
-              <div 
-                key={screen.id}
-                className="flex flex-col items-center py-0 px-2 md:px-12 space-y-4 cursor-pointer transition-all duration-300"
-                onClick={() => handleScreenClick(screen.id)}
-              >
-                <div 
-                  ref={(el) => screenRefs.current[screen.id] = el}
-                  className="relative w-16 h-10 md:w-40 md:h-24"
-                >
-                  <Image
-                    src={screen.image}
-                    alt={`LYNO ${screen.name} Android Car Display - Premium In-Car Entertainment System`}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 64px, 160px"
-                  />
-                </div>
-                <div className="text-center relative">
-                  <h3 className="font-bold text-sm" style={{ 
-                    fontFamily: 'Nasalization, Orbitron, sans-serif', 
-                    color: selectedScreen === screen.id ? '#000000' : '#4a5568'
-                  }}>
-                    {screen.name}
-                  </h3>
-                </div>
-              </div>
-            ))}
-            
-            {/* Base line - 底部长线 */}
-            <div className="absolute -bottom-4 left-0 right-0 h-[2px] bg-gray-300"></div>
-            
-            {/* Active indicator - 选中的粗线 */}
-            <motion.div
-              layoutId="screenIndicator"
-              className="absolute -bottom-4 h-[4px] bg-black"
-              style={{
-                width: indicatorPosition.width,
-                left: indicatorPosition.left
-              }}
-              initial={false}
-              transition={{
-                type: "spring",
-                stiffness: 500,
-                damping: 30
-              }}
-            />
-         </div>
-       </div>
-      </div>
-
-      {/* Product Options Section */}
-      {showProductOptions && productOptions[selectedScreen] && (
-        <div className="bg-gray-50 sm:py-16 py-4">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-3 gap-2 md:gap-8">
-              {productOptions[selectedScreen].map((product) => (
-                <motion.div
-                  key={product.id}
-                  className={`${
-                    selectedProduct === product.id ? 'bg-gray-300' : 'bg-white'
-                  } rounded-lg p-2 md:p-6 shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2`}
-                  onClick={() => setSelectedProduct(product.id)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="text-center">
-                    <h3 className="text-sm md:text-xl font-bold mb-1 md:mb-2" style={{ 
-                      fontFamily: 'Nasalization, Orbitron, sans-serif',
-                      color: '#000000'
-                    }}>
-                      {product.name}
-                    </h3>
-                    <p className="text-xs md:text-lg text-gray-600 font-semibold">
-                      {product.specs}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Product Details Section - 左边照片，右边规格表 */}
-      {selectedProduct && productDetails[selectedProduct] && (
-        <div className="bg-white py-5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              {/* 左侧：产品图片 */}
-              <div className="flex flex-col items-center">
-                <div className="relative w-full max-w-md">
-                  <Image
-                    src={productDetails[selectedProduct].image}
-                    alt={productDetails[selectedProduct].name}
-                    width={500}
-                    height={350}
-                    className="w-full h-auto rounded-lg shadow-lg"
-                  />
-                </div>
-                <div className="mt-6">
-                  <button className="bg-gray-400 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors duration-300">
-                    SHOP NOW
-                  </button>
-                </div>
-              </div>
-              
-              {/* 右侧：产品详细规格 */}
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 gap-3">
-                  {Object.entries(productDetails[selectedProduct].details).map(([key, value]) => (
-                    <div key={key} className="flex justify-between py-2 border-b border-gray-200">
-                      <span className="font-semibold text-gray-700 text-sm">{key}:</span>
-                      <span className="text-gray-600 text-right text-sm max-w-xs whitespace-pre-line">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Additional Images Below Screen Section */}
       <figure className="relative">
@@ -783,6 +671,242 @@ export default function LynoPage() {
           A complete entertainment and control solution that transforms your driving experience
         </figcaption>
       </figure>
+
+      {/* Screen Sizes Section */}
+      <div className="bg-white py-16">
+       <div className="max-w-7xl mx-auto  sm:px-6 lg:px-8">
+         {/* Screen Grid with Separators */}
+         <div className="flex flex-row items-center justify-center divide-x divide-gray-300 gap-1 md:gap-8 relative">
+            {/* Desktop: 显示所有屏幕 */}
+            <div className="hidden md:flex flex-row items-center justify-center divide-x divide-gray-300 gap-8 w-full">
+              {screenSizes.map((screen) => (
+                <div 
+                  key={screen.id}
+                  className="flex flex-col items-center py-0 px-12 space-y-4 cursor-pointer transition-all duration-300"
+                  onClick={() => handleScreenClick(screen.id)}
+                >
+                  <div 
+                    ref={(el) => screenRefs.current[screen.id] = el}
+                    className="relative w-40 h-24"
+                  >
+                    <Image
+                      src={screen.image}
+                      alt={`LYNO ${screen.name} Android Car Display - Premium In-Car Entertainment System`}
+                      fill
+                      className="object-contain"
+                      sizes="160px"
+                    />
+                  </div>
+                  <div className="text-center relative">
+                    <h3 className={`font-bold text-sm ${quicksand.className}`} style={{ 
+                      color: selectedScreen === screen.id ? '#000000' : '#4a5568'
+                    }}>
+                      {screen.name}
+                    </h3>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleScreenClick(screen.id);
+                        setShowMoreDetails(true);
+                      }}
+                      className="mt-2 bg-gradient-to-r from-gray-400 to-gray-300 text-white px-4 py-1 rounded text-xs font-semibold hover:from-gray-500 hover:to-gray-400 transition-all duration-300"
+                    >
+                      Learn More
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile: Swiper显示屏幕 */}
+            <div className="md:hidden w-full">
+              <Swiper
+                modules={[Navigation]}
+                spaceBetween={0}
+                slidesPerView={2}
+                navigation={{
+                  nextEl: '.swiper-button-next-screens',
+                  prevEl: '.swiper-button-prev-screens',
+                }}
+                className="screen-sizes-swiper"
+              >
+                {screenSizes.map((screen, index) => (
+                  <SwiperSlide key={screen.id}>
+                    <div className="flex items-center justify-center w-full relative">
+                      <div 
+                        className="flex flex-col items-center py-0 px-2 space-y-2 cursor-pointer transition-all duration-300"
+                        onClick={() => handleScreenClick(screen.id)}
+                      >
+                        <div 
+                          ref={(el) => screenRefs.current[screen.id] = el}
+                          className="relative w-24 h-16"
+                        >
+                          <Image
+                            src={screen.image}
+                            alt={`LYNO ${screen.name} Android Car Display - Premium In-Car Entertainment System`}
+                            fill
+                            className="object-contain"
+                            sizes="96px"
+                          />
+                        </div>
+                        <div className="text-center relative">
+                          <h3 className={`font-bold text-sm ${quicksand.className}`} style={{ 
+                            color: selectedScreen === screen.id ? '#000000' : '#4a5568'
+                          }}>
+                            {screen.name}
+                          </h3>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleScreenClick(screen.id);
+                              setShowMoreDetails(true);
+                            }}
+                            className="mt-2 bg-gradient-to-r from-gray-400 to-gray-300 text-white px-2 py-0.5 rounded text-xs font-semibold hover:from-gray-500 hover:to-gray-400 transition-all duration-300"
+                          >
+                            Learn More
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* 分隔线 - 在每个slide右边显示，除了最后一个 */}
+                      {index < screenSizes.length - 1 && (
+                        <div className="absolute -right-px top-1/2 transform -translate-y-1/2 h-20 w-px bg-gray-300 z-10"></div>
+                      )}
+                    </div>
+                  </SwiperSlide>
+                ))}
+                
+                {/* 自定义导航按钮 */}
+                <div className="swiper-button-prev-screens absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white rounded-full shadow-lg p-2 hover:bg-gray-50 transition-colors cursor-pointer">
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </div>
+                <div className="swiper-button-next-screens absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-white rounded-full shadow-lg p-2 hover:bg-gray-50 transition-colors cursor-pointer">
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </Swiper>
+            </div>
+            
+            {/* Base line - 底部长线 */}
+            <div className="absolute -bottom-4 left-0 right-0 h-[2px] bg-gray-300 hidden"></div>
+            
+            {/* Active indicator - 选中的粗线 */}
+            <motion.div
+              layoutId="screenIndicator"
+              className="absolute -bottom-4 h-[4px] bg-black hidden"
+              style={{
+                width: indicatorPosition.width,
+                left: indicatorPosition.left
+              }}
+              initial={false}
+              transition={{
+                type: "spring",
+                stiffness: 500,
+                damping: 30
+              }}
+            />
+         </div>
+       </div>
+      </div>
+
+      {/* Product Options Section */}
+      {showMoreDetails && showProductOptions && productOptions[selectedScreen] && (
+        <div className="bg-gray-50 sm:py-16 py-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-3 gap-2 md:gap-8">
+              {productOptions[selectedScreen].map((product) => (
+                <motion.div
+                  key={product.id}
+                  className={`${
+                    selectedProduct === product.id ? 'bg-gray-300' : 'bg-white'
+                  } rounded-lg p-2 md:p-6 shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2`}
+                  onClick={() => setSelectedProduct(product.id)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="text-center">
+                    <h3 className={`text-sm md:text-xl font-bold mb-1 md:mb-2 ${manrope.className}`} style={{ 
+                      color: '#000000'
+                    }}>
+                      {product.name}
+                    </h3>
+                    <p className="text-xs md:text-lg text-gray-600 font-semibold">
+                      {product.specs}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Product Details Section - 左边照片，右边规格表 */}
+      {showMoreDetails && selectedProduct && productDetails[selectedProduct] && (
+        <div className="bg-white py-5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              {/* 左侧：产品图片 */}
+              <div className="flex flex-col items-center">
+                {/* 手机版本：图片和按钮水平布局 */}
+                <div className="flex flex-row lg:flex-col items-center w-full gap-4 lg:gap-0">
+                  <div className="relative w-1/2 lg:w-full lg:max-w-md">
+                    <Image
+                      src={productDetails[selectedProduct].image}
+                      alt={productDetails[selectedProduct].name}
+                      width={500}
+                      height={350}
+                      className="w-full h-auto rounded-lg shadow-lg"
+                    />
+                  </div>
+                  <div className="w-1/2 lg:w-full lg:mt-6 flex justify-start lg:justify-center">
+                    <button className="bg-gray-400 text-white px-4 py-2 lg:px-8 lg:py-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors duration-300 text-sm lg:text-base">
+                      SHOP NOW
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 右侧：产品详细规格 */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-3">
+                  {Object.entries(productDetails[selectedProduct].details).map(([key, value]) => (
+                    <div key={key} className="flex justify-between py-2 border-b border-gray-200">
+                      <span className="font-semibold text-gray-700 text-sm">{key}:</span>
+                      <span className="text-gray-600 text-right text-sm max-w-xs whitespace-pre-line">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx global>{`
+        .screen-sizes-swiper {
+          width: 100%;
+          padding: 0 20px;
+        }
+        .screen-sizes-swiper .swiper-slide {
+          display: flex;
+          justify-content: center;
+        }
+        .swiper-button-prev-screens,
+        .swiper-button-next-screens {
+          width: 32px;
+          height: 32px;
+          margin-top: -16px;
+        }
+        .swiper-button-prev-screens.swiper-button-disabled,
+        .swiper-button-next-screens.swiper-button-disabled {
+          opacity: 0.3;
+          cursor: not-allowed;
+        }
+      `}</style>
     </>
   )
 }

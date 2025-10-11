@@ -1,5 +1,6 @@
 "use client"
 import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 import Link from 'next/link'
 import styles from '@/css/Product.module.css'
 import { motion } from "framer-motion";
@@ -27,13 +28,13 @@ const products = [
   },
   {
     Name: "360CAMERA",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977940/damwcrijnzpulm62k7ce_b31nnw?_a=BAVFB+DW0",
-    domainUrl: "/products/360camera"
+    ImgUrl: "/dx360/logo/dx360.jpg",
+    domainUrl: "/dx360"
   },
   {
     Name: "POWER BOOT",
     ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977940/hhtep5dkd3wdixyn8fsv_rdiujs?_a=BAVFB+DW0",
-    domainUrl: "/products/powerboot"
+    domainUrl: "/powerboot"
   },
 ];
 
@@ -81,14 +82,25 @@ export default function ProductSection() {
               >
                 <Link href={product.domainUrl} className="w-full">
                   <div className="relative aspect-square rounded-lg md:rounded-2xl overflow-hidden group">
-                    <CldImage
-                      width="600"
-                      height="600"
-                      src={product.ImgUrl}
-                      sizes="100vw"
-                      alt={product.Name}
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
+                    {product.ImgUrl.startsWith('/') ? (
+                      <Image
+                        width={600}
+                        height={600}
+                        src={product.ImgUrl}
+                        sizes="100vw"
+                        alt={product.Name}
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <CldImage
+                        width="600"
+                        height="600"
+                        src={product.ImgUrl}
+                        sizes="100vw"
+                        alt={product.Name}
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    )}
                   </div>
                 </Link>
                 <h3 className="text-[#1c5434] text-[clamp(8px,1.5vw,18px)] md:text-[clamp(10px,2vw,18px)] font-black mt-2 md:mt-5 mb-0 text-center">
