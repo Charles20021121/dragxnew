@@ -5,11 +5,23 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import MetaPixel from "@/components/MetaPixel";
+import { ProductProvider } from "@/contexts/ProductContext";
 
 const inter = Inter({ subsets: ["latin"] });
 const manrope = Manrope({ subsets: ["latin"] });
 
+// 根據環境自動選擇 base URL
+const getBaseUrl = () => {
+  // 如果有設置 NEXT_PUBLIC_BASE_URL 環境變量（用於 ngrok 測試）
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    return process.env.NEXT_PUBLIC_BASE_URL;
+  }
+  // 生產環境
+  return 'https://dragx.asia';
+};
+
 export const metadata = {
+  metadataBase: new URL(getBaseUrl()),
   title: "DRAGX",
   description: "Car Accessories",
 };
@@ -36,13 +48,15 @@ export default function RootLayout({ children }) {
         }} />
       </head>
       <body className={inter.className}>
-        <MetaPixel />
-        <Navbar />
-        <main>
-          {children}
-        </main>
-        <WhatsAppButton />
-        <Footer />
+        <ProductProvider>
+          <MetaPixel />
+          <Navbar />
+          <main>
+            {children}
+          </main>
+          <WhatsAppButton />
+          <Footer />
+        </ProductProvider>
       </body>
     </html>
   );

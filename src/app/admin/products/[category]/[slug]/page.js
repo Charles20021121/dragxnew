@@ -621,11 +621,11 @@ export default function ProductPage({ params: paramsPromise }) {
                           <label className="block text-sm font-medium text-gray-700">Android Series</label>
                           <select
                             name="android_series"
-                            value={formData.android_series}
+                            value={formData.android_series || ""}
                             onChange={handleChange}
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
                           >
-                            {!formData.android_series && <option value="">Select Android Series</option>}
+                            <option value="">Select Android Series</option>
                             <option value="Advance_series">Advance series</option>
                             <option value="Android_Ai_Box">Android Ai Box</option>
                             <option value="Cyber_series">Cyber series</option>
@@ -636,6 +636,7 @@ export default function ProductPage({ params: paramsPromise }) {
                             <option value="TRONMMEXT_EI_series">TRONMMEXT EI series</option>
                             <option value="TRONMMEXT_ES_series">TRONMMEXT ES series</option>
                             <option value="Ultra_series">Ultra series</option>
+                            <option value="Others">Others</option>
                           </select>
                         </div>
                       )}

@@ -10,6 +10,7 @@ import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import './fonts.css'
+import { useProduct } from '@/contexts/ProductContext'
 
 const quicksand = Quicksand({ 
   subsets: ['latin'],
@@ -456,6 +457,7 @@ const productOptions = {
 }
 
 export default function LynoPage() {
+  const { setCurrentProduct } = useProduct()
   const [selectedScreen, setSelectedScreen] = useState('12.3')
   const [isDesktop, setIsDesktop] = useState(false)
   const [showProductOptions, setShowProductOptions] = useState(true) // 默认显示产品选项
@@ -463,6 +465,22 @@ export default function LynoPage() {
   const [indicatorPosition, setIndicatorPosition] = useState({ left: 0, width: 0 })
   const [showMoreDetails, setShowMoreDetails] = useState(false) // 控制是否显示产品选择和详情
   const screenRefs = useRef({})
+
+  // 设置 LYNO 产品信息给 WhatsApp 按钮使用
+  useEffect(() => {
+    setCurrentProduct({
+      name: 'LYNO - Premium Android Car Player',
+      category: 'androidplayer',
+      filter1: 'androidPlayer',
+      url: window.location.href,
+      isListPage: false,
+      isLyno: true
+    })
+
+    return () => {
+      setCurrentProduct(null)
+    }
+  }, [setCurrentProduct])
 
   // 计算指示器位置
   const updateIndicatorPosition = () => {

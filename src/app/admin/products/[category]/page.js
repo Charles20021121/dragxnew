@@ -22,7 +22,8 @@ export default function CategoryProducts({ params: paramsPromise }) {
     publicId: '',
     filter: '',
     filter1: '',
-    Specifications: ''
+    Specifications: '',
+    android_series: ''
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -118,7 +119,8 @@ export default function CategoryProducts({ params: paramsPromise }) {
           publicId: '',
           filter: '',
           filter1: '',
-          Specifications: ''
+          Specifications: '',
+          android_series: ''
         });
         setSelectedFile(null);
         setUploadProgress(0);
@@ -500,6 +502,32 @@ export default function CategoryProducts({ params: paramsPromise }) {
                               <option value="volvo">Volvo</option>
                               <option value="alphard">Alphard</option>
                               <option value="vellfire">Vellfire</option>
+                            </select>
+                          </div>
+                        )}
+
+                        {/* 只在 androidplayer 類別顯示 android series 選項 */}
+                        {category.toLowerCase() === 'androidplayer' && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Android Series</label>
+                            <select
+                              name="android_series"
+                              value={formData.android_series}
+                              onChange={handleChange}
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                            >
+                              <option value="">Select Android Series</option>
+                              <option value="Advance_series">Advance series</option>
+                              <option value="Android_Ai_Box">Android Ai Box</option>
+                              <option value="Cyber_series">Cyber series</option>
+                              <option value="Diamond_series">Diamond series</option>
+                              <option value="Exclusive_series">Exclusive series</option>
+                              <option value="Luxury_series">Luxury series</option>
+                              <option value="Performance_series">Performance series</option>
+                              <option value="TRONMMEXT_EI_series">TRONMMEXT EI series</option>
+                              <option value="TRONMMEXT_ES_series">TRONMMEXT ES series</option>
+                              <option value="Ultra_series">Ultra series</option>
+                              <option value="Others">Others</option>
                             </select>
                           </div>
                         )}

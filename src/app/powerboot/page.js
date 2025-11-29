@@ -2,8 +2,10 @@
 
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
+import { useProduct } from '@/contexts/ProductContext'
 
 export default function PowerBootPage() {
+  const { setCurrentProduct } = useProduct()
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
@@ -14,6 +16,21 @@ export default function PowerBootPage() {
     window.addEventListener('resize', checkScreenSize)
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
+
+  // 设置 Power Boot 产品信息给 WhatsApp 按钮使用
+  useEffect(() => {
+    setCurrentProduct({
+      name: 'Power Boot - Smart Electric Tailgate System',
+      category: 'powerboot',
+      url: window.location.href,
+      isListPage: false,
+      isPowerBoot: true
+    })
+
+    return () => {
+      setCurrentProduct(null)
+    }
+  }, [setCurrentProduct])
 
   return (
     <>
@@ -173,9 +190,9 @@ export default function PowerBootPage() {
           <h2 className="text-2xl md:text-4xl font-bold tracking-[0.1em] mb-8 md:mb-12">SHOP BY CAR MODEL</h2>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-y-12 md:gap-8 text-[0.8rem] tracking-[0.15em]">
             <div className="space-y-4 md:space-y-6 border-b md:border-b-0 pb-12 md:pb-0">
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH10-VACUUM-i.1273732232.25034927374" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH10 VACUUM</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH20-NO-VACUUM-VACUUM-i.1273732232.25433401196" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH20 NO VACUUM/VACUUM</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH30-VACUUM-NO-VACUUM-i.1273732232.29254380671" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH30 VACUUM/NO VACUUM</a>
+              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH10-VACUUM-i.1273732232.25034927374" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH10</a>
+              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH20-NO-VACUUM-VACUUM-i.1273732232.25433401196" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH20</a>
+              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH30-VACUUM-NO-VACUUM-i.1273732232.29254380671" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH30</a>
               <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK-%F0%9F%94%A5TOYOTA-ALPHARD-VELLFIRE-ANH30-AUTO-UP-RELAY-i.1273732232.26402410705" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA ALPHARD/VELLFIRE ANH30</a>
               <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-NOAH-2023-i.1273732232.28542005564" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA NOAH 2023</a>
             </div>
@@ -196,7 +213,7 @@ export default function PowerBootPage() {
               <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-HARRIER-2015-2021-i.1273732232.28961381149" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA HARRIER 2015-2021</a>
               <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-VELOZ-i.1273732232.24436072139" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA VELOZ</a>
               <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-ESTIMA-2008-2020-i.1273732232.26361371771" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA ESTIMA 2008-2020</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-VOXY-VACUMM-NO-VACUMM-i.1273732232.27211376366" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA VOXY VACUUM/NO VACUUM</a>
+              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-VOXY-VACUMM-NO-VACUMM-i.1273732232.27211376366" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA VOXY</a>
             </div>
             <div className="space-y-4 md:space-y-6">
               <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-PERODUA-ARUZ-i.1273732232.29861376140" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PERODUA ARUZ</a>

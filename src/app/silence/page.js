@@ -3,10 +3,12 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CldImage } from 'next-cloudinary'
 import HeroSection from "@/components/HeroSection"
+import { useProduct } from '@/contexts/ProductContext'
 
 const categories = ['HATCHBACK', 'SEDAN', 'SUV', 'MPV']
 
 export default function SilencePage() {
+  const { setCurrentProduct } = useProduct()
   const [activeCategory, setActiveCategory] = useState('HATCHBACK')
   const [products, setProducts] = useState({
     HATCHBACK: [],
@@ -38,6 +40,22 @@ export default function SilencePage() {
 
     fetchProducts()
   }, [])
+
+  // 设置 Soundproof 产品信息给 WhatsApp 按钮使用
+  useEffect(() => {
+    setCurrentProduct({
+      name: `DX Silence - ${activeCategory}`,
+      category: 'soundproof',
+      filter1: activeCategory.toLowerCase(),
+      url: window.location.href,
+      isListPage: true,
+      isSoundproof: true
+    })
+
+    return () => {
+      setCurrentProduct(null)
+    }
+  }, [activeCategory, setCurrentProduct])
 
   return (
     <main 

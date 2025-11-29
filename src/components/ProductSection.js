@@ -27,7 +27,7 @@ const products = [
     domainUrl: "/products/contidecoder"
   },
   {
-    Name: "360CAMERA",
+    Name: "360",
     ImgUrl: "/dx360/logo/dx360.jpg",
     domainUrl: "/dx360"
   },

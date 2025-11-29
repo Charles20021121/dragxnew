@@ -64,52 +64,46 @@ export async function PUT(request, { params: paramsPromise }) {
 
     const product = productCheck[0];
     
-    // 如果 Id 和 same 相同，更新所有相關產品
-    if (product.Id == product.same) {
-      // 更新所有相同 same 值的產品的 Name
-      await connection.query(
-        `UPDATE products SET 
-          Name = ? 
-        WHERE same = ? AND Id = ?`,
-        [data.Name, product.same, product.Id]
-      );
+    // 確定要更新的產品 ID（使用主產品 ID）
+    const mainProductId = product.same || product.Id;
+    
+    // 更新所有相同 same 值的產品的 Name
+    await connection.query(
+      `UPDATE products SET 
+        Name = ? 
+      WHERE same = ? OR Id = ?`,
+      [data.Name, mainProductId, mainProductId]
+    );
 
-      // 只更新主產品的其他字段
-      const [result] = await connection.query(
-        `UPDATE products SET 
-          categories = ?,
-          description = ?,
-          Specifications = ?,
-          buy = ?,
-          filter = ?,
-          filter1 = ?,
-          android_series = ?,
-          date = ?
-        WHERE Id = ?`,
-        [
-          data.categories,
-          data.description,
-          data.Specifications,
-          data.buy,
-          data.filter,
-          data.filter1,
-          data.android_series,
-          data.date,
-          params.id
-        ]
-      );
+    // 更新主產品的其他字段
+    const [result] = await connection.query(
+      `UPDATE products SET 
+        categories = ?,
+        description = ?,
+        Specifications = ?,
+        buy = ?,
+        filter = ?,
+        filter1 = ?,
+        android_series = ?,
+        date = ?
+      WHERE Id = ?`,
+      [
+        data.categories,
+        data.description,
+        data.Specifications,
+        data.buy,
+        data.filter,
+        data.filter1,
+        data.android_series,
+        data.date,
+        mainProductId
+      ]
+    );
 
-      if (result.affectedRows === 0) {
-        return NextResponse.json(
-          { message: 'Failed to update product' },
-          { status: 500 }
-        );
-      }
-    } else {
-      // 如果 Id 和 same 不同，則不允許更新
+    if (result.affectedRows === 0) {
       return NextResponse.json(
-        { message: 'Cannot update non-primary product' },
-        { status: 403 }
+        { message: 'Failed to update product' },
+        { status: 500 }
       );
     }
 

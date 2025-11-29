@@ -9,8 +9,10 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import LoadingSpinner from './LoadingSpinner';
 import { PIXEL_IDS } from '@/components/MetaPixel';
+import { useProduct } from '@/contexts/ProductContext';
 
 export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage }) {
+  const { setCurrentProduct } = useProduct();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [relatedImages, setRelatedImages] = useState([
@@ -28,6 +30,25 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
 
   // 在文件頂部添加 useState
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // 设置当前产品信息给 WhatsApp 按钮使用
+  useEffect(() => {
+    if (product) {
+      setCurrentProduct({
+        name: product.name,
+        image: product.image,
+        url: window.location.href,
+        category: product.categories,
+        filter1: product.filter1,  // 添加 filter1 字段
+        android_series: product.android_series  // 添加 android_series 字段
+      });
+    }
+    
+    // 清理函数：离开页面时清除产品信息
+    return () => {
+      setCurrentProduct(null);
+    };
+  }, [product, setCurrentProduct]);
 
   useEffect(() => {
     async function fetchRelatedImages() {
@@ -105,6 +126,86 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
     }, 300);
   };
 
+  // 使用与右下角 WhatsApp 按钮相同的消息与 URL 生成逻辑
+  const getWhatsAppUrlForProduct = () => {
+    const isMobileDevice = () => {
+      if (typeof window === 'undefined') return false;
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
+    const getProductCategory = () => {
+      if (!product) return '';
+
+      if (product.isLyno) return 'LYNO';
+      if (product.isDX360) return 'DX360';
+      if (product.isPowerBoot) return 'POWER BOOT';
+      if (product.isSoundproof) {
+        const soundproofMap = {
+          'hatchback': 'SOUNDPROOF - HATCHBACK',
+          'sedan': 'SOUNDPROOF - SEDAN',
+          'suv': 'SOUNDPROOF - SUV',
+          'mpv': 'SOUNDPROOF - MPV'
+        };
+        return soundproofMap[product.filter1] || 'SOUNDPROOF';
+      }
+
+      if (product.filter1 === 'androidPlayer') {
+        return 'ANDROID PLAYER';
+      } else if (product.filter1 === 'contiAndroid') {
+        return 'ANDROID SCREEN';
+      }
+
+      return '';
+    };
+
+    const getAndroidSeries = () => {
+      if (!product || !product.android_series) return '';
+      const seriesMap = {
+        'Advance_series': 'Advance Series',
+        'Android_Ai_Box': 'Android Ai Box',
+        'Cyber_series': 'Cyber Series',
+        'Diamond_series': 'Diamond Series',
+        'Exclusive_series': 'Exclusive Series',
+        'Luxury_series': 'Luxury Series',
+        'Performance_series': 'Performance Series',
+        'TRONMMEXT_EI_series': 'TRONMMEXT EI Series',
+        'TRONMMEXT_ES_series': 'TRONMMEXT ES Series',
+        'Ultra_series': 'Ultra Series',
+        'Others': 'Others'
+      };
+      return seriesMap[product.android_series] || product.android_series;
+    };
+
+    try {
+      const phoneNumber = '60192776056';
+      const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+      const productUrl = typeof window !== 'undefined' ? `${window.location.origin}${pathname}` : '';
+
+      // 构建消息（与 WhatsAppButton 中一致）
+      let message = `Hi Dragx, I'm interested in this product:%0A%0A*${encodeURIComponent(product.name)}*`;
+
+      const category = getProductCategory();
+      if (category) {
+        message += `%0A%0ACategory: ${encodeURIComponent(category)}`;
+      }
+
+      const series = getAndroidSeries();
+      if (series) {
+        message += `%0ASeries: ${encodeURIComponent(series)}`;
+      }
+
+      message += `%0A%0AProduct Link: ${encodeURIComponent(productUrl)}%0A%0ACan you provide more information?`;
+
+      if (isMobileDevice()) {
+        return `https://wa.me/${phoneNumber}?text=${message}`;
+      } else {
+        return `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${message}`;
+      }
+    } catch (err) {
+      return 'https://wa.me/60192776056';
+    }
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -162,13 +263,12 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
             {product.name}
           </h1>
           <a
-            href={product.buy}
+            href={getWhatsAppUrlForProduct()}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#88bc04] text-white font-bold px-20 py-2 rounded-full hover:bg-[#7aa703] transition-colors duration-300"
-            onClick={handleShopNowClick}
+            className="bg-[#88bc04] text-white font-bold px-20 py-2 rounded-full hover:bg-[#7aa703] transition-colors duration-300 whitespace-nowrap"
           >
-            Shop Now
+            Learn More
           </a>
         </div>
 
@@ -370,13 +470,12 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
           </div>
           <div className="w-2/5">
             <a
-              href={product.buy}
+              href={getWhatsAppUrlForProduct()}
               target="_blank"
               rel="noopener noreferrer"
               className="block bg-[#88bc04] text-white text-sm font-bold px-5 py-1.5 rounded-full text-center hover:bg-[#7aa703] transition-colors duration-300"
-              onClick={handleShopNowClick}
             >
-              Shop Now
+              Learn More
             </a>
           </div>
         </div>

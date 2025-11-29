@@ -3,8 +3,10 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import { useProduct } from '@/contexts/ProductContext'
 
 export default function DX360Page() {
+  const { setCurrentProduct } = useProduct()
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
@@ -16,6 +18,21 @@ export default function DX360Page() {
     window.addEventListener('resize', checkScreenSize)
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
+
+  // 设置 DX360 产品信息给 WhatsApp 按钮使用
+  useEffect(() => {
+    setCurrentProduct({
+      name: 'DX360 - 360° Vision & Safety System',
+      category: 'dx360',
+      url: window.location.href,
+      isListPage: false,
+      isDX360: true
+    })
+
+    return () => {
+      setCurrentProduct(null)
+    }
+  }, [setCurrentProduct])
 
   return (
     <>
@@ -50,7 +67,9 @@ export default function DX360Page() {
           className={`absolute ${isDesktop ? 'left-[14.5%] bottom-[52%] w-[10%]' : 'left-[5.7%] bottom-[51.5%] w-[18%]'}`}
         >
           <a 
-            href="/shop/dx360"
+            href="https://my.shp.ee/hf6EHDB"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
             style={{ 
               fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
@@ -74,7 +93,9 @@ export default function DX360Page() {
           className={`absolute ${isDesktop ? 'left-[57%] bottom-[50%] w-[10%]' : 'left-[60%] bottom-[48%] w-[18%]'}`}
         >
           <a 
-            href="/shop/dx360"
+            href="https://my.shp.ee/hf6EHDB"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
             style={{ 
               fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
@@ -98,7 +119,9 @@ export default function DX360Page() {
           className={`absolute ${isDesktop ? 'left-[40.4%] bottom-[50%] w-[10%]' : 'left-[40%] bottom-[49%] w-[18%]'}`}
         >
           <a 
-            href="/shop/dx360"
+            href="https://my.shp.ee/hf6EHDB"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
             style={{ 
               fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
@@ -122,7 +145,9 @@ export default function DX360Page() {
           className={`absolute ${isDesktop ? 'left-[19.4%] bottom-[15%] w-[10%]' : 'left-[10%] bottom-[11%] w-[18%]'}`}
         >
           <a 
-            href="/shop/dx360"
+            href="https://my.shp.ee/hf6EHDB"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
             style={{ 
               fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
