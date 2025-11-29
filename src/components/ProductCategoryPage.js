@@ -144,10 +144,10 @@ export default function ProductCategoryPage({
       : categoryPath === "contidecoder"
         ? products
           .filter(product => {
-            const typeMatch = contiFilter === 'appleCarplay' 
-              ? (product.filter1 === 'appleCarplay'  )
+            const typeMatch = contiFilter === 'appleCarplay'
+              ? (product.filter1 === 'appleCarplay')
               : product.filter1 === contiFilter;
-            const carMatch = carFilter === 'all' || product.filter === carFilter ;
+            const carMatch = carFilter === 'all' || product.filter === carFilter;
             return typeMatch && carMatch;
           })
           .sort((a, b) => a.name.localeCompare(b.name, undefined, {
@@ -164,36 +164,36 @@ export default function ProductCategoryPage({
   // Android Player 专用：按系列分组产品
   const getAndroidProductsBySeries = () => {
     if (categoryPath !== "androidplayer") return {};
-    
+
     // 确保 products 是数组
     if (!Array.isArray(products)) {
       console.error('Products is not an array:', products);
       return {};
     }
-    
+
     const filteredProducts = products
       .filter(product => product && product.filter1 === androidFilter)
       .sort((a, b) => {
         const nameA = (a.name || '');
         const nameB = (b.name || '');
-        
+
         // 智能排序：正确处理包含数字的字符串
         return nameA.localeCompare(nameB, undefined, {
           numeric: true,
           sensitivity: 'base'
         });
       });
-    
+
     const productsBySeries = {};
-    
+
     // 为每个系列创建分组
     androidSeries.forEach(series => {
       if (series.value === 'all') return; // 跳过 "All Series"
-      
+
       if (series.value === 'uncategorized') {
         productsBySeries[series.value] = {
           label: series.label,
-          products: filteredProducts.filter(product => 
+          products: filteredProducts.filter(product =>
             !product.android_series || product.android_series === '' || product.android_series === null
           )
         };
@@ -204,7 +204,7 @@ export default function ProductCategoryPage({
         };
       }
     });
-    
+
     // 只返回有产品的系列
     return Object.fromEntries(
       Object.entries(productsBySeries).filter(([key, value]) => value.products.length > 0)
@@ -212,7 +212,7 @@ export default function ProductCategoryPage({
   };
 
   const androidProductsBySeries = getAndroidProductsBySeries();
-  
+
   // 调试信息
   console.log('Products in ProductCategoryPage:', products);
   console.log('Android products by series:', androidProductsBySeries);
@@ -262,7 +262,7 @@ export default function ProductCategoryPage({
 
   return (
     <main className="min-h-screen bg-[#f8f4ec] ">
-      
+
       {/* 添加 Breadcrumb */}
       <nav className="py-4 px-5">
         <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
@@ -286,35 +286,35 @@ export default function ProductCategoryPage({
       <div className="px-5 pb-5">
         {/* androidplayer 的分類切換按鈕 */}
         {categoryPath === "androidplayer" && (
-            <div className="flex justify-center mb-8 px-2">
-              <div className="inline-flex rounded-md bg-white p-1 shadow-sm w-full max-w-2xl">
+          <div className="flex justify-center mb-8 px-2">
+            <div className="inline-flex rounded-md bg-white p-1 shadow-sm w-full max-w-2xl">
               <Link
-                  href="/lyno"
-                  className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors text-gray-500 hover:text-[#1c5434] text-center whitespace-nowrap"
-                >
-                  LYNO
-                </Link>
-                <button
-                  onClick={() => setAndroidFilter('androidPlayer')}
-                  className={`flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'androidPlayer'
-                      ? 'bg-[#1c5434] text-white'
-                      : 'text-gray-500 hover:text-[#1c5434]'
-                    }`}
-                >
-                  ANDROID PLAYER
-                </button>
-                <button
-                  onClick={() => setAndroidFilter('contiAndroid')}
-                  className={`flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'contiAndroid'
-                      ? 'bg-[#1c5434] text-white'
-                      : 'text-gray-500 hover:text-[#1c5434]'
-                    }`}
-                >
-                  ANDROID SCREEN
-                </button>
-      
-              </div>
+                href="/lyno"
+                className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors text-gray-500 hover:text-[#1c5434] text-center whitespace-nowrap"
+              >
+                LYNO
+              </Link>
+              <button
+                onClick={() => setAndroidFilter('androidPlayer')}
+                className={`flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'androidPlayer'
+                  ? 'bg-[#1c5434] text-white'
+                  : 'text-gray-500 hover:text-[#1c5434]'
+                  }`}
+              >
+                ANDROID PLAYER
+              </button>
+              <button
+                onClick={() => setAndroidFilter('contiAndroid')}
+                className={`flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap ${androidFilter === 'contiAndroid'
+                  ? 'bg-[#1c5434] text-white'
+                  : 'text-gray-500 hover:text-[#1c5434]'
+                  }`}
+              >
+                ANDROID SCREEN
+              </button>
+
             </div>
+          </div>
         )}
 
         {categoryPath === "soundproof" && (
@@ -323,8 +323,8 @@ export default function ProductCategoryPage({
               <button
                 onClick={() => setSilenceFilter('hatchback')}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'hatchback'
-                    ? 'bg-[#1c5434] text-white'
-                    : 'text-gray-500 hover:text-[#1c5434]'
+                  ? 'bg-[#1c5434] text-white'
+                  : 'text-gray-500 hover:text-[#1c5434]'
                   }`}
               >
                 HATCHBACK
@@ -332,17 +332,17 @@ export default function ProductCategoryPage({
               <button
                 onClick={() => setSilenceFilter('sedan')}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'sedan'
-                    ? 'bg-[#1c5434] text-white'
-                    : 'text-gray-500 hover:text-[#1c5434]'
+                  ? 'bg-[#1c5434] text-white'
+                  : 'text-gray-500 hover:text-[#1c5434]'
                   }`}
               >
-                    SEDAN
+                SEDAN
               </button>
               <button
                 onClick={() => setSilenceFilter('suv')}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'suv'
-                    ? 'bg-[#1c5434] text-white'
-                    : 'text-gray-500 hover:text-[#1c5434]'
+                  ? 'bg-[#1c5434] text-white'
+                  : 'text-gray-500 hover:text-[#1c5434]'
                   }`}
               >
                 SUV
@@ -350,8 +350,8 @@ export default function ProductCategoryPage({
               <button
                 onClick={() => setSilenceFilter('mpv')}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'mpv'
-                    ? 'bg-[#1c5434] text-white'
-                    : 'text-gray-500 hover:text-[#1c5434]'
+                  ? 'bg-[#1c5434] text-white'
+                  : 'text-gray-500 hover:text-[#1c5434]'
                   }`}
               >
                 MPV
@@ -370,8 +370,8 @@ export default function ProductCategoryPage({
                   <button
                     onClick={() => setContiFilter('appleCarplay')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${contiFilter === 'appleCarplay'
-                        ? 'bg-[#1c5434] text-white'
-                        : 'text-gray-500 hover:text-[#1c5434]'
+                      ? 'bg-[#1c5434] text-white'
+                      : 'text-gray-500 hover:text-[#1c5434]'
                       }`}
                   >
                     APPLE CARPLAY
@@ -379,8 +379,8 @@ export default function ProductCategoryPage({
                   <button
                     onClick={() => setContiFilter('androidSystem')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${contiFilter === 'androidSystem'
-                        ? 'bg-[#1c5434] text-white'
-                        : 'text-gray-500 hover:text-[#1c5434]'
+                      ? 'bg-[#1c5434] text-white'
+                      : 'text-gray-500 hover:text-[#1c5434]'
                       }`}
                   >
                     ANDROID SYSTEM
@@ -432,8 +432,8 @@ export default function ProductCategoryPage({
                               setIsFilterOpen(false);
                             }}
                             className={`w-full px-4 py-2 text-left rounded-md transition-colors capitalize ${carFilter === model
-                                ? 'bg-[#1c5434] text-white'
-                                : 'text-gray-700 hover:bg-gray-100'
+                              ? 'bg-[#1c5434] text-white'
+                              : 'text-gray-700 hover:bg-gray-100'
                               }`}
                           >
                             {model === 'all' ? 'All Models' : model}
@@ -502,174 +502,184 @@ export default function ProductCategoryPage({
               </div>
             ) : (
               Object.entries(androidProductsBySeries || {}).map(([seriesKey, seriesData], index) => (
-              <motion.div
-                key={seriesKey}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="mb-12"
-              >
-                {/* 系列标题 - 移除装饰线 */}
-                <div className="mb-6">
-                  <div className="mb-4">
-                    <h3 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(20px,2.5vw,28px)]">
-                      {seriesData.label.toUpperCase()}
-                    </h3>
-                  </div>
-                </div>
-
-                {/* 根据产品数量选择布局方式 */}
                 <motion.div
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className={seriesData.products.length <= 5 ? "" : "swiper-container"}
+                  key={seriesKey}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="mb-12"
                 >
-                  {seriesData.products.length <= 5 ? (
-                    /* 产品少时使用网格布局 */
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {(seriesData.products || []).map((product) => (
-                        <motion.div
-                          key={product.id}
-                          variants={itemVariants}
-                          className="flex flex-col"
-                        >
-                          <div className="group relative">
-                            <Link
-                              href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
-                              className="block"
-                            >
-                              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                                <div className="relative aspect-square bg-white">
-                                  <CldImage
-                                    src={product.image}
-                                    alt={product.name}
-                                    fill
-                                    className="object-contain p-2"
-                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                  />
-                                </div>
-                              </div>
-                              <div className="mt-3 text-center">
-                                <h3 className="text-[#1c5434] font-bold text-[clamp(14px,1.5vw,16px)] group-hover:text-[#023f1b] transition-colors duration-300">
-                                  {product.name}
-                                </h3>
-                              </div>
-                            </Link>
-
-                            {/* Admin Controls */}
-                            {isAdmin && (
-                              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
-                                <button
-                                  onClick={(e) => {
-                                    e.preventDefault()
-                                    onDelete(product.id)
-                                  }}
-                                  className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                                  </svg>
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        </motion.div>
-                      ))}
+                  {/* 系列标题 - 移除装饰线 */}
+                  <div className="mb-6">
+                    <div className="mb-4">
+                      <h3 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(20px,2.5vw,28px)]">
+                        {seriesData.label.toUpperCase()}
+                      </h3>
                     </div>
-                  ) : (
-                    /* 产品多时使用滑动布局 */
-                    <Swiper
-                      modules={[Navigation]}
-                      spaceBetween={16}
-                      navigation={{
-                        nextEl: `.swiper-button-next-${seriesKey}`,
-                        prevEl: `.swiper-button-prev-${seriesKey}`,
-                      }}
-                      breakpoints={{
-                        320: {
-                          slidesPerView: Math.min(seriesData.products.length, 2),
-                          spaceBetween: 12,
-                        },
-                        640: {
-                          slidesPerView: Math.min(seriesData.products.length, 3),
-                          spaceBetween: 16,
-                        },
-                        768: {
-                          slidesPerView: Math.min(seriesData.products.length, 4),
-                          spaceBetween: 16,
-                        },
-                        1024: {
-                          slidesPerView: Math.min(seriesData.products.length, 5),
-                          spaceBetween: 16,
-                        },
-                      }}
-                      
-                    >
-                    {(seriesData.products || []).map((product) => (
-                      <SwiperSlide key={product.id}>
-                        <motion.div
-                          variants={itemVariants}
-                        >
-                          <div className="group relative">
-                            <Link
-                              href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
-                              className="block"
-                            >
-                              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                                <div className="relative aspect-square bg-white">
-                                  <CldImage
-                                    src={product.image}
-                                    alt={product.name}
-                                    fill
-                                    className="object-contain p-2"
-                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                  />
+                  </div>
+
+                  {/* 根据产品数量选择布局方式 */}
+                  <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className={seriesData.products.length <= 5 ? "" : "swiper-container"}
+                  >
+                    {seriesData.products.length <= 5 ? (
+                      /* 产品少时使用网格布局 */
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {(seriesData.products || []).map((product) => (
+                          <motion.div
+                            key={product.id}
+                            variants={itemVariants}
+                            className="flex flex-col"
+                          >
+                            <div className="group relative">
+                              <Link
+                                href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
+                                className="block"
+                              >
+                                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                  <div className="relative aspect-square bg-white">
+                                    <CldImage
+                                      src={product.image}
+                                      alt={product.name}
+                                      fill
+                                      className="object-contain p-2"
+                                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="mt-3 text-center">
-                                <h3 className="text-[#1c5434] font-bold text-[clamp(14px,1.5vw,16px)] group-hover:text-[#023f1b] transition-colors duration-300">
-                                  {product.name}
-                                </h3>
-                              </div>
-                            </Link>
+                                <div className="mt-3 text-center">
+                                  <h3 className="text-[#1c5434] font-bold text-[clamp(14px,1.5vw,16px)] group-hover:text-[#023f1b] transition-colors duration-300">
+                                    {product.name}
+                                  </h3>
+                                  {product.price && (
+                                    <p className="text-[#1c5434] font-medium text-sm mt-1">
+                                      {product.price}
+                                    </p>
+                                  )}
+                                </div>
+                              </Link>
 
-                            {/* Admin Controls */}
-                            {isAdmin && (
-                              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
-                                <button
-                                  onClick={(e) => {
-                                    e.preventDefault()
-                                    onDelete(product.id)
-                                  }}
-                                  className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                              {/* Admin Controls */}
+                              {isAdmin && (
+                                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      onDelete(product.id)
+                                    }}
+                                    className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      /* 产品多时使用滑动布局 */
+                      <Swiper
+                        modules={[Navigation]}
+                        spaceBetween={16}
+                        navigation={{
+                          nextEl: `.swiper-button-next-${seriesKey}`,
+                          prevEl: `.swiper-button-prev-${seriesKey}`,
+                        }}
+                        breakpoints={{
+                          320: {
+                            slidesPerView: Math.min(seriesData.products.length, 2),
+                            spaceBetween: 12,
+                          },
+                          640: {
+                            slidesPerView: Math.min(seriesData.products.length, 3),
+                            spaceBetween: 16,
+                          },
+                          768: {
+                            slidesPerView: Math.min(seriesData.products.length, 4),
+                            spaceBetween: 16,
+                          },
+                          1024: {
+                            slidesPerView: Math.min(seriesData.products.length, 5),
+                            spaceBetween: 16,
+                          },
+                        }}
+
+                      >
+                        {(seriesData.products || []).map((product) => (
+                          <SwiperSlide key={product.id}>
+                            <motion.div
+                              variants={itemVariants}
+                            >
+                              <div className="group relative">
+                                <Link
+                                  href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
+                                  className="block"
                                 >
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                                  </svg>
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        </motion.div>
-                      </SwiperSlide>
-                    ))}
+                                  <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                    <div className="relative aspect-square bg-white">
+                                      <CldImage
+                                        src={product.image}
+                                        alt={product.name}
+                                        fill
+                                        className="object-contain p-2"
+                                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="mt-3 text-center">
+                                    <h3 className="text-[#1c5434] font-bold text-[clamp(14px,1.5vw,16px)] group-hover:text-[#023f1b] transition-colors duration-300">
+                                      {product.name}
+                                    </h3>
+                                    {product.price && (
+                                      <p className="text-[#1c5434] font-medium text-sm mt-1">
+                                        {product.price}
+                                      </p>
+                                    )}
+                                  </div>
+                                </Link>
 
-                      {/* 自定义导航按钮 */}
-                      <div className={`swiper-button-prev-${seriesKey} absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#1c5434] p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                      </div>
-                      <div className={`swiper-button-next-${seriesKey} absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#1c5434] p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </Swiper>
-                  )}
+                                {/* Admin Controls */}
+                                {isAdmin && (
+                                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
+                                    <button
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        onDelete(product.id)
+                                      }}
+                                      className="absolute top-2 right-2 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </motion.div>
+                          </SwiperSlide>
+                        ))}
+
+                        {/* 自定义导航按钮 */}
+                        <div className={`swiper-button-prev-${seriesKey} absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#1c5434] p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </div>
+                        <div className={`swiper-button-next-${seriesKey} absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#1c5434] p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </Swiper>
+                    )}
+                  </motion.div>
                 </motion.div>
-              </motion.div>
               ))
             )}
           </div>
@@ -707,6 +717,11 @@ export default function ProductCategoryPage({
                       <h3 className="text-[#1c5434] font-bold text-[clamp(14px,1.5vw,16px)] group-hover:text-[#023f1b] transition-colors duration-300">
                         {product.name}
                       </h3>
+                      {product.price && (
+                        <p className="text-[#1c5434] font-medium text-sm mt-1">
+                          {product.price}
+                        </p>
+                      )}
                     </div>
                   </Link>
 
@@ -759,8 +774,9 @@ export default function ProductCategoryPage({
               </svg>
             </button>
           </div>
-        )}
-      </div>
-    </main>
+        )
+        }
+      </div >
+    </main >
   );
-} 
+}

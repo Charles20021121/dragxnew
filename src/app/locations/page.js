@@ -74,20 +74,18 @@ const handleLocationClick = (location) => {
       content_category: 'Store Location'
     });
   }
-  // 原有的位置點擊邏輯...
 };
 
 export default function Locations() {
   return (
     <div className="min-h-screen">
       <HeroSection 
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1740112223/ildqqqcvicpztbb0tkas.webp"
+        image="/locations/PCmap.webp"
         aspectRatio="3334 / 1562"
-        mobileImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1740112224/xpne8khqmo2iczb7yte4.webp"
+        mobileImage="/locations/PHONEmap.webp"
         mobileAspectRatio="3334/2929"
       />
 
-      
       <div 
         className="relative bg-cover bg-center py-5"
         style={{ 
@@ -156,4 +154,4 @@ export default function Locations() {
       </div>
     </div>
   )
-} 
+}

@@ -5,7 +5,7 @@ export async function POST(request) {
   const connection = await pool.getConnection()
   try {
     const data = await request.json()
-    
+
     // 先插入產品，不設置 same
     const [result] = await connection.query(
       `INSERT INTO products (
@@ -19,8 +19,9 @@ export async function POST(request) {
         filter1,
         android_series,
         publicId,
-        date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        date,
+        price
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.Name || '',           // 如果沒有值，使用空字符串
         data.categories || '',
@@ -32,7 +33,8 @@ export async function POST(request) {
         data.filter1 || '',
         data.android_series || '',
         data.publicId || '',
-        data.date || new Date().toISOString().replace('T', ' ').split('.')[0]
+        data.date || new Date().toISOString().replace('T', ' ').split('.')[0],
+        data.price || ''
       ]
     )
 
@@ -44,7 +46,7 @@ export async function POST(request) {
 
     await connection.commit()
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       id: result.insertId
     })

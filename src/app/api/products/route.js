@@ -5,9 +5,9 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
-    
+
     const connection = await pool.getConnection();
-    
+
     if (category) {
       let query = `
         SELECT 
@@ -25,21 +25,22 @@ export async function GET(request) {
         GROUP BY p1.Id
         ORDER BY p1.date DESC
       `;
-      
+
       const [products] = await connection.query(query, [category]);
       connection.release();
-      
+
       const formattedProducts = products.map(product => ({
         id: product.Id,
         name: product.Name,
         categories: product.categories,
         image: product.Url,
         date: product.date,
-        additionalImages: product.additional_images 
+        price: product.price,
+        additionalImages: product.additional_images
           ? product.additional_images.split('|||').filter(Boolean).map(imgData => {
-              const [Id, Name, Url, publicId, date] = imgData.split('|');
-              return { Id, Name, Url, publicId, date };
-            })
+            const [Id, Name, Url, publicId, date] = imgData.split('|');
+            return { Id, Name, Url, publicId, date };
+          })
           : [],
         buy: product.buy,
         specifications: product.Specifications,
@@ -68,21 +69,22 @@ export async function GET(request) {
         GROUP BY p1.Id
         ORDER BY p1.date DESC
       `;
-      
+
       const [products] = await connection.query(query);
       connection.release();
-      
+
       const formattedProducts = products.map(product => ({
         id: product.Id,
         name: product.Name,
         categories: product.categories,
         image: product.Url,
         date: product.date,
-        additionalImages: product.additional_images 
+        price: product.price,
+        additionalImages: product.additional_images
           ? product.additional_images.split('|||').filter(Boolean).map(imgData => {
-              const [Id, Name, Url, publicId, date] = imgData.split('|');
-              return { Id, Name, Url, publicId, date };
-            })
+            const [Id, Name, Url, publicId, date] = imgData.split('|');
+            return { Id, Name, Url, publicId, date };
+          })
           : [],
         buy: product.buy,
         specifications: product.Specifications,

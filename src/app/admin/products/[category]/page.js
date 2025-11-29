@@ -23,7 +23,8 @@ export default function CategoryProducts({ params: paramsPromise }) {
     filter: '',
     filter1: '',
     Specifications: '',
-    android_series: ''
+    android_series: '',
+    price: ''
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -36,23 +37,23 @@ export default function CategoryProducts({ params: paramsPromise }) {
   }, [category]);
 
   const fetchProducts = async () => {
-      try {
-        const res = await fetch(`/api/products?category=${category}`);
-        const data = await res.json();
-        
-        // 處理產品數據，添加 slug
-        const processedProducts = data.map(product => ({
-          ...product,
-          slug: product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-        }));
-        
-        setProducts(processedProducts);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        setLoading(false);
-      }
+    try {
+      const res = await fetch(`/api/products?category=${category}`);
+      const data = await res.json();
+
+      // 處理產品數據，添加 slug
+      const processedProducts = data.map(product => ({
+        ...product,
+        slug: product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      }));
+
+      setProducts(processedProducts);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setLoading(false);
     }
+  }
 
   const showNotification = (type, message) => {
     setNotification({ show: true, type, message });
@@ -63,7 +64,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       setIsUploading(true); // 開始上傳時顯示 loading
       let updatedFormData = { ...formData };
@@ -84,10 +85,10 @@ export default function CategoryProducts({ params: paramsPromise }) {
         );
 
         if (!uploadRes.ok) throw new Error('Upload failed');
-        
+
         const uploadData = await uploadRes.json();
         setUploadProgress(100);
-        
+
         // 更新表單數據中的圖片相關字段
         updatedFormData = {
           ...updatedFormData,
@@ -120,11 +121,12 @@ export default function CategoryProducts({ params: paramsPromise }) {
           filter: '',
           filter1: '',
           Specifications: '',
-          android_series: ''
+          android_series: '',
+          price: ''
         });
         setSelectedFile(null);
         setUploadProgress(0);
-        
+
         // 重新加載頁面以顯示最新數據
         setTimeout(() => {
           window.location.reload();
@@ -158,7 +160,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
         // 先獲取產品信息
         const res = await fetch(`/api/admin/products/${productId}`);
         const product = await res.json();
-        
+
         if (!res.ok) throw new Error('Failed to fetch product');
 
         // 刪除產品及相關圖片
@@ -176,7 +178,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
         if (deleteRes.ok) {
           showNotification('success', 'Product and related images deleted successfully');
           // 重新加載產品列表
-    fetchProducts();
+          fetchProducts();
         } else {
           showNotification('error', 'Failed to delete product');
         }
@@ -203,9 +205,8 @@ export default function CategoryProducts({ params: paramsPromise }) {
       {/* 提示消息 - 添加動畫效果 */}
       {notification.show && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
-            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-          } text-white transition-all duration-500 transform translate-y-0 animate-slide-in`}
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            } text-white transition-all duration-500 transform translate-y-0 animate-slide-in`}
         >
           <div className="flex items-center gap-2">
             {notification.type === 'success' ? (
@@ -253,12 +254,12 @@ export default function CategoryProducts({ params: paramsPromise }) {
       )}
 
       {/* 產品列表 */}
-    <ProductCategoryPage 
-      title={category.toUpperCase()}
-      products={products}
-      categoryPath={category}
-      isAdmin={true}
-      heroImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp"
+      <ProductCategoryPage
+        title={category.toUpperCase()}
+        products={products}
+        categoryPath={category}
+        isAdmin={true}
+        heroImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp"
         onDelete={handleDelete}
         onEdit={handleEdit}
         loading={loading}
@@ -269,23 +270,23 @@ export default function CategoryProducts({ params: paramsPromise }) {
         onClick={() => setShowOffcanvas(true)}
         className="fixed bottom-6 right-6 z-50 p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
       >
-             <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="h-6 w-6 transform group-hover:rotate-90 transition-transform duration-300" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 transform group-hover:rotate-90 transition-transform duration-300"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+        </svg>
       </button>
 
       {/* 美化後的 Offcanvas */}
       {showOffcanvas && (
         <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity" 
-               onClick={() => setShowOffcanvas(false)} />
-          
+          <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+            onClick={() => setShowOffcanvas(false)} />
+
           <div className="absolute inset-y-0 right-0 max-w-2xl w-full transform transition-transform duration-500 ease-in-out">
             <div className="h-full bg-white shadow-xl overflow-hidden flex flex-col">
               {/* Header */}
@@ -297,7 +298,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                     </svg>
                     Create New Product
                   </h2>
-                  <button 
+                  <button
                     onClick={() => setShowOffcanvas(false)}
                     className="text-white hover:text-gray-200 transition-colors"
                   >
@@ -331,39 +332,39 @@ export default function CategoryProducts({ params: paramsPromise }) {
                         />
 
                         {/* 上傳進度條 */}
-      {/* Upload Loading Overlay */}
-      {isUploading && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
-            <div className="relative">
-              {/* 主要加載圈 */}
-              <div className="w-16 h-16 rounded-full border-4 border-[#1c5434]/20">
-                <div className="w-full h-full rounded-full border-4 border-[#88bc04] border-t-transparent animate-[spin_0.8s_linear_infinite]">
-                </div>
-              </div>
-              {/* 脈衝效果 */}
-              <div className="absolute top-0 left-0 w-full h-full">
-                <div className="w-16 h-16 rounded-full border-4 border-[#88bc04] opacity-0 animate-[ping_1.5s_ease-out_infinite]">
-                </div>
-              </div>
-            </div>
-            <p className="mt-4 text-gray-600 font-medium">Uploading product...</p>
-            {uploadProgress > 0 && (
-              <div className="w-full mt-4 max-w-[200px]">
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-[#88bc04] h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
-                <p className="text-sm text-gray-500 text-center mt-2">
-                  {uploadProgress}%
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+                        {/* Upload Loading Overlay */}
+                        {isUploading && (
+                          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+                            <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+                              <div className="relative">
+                                {/* 主要加載圈 */}
+                                <div className="w-16 h-16 rounded-full border-4 border-[#1c5434]/20">
+                                  <div className="w-full h-full rounded-full border-4 border-[#88bc04] border-t-transparent animate-[spin_0.8s_linear_infinite]">
+                                  </div>
+                                </div>
+                                {/* 脈衝效果 */}
+                                <div className="absolute top-0 left-0 w-full h-full">
+                                  <div className="w-16 h-16 rounded-full border-4 border-[#88bc04] opacity-0 animate-[ping_1.5s_ease-out_infinite]">
+                                  </div>
+                                </div>
+                              </div>
+                              <p className="mt-4 text-gray-600 font-medium">Uploading product...</p>
+                              {uploadProgress > 0 && (
+                                <div className="w-full mt-4 max-w-[200px]">
+                                  <div className="w-full bg-gray-200 rounded-full h-2">
+                                    <div
+                                      className="bg-[#88bc04] h-2 rounded-full transition-all duration-300"
+                                      style={{ width: `${uploadProgress}%` }}
+                                    />
+                                  </div>
+                                  <p className="text-sm text-gray-500 text-center mt-2">
+                                    {uploadProgress}%
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
 
                         {/* 預覽已選擇的圖片 */}
                         {selectedFile && (
@@ -393,36 +394,47 @@ export default function CategoryProducts({ params: paramsPromise }) {
                             required
                           />
                         </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Price</label>
+                          <input
+                            type="text"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                            placeholder="e.g. RM 1299.00"
+                          />
+                        </div>
                       </div>
                     </div>
 
                     {/* Description and Specifications */}
-                    {category.toLowerCase() !== "soundproof" && (  
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-                      <h3 className="font-medium text-gray-900">Description & Specifications</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">Specifications</label>
-                          <textarea
-                            name="Specifications"
-                            value={formData.Specifications}
-                            onChange={handleChange}
-                            rows="4"
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">Description</label>
-                          <textarea
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
-                            rows="4"
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                          />
+                    {category.toLowerCase() !== "soundproof" && (
+                      <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+                        <h3 className="font-medium text-gray-900">Description & Specifications</h3>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Specifications</label>
+                            <textarea
+                              name="Specifications"
+                              value={formData.Specifications}
+                              onChange={handleChange}
+                              rows="4"
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea
+                              name="description"
+                              value={formData.description}
+                              onChange={handleChange}
+                              rows="4"
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
                     )}
 
                     {/* Additional Information */}
@@ -439,7 +451,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
                           />
                         </div>
-                        
+
                         {/* 只在特定類別顯示 filter1 選項 */}
                         {(category.toLowerCase() === 'androidplayer' || category.toLowerCase() === 'contidecoder' || category.toLowerCase() === 'soundproof') && (
                           <div>
@@ -469,7 +481,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                                   <option value="suv">SUV</option>
                                   <option value="mpv">MPV</option>
                                 </>
-                              ): null}
+                              ) : null}
                             </select>
                           </div>
                         )}
@@ -534,7 +546,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Submit Buttons */}
                   <div className="sticky bottom-0 bg-white border-t px-6 py-3 flex justify-end gap-3">
                     <button
@@ -562,4 +574,4 @@ export default function CategoryProducts({ params: paramsPromise }) {
       )}
     </div>
   );
-} 
+}

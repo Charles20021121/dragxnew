@@ -7,6 +7,7 @@ import { useProduct } from '@/contexts/ProductContext'
 export default function PowerBootPage() {
   const { setCurrentProduct } = useProduct()
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -15,6 +16,13 @@ export default function PowerBootPage() {
     checkScreenSize()
     window.addEventListener('resize', checkScreenSize)
     return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
+
+  useEffect(() => {
+    const checkMobileDevice = () => {
+      setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    }
+    checkMobileDevice()
   }, [])
 
   // 设置 Power Boot 产品信息给 WhatsApp 按钮使用
@@ -31,6 +39,17 @@ export default function PowerBootPage() {
       setCurrentProduct(null)
     }
   }, [setCurrentProduct])
+
+  const getWhatsAppUrl = (modelName) => {
+    const phoneNumber = '60192776056'
+    const message = `Hi Dragx, I'm interested in Power Boot for ${modelName}`
+
+    if (isMobile) {
+      return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    } else {
+      return `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`
+    }
+  }
 
   return (
     <>
@@ -190,50 +209,50 @@ export default function PowerBootPage() {
           <h2 className="text-2xl md:text-4xl font-bold tracking-[0.1em] mb-8 md:mb-12">SHOP BY CAR MODEL</h2>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-y-12 md:gap-8 text-[0.8rem] tracking-[0.15em]">
             <div className="space-y-4 md:space-y-6 border-b md:border-b-0 pb-12 md:pb-0">
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH10-VACUUM-i.1273732232.25034927374" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH10</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH20-NO-VACUUM-VACUUM-i.1273732232.25433401196" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH20</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWERBOOT-ANH30-VACUUM-NO-VACUUM-i.1273732232.29254380671" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH30</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK-%F0%9F%94%A5TOYOTA-ALPHARD-VELLFIRE-ANH30-AUTO-UP-RELAY-i.1273732232.26402410705" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA ALPHARD/VELLFIRE ANH30</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-NOAH-2023-i.1273732232.28542005564" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA NOAH 2023</a>
+              <a href={getWhatsAppUrl('ANH10')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH10</a>
+              <a href={getWhatsAppUrl('ANH20')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH20</a>
+              <a href={getWhatsAppUrl('ANH30')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">ANH30</a>
+              <a href={getWhatsAppUrl('TOYOTA ALPHARD/VELLFIRE ANH30')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA ALPHARD/VELLFIRE ANH30</a>
+              <a href={getWhatsAppUrl('TOYOTA NOAH 2023')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA NOAH 2023</a>
             </div>
             <div className="space-y-4 md:space-y-6 border-b md:border-b-0 pb-12 md:pb-0">
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-BMW-F10-2011-2017-i.1273732232.29411546329" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">BMW F10 2011-2017</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-MERZ-W205-2016-2019-i.1273732232.24136135929" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">MERZ W205 2016-2019</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-MAZDA-CX-5-2013-2016-i.1273732232.24136067041" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">MAZDA CX-5 2013-2016</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-NISSAN-SERENA-C27-2015-2023-i.1273732232.29711371062" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">NISSAN SERENA C27 2015-2023</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-NISSAN-X-TRAIL-2015-2021-i.1273732232.28711371285" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">NISSAN X-TRAIL 2015-2021</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-NISSAN-ELGRAND-2017-i.1273732232.26911546282" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">NISSAN ELGRAND 2017</a>
+              <a href={getWhatsAppUrl('BMW F10 2011-2017')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">BMW F10 2011-2017</a>
+              <a href={getWhatsAppUrl('MERZ W205 2016-2019')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">MERZ W205 2016-2019</a>
+              <a href={getWhatsAppUrl('MAZDA CX-5 2013-2016')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">MAZDA CX-5 2013-2016</a>
+              <a href={getWhatsAppUrl('NISSAN SERENA C27 2015-2023')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">NISSAN SERENA C27 2015-2023</a>
+              <a href={getWhatsAppUrl('NISSAN X-TRAIL 2015-2021')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">NISSAN X-TRAIL 2015-2021</a>
+              <a href={getWhatsAppUrl('NISSAN ELGRAND 2017')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">NISSAN ELGRAND 2017</a>
             </div>
             <div className="space-y-4 md:space-y-6 border-b md:border-b-0 pb-12 md:pb-0">
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-HONDA-CRV-2017-i.1273732232.29911314881" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">HONDA CRV 2017</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-VOXY-VACUMM-NO-VACUMM-i.1273732232.27211376366" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">HONDA ODYSSEY 2015-2020</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-HONDA-HRV-2015-2021-i.1273732232.29011375597" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">HONDA HRV 2015-2021</a>
+              <a href={getWhatsAppUrl('HONDA CRV 2017')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">HONDA CRV 2017</a>
+              <a href={getWhatsAppUrl('HONDA ODYSSEY 2015-2020')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">HONDA ODYSSEY 2015-2020</a>
+              <a href={getWhatsAppUrl('HONDA HRV 2015-2021')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">HONDA HRV 2015-2021</a>
             </div>
             <div className="space-y-4 md:space-y-6 border-b md:border-b-0 pb-12 md:pb-0">
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-HARRIER-2015-2021-i.1273732232.28961381149" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA HARRIER 2015-2021</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-VELOZ-i.1273732232.24436072139" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA VELOZ</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-ESTIMA-2008-2020-i.1273732232.26361371771" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA ESTIMA 2008-2020</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-TOYOTA-VOXY-VACUMM-NO-VACUMM-i.1273732232.27211376366" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA VOXY</a>
+              <a href={getWhatsAppUrl('TOYOTA HARRIER 2015-2021')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA HARRIER 2015-2021</a>
+              <a href={getWhatsAppUrl('TOYOTA VELOZ')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA VELOZ</a>
+              <a href={getWhatsAppUrl('TOYOTA ESTIMA 2008-2020')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA ESTIMA 2008-2020</a>
+              <a href={getWhatsAppUrl('TOYOTA VOXY')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">TOYOTA VOXY</a>
             </div>
             <div className="space-y-4 md:space-y-6">
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-PERODUA-ARUZ-i.1273732232.29861376140" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PERODUA ARUZ</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-PERODUA-ATIVA-i.1273732232.29811371462" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PERODUA ATIVA</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-PROTON-X-70-i.1273732232.29711380927" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PROTON X-70</a>
-              <a href="https://shopee.com.my/%F0%9F%94%A5READY-STOCK%F0%9F%94%A5POWER-BOOT-PROTON-X-50-i.1273732232.27211371483" target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PROTON X-50</a>
+              <a href={getWhatsAppUrl('PERODUA ARUZ')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PERODUA ARUZ</a>
+              <a href={getWhatsAppUrl('PERODUA ATIVA')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PERODUA ATIVA</a>
+              <a href={getWhatsAppUrl('PROTON X-70')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PROTON X-70</a>
+              <a href={getWhatsAppUrl('PROTON X-50')} target="_blank" rel="noopener noreferrer" className="block hover:text-gray-300">PROTON X-50</a>
             </div>
           </div>
         </div>
       </div>
 
-      {/* SEO Content - Hidden from visual display but readable by search engines */}
+      {/* SEO Content - Hidden from visual display but readable by search engines  */}
       <div className="sr-only">
         <h1>Power Boot - Smart Electric Tailgate System by DX Power Boot</h1>
         <h2>Electric Tailgate Wake Lift Easy - Smart Boot, Smart Choice</h2>
-        
+
         <section>
           <h3>Power Boot Smart Upgrade for Your Car</h3>
           <p>Upgrade your driving experience with Power Boot, the intelligent electric tailgate designed for comfort and safety. With just one touch—or even hands-free—you can open and close your tailgate effortlessly. Equipped with anti-pinch protection, adjustable height, and smart controls, Power Boot brings convenience, safety, and a premium feel to your car. Smooth, durable, and stylish, it's the upgrade that makes every journey easier.</p>
-          
+
           <div>
             <h4>Key Features:</h4>
             <ul>

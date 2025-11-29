@@ -18,16 +18,19 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
   if (!shouldShowSwiper) {
     // 单张图片的原有逻辑
     const isLynoBanner = heroImages[0].includes('lynobanner');
-    
+    const isGalleryBanner = heroImages[0].includes('gallerybanner');
+
+    const bannerLink = isLynoBanner ? '/lyno' : (isGalleryBanner ? '/gallery' : null);
+
     return (
       <div className="w-full relative">
         {/* 桌面版圖片 */}
-        <div 
+        <div
           className="hidden md:block relative w-full"
           style={{ aspectRatio }}
         >
-          {isLynoBanner ? (
-            <Link href="/lyno" className="block w-full h-full cursor-pointer">
+          {bannerLink ? (
+            <Link href={bannerLink} className="block w-full h-full cursor-pointer">
               {heroImages[0].startsWith('http') || heroImages[0].startsWith('/') ? (
                 <Image
                   src={heroImages[0]}
@@ -74,12 +77,12 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
         </div>
 
         {/* 手機版圖片 */}
-        <div 
+        <div
           className="block md:hidden relative w-full"
           style={{ aspectRatio: mobileAspectRatio || aspectRatio }}
         >
-          {isLynoBanner ? (
-            <Link href="/lyno" className="block w-full h-full cursor-pointer">
+          {bannerLink ? (
+            <Link href={bannerLink} className="block w-full h-full cursor-pointer">
               {(mobileImage || heroImages[0]).startsWith('http') || (mobileImage || heroImages[0]).startsWith('/') ? (
                 <Image
                   src={mobileImage || heroImages[0]}
@@ -148,17 +151,19 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
       >
         {heroImages.map((imageUrl, index) => {
           const isLynoBanner = imageUrl.includes('lynobanner');
-          
+          const isGalleryBanner = imageUrl.includes('gallerybanner');
+          const bannerLink = isLynoBanner ? '/lyno' : (isGalleryBanner ? '/gallery' : null);
+
           return (
             <SwiperSlide key={index}>
               <div className="relative">
                 {/* 桌面版圖片 */}
-                <div 
+                <div
                   className="hidden md:block relative w-full"
                   style={{ aspectRatio }}
                 >
-                  {isLynoBanner ? (
-                    <Link href="/lyno" className="block w-full h-full cursor-pointer">
+                  {bannerLink ? (
+                    <Link href={bannerLink} className="block w-full h-full cursor-pointer">
                       {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
                         <Image
                           src={imageUrl}
@@ -205,12 +210,12 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                 </div>
 
                 {/* 手機版圖片 */}
-                <div 
+                <div
                   className="block md:hidden relative w-full"
                   style={{ aspectRatio: mobileAspectRatio || aspectRatio }}
                 >
-                  {isLynoBanner ? (
-                    <Link href="/lyno" className="block w-full h-full cursor-pointer">
+                  {bannerLink ? (
+                    <Link href={bannerLink} className="block w-full h-full cursor-pointer">
                       {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
                         <Image
                           src={mobileImage || imageUrl}
@@ -268,4 +273,4 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
       `}</style>
     </div>
   );
-} 
+}

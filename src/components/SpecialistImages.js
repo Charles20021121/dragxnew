@@ -1,5 +1,6 @@
 "use client"
 import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 
 const images = {
   desktop: [
@@ -8,7 +9,7 @@ const images = {
       aspect: '3333/1248'
     },
     {
-      src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1740112223/ildqqqcvicpztbb0tkas.webp',
+      src: '/locations/PCmap.webp',
       aspect: '3334/1562'
     }
   ],
@@ -18,7 +19,7 @@ const images = {
       aspect: '3333/3034'
     },
     {
-      src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1740112224/xpne8khqmo2iczb7yte4.webp',
+      src: '/locations/PHONEmap.webp',
       aspect: '3334/2929'
     }
   ]
@@ -27,7 +28,7 @@ const images = {
 export default function SpecialistImages() {
   return (
     <div className="mt-6">
-        
+
       {/* Desktop Images */}
       {images.desktop.map((image, index) => (
         <div
@@ -35,14 +36,25 @@ export default function SpecialistImages() {
           className="hidden md:block relative w-full overflow-hidden"
           style={{ aspectRatio: image.aspect }}
         >
-          <CldImage
-            src={image.src}
-            alt="Specialist Car"
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority={index === 0}
-          />
+          {image.src.startsWith('/') ? (
+            <Image
+              src={image.src}
+              alt="Specialist Car"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority={index === 0}
+            />
+          ) : (
+            <CldImage
+              src={image.src}
+              alt="Specialist Car"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority={index === 0}
+            />
+          )}
         </div>
       ))}
 
@@ -53,16 +65,27 @@ export default function SpecialistImages() {
           className="block md:hidden relative w-full overflow-hidden"
           style={{ aspectRatio: image.aspect }}
         >
-          <CldImage
-            src={image.src}
-            alt="Specialist Car"
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority={index === 0}
-          />
+          {image.src.startsWith('/') ? (
+            <Image
+              src={image.src}
+              alt="Specialist Car"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority={index === 0}
+            />
+          ) : (
+            <CldImage
+              src={image.src}
+              alt="Specialist Car"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority={index === 0}
+            />
+          )}
         </div>
       ))}
     </div>
   )
-} 
+}

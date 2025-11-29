@@ -9,7 +9,7 @@ export default function ProductCard({ product, categoryPath }) {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col"
     >
-      <Link 
+      <Link
         href={`/products/${categoryPath}/${product.slug}`}
         className="group"
       >

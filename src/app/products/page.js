@@ -27,7 +27,7 @@ const categoryOrder = {
 }
 
 // 排除的類別
-const excludedCategories = ['360camera', 'powerboot'];
+const excludedCategories = ['powerboot'];
 
 export default function Products() {
   const [categories, setCategories] = useState([]);
@@ -38,19 +38,24 @@ export default function Products() {
       try {
         const res = await fetch('/api/products');
         const products = await res.json();
-        
+
         if (Array.isArray(products)) {
           const categorizedProducts = products.reduce((acc, product) => {
             const category = product.categories;
-            
+
             // 排除指定的類別
             if (excludedCategories.includes(category)) {
               return acc;
             }
-            
+
             if (!acc[category]) {
+              let displayName = category.toUpperCase();
+              if (category === '360camera') {
+                displayName = '360';
+              }
+
               acc[category] = {
-                name: category.toUpperCase(),
+                name: displayName,
                 link: `/products/${category}`,
                 products: []
               };
@@ -92,18 +97,18 @@ export default function Products() {
 
   return (
     <main className="min-h-screen">
-      <HeroSection 
+      <HeroSection
         image="https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp"
         aspectRatio="1601/501"
       />
-      <motion.div 
+      <motion.div
         className="py-1 bg-[#f8f4ec]"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <div className="max-w-[1400px] mx-auto px-2">
-          <motion.h1 
+          <motion.h1
             className="text-[#1c5434] font-bold text-center mb-10 text-[clamp(24px,3vw,40px)]"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -124,4 +129,4 @@ export default function Products() {
       </motion.div>
     </main>
   );
-} 
+}

@@ -45,10 +45,10 @@ export async function PUT(request, { params: paramsPromise }) {
   // 先等待 params
   const params = await paramsPromise;
   const connection = await pool.getConnection();
-  
+
   try {
     const data = await request.json();
-    
+
     // 先檢查產品的 Id 和 same 是否相同
     const [productCheck] = await connection.query(
       'SELECT Id, same FROM products WHERE Id = ?',
@@ -63,10 +63,10 @@ export async function PUT(request, { params: paramsPromise }) {
     }
 
     const product = productCheck[0];
-    
+
     // 確定要更新的產品 ID（使用主產品 ID）
     const mainProductId = product.same || product.Id;
-    
+
     // 更新所有相同 same 值的產品的 Name
     await connection.query(
       `UPDATE products SET 
@@ -85,7 +85,8 @@ export async function PUT(request, { params: paramsPromise }) {
         filter = ?,
         filter1 = ?,
         android_series = ?,
-        date = ?
+        date = ?,
+        price = ?
       WHERE Id = ?`,
       [
         data.categories,
@@ -96,6 +97,7 @@ export async function PUT(request, { params: paramsPromise }) {
         data.filter1,
         data.android_series,
         data.date,
+        data.price,
         mainProductId
       ]
     );
@@ -123,10 +125,10 @@ export async function PUT(request, { params: paramsPromise }) {
 export async function DELETE(request, { params }) {
   const { id } = params;
   const connection = await pool.getConnection();
-  
+
   try {
     await connection.beginTransaction();
-    
+
     // 1. 檢查產品是否存在並獲取相關信息
     const [productCheck] = await connection.query(
       'SELECT * FROM products WHERE Id = ?',
@@ -188,7 +190,7 @@ export async function DELETE(request, { params }) {
     }
 
     await connection.commit();
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Product(s) deleted successfully'
     });
@@ -197,8 +199,8 @@ export async function DELETE(request, { params }) {
     await connection.rollback();
     console.error('Delete operation failed:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         message: error.message || 'Failed to delete product(s)'
       },
       { status: 500 }

@@ -19,19 +19,20 @@ export const metadata = {
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
-      <HeroSection 
+      <HeroSection
         images={[
           "/home/lynobanner.webp",
+          "/home/gallerybanner.webp",
           "https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp"
-          
+
         ]}
         aspectRatio="3333/1458"
-        
+
       />
       <ServiceSection />
       <ProductSection />
       <SpecialistSection />
       <FeaturesSection />
-      </main>
+    </main>
   );
 }

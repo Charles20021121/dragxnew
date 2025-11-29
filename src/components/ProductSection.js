@@ -61,7 +61,7 @@ export default function ProductSection() {
             <div className="mx-[2%]">
 
               <h2 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(12px,2vw,32px)] relative">
-                Products
+                Product Line-up
                 <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-[#1c5434] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
               </h2>
 

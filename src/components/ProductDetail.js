@@ -43,7 +43,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
         android_series: product.android_series  // 添加 android_series 字段
       });
     }
-    
+
     // 清理函数：离开页面时清除产品信息
     return () => {
       setCurrentProduct(null);
@@ -55,13 +55,13 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
       try {
         const res = await fetch(`/api/products?category=${product.categories}`);
         const products = await res.json();
-        
+
         // 找到所有相同 same 值的產品圖片
-        const sameProducts = products.filter(p => 
+        const sameProducts = products.filter(p =>
           p.same === product.same
         );
 
-        
+
 
         // 按日期排序（較早的日期排在前面）
         const sortedProducts = sameProducts.sort((a, b) => {
@@ -72,18 +72,18 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
 
         console.log(sortedProducts)
 
-        
+
 
         // 設置所有圖片
         const allImages = sortedProducts.map(p => ({
           src: p.image,
           alt: p.name || `Product image ${p.id}`,
-          publicId:p.publicId,
-          id:p.id,
-          same:p.same
+          publicId: p.publicId,
+          id: p.id,
+          same: p.same
         }));
-        console.log('all',allImages)
-        console.log('related',relatedImages)
+        console.log('all', allImages)
+        console.log('related', relatedImages)
 
         setRelatedImages(allImages);
         setLoading(false);
@@ -244,7 +244,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
             <span>/</span>
             <li>
               <Link
-                href={isAdmin ? `/admin/products/${product.categories}` :   `/products/${product.categories}`}
+                href={isAdmin ? `/admin/products/${product.categories}` : `/products/${product.categories}`}
                 className="text-black hover:text-[#1c5434] capitalize"
               >
                 {product.categories}
@@ -252,7 +252,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
             </li>
             <span>/</span>
             <li className="text-black capitalize truncate">
-                {product.name}
+              {product.name}
             </li>
           </ol>
         </nav>
@@ -261,6 +261,11 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
         <div className="hidden md:flex justify-between items-center py-4">
           <h1 className="text-[clamp(12.5px,2vw,25px)] font-bold capitalize w-4/5">
             {product.name}
+            {product.price && (
+              <span className="block text-[#1c5434] text-lg mt-1">
+                {product.price}
+              </span>
+            )}
           </h1>
           <a
             href={getWhatsAppUrlForProduct()}
@@ -301,11 +306,10 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                           setCurrentImageIndex(index);
                           setSelectedImage(image.src);
                         }}
-                        className={`relative aspect-square transition-all duration-300 ${
-                          currentImageIndex === index
-                            ? 'border-2 border-[#1c5434]'
-                            : 'border border-gray-200 hover:border-[#1c5434]'
-                        }`}
+                        className={`relative aspect-square transition-all duration-300 ${currentImageIndex === index
+                          ? 'border-2 border-[#1c5434]'
+                          : 'border border-gray-200 hover:border-[#1c5434]'
+                          }`}
                       >
                         <CldImage
                           src={image.src}
@@ -342,11 +346,10 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                           setCurrentImageIndex(index);
                           setSelectedImage(image.src);
                         }}
-                        className={`relative w-full aspect-square ${
-                          currentImageIndex === index
-                            ? 'border-2 border-[#1c5434]'
-                            : 'border border-gray-200'
-                        }`}
+                        className={`relative w-full aspect-square ${currentImageIndex === index
+                          ? 'border-2 border-[#1c5434]'
+                          : 'border border-gray-200'
+                          }`}
                       >
                         <CldImage
                           src={image.src}
@@ -364,8 +367,13 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                     <h1 className="text-[clamp(16px,5vw,24px)] font-bold">
                       {product.name}
                     </h1>
-                    
-  
+                    {product.price && (
+                      <p className="text-[#1c5434] font-bold text-lg">
+                        {product.price}
+                      </p>
+                    )}
+
+
 
                     {/* Description */}
                     <div className="space-y-2">
@@ -379,12 +387,12 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
 
               {/* Right Side - Product Info */}
               <div className="space-y-8 hidden md:block">
- 
+
 
                 {/* Description Section */}
                 <div>
-                  <div className="prose max-w-none whitespace-pre-line" 
-                    dangerouslySetInnerHTML={{ __html: product.description }} 
+                  <div className="prose max-w-none whitespace-pre-line"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
                   />
                 </div>
               </div>
@@ -467,6 +475,11 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
               {product.name}
             </h2>
             <p className="text-xs">{product.specifications}</p>
+            {product.price && (
+              <p className="text-[#1c5434] font-bold text-sm mt-1">
+                {product.price}
+              </p>
+            )}
           </div>
           <div className="w-2/5">
             <a
@@ -495,20 +508,20 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
           onClick={() => setShowDeleteModal(true)}
           className="fixed fixed  right-8 p-4 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors duration-300 z-50"
           title="Delete Images"
-          style={{bottom:'180px'}}
+          style={{ bottom: '180px' }}
         >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-6 w-6" 
-            fill="none" 
-            viewBox="0 0 24 24" 
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
             />
           </svg>
         </button>
@@ -516,63 +529,63 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
 
       {/* 刪除圖片模態框 */}
       {showDeleteModal && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
-      <div className="p-4 bg-[#1c5434] text-white flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Delete Images</h3>
-        <button 
-          onClick={() => setShowDeleteModal(false)}
-          className="hover:text-gray-200"
-        >
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-      
-      <div className="p-6 overflow-y-auto max-h-[70vh]"> {/* 限制高度并启用滚动 */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {relatedImages.slice(1).map((image, index) => (
-            <div key={index} className="relative group">
-              {image.Id}
-              <div className="aspect-square relative rounded-lg overflow-hidden border border-gray-200">
-                <CldImage
-                  src={image.src}
-                  alt={image.alt || `Product image ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 33vw"
-                />
-              </div>
-              {relatedImages.length > 1 && (
-                <button
-                  onClick={() => {
-                    if (confirm('Are you sure you want to delete this image?')) {
-                      onDeleteImage(
-                        image.id,          // 数据库中的 ID
-                        image.same,        // same 值（如果需要）
-                        image.publicId     // Cloudinary 的 public ID
-                      );
-                      if (relatedImages.length <= 2) {
-                        setShowDeleteModal(false);
-                      }
-                    }
-                  }}
-                  className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+            <div className="p-4 bg-[#1c5434] text-white flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Delete Images</h3>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="hover:text-gray-200"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-          ))}
+
+            <div className="p-6 overflow-y-auto max-h-[70vh]"> {/* 限制高度并启用滚动 */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {relatedImages.slice(1).map((image, index) => (
+                  <div key={index} className="relative group">
+                    {image.Id}
+                    <div className="aspect-square relative rounded-lg overflow-hidden border border-gray-200">
+                      <CldImage
+                        src={image.src}
+                        alt={image.alt || `Product image ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                      />
+                    </div>
+                    {relatedImages.length > 1 && (
+                      <button
+                        onClick={() => {
+                          if (confirm('Are you sure you want to delete this image?')) {
+                            onDeleteImage(
+                              image.id,          // 数据库中的 ID
+                              image.same,        // same 值（如果需要）
+                              image.publicId     // Cloudinary 的 public ID
+                            );
+                            if (relatedImages.length <= 2) {
+                              setShowDeleteModal(false);
+                            }
+                          }
+                        }}
+                        className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
+                      >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
 
     </div>
   );
-} 
+}

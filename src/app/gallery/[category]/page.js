@@ -10,10 +10,18 @@ export default function GalleryCategory() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
+  // Special handling for Alphard & Vellfire
+  const isCombined = category === 'alphard-vellfire'
+  const [activeTab, setActiveTab] = useState('alphard')
+
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true)
       try {
-        const response = await fetch(`/api/gallery?category=${category}`)
+        // Determine which category to fetch
+        const categoryToFetch = isCombined ? activeTab : category
+
+        const response = await fetch(`/api/gallery?category=${categoryToFetch}`)
         if (!response.ok) throw new Error('Network response was not ok')
         const data = await response.json()
         setProducts(data)
@@ -27,7 +35,7 @@ export default function GalleryCategory() {
     if (category) {
       fetchProducts()
     }
-  }, [category])
+  }, [category, activeTab, isCombined])
 
   useEffect(() => {
     if (window.fbq) {
@@ -42,10 +50,15 @@ export default function GalleryCategory() {
     return null // 或者顯示載入動畫
   }
 
+  const tabs = isCombined ? [
+    { label: 'Alphard', value: 'alphard' },
+    { label: 'Vellfire', value: 'vellfire' }
+  ] : []
+
   return (
     <div className="min-h-screen">
-      <GalleryCategoryPage 
-        title={category.toUpperCase()}
+      <GalleryCategoryPage
+        title={isCombined ? 'ALPHARD & VELLFIRE' : category.toUpperCase()}
         products={products.map(item => ({
           id: item.Id,
           name: item.Name || `Product ${item.Id}`,
@@ -56,7 +69,10 @@ export default function GalleryCategory() {
           slug: (item.Name || `Product ${item.Id}`).toLowerCase().replace(/\s+/g, '-')
         }))}
         categoryPath={category}
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
       />
     </div>
   )
-} 
+}

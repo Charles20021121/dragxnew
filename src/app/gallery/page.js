@@ -1,12 +1,12 @@
 "use client"
+import Image from 'next/image'
 import { motion } from "framer-motion"
 import { CldImage } from 'next-cloudinary'
 import Link from 'next/link'
 import HeroSection from "@/components/HeroSection"
 
 const categories = [
-  { Name: 'Alphard', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/lyeylq4n5vfrh5n39izv.webp', domainUrl: '/gallery/alphard', alt: 'Alphard Gallery Image' },
-  { Name: 'Vellfire', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/eeldtvtiwd3a8nmh50gk.webp', domainUrl: '/gallery/vellfire', alt: 'Vellfire Gallery Image' },
+  { Name: 'Alphard & Vellfire', ImgUrl: '/gallery/AP_VF.webp', domainUrl: '/gallery/alphard-vellfire', alt: 'Alphard & Vellfire Gallery Image' },
   { Name: 'Audi', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680833/r9bx7381jafl517oyo23.webp', domainUrl: '/gallery/audi', alt: 'Audi Gallery Image' },
   { Name: 'Mercedes-Benz', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680833/ltvgxtgdnfvpu6e5lifw.webp', domainUrl: '/gallery/mercedes-benz', alt: 'Mercedes-Benz Gallery Image' },
   { Name: 'BMW', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680831/pjeo4wxziqxdxsjcfpbb.webp', domainUrl: '/gallery/bmw', alt: 'BMW Gallery Image' },
@@ -48,12 +48,12 @@ const itemVariants = {
 export default function Gallery() {
   return (
     <div className="min-h-screen bg-[#f8f4ec]">
-      <HeroSection 
+      <HeroSection
         image="https://res.cloudinary.com/dmkxx68km/image/upload/v1729680281/uyzu9ol6jxbsy1phipmg.webp"
         aspectRatio="1920 / 601"
       />
 
-      <motion.div 
+      <motion.div
         className="py-10 px-4"
         variants={containerVariants}
         initial="hidden"
@@ -66,25 +66,35 @@ export default function Gallery() {
               variants={itemVariants}
               className="flex flex-col items-center"
             >
-              <Link 
+              <Link
                 href={category.domainUrl}
                 className="w-full group"
               >
                 <div className="relative overflow-hidden rounded-lg">
                   <div className="relative aspect-[16/9]">
-                    <CldImage
-                      src={category.ImgUrl}
-                      alt={category.alt || `${category.Name} Gallery Image`}
-                      fill
-                      className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
+                    {category.ImgUrl.startsWith('/') ? (
+                      <Image
+                        src={category.ImgUrl}
+                        alt={category.alt || `${category.Name} Gallery Image`}
+                        fill
+                        className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
+                    ) : (
+                      <CldImage
+                        src={category.ImgUrl}
+                        alt={category.alt || `${category.Name} Gallery Image`}
+                        fill
+                        className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
+                    )}
                     {/* 懸停時的遮罩 */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                   </div>
                 </div>
               </Link>
-              <motion.div 
+              <motion.div
                 className="mt-4 text-center"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
@@ -99,4 +109,4 @@ export default function Gallery() {
       </motion.div>
     </div>
   )
-} 
+}

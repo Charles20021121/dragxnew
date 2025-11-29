@@ -12,12 +12,12 @@ import 'swiper/css/navigation'
 import './fonts.css'
 import { useProduct } from '@/contexts/ProductContext'
 
-const quicksand = Quicksand({ 
+const quicksand = Quicksand({
   subsets: ['latin'],
   weight: '400'
 })
 
-const manrope = Manrope({ 
+const manrope = Manrope({
   subsets: ['latin'],
   weight: '500'
 })
@@ -460,6 +460,7 @@ export default function LynoPage() {
   const { setCurrentProduct } = useProduct()
   const [selectedScreen, setSelectedScreen] = useState('12.3')
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [showProductOptions, setShowProductOptions] = useState(true) // 默认显示产品选项
   const [selectedProduct, setSelectedProduct] = useState(productOptions['12.3'][0].id) // 默认选中12.3英寸的第一个产品
   const [indicatorPosition, setIndicatorPosition] = useState({ left: 0, width: 0 })
@@ -489,10 +490,10 @@ export default function LynoPage() {
       const containerElement = selectedElement.parentElement.parentElement // 获取容器元素
       const containerRect = containerElement.getBoundingClientRect()
       const elementRect = selectedElement.getBoundingClientRect()
-      
+
       const left = elementRect.left - containerRect.left + (elementRect.width / 2)
       const width = isDesktop ? 80 : 32
-      
+
       setIndicatorPosition({
         left: left - (width / 2),
         width: width
@@ -506,13 +507,34 @@ export default function LynoPage() {
       setIsDesktop(window.innerWidth >= 768)
     }
 
+    const checkMobileDevice = () => {
+      setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    }
+
     // 初始检查
     checkScreenSize()
+    checkMobileDevice()
 
     // 监听窗口大小变化
     window.addEventListener('resize', checkScreenSize)
-    return () => window.removeEventListener('resize', checkScreenSize)
+    window.addEventListener('resize', checkMobileDevice)
+
+    return () => {
+      window.removeEventListener('resize', checkScreenSize)
+      window.removeEventListener('resize', checkMobileDevice)
+    }
   }, [])
+
+  const getWhatsAppUrl = (productName, specs) => {
+    const phoneNumber = '60192776056'
+    const message = `Hi Dragx, I'm interested in LYNO: ${productName} (${specs})`
+
+    if (isMobile) {
+      return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    } else {
+      return `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`
+    }
+  }
 
   // 更新指示器位置当选中屏幕或窗口大小改变时
   useEffect(() => {
@@ -520,7 +542,7 @@ export default function LynoPage() {
     const timer = setTimeout(() => {
       updateIndicatorPosition()
     }, 100)
-    
+
     return () => clearTimeout(timer)
   }, [selectedScreen, isDesktop])
 
@@ -529,7 +551,7 @@ export default function LynoPage() {
     const handleResize = () => {
       updateIndicatorPosition()
     }
-    
+
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [selectedScreen, isDesktop])
@@ -537,7 +559,7 @@ export default function LynoPage() {
   // 处理屏幕尺寸点击
   const handleScreenClick = (screenId) => {
     setSelectedScreen(screenId)
-    
+
     // 如果点击的屏幕有产品选项，显示产品选项并默认选中第一个
     if (productOptions[screenId]) {
       setShowProductOptions(true)
@@ -564,7 +586,7 @@ export default function LynoPage() {
           <h1>LYNO</h1>
           <h2>Light Your New Omni-System</h2>
           <p>
-            Unlocking a new level of smart entertainment and control — fast, intelligent, and made just for you. 
+            Unlocking a new level of smart entertainment and control — fast, intelligent, and made just for you.
             It's not just a player; it's a complete system that powers your digital life.
           </p>
         </div>
@@ -585,7 +607,7 @@ export default function LynoPage() {
           UIS 7870 processor featuring 2.7Ghz clock speed, 8 core architecture, 6nm manufacturing process, delivering 204% CPU Boost and 240% GPU Boost performance
         </figcaption>
       </figure>
-      
+
       <figure className="relative">
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-03.webp" : "/lyno/PHONE SIZE-03.webp"}
@@ -598,7 +620,7 @@ export default function LynoPage() {
           Creative Mode lets you customize themes, backgrounds, and personalize your dashboard and multimedia experience to match your style and mood
         </figcaption>
       </figure>
-      
+
       <figure className="relative">
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-04.webp" : "/lyno/PHONE SIZE-04.webp"}
@@ -611,7 +633,7 @@ export default function LynoPage() {
           Crystal-Clear Voice with Digital Noise Blocking featuring AKM7739 DSP for Studio-Grade Audio, TDA7808 amplifier to Hear the Road and Feel the Power, OpAmp 5532*3 Built for Clarity and Tuned for Passion
         </figcaption>
       </figure>
-      
+
       <figure className="relative">
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-05.webp" : "/lyno/PHONE SIZE-05.webp"}
@@ -624,7 +646,7 @@ export default function LynoPage() {
           Flexible UI Layout Mode allows users to freely customize the arrangement, size, and position of on-screen elements such as widgets, media panels, navigation shortcuts, and system controls. This mode provides a personalized, modular dashboard that adapts to individual preferences and usage habits.
         </figcaption>
       </figure>
-      
+
       <figure className="relative">
         <Image
           src="/lyno/LYNO PAGE-06.webp"
@@ -637,7 +659,7 @@ export default function LynoPage() {
           Delivers a complete, real-time panoramic view of the surroundings, ensuring no area is left unseen. Perfect for safety, awareness, and total control.
         </figcaption>
       </figure>
-      
+
       <figure className="relative">
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-07.webp" : "/lyno/PHONE SIZE-07.webp"}
@@ -650,7 +672,7 @@ export default function LynoPage() {
           Advanced plugin system featuring weather updates, trip information, TPMS monitoring, music control, map navigation, energy flow monitoring, compass, and comprehensive vehicle data display
         </figcaption>
       </figure>
-      
+
       <figure className="relative">
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-08.webp" : "/lyno/PHONE SIZE-08.webp"}
@@ -692,18 +714,18 @@ export default function LynoPage() {
 
       {/* Screen Sizes Section */}
       <div className="bg-white py-16">
-       <div className="max-w-7xl mx-auto  sm:px-6 lg:px-8">
-         {/* Screen Grid with Separators */}
-         <div className="flex flex-row items-center justify-center divide-x divide-gray-300 gap-1 md:gap-8 relative">
+        <div className="max-w-7xl mx-auto  sm:px-6 lg:px-8">
+          {/* Screen Grid with Separators */}
+          <div className="flex flex-row items-center justify-center divide-x divide-gray-300 gap-1 md:gap-8 relative">
             {/* Desktop: 显示所有屏幕 */}
             <div className="hidden md:flex flex-row items-center justify-center divide-x divide-gray-300 gap-8 w-full">
               {screenSizes.map((screen) => (
-                <div 
+                <div
                   key={screen.id}
                   className="flex flex-col items-center py-0 px-12 space-y-4 cursor-pointer transition-all duration-300"
                   onClick={() => handleScreenClick(screen.id)}
                 >
-                  <div 
+                  <div
                     ref={(el) => screenRefs.current[screen.id] = el}
                     className="relative w-40 h-24"
                   >
@@ -716,7 +738,7 @@ export default function LynoPage() {
                     />
                   </div>
                   <div className="text-center relative">
-                    <h3 className={`font-bold text-sm ${quicksand.className}`} style={{ 
+                    <h3 className={`font-bold text-sm ${quicksand.className}`} style={{
                       color: selectedScreen === screen.id ? '#000000' : '#4a5568'
                     }}>
                       {screen.name}
@@ -751,11 +773,11 @@ export default function LynoPage() {
                 {screenSizes.map((screen, index) => (
                   <SwiperSlide key={screen.id}>
                     <div className="flex items-center justify-center w-full relative">
-                      <div 
+                      <div
                         className="flex flex-col items-center py-0 px-2 space-y-2 cursor-pointer transition-all duration-300"
                         onClick={() => handleScreenClick(screen.id)}
                       >
-                        <div 
+                        <div
                           ref={(el) => screenRefs.current[screen.id] = el}
                           className="relative w-24 h-16"
                         >
@@ -768,7 +790,7 @@ export default function LynoPage() {
                           />
                         </div>
                         <div className="text-center relative">
-                          <h3 className={`font-bold text-sm ${quicksand.className}`} style={{ 
+                          <h3 className={`font-bold text-sm ${quicksand.className}`} style={{
                             color: selectedScreen === screen.id ? '#000000' : '#4a5568'
                           }}>
                             {screen.name}
@@ -785,7 +807,7 @@ export default function LynoPage() {
                           </button>
                         </div>
                       </div>
-                      
+
                       {/* 分隔线 - 在每个slide右边显示，除了最后一个 */}
                       {index < screenSizes.length - 1 && (
                         <div className="absolute -right-px top-1/2 transform -translate-y-1/2 h-20 w-px bg-gray-300 z-10"></div>
@@ -793,7 +815,7 @@ export default function LynoPage() {
                     </div>
                   </SwiperSlide>
                 ))}
-                
+
                 {/* 自定义导航按钮 */}
                 <div className="swiper-button-prev-screens absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white rounded-full shadow-lg p-2 hover:bg-gray-50 transition-colors cursor-pointer">
                   <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -807,10 +829,10 @@ export default function LynoPage() {
                 </div>
               </Swiper>
             </div>
-            
+
             {/* Base line - 底部长线 */}
             <div className="absolute -bottom-4 left-0 right-0 h-[2px] bg-gray-300 hidden"></div>
-            
+
             {/* Active indicator - 选中的粗线 */}
             <motion.div
               layoutId="screenIndicator"
@@ -826,8 +848,8 @@ export default function LynoPage() {
                 damping: 30
               }}
             />
-         </div>
-       </div>
+          </div>
+        </div>
       </div>
 
       {/* Product Options Section */}
@@ -838,15 +860,14 @@ export default function LynoPage() {
               {productOptions[selectedScreen].map((product) => (
                 <motion.div
                   key={product.id}
-                  className={`${
-                    selectedProduct === product.id ? 'bg-gray-300' : 'bg-white'
-                  } rounded-lg p-2 md:p-6 shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2`}
+                  className={`${selectedProduct === product.id ? 'bg-gray-300' : 'bg-white'
+                    } rounded-lg p-2 md:p-6 shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2`}
                   onClick={() => setSelectedProduct(product.id)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="text-center">
-                    <h3 className={`text-sm md:text-xl font-bold mb-1 md:mb-2 ${manrope.className}`} style={{ 
+                    <h3 className={`text-sm md:text-xl font-bold mb-1 md:mb-2 ${manrope.className}`} style={{
                       color: '#000000'
                     }}>
                       {product.name}
@@ -881,13 +902,18 @@ export default function LynoPage() {
                     />
                   </div>
                   <div className="w-1/2 lg:w-full lg:mt-6 flex justify-start lg:justify-center">
-                    <button className="bg-gray-400 text-white px-4 py-2 lg:px-8 lg:py-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors duration-300 text-sm lg:text-base">
+                    <a
+                      href={getWhatsAppUrl(productDetails[selectedProduct].name, productDetails[selectedProduct].specs)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-gray-400 text-white px-4 py-2 lg:px-8 lg:py-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors duration-300 text-sm lg:text-base inline-block text-center"
+                    >
                       SHOP NOW
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
-              
+
               {/* 右侧：产品详细规格 */}
               <div className="space-y-4">
                 <div className="grid grid-cols-1 gap-3">

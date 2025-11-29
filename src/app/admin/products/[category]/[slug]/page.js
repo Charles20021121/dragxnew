@@ -11,7 +11,7 @@ export default function ProductPage({ params: paramsPromise }) {
   const params = use(paramsPromise);
   const { category, slug } = params;
   const [product, setProduct] = useState(null);
-  
+
   const [loading, setLoading] = useState(true);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: '', message: '' });
@@ -26,6 +26,7 @@ export default function ProductPage({ params: paramsPromise }) {
     filter: '',
     filter1: '',
     android_series: '',
+    price: '',
     date: new Date().toISOString().replace('T', ' ').split('.')[0]
   });
   const [showImageOffcanvas, setShowImageOffcanvas] = useState(false);
@@ -49,7 +50,7 @@ export default function ProductPage({ params: paramsPromise }) {
     try {
       const res = await fetch(`/api/products?category=${category}`);
       const products = await res.json();
-      const foundProduct = products.find(p => 
+      const foundProduct = products.find(p =>
         p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
       );
 
@@ -71,7 +72,7 @@ export default function ProductPage({ params: paramsPromise }) {
             same: img.same
           }))
         ];
-        
+
         setProduct({
           ...foundProduct,
           relatedImages
@@ -97,6 +98,7 @@ export default function ProductPage({ params: paramsPromise }) {
         filter: product.filter || '',
         filter1: product.filter1 || '',
         android_series: product.android_series || '',
+        price: product.price || '',
         date: product.date || new Date().toISOString().replace('T', ' ').split('.')[0]
       });
     }
@@ -131,10 +133,10 @@ export default function ProductPage({ params: paramsPromise }) {
       if (res.ok) {
         setShowOffcanvas(false);
         showNotification('success', 'Product updated successfully!');
-        
+
         // 計算新的 slug
         const newSlug = formData.Name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        
+
         // 如果名稱改變了，重定向到新的 URL
         if (newSlug !== slug) {
           setTimeout(() => {
@@ -214,11 +216,11 @@ export default function ProductPage({ params: paramsPromise }) {
 
   const handleDrop = (e, dropIndex) => {
     e.preventDefault();
-    
+
     if (draggedIndex !== null && draggedIndex !== dropIndex) {
       moveImage(draggedIndex, dropIndex);
     }
-    
+
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
@@ -231,10 +233,10 @@ export default function ProductPage({ params: paramsPromise }) {
   // 批量添加圖片的處理函數
   const handleAddImages = async (e) => {
     e.preventDefault();
-    
+
     setIsUploading(true);
     setUploadProgress(0);
-    
+
     try {
       const totalFiles = selectedFiles.length;
       let completedFiles = 0;
@@ -255,10 +257,10 @@ export default function ProductPage({ params: paramsPromise }) {
 
         if (!res.ok) throw new Error('Upload failed');
         const data = await res.json();
-        
+
         completedFiles++;
         setUploadProgress((completedFiles / totalFiles) * 100);
-        
+
         return {
           Url: data.secure_url,
           publicId: data.public_id
@@ -291,7 +293,7 @@ export default function ProductPage({ params: paramsPromise }) {
 
         if (!mainImageRes.ok) throw new Error('Failed to create main product');
         const mainProduct = await mainImageRes.json();
-        
+
         // 使用新創建的產品 ID 作為 same
         const remainingImages = uploadedImages.slice(1);
         const savePromises = remainingImages.map((image, index) => {
@@ -378,7 +380,7 @@ export default function ProductPage({ params: paramsPromise }) {
     try {
       // 顯示加載狀態
       setLoading(true);
-      
+
       const response = await fetch(`/api/admin/products/${id}`, {
         method: 'DELETE',
         headers: {
@@ -393,7 +395,7 @@ export default function ProductPage({ params: paramsPromise }) {
 
       // 刪除成功後重新獲取產品數據
       await fetchProduct();
-      
+
       // 顯示成功通知
       showNotification('success', 'Image deleted successfully');
 
@@ -426,9 +428,8 @@ export default function ProductPage({ params: paramsPromise }) {
       {/* 提示消息 */}
       {notification.show && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
-            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-          } text-white transition-all duration-500 transform translate-y-0 animate-slide-in`}
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            } text-white transition-all duration-500 transform translate-y-0 animate-slide-in`}
         >
           <div className="flex items-center gap-2">
             {notification.type === 'success' ? (
@@ -445,21 +446,21 @@ export default function ProductPage({ params: paramsPromise }) {
         </div>
       )}
 
-    <Suspense fallback={<div>Loading...</div>}>
-        <ProductDetail 
-          product={product} 
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProductDetail
+          product={product}
           isAdmin={true}
           onEdit={() => setShowOffcanvas(true)}
           onDeleteImage={handleDeleteImage}
         />
-    </Suspense>
+      </Suspense>
 
       {/* Edit Offcanvas */}
       {showOffcanvas && (
         <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity" 
-               onClick={() => setShowOffcanvas(false)} />
-          
+          <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+            onClick={() => setShowOffcanvas(false)} />
+
           <div className="absolute inset-y-0 right-0 max-w-2xl w-full transform transition-transform duration-500 ease-in-out">
             <div className="h-full bg-white shadow-xl overflow-hidden flex flex-col">
               {/* Header */}
@@ -471,7 +472,7 @@ export default function ProductPage({ params: paramsPromise }) {
                     </svg>
                     Edit Product
                   </h2>
-                  <button 
+                  <button
                     onClick={() => setShowOffcanvas(false)}
                     className="text-white hover:text-gray-200 transition-colors"
                   >
@@ -500,40 +501,47 @@ export default function ProductPage({ params: paramsPromise }) {
                           required
                         />
                       </div>
-
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Price</label>
+                        <input
+                          type="text"
+                          name="price"
+                          value={formData.price}
+                          onChange={handleChange}
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                          placeholder="e.g. RM 1299.00"
+                        />
+                      </div>
                     </div>
                   </div>
-
-                
-
 
                   {/* Description and Specifications */}
                   {category.toLowerCase() !== "soundproof" && (
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-                    <h3 className="font-medium text-gray-900">Description & Specifications</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">Specifications</label>
-                        <textarea
-                          name="Specifications"
-                          value={formData.Specifications}
-                          onChange={handleChange}
-                          rows="4"
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea
-                          name="description"
-                          value={formData.description}
-                          onChange={handleChange}
-                          rows="4"
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                        />
+                    <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+                      <h3 className="font-medium text-gray-900">Description & Specifications</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Specifications</label>
+                          <textarea
+                            name="Specifications"
+                            value={formData.Specifications}
+                            onChange={handleChange}
+                            rows="4"
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Description</label>
+                          <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            rows="4"
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
                   )}
 
                   {/* Additional Information */}
@@ -550,7 +558,7 @@ export default function ProductPage({ params: paramsPromise }) {
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
                         />
                       </div>
-                      
+
                       {/* 只在特定類別顯示 filter1 選項 */}
                       {(formData.categories.toLowerCase() === 'androidplayer' || formData.categories.toLowerCase() === 'contidecoder' || formData.categories.toLowerCase() === 'soundproof') && (
                         <div>
@@ -683,23 +691,23 @@ export default function ProductPage({ params: paramsPromise }) {
 
         {/* 添加圖片按鈕 */}
         {category.toLowerCase() !== "soundproof" && (
-        <button
-          onClick={() => setShowImageOffcanvas(true)}
-          className="bg-[#1c5434] hover:bg-[#143a25] text-white p-4 rounded-full shadow-lg flex items-center gap-2 transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </button>
+          <button
+            onClick={() => setShowImageOffcanvas(true)}
+            className="bg-[#1c5434] hover:bg-[#143a25] text-white p-4 rounded-full shadow-lg flex items-center gap-2 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </button>
         )}
       </div>
 
       {/* 添加圖片的 Offcanvas */}
       {showImageOffcanvas && (
         <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity" 
-               onClick={() => setShowImageOffcanvas(false)} />
-          
+          <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+            onClick={() => setShowImageOffcanvas(false)} />
+
           <div className="absolute inset-y-0 right-0 max-w-2xl w-full transform transition-transform duration-500 ease-in-out">
             <div className="h-full bg-white shadow-xl overflow-hidden flex flex-col">
               {/* Header */}
@@ -711,7 +719,7 @@ export default function ProductPage({ params: paramsPromise }) {
                     </svg>
                     Add New Images
                   </h2>
-                  <button 
+                  <button
                     onClick={() => setShowImageOffcanvas(false)}
                     className="text-white hover:text-gray-200 transition-colors"
                   >
@@ -727,7 +735,7 @@ export default function ProductPage({ params: paramsPromise }) {
                 <form onSubmit={handleAddImages} className="p-6 space-y-6">
                   <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                     <h3 className="font-medium text-gray-900">Select Images</h3>
-                    
+
                     {/* 文件選擇器 */}
                     <label className="block w-full">
                       <input
@@ -759,7 +767,7 @@ export default function ProductPage({ params: paramsPromise }) {
                           </p>
                         </div>
                         <div className="space-y-2">
-                        {selectedFiles.map((file, index) => (
+                          {selectedFiles.map((file, index) => (
                             <div
                               key={`${file.name}-${index}`}
                               draggable
@@ -768,13 +776,12 @@ export default function ProductPage({ params: paramsPromise }) {
                               onDragLeave={handleDragLeave}
                               onDrop={(e) => handleDrop(e, index)}
                               onDragEnd={handleDragEnd}
-                              className={`relative border rounded-lg p-3 transition-all duration-200 cursor-move ${
-                                draggedIndex === index 
-                                  ? 'bg-blue-50 border-blue-300 opacity-50 scale-95' 
-                                  : dragOverIndex === index 
-                                    ? 'bg-green-50 border-green-300 border-2' 
+                              className={`relative border rounded-lg p-3 transition-all duration-200 cursor-move ${draggedIndex === index
+                                  ? 'bg-blue-50 border-blue-300 opacity-50 scale-95'
+                                  : dragOverIndex === index
+                                    ? 'bg-green-50 border-green-300 border-2'
                                     : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                              }`}
+                                }`}
                             >
                               <div className="flex items-center gap-3">
                                 {/* 拖拽图标 */}
@@ -783,120 +790,71 @@ export default function ProductPage({ params: paramsPromise }) {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
                                   </svg>
                                 </div>
-                                
+
                                 {/* 序号 */}
                                 <div className="flex-shrink-0 w-6 h-6 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
                                   {index + 1}
                                 </div>
-                                
+
                                 {/* 图片预览 */}
                                 <div className="flex-shrink-0">
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Preview ${index + 1}`}
+                                  <img
+                                    src={URL.createObjectURL(file)}
+                                    alt={`Preview ${index + 1}`}
                                     className="w-12 h-12 rounded-lg object-cover"
                                   />
                                 </div>
-                                
-                                {/* 图片信息 */}
+
+                                {/* 文件名和大小 */}
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-900">
+                                  <p className="text-sm font-medium text-gray-900 truncate">
                                     {file.name}
                                   </p>
                                   <p className="text-xs text-gray-500">
                                     {(file.size / 1024 / 1024).toFixed(2)} MB
                                   </p>
                                 </div>
-                                
-                                {/* 控制按钮 */}
-                                <div className="flex items-center gap-1">
-                                  {/* 上移按钮 */}
-                                  <button
-                                    type="button"
-                                    onClick={() => moveImageUp(index)}
-                                    disabled={index === 0}
-                                    className={`p-1 rounded transition-colors ${
-                                      index === 0 
-                                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                                        : 'bg-blue-500 text-white hover:bg-blue-600'
-                                    }`}
-                                    title="Move up"
-                                  >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                                    </svg>
-                                  </button>
-                                  
-                                  {/* 下移按钮 */}
-                                  <button
-                                    type="button"
-                                    onClick={() => moveImageDown(index)}
-                                    disabled={index === selectedFiles.length - 1}
-                                    className={`p-1 rounded transition-colors ${
-                                      index === selectedFiles.length - 1 
-                                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                                        : 'bg-blue-500 text-white hover:bg-blue-600'
-                                    }`}
-                                    title="Move down"
-                                  >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                  </button>
-                                  
-                                  {/* 删除按钮 */}
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveFile(index)}
-                                    className="p-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                                    title="Remove image"
-                            >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                            </button>
-                                </div>
+
+                                {/* 删除按钮 */}
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveFile(index)}
+                                  className="flex-shrink-0 p-1 text-gray-400 hover:text-red-500 transition-colors"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
                               </div>
-                              
-                              {/* 拖拽提示 */}
-                              {dragOverIndex === index && draggedIndex !== index && (
-                                <div className="absolute inset-0 bg-green-100 bg-opacity-75 rounded-lg flex items-center justify-center">
-                                  <p className="text-green-600 font-medium text-sm">Drop here</p>
-                                </div>
-                              )}
-                          </div>
-                        ))}
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
-                  </div>
 
-                  {/* Submit Buttons */}
-                  <div className="sticky bottom-0 bg-white border-t px-6 py-3 flex justify-end gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setShowImageOffcanvas(false);
-                        setSelectedFiles([]);
-                      }}
-                      className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1c5434]"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={selectedFiles.length === 0}
-                      className={`px-4 py-2 rounded-md flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1c5434] ${
-                        selectedFiles.length > 0
-                          ? 'bg-[#1c5434] hover:bg-[#143a25] text-white' 
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      }`}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      Upload {selectedFiles.length} {selectedFiles.length === 1 ? 'Image' : 'Images'}
-                    </button>
+                    {/* 操作按鈕 */}
+                    <div className="flex justify-end gap-3 pt-4 border-t">
+                      <button
+                        type="button"
+                        onClick={() => setShowImageOffcanvas(false)}
+                        className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={selectedFiles.length === 0}
+                        className={`px-4 py-2 rounded-md text-white flex items-center gap-2 ${selectedFiles.length === 0
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : 'bg-[#1c5434] hover:bg-[#143a25]'
+                          }`}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        Upload {selectedFiles.length > 0 ? `(${selectedFiles.length})` : ''}
+                      </button>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -904,40 +862,6 @@ export default function ProductPage({ params: paramsPromise }) {
           </div>
         </div>
       )}
-
-      {/* Upload Loading Overlay */}
-      {isUploading && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
-            <div className="relative">
-              {/* 主要加載圈 */}
-              <div className="w-16 h-16 rounded-full border-4 border-[#1c5434]/20">
-                <div className="w-full h-full rounded-full border-4 border-[#88bc04] border-t-transparent animate-[spin_0.8s_linear_infinite]">
-                </div>
-              </div>
-              {/* 脈衝效果 */}
-              <div className="absolute top-0 left-0 w-full h-full">
-                <div className="w-16 h-16 rounded-full border-4 border-[#88bc04] opacity-0 animate-[ping_1.5s_ease-out_infinite]">
-                </div>
-              </div>
-            </div>
-            <p className="mt-4 text-gray-600 font-medium">Uploading images...</p>
-            {uploadProgress > 0 && (
-              <div className="w-full mt-4 max-w-[200px]">
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-[#88bc04] h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
-                <p className="text-sm text-gray-500 text-center mt-2">
-                  {Math.round(uploadProgress)}%
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </>
   );
-} 
+}
