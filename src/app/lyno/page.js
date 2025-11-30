@@ -23,8 +23,8 @@ const manrope = Manrope({
 })
 
 const screenSizes = [
-  { id: '12.3', name: '12.3 INCH', image: '/lyno/screen/12.3 INCH.jpg' },
-  { id: '11.5', name: '11.5 INCH', image: '/lyno/screen/11.5 INCH.jpg' },
+  { id: '12.3', name: '12.3 INCH', image: '/lyno/screen/12.30 INCh.jpg' },
+  { id: '11.5', name: '11.5 INCH', image: '/lyno/screen/11.50 INCH.jpg' },
   { id: '10.36', name: '10.36 INCH', image: '/lyno/screen/10.36 INCH.jpg' },
   { id: '9.5', name: '9.5 INCH', image: '/lyno/screen/9.5 INCH.jpg' }
 ]
@@ -32,9 +32,9 @@ const screenSizes = [
 // 产品详细规格数据
 const productDetails = {
   'pro-max-12': {
-    name: 'LYNO Pro Max 12',
+    name: 'LYNO Quantum Pro Max',
     specs: '12GB+256GB',
-    image: '/lyno/screen/12.3 INCH 2.jpg',
+    image: '/lyno/screen/12.30 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '12GB+256GB',
@@ -47,22 +47,23 @@ const productDetails = {
       'Amplifier Output': '5532 ×3 (Enhanced Audio Signal)',
       'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA5.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '13 (API=33)',
-      'Screen': '12.3" → 1920*1200/2400*896',
+      'Screen': '12.3" → 2400*896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
-      '360° Panorama': 'Supported\n- 6+64 requires 360IC + camera\n- Higher versions only require 360° camera',
+      '360° Panorama': 'Supported\n(requires 360 camera)',
       'Voice Control': 'Built-in support'
     }
   },
   'max-12': {
-    name: 'LYNO Max 12',
+    name: 'LYNO Quantum Max',
     specs: '8GB+128GB',
-    image: '/lyno/screen/12.3 INCH 2.jpg',
+    image: '/lyno/screen/12.30 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '8GB+128GB',
@@ -75,22 +76,23 @@ const productDetails = {
       'Amplifier Output': '5532 ×3 (Enhanced Audio Signal)',
       'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA5.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '13 (API=33)',
-      'Screen': '12.3" → 1920*1200/2400*896',
+      'Screen': '12.3" → 2400*896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
-      '360° Panorama': 'Supported\n- 6+64 requires 360IC + camera\n- Higher versions only require 360° camera',
+      '360° Panorama': 'Supported\n(requires 360 camera)',
       'Voice Control': 'Built-in support'
     }
   },
   'max-lite-12': {
-    name: 'LYNO Max Lite 12',
+    name: 'LYNO Quantum Lite',
     specs: '6GB+64GB',
-    image: '/lyno/screen/12.3 INCH 2.jpg',
+    image: '/lyno/screen/12.30 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7862S A55 2.0GHz (12nm)',
       'RAM+ROM': '6GB+64GB',
@@ -103,23 +105,24 @@ const productDetails = {
       'Amplifier Output': '2582 ×3',
       'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA5.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
-      'Screen': '12.3" → 1920×720 / 2400×896',
+      'Screen': '12.3" → 2400*896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
-      '360° Panorama': 'Supported (requires 360IC + camera)',
+      '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
       'Voice Control': 'Built-in support'
     }
   },
   // 11.5英寸产品详细规格
   'vision-pro-11': {
-    name: 'LYNO Vision Pro 11',
+    name: 'LYNO Vision Pro Max',
     specs: '12GB+256GB',
-    image: '/lyno/screen/11.5 INCH 2.jpg',
+    image: '/lyno/screen/11.50 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '12GB+256GB',
@@ -132,22 +135,23 @@ const productDetails = {
       'Amplifier Output': '5532 ×3 (Enhanced Audio Signal)',
       'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA5.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '13 (API=33)',
       'Screen': '11.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
-      '360° Panorama': 'Supported\n- 6+64 requires 360IC + camera\n- Higher versions only require 360° camera',
+      '360° Panorama': 'Supported\n(requires 360 camera)',
       'Voice Control': 'Built-in support'
     }
   },
   'vision-11': {
-    name: 'LYNO Vision 11',
+    name: 'LYNO Vision Max',
     specs: '8GB+128GB',
-    image: '/lyno/screen/11.5 INCH 2.jpg',
+    image: '/lyno/screen/11.50 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '8GB+128GB',
@@ -160,22 +164,23 @@ const productDetails = {
       'Amplifier Output': '5532 ×3 (Enhanced Audio Signal)',
       'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA5.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '13 (API=33)',
       'Screen': '11.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
-      '360° Panorama': 'Supported\n- 6+64 requires 360IC + camera\n- Higher versions only require 360° camera',
+      '360° Panorama': 'Supported\n(requires 360 camera)',
       'Voice Control': 'Built-in support'
     }
   },
   'vision-lite-11': {
-    name: 'LYNO Vision Lite 11',
+    name: 'LYNO Vision Lite',
     specs: '6GB+64GB',
-    image: '/lyno/screen/11.5 INCH 2.jpg',
+    image: '/lyno/screen/11.50 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7862S A55 2.0GHz (12nm)',
       'RAM+ROM': '6GB+64GB',
@@ -188,21 +193,22 @@ const productDetails = {
       'Amplifier Output': '2582 ×3',
       'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA5.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
       'Screen': '11.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
-      '360° Panorama': 'Supported (requires 360IC + camera)',
+      '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
       'Voice Control': 'Built-in support'
     }
   },
   // 10.36英寸产品详细规格
   'air-max-10': {
-    name: 'LYNO Air Max 10',
+    name: 'LYNO OS Pro Max',
     specs: '12GB+256GB',
     image: '/lyno/screen/10.36 INCH 2.jpg',
     details: {
@@ -217,20 +223,21 @@ const productDetails = {
       'Amplifier Output': '5532 ×3 (Enhanced Audio Signal)',
       'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA5.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '13 (API=33)',
       'Screen': '10.36" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
-      '360° Panorama': 'Supported\n- 6+64 requires 360IC + camera\n- Higher versions only require 360° camera',
+      '360° Panorama': 'Supported\n(requires 360 camera)',
       'Voice Control': 'Built-in support'
     }
   },
   'air-10': {
-    name: 'LYNO Air 10',
+    name: 'LYNO OS Max',
     specs: '8GB+128GB',
     image: '/lyno/screen/10.36 INCH 2.jpg',
     details: {
@@ -245,20 +252,21 @@ const productDetails = {
       'Amplifier Output': 'None',
       'Filter Capacitance': '6800μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA2.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC, RCA2.1',
       'Bluetooth': 'Realtek 8761',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
-      'Screen': '10.36" → 1280*720',
+      'Screen': '10.36" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
-      '360° Panorama': 'Supported (requires 360IC + camera)',
+      '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
       'Voice Control': 'Requires extra software'
     }
   },
   'core-10': {
-    name: 'LYNO Core 10',
+    name: 'LYNO OS Lite',
     specs: '4GB+64GB',
     image: '/lyno/screen/10.36 INCH 2.jpg',
     details: {
@@ -273,21 +281,22 @@ const productDetails = {
       'Amplifier Output': 'None',
       'Filter Capacitance': '6800μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA2.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC, RCA2.1',
       'Bluetooth': 'Realtek 8761',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
-      'Screen': '10.36" → 1280*720',
+      'Screen': '10.36" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
-      '360° Panorama': 'Supported (requires 360IC + camera)',
+      '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
       'Voice Control': 'Requires extra software'
     }
   },
   // 9.5英寸产品详细规格
   'air-max-9': {
-    name: 'LYNO Air Max 9',
+    name: 'LYNO OS Pro Max',
     specs: '12GB+256GB',
     image: '/lyno/screen/9.5 INCH 2.jpg',
     details: {
@@ -302,20 +311,21 @@ const productDetails = {
       'Amplifier Output': '5532 ×3 (Enhanced Audio Signal)',
       'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA5.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
       'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '13 (API=33)',
       'Screen': '9.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
-      '360° Panorama': 'Supported\n- 6+64 requires 360IC + camera\n- Higher versions only require 360° camera',
+      '360° Panorama': 'Supported\n(requires 360 camera)',
       'Voice Control': 'Built-in support'
     }
   },
   'air-9': {
-    name: 'LYNO Air 9',
+    name: 'LYNO OS Max',
     specs: '8GB+128GB',
     image: '/lyno/screen/9.5 INCH 2.jpg',
     details: {
@@ -330,20 +340,21 @@ const productDetails = {
       'Amplifier Output': 'None',
       'Filter Capacitance': '6800μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA2.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC, RCA2.1',
       'Bluetooth': 'Realtek 8761',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
-      'Screen': '9.5" → 1280*720',
+      'Screen': '9.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
-      '360° Panorama': 'Supported (requires 360IC + camera)',
+      '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
       'Voice Control': 'Requires extra software'
     }
   },
   'core-9': {
-    name: 'LYNO Core 9',
+    name: 'LYNO OS Lite',
     specs: '4GB+64GB',
     image: '/lyno/screen/9.5 INCH 2.jpg',
     details: {
@@ -358,18 +369,19 @@ const productDetails = {
       'Amplifier Output': 'None',
       'Filter Capacitance': '6800μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'RCA2.1 + Optical + USB DAC',
+      'Audio Output': 'Optical + Coaxial + USB DAC, RCA2.1',
       'Bluetooth': 'Realtek 8761',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
+      'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
-      'Screen': '9.5" → 1280*720',
+      'Screen': '9.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
-      '360° Panorama': 'Supported (requires 360IC + camera)',
+      '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
       'Voice Control': 'Requires extra software'
     }
-  }
+  },
 }
 
 // 所有屏幕尺寸的产品选项
@@ -377,59 +389,59 @@ const productOptions = {
   '12.3': [
     {
       id: 'pro-max-12',
-      name: 'LYNO Pro Max 12',
+      name: 'LYNO Quantum Pro Max',
       specs: '12GB+256GB',
-      image: '/lyno/screen/12.3 INCH.jpg'
+      image: '/lyno/screen/12.30 INCh.jpg'
     },
     {
       id: 'max-12',
-      name: 'LYNO Max 12',
+      name: 'LYNO Quantum Max',
       specs: '8GB+128GB',
-      image: '/lyno/screen/12.3 INCH.jpg'
+      image: '/lyno/screen/12.30 INCh.jpg'
     },
     {
       id: 'max-lite-12',
-      name: 'LYNO Max Lite 12',
+      name: 'LYNO Quantum Lite',
       specs: '6GB+64GB',
-      image: '/lyno/screen/12.3 INCH.jpg'
+      image: '/lyno/screen/12.30 INCh.jpg'
     }
   ],
   '11.5': [
     {
       id: 'vision-pro-11',
-      name: 'LYNO Vision Pro 11',
+      name: 'LYNO Vision Pro Max',
       specs: '12GB+256GB',
-      image: '/lyno/screen/11.5 INCH.jpg'
+      image: '/lyno/screen/11.50 INCH.jpg'
     },
     {
       id: 'vision-11',
-      name: 'LYNO Vision 11',
+      name: 'LYNO Vision Max',
       specs: '8GB+128GB',
-      image: '/lyno/screen/11.5 INCH.jpg'
+      image: '/lyno/screen/11.50 INCH.jpg'
     },
     {
       id: 'vision-lite-11',
-      name: 'LYNO Vision Lite 11',
+      name: 'LYNO Vision Lite',
       specs: '6GB+64GB',
-      image: '/lyno/screen/11.5 INCH.jpg'
+      image: '/lyno/screen/11.50 INCH.jpg'
     }
   ],
   '10.36': [
     {
       id: 'air-max-10',
-      name: 'LYNO Air Max 10',
+      name: 'LYNO OS Pro Max',
       specs: '12GB+256GB',
       image: '/lyno/screen/10.36 INCH.jpg'
     },
     {
       id: 'air-10',
-      name: 'LYNO Air 10',
+      name: 'LYNO OS Max',
       specs: '8GB+128GB',
       image: '/lyno/screen/10.36 INCH.jpg'
     },
     {
       id: 'core-10',
-      name: 'LYNO Core 10',
+      name: 'LYNO OS Lite',
       specs: '4GB+64GB',
       image: '/lyno/screen/10.36 INCH.jpg'
     }
@@ -437,19 +449,19 @@ const productOptions = {
   '9.5': [
     {
       id: 'air-max-9',
-      name: 'LYNO Air Max 9',
+      name: 'LYNO OS Pro Max',
       specs: '12GB+256GB',
       image: '/lyno/screen/9.5 INCH.jpg'
     },
     {
       id: 'air-9',
-      name: 'LYNO Air 9',
+      name: 'LYNO OS Max',
       specs: '8GB+128GB',
       image: '/lyno/screen/9.5 INCH.jpg'
     },
     {
       id: 'core-9',
-      name: 'LYNO Core 9',
+      name: 'LYNO OS Lite',
       specs: '4GB+64GB',
       image: '/lyno/screen/9.5 INCH.jpg'
     }

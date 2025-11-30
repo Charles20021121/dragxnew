@@ -555,8 +555,8 @@ export default function ProductCategoryPage({
                                     {product.name}
                                   </h3>
                                   {product.price && (
-                                    <p className="text-[#1c5434] font-medium text-sm mt-1">
-                                      {product.price}
+                                    <p className="text-black font-medium text-sm mt-1">
+                                      RM {product.price}
                                     </p>
                                   )}
                                 </div>
@@ -609,13 +609,10 @@ export default function ProductCategoryPage({
                             spaceBetween: 16,
                           },
                         }}
-
                       >
                         {(seriesData.products || []).map((product) => (
                           <SwiperSlide key={product.id}>
-                            <motion.div
-                              variants={itemVariants}
-                            >
+                            <motion.div variants={itemVariants}>
                               <div className="group relative">
                                 <Link
                                   href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
@@ -637,8 +634,8 @@ export default function ProductCategoryPage({
                                       {product.name}
                                     </h3>
                                     {product.price && (
-                                      <p className="text-[#1c5434] font-medium text-sm mt-1">
-                                        {product.price}
+                                      <p className="text-black font-medium text-sm mt-1">
+                                        RM {product.price}
                                       </p>
                                     )}
                                   </div>
@@ -718,8 +715,8 @@ export default function ProductCategoryPage({
                         {product.name}
                       </h3>
                       {product.price && (
-                        <p className="text-[#1c5434] font-medium text-sm mt-1">
-                          {product.price}
+                        <p className="text-black font-medium text-sm mt-1">
+                          RM {product.price}
                         </p>
                       )}
                     </div>

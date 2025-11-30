@@ -15,9 +15,19 @@ export default function ProductPage({ params: paramsPromise }) {
       try {
         const res = await fetch(`/api/products?category=${category}`);
         const products = await res.json();
-        const foundProduct = products.find(p => 
+
+        const matchingProducts = products.filter(p =>
           p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
         );
+
+        // Prioritize the entry that has price and description
+        const foundProduct = matchingProducts.sort((a, b) => {
+          // Give points for having price and description
+          let scoreA = (a.price ? 2 : 0) + (a.description ? 1 : 0);
+          let scoreB = (b.price ? 2 : 0) + (b.description ? 1 : 0);
+          return scoreB - scoreA;
+        })[0];
+
         setProduct(foundProduct);
         setLoading(false);
       } catch (error) {
@@ -50,4 +60,4 @@ export default function ProductPage({ params: paramsPromise }) {
       <ProductDetail product={product} />
     </Suspense>
   );
-} 
+}

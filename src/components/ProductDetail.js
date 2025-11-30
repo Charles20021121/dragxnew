@@ -61,8 +61,6 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
           p.same === product.same
         );
 
-
-
         // 按日期排序（較早的日期排在前面）
         const sortedProducts = sameProducts.sort((a, b) => {
           const dateA = new Date(a.date);
@@ -71,8 +69,6 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
         });
 
         console.log(sortedProducts)
-
-
 
         // 設置所有圖片
         const allImages = sortedProducts.map(p => ({
@@ -262,8 +258,8 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
           <h1 className="text-[clamp(12.5px,2vw,25px)] font-bold capitalize w-4/5">
             {product.name}
             {product.price && (
-              <span className="block text-[#1c5434] text-lg mt-1">
-                {product.price}
+              <span className="block text-black text-lg mt-1">
+                RM {product.price}
               </span>
             )}
           </h1>
@@ -368,12 +364,10 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                       {product.name}
                     </h1>
                     {product.price && (
-                      <p className="text-[#1c5434] font-bold text-lg">
-                        {product.price}
+                      <p className="text-black font-bold text-lg">
+                        RM {product.price}
                       </p>
                     )}
-
-
 
                     {/* Description */}
                     <div className="space-y-2">
@@ -387,8 +381,6 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
 
               {/* Right Side - Product Info */}
               <div className="space-y-8 hidden md:block">
-
-
                 {/* Description Section */}
                 <div>
                   <div className="prose max-w-none whitespace-pre-line"
@@ -459,13 +451,10 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                   ))}
                 </Swiper>
               </div>
-
-
             </div>
           </div>
         </div>
       </div>
-
 
       {/* Mobile Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#f8f4ec] shadow-[0_5px_15px_rgba(0,0,0,1)] px-[5%] py-3 z-10">
@@ -476,8 +465,8 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
             </h2>
             <p className="text-xs">{product.specifications}</p>
             {product.price && (
-              <p className="text-[#1c5434] font-bold text-sm mt-1">
-                {product.price}
+              <p className="text-black font-bold text-sm mt-1">
+                RM {product.price}
               </p>
             )}
           </div>

@@ -50,9 +50,16 @@ export default function ProductPage({ params: paramsPromise }) {
     try {
       const res = await fetch(`/api/products?category=${category}`);
       const products = await res.json();
-      const foundProduct = products.find(p =>
+
+      const matchingProducts = products.filter(p =>
         p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
       );
+
+      const foundProduct = matchingProducts.sort((a, b) => {
+        let scoreA = (a.price ? 2 : 0) + (a.description ? 1 : 0);
+        let scoreB = (b.price ? 2 : 0) + (b.description ? 1 : 0);
+        return scoreB - scoreA;
+      })[0];
 
       if (foundProduct) {
         // 確保每個圖片對象都有必要的字段
@@ -777,10 +784,10 @@ export default function ProductPage({ params: paramsPromise }) {
                               onDrop={(e) => handleDrop(e, index)}
                               onDragEnd={handleDragEnd}
                               className={`relative border rounded-lg p-3 transition-all duration-200 cursor-move ${draggedIndex === index
-                                  ? 'bg-blue-50 border-blue-300 opacity-50 scale-95'
-                                  : dragOverIndex === index
-                                    ? 'bg-green-50 border-green-300 border-2'
-                                    : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                                ? 'bg-blue-50 border-blue-300 opacity-50 scale-95'
+                                : dragOverIndex === index
+                                  ? 'bg-green-50 border-green-300 border-2'
+                                  : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                                 }`}
                             >
                               <div className="flex items-center gap-3">
@@ -845,8 +852,8 @@ export default function ProductPage({ params: paramsPromise }) {
                         type="submit"
                         disabled={selectedFiles.length === 0}
                         className={`px-4 py-2 rounded-md text-white flex items-center gap-2 ${selectedFiles.length === 0
-                            ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-[#1c5434] hover:bg-[#143a25]'
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : 'bg-[#1c5434] hover:bg-[#143a25]'
                           }`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
