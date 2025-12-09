@@ -27,7 +27,7 @@ const categoryOrder = {
 }
 
 // 排除的類別
-const excludedCategories = ['powerboot'];
+const excludedCategories = [];
 
 export default function Products() {
   const [categories, setCategories] = useState([]);
