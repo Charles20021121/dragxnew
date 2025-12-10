@@ -1,8 +1,8 @@
 import HeroSection from "@/components/HeroSection";
 import ServiceSection from "@/components/ServiceSection";
 import ProductSection from "@/components/ProductSection";
-import SpecialistSection from "@/components/SpecialistSection";
 import FeaturesSection from "@/components/FeaturesSection";
+import SpecialistImages from "@/components/SpecialistImages";
 
 // 添加 metadata
 export const metadata = {
@@ -21,17 +21,20 @@ export default function Home() {
     <main className="flex min-h-screen flex-col">
       <HeroSection
         images={[
+                    "https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp",
           "/home/lynobanner.webp",
           "/home/gallerybanner.webp",
-          "https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp"
 
+          "/home/specialist/bmw.webp",
+          "/home/specialist/alphardvellfire.webp",
+          "/home/specialist/mercedes.webp"
         ]}
         aspectRatio="3333/1458"
 
       />
       <ServiceSection />
       <ProductSection />
-      <SpecialistSection />
+      <SpecialistImages />
       <FeaturesSection />
     </main>
   );

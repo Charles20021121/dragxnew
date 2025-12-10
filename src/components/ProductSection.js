@@ -19,12 +19,12 @@ const products = [
   {
     Name: "AMBIENTLIGHT",
     ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977943/m75j3e1uy8kqdc0iiyzy_dnk0kb?_a=BAVFB+DW0",
-    domainUrl: "/products/ambientlight"
+    domainUrl: "/ambientlight"
   },
   {
     Name: "CONTI DECODER",
     ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1729013791/gcpdyz9k7cs9pgdcggen?_a=BAVFB+DW0",
-    domainUrl: "/products/contidecoder"
+    domainUrl: "/contidecoder"
   },
   {
     Name: "360",

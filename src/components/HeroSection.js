@@ -152,7 +152,23 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
         {heroImages.map((imageUrl, index) => {
           const isLynoBanner = imageUrl.includes('lynobanner');
           const isGalleryBanner = imageUrl.includes('gallerybanner');
-          const bannerLink = isLynoBanner ? '/lyno' : (isGalleryBanner ? '/gallery' : null);
+          const isSpecialistBanner = imageUrl.includes('/specialist/');
+
+          // Determine banner link based on image type
+          let bannerLink = null;
+          if (isLynoBanner) {
+            bannerLink = '/lyno';
+          } else if (isGalleryBanner) {
+            bannerLink = '/gallery';
+          } else if (isSpecialistBanner) {
+            if (imageUrl.includes('bmw')) {
+              bannerLink = '/gallery/bmw';
+            } else if (imageUrl.includes('alphardvellfire')) {
+              bannerLink = '/gallery/alphard-vellfire';
+            } else if (imageUrl.includes('mercedes')) {
+              bannerLink = '/gallery/mercedes-benz';
+            }
+          }
 
           return (
             <SwiperSlide key={index}>
@@ -162,28 +178,52 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   className="hidden md:block relative w-full"
                   style={{ aspectRatio }}
                 >
-                  {bannerLink ? (
-                    <Link href={bannerLink} className="block w-full h-full cursor-pointer">
-                      {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
-                        <Image
-                          src={imageUrl}
-                          alt={`Hero Image ${index + 1}`}
-                          fill
-                          className="object-contain"
-                          sizes="100vw"
-                          priority={index === 0}
-                        />
-                      ) : (
-                        <CldImage
-                          src={imageUrl}
-                          alt={`Hero Image ${index + 1}`}
-                          fill
-                          className="object-cover"
-                          sizes="100vw"
-                          priority={index === 0}
-                        />
-                      )}
-                    </Link>
+                  {bannerLink || isSpecialistBanner ? (
+                    bannerLink ? (
+                      <Link href={bannerLink} className="block w-full h-full cursor-pointer">
+                        {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
+                          <Image
+                            src={imageUrl}
+                            alt={`Hero Image ${index + 1}`}
+                            fill
+                            className="object-contain"
+                            sizes="100vw"
+                            priority={index === 0}
+                          />
+                        ) : (
+                          <CldImage
+                            src={imageUrl}
+                            alt={`Hero Image ${index + 1}`}
+                            fill
+                            className="object-cover"
+                            sizes="100vw"
+                            priority={index === 0}
+                          />
+                        )}
+                      </Link>
+                    ) : (
+                      <>
+                        {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
+                          <Image
+                            src={imageUrl}
+                            alt={`Hero Image ${index + 1}`}
+                            fill
+                            className="object-contain"
+                            sizes="100vw"
+                            priority={index === 0}
+                          />
+                        ) : (
+                          <CldImage
+                            src={imageUrl}
+                            alt={`Hero Image ${index + 1}`}
+                            fill
+                            className="object-cover"
+                            sizes="100vw"
+                            priority={index === 0}
+                          />
+                        )}
+                      </>
+                    )
                   ) : (
                     <>
                       {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
@@ -214,28 +254,52 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   className="block md:hidden relative w-full"
                   style={{ aspectRatio: mobileAspectRatio || aspectRatio }}
                 >
-                  {bannerLink ? (
-                    <Link href={bannerLink} className="block w-full h-full cursor-pointer">
-                      {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
-                        <Image
-                          src={mobileImage || imageUrl}
-                          alt={`Hero Image ${index + 1}`}
-                          fill
-                          className="object-contain"
-                          sizes="100vw"
-                          priority={index === 0}
-                        />
-                      ) : (
-                        <CldImage
-                          src={mobileImage || imageUrl}
-                          alt={`Hero Image ${index + 1}`}
-                          fill
-                          className="object-cover"
-                          sizes="100vw"
-                          priority={index === 0}
-                        />
-                      )}
-                    </Link>
+                  {bannerLink || isSpecialistBanner ? (
+                    bannerLink ? (
+                      <Link href={bannerLink} className="block w-full h-full cursor-pointer">
+                        {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
+                          <Image
+                            src={mobileImage || imageUrl}
+                            alt={`Hero Image ${index + 1}`}
+                            fill
+                            className="object-contain"
+                            sizes="100vw"
+                            priority={index === 0}
+                          />
+                        ) : (
+                          <CldImage
+                            src={mobileImage || imageUrl}
+                            alt={`Hero Image ${index + 1}`}
+                            fill
+                            className="object-cover"
+                            sizes="100vw"
+                            priority={index === 0}
+                          />
+                        )}
+                      </Link>
+                    ) : (
+                      <>
+                        {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
+                          <Image
+                            src={mobileImage || imageUrl}
+                            alt={`Hero Image ${index + 1}`}
+                            fill
+                            className="object-contain"
+                            sizes="100vw"
+                            priority={index === 0}
+                          />
+                        ) : (
+                          <CldImage
+                            src={mobileImage || imageUrl}
+                            alt={`Hero Image ${index + 1}`}
+                            fill
+                            className="object-cover"
+                            sizes="100vw"
+                            priority={index === 0}
+                          />
+                        )}
+                      </>
+                    )
                   ) : (
                     <>
                       {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (

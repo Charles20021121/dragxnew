@@ -393,65 +393,46 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
             {relatedImages.length > 4 && <div className="w-full h-[1px] bg-gray-200 my-8" />}
 
             {/* Bottom Extra Images */}
-            <div className="mt-8 w-full ">
-              {/* Bottom Extra Images - Mobile */}
-              <div className="mt-8 block md:hidden">
-                <Swiper
-                  modules={[Navigation, Pagination]}
-                  spaceBetween={8}
-                  slidesPerView={1}
-                  navigation
-                  pagination={{ clickable: true }}
-                  className="mySwiper"
-                  centeredSlides={true}
-                >
+            {relatedImages.length > 4 && (
+              <div className="mt-8 w-full">
+                {/* Mobile View - Single Column */}
+                <div className="grid grid-cols-1 gap-4 md:hidden">
                   {relatedImages.slice(4).map((image, index) => (
-                    <SwiperSlide key={index}>
-                      <div className="relative aspect-square w-full">
-                        <CldImage
-                          src={image.src}
-                          alt={image.alt || "Related product image"}
-                          fill
-                          className="object-contain bg-white rounded-lg"
-                          sizes="100vw"
-                        />
-                      </div>
-                    </SwiperSlide>
+                    <div key={index} className="relative aspect-square w-full">
+                      <CldImage
+                        src={image.src}
+                        alt={image.alt || "Related product image"}
+                        fill
+                        className="object-contain bg-white rounded-lg"
+                        sizes="100vw"
+                      />
+                    </div>
                   ))}
-                </Swiper>
-              </div>
-              {/* Desktop View */}
-              <div className="hidden md:block">
-                <Swiper
-                  modules={[Navigation, Pagination]}
-                  spaceBetween={8}
-                  slidesPerView={3}
-                  navigation
-                  pagination={{ clickable: true }}
-                  className="mySwiper"
-                >
+                </div>
+
+                {/* Desktop View - 3 Columns Grid */}
+                <div className="hidden md:grid grid-cols-3 gap-4">
                   {relatedImages.slice(4).map((image, index) => (
-                    <SwiperSlide key={index}>
-                      <button
-                        onClick={() => {
-                          setCurrentImageIndex(index + 4);
-                          setSelectedImage(image.src);
-                        }}
-                        className="w-full relative aspect-square hover:opacity-90 transition-opacity"
-                      >
-                        <CldImage
-                          src={image.src}
-                          alt={image.alt || "Related product image"}
-                          fill
-                          className="object-contain bg-white rounded-lg p-1"
-                          sizes="(max-width: 768px) 100vw, 25vw"
-                        />
-                      </button>
-                    </SwiperSlide>
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setCurrentImageIndex(index + 4);
+                        setSelectedImage(image.src);
+                      }}
+                      className="relative aspect-square hover:opacity-90 transition-opacity"
+                    >
+                      <CldImage
+                        src={image.src}
+                        alt={image.alt || "Related product image"}
+                        fill
+                        className="object-contain bg-white rounded-lg p-1"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </button>
                   ))}
-                </Swiper>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

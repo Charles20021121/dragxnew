@@ -10,17 +10,17 @@ import Link from 'next/link'
 
 const specialists = [
   {
-    imgUrl: "/home/specialist/bmw.webp",
+    imgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725296185/idm52xuh4fqnjoyxywcs.webp",
     alt: "BMW Specialist",
     url: "/products/bmw"
   },
   {
-    imgUrl: "/home/specialist/alphardvellfire.webp",
+    imgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725296125/ki49clwmldclh4iulpc3.webp",
     alt: "ALPHARDVELLFIRE Specialist",
     url: "/products/alphardvellfire"
   },
   {
-    imgUrl: "/home/specialist/mercedes.webp",
+    imgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725293406/np3uc2vpfjn2bnrbn30c.webp",
     alt: "MERCEDES BENZ Specialist",
     url: "/products/mercedes"
   },
