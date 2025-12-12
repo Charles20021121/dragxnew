@@ -4,37 +4,37 @@ import HeroSection from "@/components/HeroSection"
 
 const locations = [
   {
-    name: "DragX Maluri Cheras",
+    name: "DRAGX Maluri Cheras",
     address: "28, Jalan Jejaka 9, Maluri, 55100 Cheras, Wilayah Persekutuan Kuala Lumpur",
     mapLink: "https://maps.app.goo.gl/hp3ndNgNX5CG4ERp7"
   },
   {
-    name: "DragX Batu Caves",
+    name: "DRAGX Batu Caves",
     address: "141, JIn Sbc 1, Taman Sri Batu Caves, 68100 Batu Caves, Selangor",
     mapLink: "https://maps.app.goo.gl/19MGjx5KyPuggbQ18"
   },
   {
-    name: "DragX Equine Park",
+    name: "DRAGX Equine Park",
     address: "9, JIn Equine 1g, Taman Equine, 43300 Seri Kembangan, Selangor",
     mapLink: "https://maps.app.goo.gl/RGKAHs8L1CJrz2y66"
   },
   {
-    name: "DragX Balakong Alphard/Vellfire",
+    name: "DRAGX Balakong Alphard/Vellfire",
     address: "Lot 24, Persiaran Cheras Raya 4, Balakong, 43200 Cheras, Selangor",
     mapLink: "https://maps.app.goo.gl/DxQirLWmaRi3CTbF7"
   },
   {
-    name: "DragX Shah Alam",
+    name: "DRAGX Shah Alam",
     address: "49, Jalan Pelabur B 23/B, Seksyen 23, 40300 Shah Alam, Selangor",
     mapLink: "https://maps.app.goo.gl/V7xZDMNEL1RWPC8BA"
   },
   {
-    name: "DragX Balakong",
+    name: "DRAGX Balakong",
     address: "Kampong Dato Ujang Balakong, Lot 23, Batu 11, Balakong,43200 Cheras, Selangor",
     mapLink: "https://maps.app.goo.gl/kuKH2Zs33TUWWFZ28"
   },
   {
-    name: "DragX Puchong",
+    name: "DRAGX Puchong",
     address: "22a, Jalan Puteri 4/8, Bandar Puteri, 47100 Puchong, Selangor",
     mapLink: "https://maps.app.goo.gl/W7iTewJV5RDpQw496"
   },
@@ -79,23 +79,23 @@ const handleLocationClick = (location) => {
 export default function Locations() {
   return (
     <div className="min-h-screen">
-      <HeroSection 
+      <HeroSection
         image="/locations/PCmap.webp"
         aspectRatio="3334 / 1562"
         mobileImage="/locations/PHONEmap.webp"
         mobileAspectRatio="3334/2929"
       />
 
-      <div 
+      <div
         className="relative bg-cover bg-center py-5"
-        style={{ 
+        style={{
           backgroundImage: 'url(https://res.cloudinary.com/dmkxx68km/image/upload/v1725277309/obxfovzofmswunpamu9k.jpg)'
         }}
       >
         {/* 背景遮罩 */}
         <div className="absolute inset-0 bg-black/30" />
 
-        <motion.div 
+        <motion.div
           className="relative mx-auto px-2 md:px-4"
           variants={containerVariants}
           initial="hidden"
@@ -118,13 +118,13 @@ export default function Locations() {
                       {" " + location.name.split(" ").slice(1).join(" ")}
                     </span>
                   </h3>
-                  
+
                   {location.address && (
                     <p className="text-gray-200 mb-4 min-h-[60px] text-sm md:text-base">
                       {location.address}
                     </p>
                   )}
-                  
+
                   {location.mapLink && (
                     <div className="text-right">
                       <a
@@ -135,10 +135,10 @@ export default function Locations() {
                         onClick={() => handleLocationClick(location)}
                       >
                         Direction
-                        <svg 
-                          className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" 
-                          fill="none" 
-                          stroke="currentColor" 
+                        <svg
+                          className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300"
+                          fill="none"
+                          stroke="currentColor"
                           viewBox="0 0 24 24"
                         >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

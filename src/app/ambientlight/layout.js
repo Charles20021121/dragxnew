@@ -5,7 +5,7 @@ export const metadata = {
   openGraph: {
     title: 'Ambient Light - Premium Car Interior Lighting System | DRAGX Malaysia',
     description: 'Transform your car interior with premium RGB ambient lighting. Customizable colors and effects.',
-    images: ['/ambientlight/pc/Ambient light PC-01.webp'],
+    images: ['https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977943/m75j3e1uy8kqdc0iiyzy_dnk0kb?_a=BAVAZGBz0'],
   }
 }
 

@@ -5,7 +5,7 @@ export const metadata = {
   openGraph: {
     title: 'Conti Decoder - Advanced Car Decoding System | DRAGX Malaysia',
     description: 'Professional car decoder solution for modern vehicles. Advanced diagnostics and vehicle customization system.',
-    images: ['/contidecoder/pc/CONTI DECODER PAGE 2-01.webp'],
+    images: ['https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1729013791/gcpdyz9k7cs9pgdcggen?_a=BAVAZGBz0'],
   }
 }
 

@@ -7,6 +7,8 @@ import { useProduct } from '@/contexts/ProductContext'
 export default function AmbientLightPage() {
   const { setCurrentProduct } = useProduct()
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [pageUrl, setPageUrl] = useState('')
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -16,6 +18,30 @@ export default function AmbientLightPage() {
     window.addEventListener('resize', checkScreenSize)
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
+
+  useEffect(() => {
+    const checkMobileDevice = () => {
+      setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    }
+    checkMobileDevice()
+  }, [])
+
+  useEffect(() => {
+    setPageUrl(window.location.href)
+  }, [])
+
+  const getWhatsAppUrl = (modelName) => {
+    const phoneNumber = '60192776056'
+    const message = modelName
+      ? `${pageUrl}\n\nHi Dragx, I'm interested in Ambient Light for ${modelName}`
+      : `${pageUrl}\n\nHi Dragx, I'm interested in Ambient Light for [Type Your Car Model Here]`
+
+    if (isMobile) {
+      return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    } else {
+      return `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`
+    }
+  }
 
   // 设置 Ambient Light 产品信息给 WhatsApp 按钮使用
   useEffect(() => {
@@ -38,7 +64,7 @@ export default function AmbientLightPage() {
         <>
           <figure className="relative">
             <Image
-              src="/ambientlight/pc/Ambient light PC-01.webp"
+              src="/ambientlight/pc/ambient-light-main.webp"
               alt="Ambient Light - Premium Car Interior Lighting System"
               width={1200}
               height={800}
@@ -123,6 +149,17 @@ export default function AmbientLightPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-full text-center">
+              <a
+                href={getWhatsAppUrl('')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="bg-white/90 backdrop-blur-sm text-black px-6 md:px-10 py-2 md:py-4 rounded-xl font-bold text-xs md:text-lg hover:bg-gray-100 transition-all duration-300 uppercase tracking-widest border-2 border-black/10 shadow-2xl hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] active:scale-95">
+                  Contact Us With Your Car Model
+                </button>
+              </a>
+            </div>
             <figcaption className="sr-only">
               Benefits and advantages of ambient light system.
             </figcaption>
@@ -217,6 +254,17 @@ export default function AmbientLightPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-full text-center">
+              <a
+                href={getWhatsAppUrl('')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="bg-white/90 backdrop-blur-sm text-black px-4 md:px-8 py-2 md:py-3 rounded-xl font-bold text-[10px] md:text-base hover:bg-gray-100 transition-all duration-300 uppercase tracking-widest border-2 border-black/10 shadow-2xl hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] active:scale-95">
+                  Contact Us With Your Car Model
+                </button>
+              </a>
+            </div>
             <figcaption className="sr-only">
               Benefits and advantages of ambient light system.
             </figcaption>

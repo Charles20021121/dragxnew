@@ -40,9 +40,15 @@ export default function PowerBootPage() {
     }
   }, [setCurrentProduct])
 
+  const [pageUrl, setPageUrl] = useState('')
+
+  useEffect(() => {
+    setPageUrl(window.location.href)
+  }, [])
+
   const getWhatsAppUrl = (modelName) => {
     const phoneNumber = '60192776056'
-    const message = `Hi Dragx, I'm interested in Power Boot for ${modelName}`
+    const message = `${pageUrl}\n\nHi Dragx, I'm interested in Power Boot for ${modelName}`
 
     if (isMobile) {
       return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`

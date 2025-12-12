@@ -144,7 +144,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
         }}
         loop={true}
         autoplay={{
-          delay: 5000,
+          delay: 3000,
           disableOnInteraction: false,
         }}
         className="hero-swiper"

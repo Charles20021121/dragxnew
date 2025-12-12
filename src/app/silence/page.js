@@ -27,9 +27,15 @@ export default function SilencePage() {
     return () => window.removeEventListener('resize', checkMobileDevice)
   }, [])
 
+  const [pageUrl, setPageUrl] = useState('')
+
+  useEffect(() => {
+    setPageUrl(window.location.href)
+  }, [])
+
   const getWhatsAppUrl = (productName) => {
     const phoneNumber = '60192776056'
-    const message = `Hi Dragx, I'm interested in Soundproof: ${productName}`
+    const message = `${pageUrl}\n\nHi Dragx, I'm interested in Soundproof: ${productName}`
 
     if (isMobile) {
       return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
@@ -121,8 +127,8 @@ export default function SilencePage() {
               >
                 <div className="relative px-2 md:px-4">
                   <span className={`text-sm md:text-base ${activeCategory === category
-                      ? 'text-[#64acac] font-bold'
-                      : 'text-gray-400 font-normal'
+                    ? 'text-[#64acac] font-bold'
+                    : 'text-gray-400 font-normal'
                     }`}>
                     {category}
                   </span>

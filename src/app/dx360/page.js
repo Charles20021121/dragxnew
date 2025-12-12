@@ -10,6 +10,12 @@ export default function DX360Page() {
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
+  const [origin, setOrigin] = useState('')
+
+  useEffect(() => {
+    setOrigin(window.location.origin)
+  }, [])
+
   useEffect(() => {
     const checkScreenSize = () => {
       setIsDesktop(window.innerWidth >= 768)
@@ -44,16 +50,26 @@ export default function DX360Page() {
   }, [setCurrentProduct])
 
   // 生成 WhatsApp URL（根据设备类型）
-  const getWhatsAppUrl = () => {
+  const getWhatsAppUrl = (customMessage, imageName) => {
     const phoneNumber = '60192776056'
-    const message = "Hi%20Dragx,%20I'm%20interested%20in%20DX360."
+
+    let messageText = customMessage || "Hi Dragx, I'm interested in DX360."
+    let finalMessage = messageText
+
+    if (imageName && origin) {
+      const imageUrl = `${origin}/dx360/product/${encodeURIComponent(imageName)}`
+      // Link first, then message (with empty line)
+      finalMessage = `${imageUrl}\n\n${messageText}`
+    }
+
+    const encodedMessage = encodeURIComponent(finalMessage)
 
     if (isMobile) {
       // 移动设备：使用 wa.me（打开 WhatsApp App）
-      return `https://wa.me/${phoneNumber}?text=${message}`
+      return `https://wa.me/${phoneNumber}?text=${encodedMessage}`
     } else {
       // 电脑：使用 web.whatsapp.com
-      return `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${message}`
+      return `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`
     }
   }
 
@@ -87,13 +103,13 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[14.5%] bottom-[52%] w-[10%]' : 'left-[5.7%] bottom-[51.5%] w-[18%]'}`}
+          className={`absolute ${isDesktop ? 'left-[14.5%] bottom-[52%] w-fit' : 'left-[5.7%] bottom-[51.5%] w-fit'}`}
         >
           <a
-            href={getWhatsAppUrl()}
+            href={getWhatsAppUrl("Hi Dragx, I'm interested in the 360° Surrounding View System.", "360 CAM.jpg")}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
+            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
               fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
               padding: '0.4em 1.2em'
@@ -113,13 +129,13 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[57%] bottom-[50%] w-[10%]' : 'left-[60%] bottom-[48%] w-[18%]'}`}
+          className={`absolute ${isDesktop ? 'left-[57%] bottom-[50%] w-fit' : 'left-[60%] bottom-[48%] w-fit'}`}
         >
           <a
-            href={getWhatsAppUrl()}
+            href={getWhatsAppUrl("Hi Dragx, I'm interested in the Radar Sensor System.", "RADAR SENSOR.jpg")}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
+            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
               fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
               padding: '0.4em 1.2em'
@@ -139,13 +155,13 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[40.4%] bottom-[50%] w-[10%]' : 'left-[40%] bottom-[49%] w-[18%]'}`}
+          className={`absolute ${isDesktop ? 'left-[40.4%] bottom-[50%] w-fit' : 'left-[40%] bottom-[49%] w-fit'}`}
         >
           <a
-            href={getWhatsAppUrl()}
+            href={getWhatsAppUrl("Hi Dragx, I'm interested in the Blind Spot Monitor (BSM).", "BSM.jpg")}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
+            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
               fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
               padding: '0.4em 1.2em'
@@ -165,13 +181,13 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[19.4%] bottom-[15%] w-[10%]' : 'left-[10%] bottom-[11%] w-[18%]'}`}
+          className={`absolute ${isDesktop ? 'left-[19.4%] bottom-[15%] w-fit' : 'left-[10%] bottom-[11%] w-fit'}`}
         >
           <a
-            href={getWhatsAppUrl()}
+            href={getWhatsAppUrl("Hi Dragx, I'm interested in the Dash Cam.", "DASH CAM.jpg")}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
+            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
               fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
               padding: '0.4em 1.2em'

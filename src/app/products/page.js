@@ -23,7 +23,11 @@ const categoryOrder = {
   'alphardvellfire': 4,
   'bmw': 5,
   'mercedes': 6,
-  'other': 7
+  'powerboot': 7,
+  'soundproof': 8,
+  'silence': 8,
+  '360camera': 9,
+  'other': 999
 }
 
 // 排除的類別
@@ -56,6 +60,7 @@ export default function Products() {
 
               acc[category] = {
                 name: displayName,
+                categoryKey: category,
                 link: `/products/${category}`,
                 products: []
               };
@@ -74,8 +79,8 @@ export default function Products() {
 
           // 對類別進行排序
           const sortedCategories = Object.values(categorizedProducts).sort((a, b) => {
-            const orderA = categoryOrder[a.name.toLowerCase()] || 999;
-            const orderB = categoryOrder[b.name.toLowerCase()] || 999;
+            const orderA = categoryOrder[a.categoryKey] || 999;
+            const orderB = categoryOrder[b.categoryKey] || 999;
             return orderA - orderB;
           });
 

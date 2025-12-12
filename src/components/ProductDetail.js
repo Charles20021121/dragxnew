@@ -410,8 +410,11 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                   ))}
                 </div>
 
-                {/* Desktop View - 3 Columns Grid */}
-                <div className="hidden md:grid grid-cols-3 gap-4">
+                {/* Desktop View - 2 Columns Grid for specific product, 3 for others */}
+                <div className={`hidden md:grid gap-4 ${(product.name.toLowerCase().includes('luxury series 8') && product.name.toLowerCase().includes('dxpro'))
+                    ? 'grid-cols-2'
+                    : 'grid-cols-3'
+                  }`}>
                   {relatedImages.slice(4).map((image, index) => (
                     <button
                       key={index}

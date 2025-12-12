@@ -7,6 +7,8 @@ import { useProduct } from '@/contexts/ProductContext'
 export default function ContiDecoderPage() {
   const { setCurrentProduct } = useProduct()
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [pageUrl, setPageUrl] = useState('')
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -16,6 +18,30 @@ export default function ContiDecoderPage() {
     window.addEventListener('resize', checkScreenSize)
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
+
+  useEffect(() => {
+    const checkMobileDevice = () => {
+      setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    }
+    checkMobileDevice()
+  }, [])
+
+  useEffect(() => {
+    setPageUrl(window.location.href)
+  }, [])
+
+  const getWhatsAppUrl = (modelName) => {
+    const phoneNumber = '60192776056'
+    const message = modelName
+      ? `${pageUrl}\n\nHi Dragx, I'm interested in Conti Decoder for ${modelName}`
+      : `${pageUrl}\n\nHi Dragx, I'm interested in Conti Decoder for [Type Your Car Model Here]`
+
+    if (isMobile) {
+      return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    } else {
+      return `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`
+    }
+  }
 
   // 设置 Conti Decoder 产品信息给 WhatsApp 按钮使用
   useEffect(() => {
@@ -38,7 +64,7 @@ export default function ContiDecoderPage() {
         <>
           <figure className="relative">
             <Image
-              src="/contidecoder/pc/CONTI DECODER PAGE 2-01.webp"
+              src="/contidecoder/pc/conti-decoder-main.webp"
               alt="Conti Decoder - Advanced Car Decoding System"
               width={1200}
               height={800}
@@ -123,6 +149,17 @@ export default function ContiDecoderPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-full text-center">
+              <a
+                href={getWhatsAppUrl('')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="bg-[#1a1a1a]/90 backdrop-blur-sm text-white px-6 md:px-10 py-2 md:py-4 rounded-xl font-bold text-xs md:text-lg hover:bg-black transition-all duration-300 uppercase tracking-widest border-2 border-white/30 shadow-2xl hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] active:scale-95">
+                  Contact Us With Your Car Model
+                </button>
+              </a>
+            </div>
             <figcaption className="sr-only">
               Additional information about Conti Decoder system.
             </figcaption>
@@ -217,12 +254,25 @@ export default function ContiDecoderPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-full text-center">
+              <a
+                href={getWhatsAppUrl('')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="bg-[#1a1a1a]/90 backdrop-blur-sm text-white px-4 md:px-8 py-2 md:py-3 rounded-xl font-bold text-[10px] md:text-base hover:bg-black transition-all duration-300 uppercase tracking-widest border-2 border-white/30 shadow-2xl hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] active:scale-95">
+                  Contact Us With Your Car Model
+                </button>
+              </a>
+            </div>
             <figcaption className="sr-only">
               Additional information about Conti Decoder system.
             </figcaption>
           </figure>
         </>
       )}
+
+
 
       {/* SEO Content - Hidden from visual display but readable by search engines */}
       <div className="sr-only">

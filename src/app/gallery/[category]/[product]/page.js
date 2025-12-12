@@ -29,7 +29,7 @@ export default function GalleryProductPage() {
         const imagesData = await imagesRes.json()
         const validImages = imagesData.filter(img => img.Url && img.Url.trim() !== '')
         setRelatedImages(validImages)
-        
+
         setLoading(false)
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -127,71 +127,26 @@ export default function GalleryProductPage() {
           <div className="bg-white rounded-t-3xl p-5">
             {/* Desktop Layout */}
             <div className="hidden md:block">
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                {/* Main Image - Left Side */}
-                <motion.div 
-                  className="relative aspect-square cursor-pointer"
-                  onClick={() => setSelectedImageIndex(0)}
-                >
-                  <CldImage
-                    src={mainImage.Url}
-                    alt={mainImage.Name || 'Product Image'}
-                    fill
-                    className="object-cover rounded-lg"
-                    sizes="50vw"
-                  />
-                </motion.div>
-
-                {/* First Four Images - Right Side */}
-                {allImages.length > 0 && (
-                  <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full">
-                    {allImages.slice(0, 4).map((image, index) => (
-                      <motion.div
-                        key={`${image.Id}-${index}`}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="relative aspect-square cursor-pointer"
-                        onClick={() => setSelectedImageIndex(index + 1)}
-                      >
-                        <CldImage
-                          src={image.Url}
-                          alt={image.Name || 'Product View'}
-                          fill
-                          className="object-cover rounded-lg"
-                          sizes="25vw"
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
+              <div className="grid grid-cols-4 gap-4">
+                {allImagesArray.map((image, index) => (
+                  <motion.div
+                    key={`${image.Id}-${index}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="relative aspect-square cursor-pointer"
+                    onClick={() => setSelectedImageIndex(index)}
+                  >
+                    <CldImage
+                      src={image.Url}
+                      alt={image.Name || 'Product View'}
+                      fill
+                      className="object-cover rounded-lg"
+                      sizes="25vw"
+                    />
+                  </motion.div>
+                ))}
               </div>
-
-              {/* Remaining Images for Desktop */}
-              {allImages.length > 4 && (
-                <div className="mt-8">
-                  <div className="grid grid-cols-3 gap-4">
-                    {allImages.slice(4).map((image, index) => (
-                      <motion.div
-                        key={`${image.Id}-${index}`}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="relative aspect-square w-full cursor-pointer"
-                        onClick={() => setSelectedImageIndex(index + 5)}
-                      >
-                        <CldImage
-                          src={image.Url}
-                          alt={image.Name || 'Product View'}
-                          fill
-                          className="object-cover rounded-lg"
-                          sizes="400px"
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Mobile Layout */}
