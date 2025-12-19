@@ -169,6 +169,7 @@ export default function SilencePage() {
                   className="relative"
                 >
                   <CldImage
+                    unoptimized
                     src={product.image}
                     alt="Product Image"
                     width={400}

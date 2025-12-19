@@ -64,6 +64,7 @@ export default function ContiDecoderPage() {
         <>
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/pc/conti-decoder-main.webp"
               alt="Conti Decoder - Advanced Car Decoding System"
               width={1200}
@@ -78,6 +79,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/pc/CONTI DECODER PAGE 2-02.webp"
               alt="Conti Decoder Features"
               width={1200}
@@ -91,6 +93,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/pc/CONTI DECODER PAGE 2-03.webp"
               alt="Conti Decoder Functionality"
               width={1200}
@@ -104,6 +107,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/pc/CONTI DECODER PAGE 2-04.webp"
               alt="Conti Decoder Integration"
               width={1200}
@@ -117,6 +121,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/pc/CONTI DECODER PAGE 2-05.webp"
               alt="Conti Decoder Benefits"
               width={1200}
@@ -130,6 +135,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/pc/CONTI DECODER PAGE 2-06.webp"
               alt="Conti Decoder Compatibility"
               width={1200}
@@ -143,7 +149,8 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
-              src="/contidecoder/pc/CONTI DECODER PAGE phone size-07.webp"
+              unoptimized
+              src="/contidecoder/pc/CONTI DECODER PAGE 7.webp"
               alt="Conti Decoder Additional Information"
               width={1200}
               height={800}
@@ -156,7 +163,7 @@ export default function ContiDecoderPage() {
                 rel="noopener noreferrer"
               >
                 <button className="bg-[#1a1a1a]/90 backdrop-blur-sm text-white px-6 md:px-10 py-2 md:py-4 rounded-xl font-bold text-xs md:text-lg hover:bg-black transition-all duration-300 uppercase tracking-widest border-2 border-white/30 shadow-2xl hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] active:scale-95">
-                  Contact Us With Your Car Model
+                  CONTACT US WITH YOUR CAR MODEL
                 </button>
               </a>
             </div>
@@ -169,6 +176,7 @@ export default function ContiDecoderPage() {
         <>
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/phone/CONTI DECODER PAGE phone size-01.webp"
               alt="Conti Decoder - Advanced Car Decoding System"
               width={1200}
@@ -183,6 +191,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/phone/CONTI DECODER PAGE phone size-02.webp"
               alt="Conti Decoder Features"
               width={1200}
@@ -196,6 +205,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/phone/CONTI DECODER PAGE phone size-03.webp"
               alt="Conti Decoder Functionality"
               width={1200}
@@ -209,6 +219,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/phone/CONTI DECODER PAGE phone size-04.webp"
               alt="Conti Decoder Integration"
               width={1200}
@@ -222,6 +233,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/phone/CONTI DECODER PAGE phone size-05.webp"
               alt="Conti Decoder Benefits"
               width={1200}
@@ -235,6 +247,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/phone/CONTI DECODER PAGE phone size-06.webp"
               alt="Conti Decoder Compatibility"
               width={1200}
@@ -248,6 +261,7 @@ export default function ContiDecoderPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/contidecoder/phone/CONTI DECODER PAGE phone size-07.webp"
               alt="Conti Decoder Additional Information"
               width={1200}
@@ -261,7 +275,7 @@ export default function ContiDecoderPage() {
                 rel="noopener noreferrer"
               >
                 <button className="bg-[#1a1a1a]/90 backdrop-blur-sm text-white px-4 md:px-8 py-2 md:py-3 rounded-xl font-bold text-[10px] md:text-base hover:bg-black transition-all duration-300 uppercase tracking-widest border-2 border-white/30 shadow-2xl hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] active:scale-95">
-                  Contact Us With Your Car Model
+                  CONTACT US WITH YOUR CAR MODEL
                 </button>
               </a>
             </div>

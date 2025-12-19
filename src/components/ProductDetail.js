@@ -269,7 +269,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
             rel="noopener noreferrer"
             className="bg-[#88bc04] text-white font-bold px-20 py-2 rounded-full hover:bg-[#7aa703] transition-colors duration-300 whitespace-nowrap"
           >
-            Learn More
+            LEARN MORE
           </a>
         </div>
 
@@ -410,11 +410,8 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                   ))}
                 </div>
 
-                {/* Desktop View - 2 Columns Grid for specific product, 3 for others */}
-                <div className={`hidden md:grid gap-4 ${(product.name.toLowerCase().includes('luxury series 8') && product.name.toLowerCase().includes('dxpro'))
-                    ? 'grid-cols-2'
-                    : 'grid-cols-3'
-                  }`}>
+                {/* Desktop View - 2 Columns Grid */}
+                <div className="hidden md:grid grid-cols-2 gap-4">
                   {relatedImages.slice(4).map((image, index) => (
                     <button
                       key={index}
@@ -461,7 +458,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
               rel="noopener noreferrer"
               className="block bg-[#88bc04] text-white text-sm font-bold px-5 py-1.5 rounded-full text-center hover:bg-[#7aa703] transition-colors duration-300"
             >
-              Learn More
+              LEARN MORE
             </a>
           </div>
         </div>

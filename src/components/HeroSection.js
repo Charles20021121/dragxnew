@@ -33,6 +33,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
             <Link href={bannerLink} className="block w-full h-full cursor-pointer">
               {heroImages[0].startsWith('http') || heroImages[0].startsWith('/') ? (
                 <Image
+                  unoptimized
                   src={heroImages[0]}
                   alt="Hero Image"
                   fill
@@ -55,6 +56,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
             <>
               {heroImages[0].startsWith('http') || heroImages[0].startsWith('/') ? (
                 <Image
+                  unoptimized
                   src={heroImages[0]}
                   alt="Hero Image"
                   fill
@@ -85,6 +87,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
             <Link href={bannerLink} className="block w-full h-full cursor-pointer">
               {(mobileImage || heroImages[0]).startsWith('http') || (mobileImage || heroImages[0]).startsWith('/') ? (
                 <Image
+                  unoptimized
                   src={mobileImage || heroImages[0]}
                   alt="Hero Image"
                   fill
@@ -107,6 +110,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
             <>
               {(mobileImage || heroImages[0]).startsWith('http') || (mobileImage || heroImages[0]).startsWith('/') ? (
                 <Image
+                  unoptimized
                   src={mobileImage || heroImages[0]}
                   alt="Hero Image"
                   fill
@@ -183,6 +187,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                       <Link href={bannerLink} className="block w-full h-full cursor-pointer">
                         {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
                           <Image
+                            unoptimized
                             src={imageUrl}
                             alt={`Hero Image ${index + 1}`}
                             fill
@@ -205,6 +210,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                       <>
                         {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
                           <Image
+                            unoptimized
                             src={imageUrl}
                             alt={`Hero Image ${index + 1}`}
                             fill
@@ -228,6 +234,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                     <>
                       {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
                         <Image
+                          unoptimized
                           src={imageUrl}
                           alt={`Hero Image ${index + 1}`}
                           fill
@@ -259,6 +266,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                       <Link href={bannerLink} className="block w-full h-full cursor-pointer">
                         {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
                           <Image
+                            unoptimized
                             src={mobileImage || imageUrl}
                             alt={`Hero Image ${index + 1}`}
                             fill
@@ -281,6 +289,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                       <>
                         {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
                           <Image
+                            unoptimized
                             src={mobileImage || imageUrl}
                             alt={`Hero Image ${index + 1}`}
                             fill
@@ -304,6 +313,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                     <>
                       {imageUrl.startsWith('http') || imageUrl.startsWith('/') ? (
                         <Image
+                          unoptimized
                           src={mobileImage || imageUrl}
                           alt={`Hero Image ${index + 1}`}
                           fill

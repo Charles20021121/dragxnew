@@ -2,7 +2,7 @@ import pool from '@/lib/db'
 
 export default async function sitemap() {
   const baseUrl = 'https://dragx.asia';
-  
+
   // 静态页面
   const staticRoutes = [
     {
@@ -30,16 +30,58 @@ export default async function sitemap() {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/androidplayer`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/silence`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/ambientlight`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contidecoder`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/dx360`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/powerboot`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/lyno`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/manual/lyno`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
   ];
 
   try {
     const connection = await pool.getConnection();
-    
+
     try {
       // 获取所有产品（只获取主产品，Id = same）
       const [products] = await connection.query(`
@@ -49,7 +91,7 @@ export default async function sitemap() {
       `);
 
       console.log('Total products found:', products.length);
-      
+
       // 过滤出主产品（Id = same）
       const mainProducts = products.filter(p => p.Id == p.same);
       console.log('Main products found:', mainProducts.length);
@@ -62,14 +104,14 @@ export default async function sitemap() {
       `);
 
       console.log('Total gallery items found:', galleryItems.length);
-      
+
       // 过滤出主画廊项目（Id = same）
       const mainGalleryItems = galleryItems.filter(g => g.Id == g.same);
       console.log('Main gallery items found:', mainGalleryItems.length);
 
       // 获取产品类别
       const productCategories = [...new Set(mainProducts.map(p => p.categories))];
-      
+
       // 获取画廊类别  
       const galleryCategories = [...new Set(mainGalleryItems.map(g => g.categories))];
 
@@ -122,7 +164,7 @@ export default async function sitemap() {
     } finally {
       connection.release();
     }
-    
+
   } catch (error) {
     console.error('Error generating sitemap:', error);
     // 如果获取动态数据失败，至少返回静态页面

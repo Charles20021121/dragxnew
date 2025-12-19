@@ -14,7 +14,7 @@ const products = [
   {
     Name: "ANDROID PLAYER",
     ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977941/lz4oh3mzwlmq7aiquwmf_f5e6ze?_a=BAVFB+DW0",
-    domainUrl: "/products/androidplayer"
+    domainUrl: "/androidplayer"
   },
   {
     Name: "AMBIENTLIGHT",

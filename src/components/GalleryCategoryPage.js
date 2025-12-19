@@ -142,8 +142,8 @@ export default function GalleryCategoryPage({
                   key={tab.value}
                   onClick={() => onTabChange(tab.value)}
                   className={`px-6 py-2 rounded-full border transition-all duration-300 ${activeTab === tab.value
-                      ? 'bg-[#1c5434] text-white border-[#1c5434]'
-                      : 'bg-transparent text-[#1c5434] border-[#1c5434] hover:bg-[#1c5434] hover:text-white'
+                    ? 'bg-[#1c5434] text-white border-[#1c5434]'
+                    : 'bg-transparent text-[#1c5434] border-[#1c5434] hover:bg-[#1c5434] hover:text-white'
                     }`}
                 >
                   {tab.label}
@@ -244,8 +244,8 @@ export default function GalleryCategoryPage({
                 key={tab.value}
                 onClick={() => onTabChange(tab.value)}
                 className={`px-6 py-2 rounded-full border transition-all duration-300 ${activeTab === tab.value
-                    ? 'bg-[#1c5434] text-white border-[#1c5434]'
-                    : 'bg-transparent text-[#1c5434] border-[#1c5434] hover:bg-[#1c5434] hover:text-white'
+                  ? 'bg-[#1c5434] text-white border-[#1c5434]'
+                  : 'bg-transparent text-[#1c5434] border-[#1c5434] hover:bg-[#1c5434] hover:text-white'
                   }`}
               >
                 {tab.label}

@@ -64,6 +64,7 @@ export default function AmbientLightPage() {
         <>
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/pc/ambient-light-main.webp"
               alt="Ambient Light - Premium Car Interior Lighting System"
               width={1200}
@@ -78,6 +79,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/pc/Ambient light PC-02.webp"
               alt="Ambient Light Features"
               width={1200}
@@ -91,6 +93,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/pc/Ambient light PC-03.webp"
               alt="Ambient Light Color Options"
               width={1200}
@@ -104,6 +107,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/pc/Ambient light PC-04.webp"
               alt="Ambient Light Installation"
               width={1200}
@@ -117,6 +121,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/pc/Ambient light PC-05.webp"
               alt="Ambient Light Control"
               width={1200}
@@ -130,6 +135,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/pc/Ambient light PC-06.webp"
               alt="Ambient Light Effects"
               width={1200}
@@ -143,6 +149,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/pc/Ambient light PC-07.webp"
               alt="Ambient Light Benefits"
               width={1200}
@@ -169,6 +176,7 @@ export default function AmbientLightPage() {
         <>
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/Phone/Ambient light Phone-01.webp"
               alt="Ambient Light - Premium Car Interior Lighting System"
               width={1200}
@@ -183,6 +191,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/Phone/Ambient light Phone-02.webp"
               alt="Ambient Light Features"
               width={1200}
@@ -196,6 +205,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/Phone/Ambient light Phone-03.webp"
               alt="Ambient Light Color Options"
               width={1200}
@@ -209,6 +219,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/Phone/Ambient light Phone-04.webp"
               alt="Ambient Light Installation"
               width={1200}
@@ -222,6 +233,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/Phone/Ambient light Phone-05.webp"
               alt="Ambient Light Control"
               width={1200}
@@ -235,6 +247,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/Phone/Ambient light Phone-06.webp"
               alt="Ambient Light Effects"
               width={1200}
@@ -248,6 +261,7 @@ export default function AmbientLightPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/ambientlight/Phone/Ambient light Phone-07.webp"
               alt="Ambient Light Benefits"
               width={1200}

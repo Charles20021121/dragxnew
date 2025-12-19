@@ -34,11 +34,11 @@ export default function ImageModal({ images, currentIndex, onClose }) {
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return
-    
+
     const distance = touchStart - touchEnd
     const isLeftSwipe = distance > minSwipeDistance
     const isRightSwipe = distance < -minSwipeDistance
-    
+
     if (isLeftSwipe) {
       handleNext()
     }
@@ -63,7 +63,7 @@ export default function ImageModal({ images, currentIndex, onClose }) {
       className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
       onClick={onClose}
     >
-      <div 
+      <div
         className="relative w-full h-full flex items-center justify-center"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
@@ -81,7 +81,7 @@ export default function ImageModal({ images, currentIndex, onClose }) {
 
         {/* 上一張按鈕 */}
         <button
-          className="absolute left-4 text-white z-50 p-2 hover:bg-white/10 rounded-full transition-colors"
+          className="absolute left-4 text-white z-50 p-2 hover:bg-white/10 rounded-full transition-colors hidden md:block"
           onClick={(e) => {
             e.stopPropagation()
             handlePrevious()
@@ -93,29 +93,36 @@ export default function ImageModal({ images, currentIndex, onClose }) {
         </button>
 
         {/* 圖片 */}
-        <div className="relative w-full h-full flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
-          <AnimatePresence mode="wait">
+        <div className="relative w-full h-full overflow-hidden" onClick={(e) => e.stopPropagation()}>
+          <AnimatePresence initial={false}>
             <motion.div
               key={index}
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
-              className="relative w-full h-full flex items-center justify-center"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 }
+              }}
+              className="absolute inset-0 flex items-center justify-center p-4"
             >
-              <CldImage
-                src={images[index].Url}
-                alt={images[index].Name || "Gallery image"}
-                fill
-                className="object-contain"
-                sizes="100vw"
-              />
+              <div className="relative w-full h-full max-w-7xl mx-auto">
+                <CldImage
+                  src={images[index].Url}
+                  alt={images[index].Name || "Gallery image"}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                  priority
+                />
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
         {/* 下一張按鈕 */}
         <button
-          className="absolute right-4 text-white z-50 p-2 hover:bg-white/10 rounded-full transition-colors"
+          className="absolute right-4 text-white z-50 p-2 hover:bg-white/10 rounded-full transition-colors hidden md:block"
           onClick={(e) => {
             e.stopPropagation()
             handleNext()
@@ -127,10 +134,43 @@ export default function ImageModal({ images, currentIndex, onClose }) {
         </button>
 
         {/* 圖片計數器 */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-4 py-2 rounded-full">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-4 py-2 rounded-full z-50">
           {index + 1} / {images.length}
         </div>
+
+        {/* MORE INFO Button Overlay */}
+        {images[index].link && images[index].link.trim() !== '' && (
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-50">
+            <a
+              href={images[index].link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block bg-[#88bc04] text-white text-center py-2.5 px-8 rounded-lg text-sm font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider shadow-[0_4px_10px_rgba(0,0,0,0.3)] hover:scale-105 transform duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              MORE INFO
+            </a>
+          </div>
+        )}
+
+        {/* Preloader for next image */}
+        <div className="hidden">
+          <CldImage
+            src={images[(index + 1) % images.length].Url}
+            alt="preload"
+            width={1}
+            height={1}
+            priority
+          />
+          <CldImage
+            src={images[(index - 1 + images.length) % images.length].Url}
+            alt="preload-prev"
+            width={1}
+            height={1}
+            priority
+          />
+        </div>
       </div>
-    </motion.div>
+    </motion.div >
   )
 } 

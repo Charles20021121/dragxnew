@@ -63,6 +63,7 @@ export default function PowerBootPage() {
         <>
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/Power boot page-01.webp"
               alt="DX Power Boot - Smart Electric Tailgate System with hands-free operation and advanced safety features"
               width={1200}
@@ -77,6 +78,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/Power boot page-02.webp"
               alt="Power Boot Smart Upgrade - Intelligent electric tailgate with 9 key features including anti-pinch protection"
               width={1200}
@@ -90,6 +92,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/Power boot page-03.webp"
               alt="Power Boot Convenience & Comfort - One-touch operation perfect for busy lifestyles and family use"
               width={1200}
@@ -103,6 +106,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/Power boot page-04.webp"
               alt="Power Boot Smart Integration - Advanced integration with car's central lock and foot-sensor activation"
               width={1200}
@@ -116,6 +120,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/Power boot page-05.webp"
               alt="Power Boot Safety & Protection - Anti-pinch technology preventing damage and ensuring user safety"
               width={1200}
@@ -129,6 +134,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/Power boot page-06.webp"
               alt="Power Boot Adjustable Height - User-friendly customization for different users and garage clearances"
               width={1200}
@@ -144,6 +150,7 @@ export default function PowerBootPage() {
         <>
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/Power boot page-01.webp"
               alt="DX Power Boot - Smart Electric Tailgate System with hands-free operation and advanced safety features"
               width={1200}
@@ -158,6 +165,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/PHONE SIZE-02.webp"
               alt="Power Boot Smart Upgrade - Intelligent electric tailgate with 9 key features including anti-pinch protection"
               width={1200}
@@ -171,6 +179,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/PHONE SIZE-03.webp"
               alt="Power Boot Convenience & Comfort - One-touch operation perfect for busy lifestyles and family use"
               width={1200}
@@ -184,6 +193,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/PHONE SIZE-04.webp"
               alt="Power Boot Smart Integration - Advanced integration with car's central lock and foot-sensor activation"
               width={1200}
@@ -197,6 +207,7 @@ export default function PowerBootPage() {
 
           <figure className="relative">
             <Image
+              unoptimized
               src="/powerboot/PHONE SIZE-05.webp"
               alt="Power Boot Safety & Protection - Anti-pinch technology preventing damage and ensuring user safety"
               width={1200}

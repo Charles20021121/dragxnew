@@ -77,7 +77,8 @@ export default function DX360Page() {
     <>
       <div className="relative">
         <Image
-          src="/dx360/360 PAGE-01.webp"
+          unoptimized
+          src={isDesktop ? "/dx360/360 PAGE-01.webp" : "/dx360/PHONE SIZE-01.webp"}
           alt="DX360 - 360° Vision & Safety Upgrades for Every Car - Complete car safety system with 360 camera, dash cam, blind spot monitor and radar sensor"
           width={1200}
           height={800}
@@ -87,6 +88,7 @@ export default function DX360Page() {
       </div>
 
       <Image
+        unoptimized
         src={isDesktop ? "/dx360/360 PAGE-02.webp" : "/dx360/PHONE SIZE-02.webp"}
         alt="DX360 System Overview - Comprehensive vehicle safety features including 360° surrounding view cameras, radar sensors, blind spot monitoring, and dash cam integration"
         width={1200}
@@ -96,6 +98,7 @@ export default function DX360Page() {
 
       <div className="relative">
         <Image
+          unoptimized
           src={isDesktop ? "/dx360/360 PAGE-03.webp" : "/dx360/PHONE SIZE-03.webp"}
           alt="DX360 360° Surrounding View - Eliminates blind spots, prevents scratches and collisions, enables safer parking with complete vehicle coverage"
           width={1200}
@@ -103,16 +106,14 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[14.5%] bottom-[52%] w-fit' : 'left-[5.7%] bottom-[51.5%] w-fit'}`}
+          className={`absolute ${isDesktop ? 'left-[14.5%] bottom-[52%] w-fit' : 'left-1/2 bottom-[3%] -translate-x-1/2 w-fit'}`}
         >
           <a
-            href={getWhatsAppUrl("Hi Dragx, I'm interested in the 360° Surrounding View System.", "360 CAM.jpg")}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/products/360camera"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
-              fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
-              padding: '0.4em 1.2em'
+              fontSize: isDesktop ? 'min(1vw, 12px)' : '15px',
+              padding: isDesktop ? '0.4em 1.2em' : '0.45em 1.3em'
             }}
           >
             LEARN MORE
@@ -122,6 +123,7 @@ export default function DX360Page() {
 
       <div className="relative">
         <Image
+          unoptimized
           src={isDesktop ? "/dx360/360 PAGE-04.webp" : "/dx360/PHONE SIZE-04.webp"}
           alt="DX360 Radar Sensor System - Advanced collision prevention, parking assistance, and enhanced awareness with microwave radar technology"
           width={1200}
@@ -129,16 +131,14 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[57%] bottom-[50%] w-fit' : 'left-[60%] bottom-[48%] w-fit'}`}
+          className={`absolute ${isDesktop ? 'left-[57%] bottom-[50%] w-fit' : 'left-1/2 bottom-[3%] -translate-x-1/2 w-fit'}`}
         >
           <a
-            href={getWhatsAppUrl("Hi Dragx, I'm interested in the Radar Sensor System.", "RADAR SENSOR.jpg")}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/products/360camera"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
-              fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
-              padding: '0.4em 1.2em'
+              fontSize: isDesktop ? 'min(1vw, 12px)' : '15px',
+              padding: isDesktop ? '0.4em 1.2em' : '0.45em 1.3em'
             }}
           >
             LEARN MORE
@@ -148,6 +148,7 @@ export default function DX360Page() {
 
       <div className="relative">
         <Image
+          unoptimized
           src={isDesktop ? "/dx360/360 PAGE-05.webp" : "/dx360/PHONE SIZE-05.webp"}
           alt="DX360 Blind Spot Monitor (BSM) - Safer lane changes, enhanced highway safety, and all-weather support for optimal driving safety"
           width={1200}
@@ -155,16 +156,14 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[40.4%] bottom-[50%] w-fit' : 'left-[40%] bottom-[49%] w-fit'}`}
+          className={`absolute ${isDesktop ? 'left-[40.4%] bottom-[50%] w-fit' : 'left-[8%] bottom-[34%] w-fit'}`}
         >
           <a
-            href={getWhatsAppUrl("Hi Dragx, I'm interested in the Blind Spot Monitor (BSM).", "BSM.jpg")}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/products/360camera"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
-              fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
-              padding: '0.4em 1.2em'
+              fontSize: isDesktop ? 'min(1vw, 12px)' : '15px',
+              padding: isDesktop ? '0.4em 1.2em' : '0.45em 1.3em'
             }}
           >
             LEARN MORE
@@ -174,6 +173,7 @@ export default function DX360Page() {
 
       <div className="relative">
         <Image
+          unoptimized
           src={isDesktop ? "/dx360/360 PAGE-06.webp" : "/dx360/PHONE SIZE-06.webp"}
           alt="DX360 Dash Cam - Advanced accident evidence recording, reckless driving deterrent, and 24/7 parking surveillance system"
           width={1200}
@@ -181,16 +181,14 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[19.4%] bottom-[15%] w-fit' : 'left-[10%] bottom-[11%] w-fit'}`}
+          className={`absolute ${isDesktop ? 'left-[19.4%] bottom-[15%] w-fit' : 'left-1/2 bottom-[3%] -translate-x-1/2 w-fit'}`}
         >
           <a
-            href={getWhatsAppUrl("Hi Dragx, I'm interested in the Dash Cam.", "DASH CAM.jpg")}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/products/360camera"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
-              fontSize: isDesktop ? 'min(1vw, 12px)' : 'min(1.5vw, 16px)',
-              padding: '0.4em 1.2em'
+              fontSize: isDesktop ? 'min(1vw, 12px)' : '15px',
+              padding: isDesktop ? '0.4em 1.2em' : '0.45em 1.3em'
             }}
           >
             LEARN MORE

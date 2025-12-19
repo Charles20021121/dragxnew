@@ -11,7 +11,7 @@ export async function GET(request) {
 
   try {
     const connection = await pool.getConnection()
-    
+
     try {
       const query = `
         SELECT *
@@ -19,7 +19,7 @@ export async function GET(request) {
         WHERE categories = ?
         ORDER BY date DESC
       `
-      
+
       const [rows] = await connection.execute(query, [category])
       return NextResponse.json(rows)
     } finally {
@@ -39,7 +39,7 @@ export async function POST(request) {
   try {
     const data = await request.json()
     console.log('Received data:', data)
-    
+
     // 先插入圖片
     const [result] = await connection.query(
       `INSERT INTO gallery (
@@ -51,8 +51,9 @@ export async function POST(request) {
         specifications,
         buy,
         publicId,
-        date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        date,
+        link
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.Name || '',
         data.categories || '',
@@ -62,7 +63,8 @@ export async function POST(request) {
         data.Specifications || '',
         data.buy || '',
         data.publicId || '',
-        data.date || new Date().toISOString().replace('T', ' ').split('.')[0]
+        data.date || new Date().toISOString().replace('T', ' ').split('.')[0],
+        data.link || ''
       ]
     )
 
@@ -77,7 +79,7 @@ export async function POST(request) {
     await connection.commit()
     console.log('Insert successful, ID:', result.insertId)
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       id: result.insertId
     })

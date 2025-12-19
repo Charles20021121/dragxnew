@@ -18,13 +18,13 @@ export default function GalleryProductPage() {
     const fetchData = async () => {
       try {
         // 獲取主產品數據
-        const productRes = await fetch(`/api/gallery/${params.category}/${params.product}`)
+        const productRes = await fetch(`/api/gallery/${params.category}/${params.product}`, { cache: 'no-store' })
         if (!productRes.ok) throw new Error('Network response was not ok')
         const productData = await productRes.json()
         setProduct(productData)
 
         // 獲取相同 same 值的所有產品
-        const imagesRes = await fetch(`/api/gallery/related?same=${productData.same}`)
+        const imagesRes = await fetch(`/api/gallery/related?same=${productData.same}`, { cache: 'no-store' })
         if (!imagesRes.ok) throw new Error('Network response was not ok')
         const imagesData = await imagesRes.json()
         const validImages = imagesData.filter(img => img.Url && img.Url.trim() !== '')
@@ -45,20 +45,29 @@ export default function GalleryProductPage() {
   if (loading) return <LoadingSpinner />
   if (!product || !product.Url) return null
 
-  // 確保主圖有有效的 URL
-  const mainImage = product
+  // Logic to strictly identify Master Record (Id == same)
+  const masterId = String(product.same || product.Id);
+  const masterImage = relatedImages.find(img => String(img.Id) === masterId);
 
-  // 所有相關圖片按日期排序
-  const allImages = relatedImages
-    .filter(img => img.Id !== product.Id)
-    .sort((a, b) => {
-      const dateA = new Date(a.date || 0)
-      const dateB = new Date(b.date || 0)
-      return dateA - dateB
-    })
+  // All other images sorted by date DESC (newest first)
+  const otherImages = relatedImages
+    .filter(img => String(img.Id) !== masterId)
+    .sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0));
 
-  // 將所有圖片整理成一個數組
-  const allImagesArray = [mainImage, ...allImages]
+  let allImagesArray = [];
+
+  // Special case: for alphard-vellfire, hide the Main Image (Master Record)
+  if (params.category === 'alphard-vellfire') {
+    allImagesArray = otherImages;
+  } else {
+    // For others, Lock Main Image (Master Record) at the top
+    if (masterImage) {
+      allImagesArray = [masterImage, ...otherImages];
+    } else {
+      // Fallback if master not found for some reason
+      allImagesArray = otherImages;
+    }
+  }
 
   return (
     <div className=" bg-[#f8f4ec]">
@@ -93,32 +102,11 @@ export default function GalleryProductPage() {
           </ol>
         </nav>
 
-        {/* Product Title & Shop Now Button - Desktop */}
+        {/* Product Title - Desktop */}
         <div className="hidden md:flex justify-between items-center py-4 px-5">
           <h1 className="text-[clamp(12.5px,2vw,25px)] font-bold capitalize w-4/5">
             {product.Name}
           </h1>
-
-          <div className="rounded-full flex overflow-hidden">
-            <a
-              href={product.buy}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#88bc04] text-white text-xs font-bold px-6 py-1.5 hover:bg-[#7aa703] transition-colors duration-300 relative"
-            >
-              Shop Now
-              <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
-            </a>
-            <a
-              href="https://wa.me/60192776056?text=Hi Dragx, Can you recommend a product that suits my needs?"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#709c44] text-white text-xs font-bold px-6 py-1.5 hover:bg-[#648c3d] transition-colors duration-300 relative"
-            >
-              Chat Now
-              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
-            </a>
-          </div>
         </div>
 
 
@@ -129,22 +117,34 @@ export default function GalleryProductPage() {
             <div className="hidden md:block">
               <div className="grid grid-cols-4 gap-4">
                 {allImagesArray.map((image, index) => (
-                  <motion.div
-                    key={`${image.Id}-${index}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative aspect-square cursor-pointer"
-                    onClick={() => setSelectedImageIndex(index)}
-                  >
-                    <CldImage
-                      src={image.Url}
-                      alt={image.Name || 'Product View'}
-                      fill
-                      className="object-cover rounded-lg"
-                      sizes="25vw"
-                    />
-                  </motion.div>
+                  <div key={`${image.Id}-${index}`} className="flex flex-col gap-2">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="relative aspect-square cursor-pointer"
+                      onClick={() => setSelectedImageIndex(index)}
+                    >
+                      <CldImage
+                        src={image.Url}
+                        alt={image.Name || 'Product View'}
+                        fill
+                        className="object-cover rounded-lg hover:opacity-90 transition-opacity"
+                        sizes="25vw"
+                      />
+                    </motion.div>
+
+                    {image.link && image.link.trim() !== '' && (
+                      <a
+                        href={image.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full bg-[#88bc04] text-white text-center py-2 rounded-lg text-xs font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider"
+                      >
+                        MORE INFO
+                      </a>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
@@ -152,40 +152,35 @@ export default function GalleryProductPage() {
             {/* Mobile Layout */}
             <div className="md:hidden">
               <div className="grid grid-cols-2 gap-4">
-                {/* Main Image First */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="relative aspect-square cursor-pointer"
-                  onClick={() => setSelectedImageIndex(0)}
-                >
-                  <CldImage
-                    src={mainImage.Url}
-                    alt={mainImage.Name || 'Product Image'}
-                    fill
-                    className="object-cover rounded-lg"
-                    sizes="33vw"
-                  />
-                </motion.div>
+                {allImagesArray.map((image, index) => (
+                  <div key={`${image.Id}-${index}`} className="flex flex-col gap-2">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="relative aspect-square cursor-pointer"
+                      onClick={() => setSelectedImageIndex(index)}
+                    >
+                      <CldImage
+                        src={image.Url}
+                        alt={image.Name || 'Product View'}
+                        fill
+                        className="object-cover rounded-lg hover:opacity-90 transition-opacity"
+                        sizes="33vw"
+                      />
+                    </motion.div>
 
-                {/* All Other Images */}
-                {allImages.map((image, index) => (
-                  <motion.div
-                    key={`${image.Id}-${index}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative aspect-square cursor-pointer"
-                    onClick={() => setSelectedImageIndex(index + 1)}
-                  >
-                    <CldImage
-                      src={image.Url}
-                      alt={image.Name || 'Product View'}
-                      fill
-                      className="object-cover rounded-lg"
-                      sizes="33vw"
-                    />
-                  </motion.div>
+                    {image.link && image.link.trim() !== '' && (
+                      <a
+                        href={image.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full bg-[#88bc04] text-white text-center py-2 rounded-lg text-xs font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider"
+                      >
+                        MORE INFO
+                      </a>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
@@ -207,32 +202,10 @@ export default function GalleryProductPage() {
       {/* Mobile Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#f8f4ec] shadow-[0_5px_15px_rgba(0,0,0,1)] px-[5%] py-3 z-10">
         <div className="flex justify-between items-center">
-          <div className="w-3/5">
+          <div className="w-full">
             <h2 className="text-[clamp(10px,2vw,20px)] font-bold capitalize truncate">
               {product.Name}
             </h2>
-          </div>
-          <div className="w-2/5">
-            <div className="rounded-full flex overflow-hidden">
-              <a
-                href={product.buy}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 bg-[#88bc04] text-white text-xs font-bold py-1.5 text-center hover:bg-[#7aa703] transition-colors duration-300 relative"
-              >
-                Shop Now
-                <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
-              </a>
-              <a
-                href="https://wa.me/60192776056?text=Hi Dragx, Can you recommend a product that suits my needs?"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 bg-[#709c44] text-white text-xs font-bold py-1.5 text-center hover:bg-[#648c3d] transition-colors duration-300 relative"
-              >
-                Chat Now
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[1px] bg-white"></span>
-              </a>
-            </div>
           </div>
         </div>
       </div>

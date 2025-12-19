@@ -19,6 +19,7 @@ export async function GET(request, props) {
           FROM gallery
           WHERE categories IN ('alphard', 'vellfire')
           AND LOWER(REPLACE(Name, ' ', '-')) = ?
+          ORDER BY date ASC
         `
         queryParams = [productSlug]
       } else {
@@ -27,6 +28,7 @@ export async function GET(request, props) {
           FROM gallery
           WHERE categories = ? 
           AND LOWER(REPLACE(Name, ' ', '-')) = ?
+          ORDER BY date ASC
         `
         queryParams = [category, productSlug]
       }

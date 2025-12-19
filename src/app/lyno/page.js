@@ -763,7 +763,7 @@ export default function LynoPage() {
                       }}
                       className="mt-2 bg-gradient-to-r from-gray-400 to-gray-300 text-white px-4 py-1 rounded text-xs font-semibold hover:from-gray-500 hover:to-gray-400 transition-all duration-300"
                     >
-                      Learn More
+                      LEARN MORE
                     </button>
                   </div>
                 </div>
@@ -815,7 +815,7 @@ export default function LynoPage() {
                             }}
                             className="mt-2 bg-gradient-to-r from-gray-400 to-gray-300 text-white px-2 py-0.5 rounded text-xs font-semibold hover:from-gray-500 hover:to-gray-400 transition-all duration-300"
                           >
-                            Learn More
+                            LEARN MORE
                           </button>
                         </div>
                       </div>

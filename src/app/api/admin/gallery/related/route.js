@@ -16,7 +16,7 @@ export async function GET(request) {
     const connection = await pool.getConnection()
     try {
       const [rows] = await connection.query(
-        'SELECT * FROM gallery WHERE same = ? ORDER BY date DESC',
+        'SELECT * FROM gallery WHERE same = ? ORDER BY date ASC',
         [same]
       )
       return NextResponse.json(rows)
