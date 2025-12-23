@@ -81,6 +81,7 @@ export default function WhatsAppButton() {
       'Exclusive_series': 'Exclusive Series',
       'Luxury_series': 'Luxury Series',
       'Performance_series': 'Performance Series',
+      'Signature_40': 'Signature 40',
       'TRONMMEXT_EI_series': 'TRONMMEXT EI Series',
       'TRONMMEXT_ES_series': 'TRONMMEXT ES Series',
       'Ultra_series': 'Ultra Series',

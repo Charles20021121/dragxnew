@@ -67,6 +67,7 @@ const androidSeries = [
   { value: 'Exclusive_series', label: 'Exclusive series' },
   { value: 'Luxury_series', label: 'Luxury series' },
   { value: 'Performance_series', label: 'Performance series' },
+  { value: 'Signature_40', label: 'Signature 40' },
   { value: 'TRONMMEXT_EI_series', label: 'TRONMMEXT EI series' },
   { value: 'TRONMMEXT_ES_series', label: 'TRONMMEXT ES series' },
   { value: 'Ultra_series', label: 'Ultra series' },
@@ -90,6 +91,22 @@ export default function ProductCategoryPage({
   const [contiFilter, setContiFilter] = useState('appleCarplay');
   const [carFilter, setCarFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // 处理 URL hash 滚动到对应系列
+  useEffect(() => {
+    if (typeof window !== 'undefined' && categoryPath === 'androidplayer') {
+      const hash = window.location.hash.substring(1); // 移除 # 号
+      if (hash) {
+        // 延迟滚动，等待页面渲染完成
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 500);
+      }
+    }
+  }, [categoryPath, products]);
 
   // 设置当前分类信息给 WhatsApp 按钮使用
   useEffect(() => {
@@ -504,6 +521,7 @@ export default function ProductCategoryPage({
               Object.entries(androidProductsBySeries || {}).map(([seriesKey, seriesData], index) => (
                 <motion.div
                   key={seriesKey}
+                  id={seriesKey}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}

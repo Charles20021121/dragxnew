@@ -66,6 +66,7 @@ export default function AndroidPlayerPage() {
         '/androidplayer/PC/Android player PC-04.jpg',
         '/androidplayer/PC/Android player PC-05.jpg',
         '/androidplayer/PC/Android player PC-06.jpg',
+        '/androidplayer/Android player link/Android player-08.webp',
         '/androidplayer/Android player link/Android player-09.webp',
         '/androidplayer/Android player link/Android player-10.webp',
         '/androidplayer/Android player link/Android player-11.webp',
@@ -84,6 +85,7 @@ export default function AndroidPlayerPage() {
         '/androidplayer/phone/Android player Phone-04.webp',
         '/androidplayer/phone/Android player Phone-05.webp',
         '/androidplayer/phone/Android player Phone-06.webp',
+        '/androidplayer/Android player link/Android player-08.webp',
         '/androidplayer/Android player link/Android player-09.webp',
         '/androidplayer/Android player link/Android player-10.webp',
         '/androidplayer/Android player link/Android player-11.webp',
@@ -122,18 +124,38 @@ export default function AndroidPlayerPage() {
                     </h2>
 
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-4">
-                        {(isDesktop ? pcImages.slice(6) : phoneImages.slice(6)).map((src, index) => (
-                            <Link key={`series-${index}`} href="/products/androidplayer" className="relative group cursor-pointer block">
-                                <Image
-                                    unoptimized
-                                    src={src}
-                                    alt={`Product Series ${index + 9}`}
-                                    width={400}
-                                    height={400}
-                                    className="w-full h-auto rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105"
-                                />
-                            </Link>
-                        ))}
+                        {(isDesktop ? pcImages.slice(6) : phoneImages.slice(6)).map((src, index) => {
+                            // 定义每个图片对应的系列 hash
+                            const seriesHashes = [
+                                'TRONMMEXT_EI_series',  // Android player-08
+                                'TRONMMEXT_ES_series',  // Android player-09
+                                'Advance_series',       // Android player-10
+                                'Cyber_series',         // Android player-11
+                                'Performance_series',   // Android player-12
+                                'Luxury_series',        // Android player-13
+                                'Diamond_series',       // Android player-14
+                                'Exclusive_series',     // Android player-15
+                                'Signature_40',         // Android player-16
+                                'Ultra_series'          // Android player-17
+                            ];
+
+                            return (
+                                <Link
+                                    key={`series-${index}`}
+                                    href={`/products/androidplayer#${seriesHashes[index]}`}
+                                    className="relative group cursor-pointer block"
+                                >
+                                    <Image
+                                        unoptimized
+                                        src={src}
+                                        alt={`Product Series ${index + 9}`}
+                                        width={400}
+                                        height={400}
+                                        className="w-full h-auto rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105"
+                                    />
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
 

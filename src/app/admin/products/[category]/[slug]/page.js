@@ -648,6 +648,7 @@ export default function ProductPage({ params: paramsPromise }) {
                             <option value="Exclusive_series">Exclusive series</option>
                             <option value="Luxury_series">Luxury series</option>
                             <option value="Performance_series">Performance series</option>
+                            <option value="Signature_40">Signature 40</option>
                             <option value="TRONMMEXT_EI_series">TRONMMEXT EI series</option>
                             <option value="TRONMMEXT_ES_series">TRONMMEXT ES series</option>
                             <option value="Ultra_series">Ultra series</option>

@@ -181,14 +181,14 @@ export default function DX360Page() {
           className="w-full h-auto"
         />
         <div
-          className={`absolute ${isDesktop ? 'left-[19.4%] bottom-[15%] w-fit' : 'left-1/2 bottom-[3%] -translate-x-1/2 w-fit'}`}
+          className={`absolute ${isDesktop ? 'left-1/2 -translate-x-1/2 bottom-[10%] w-fit' : 'left-1/2 bottom-[3%] -translate-x-1/2 w-fit'}`}
         >
           <a
             href="/products/360camera"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
-              fontSize: isDesktop ? 'min(1vw, 12px)' : '15px',
-              padding: isDesktop ? '0.4em 1.2em' : '0.45em 1.3em'
+              fontSize: isDesktop ? 'min(1.5vw, 18px)' : '15px',
+              padding: isDesktop ? '0.6em 1.8em' : '0.45em 1.3em'
             }}
           >
             LEARN MORE
