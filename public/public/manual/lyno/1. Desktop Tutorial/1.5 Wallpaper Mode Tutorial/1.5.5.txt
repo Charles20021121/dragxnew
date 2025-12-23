@@ -1,0 +1,1 @@
+Basic Settings. You can adjust the transparency of widgets and plug-ins, as well as the automatic switching of wallpapers.

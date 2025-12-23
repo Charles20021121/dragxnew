@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# 確保 Meta/Facebook 爬蟲可以訪問您的網站
+User-agent: facebookexternalhit
+Allow: /
+
+# Sitemap
+Sitemap: https://dragx.asia/sitemap.xml 

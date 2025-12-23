@@ -123,37 +123,43 @@ export default function AndroidPlayerPage() {
                         CHOOSE YOUR SERIES
                     </h2>
 
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
                         {(isDesktop ? pcImages.slice(6) : phoneImages.slice(6)).map((src, index) => {
-                            // 定义每个图片对应的系列 hash
-                            const seriesHashes = [
-                                'TRONMMEXT_EI_series',  // Android player-08
-                                'TRONMMEXT_ES_series',  // Android player-09
-                                'Advance_series',       // Android player-10
-                                'Cyber_series',         // Android player-11
-                                'Performance_series',   // Android player-12
-                                'Luxury_series',        // Android player-13
-                                'Diamond_series',       // Android player-14
-                                'Exclusive_series',     // Android player-15
-                                'Signature_40',         // Android player-16
-                                'Ultra_series'          // Android player-17
+                            // 定义每个图片对应的系列 hash 和名称
+                            const seriesData = [
+                                { hash: 'TRONMMEXT_EI_series', name: 'EI SERIES' },
+                                { hash: 'TRONMMEXT_ES_series', name: 'ES SERIES' },
+                                { hash: 'Advance_series', name: 'ADVANCE SERIES' },
+                                { hash: 'Cyber_series', name: 'CYBER SERIES' },
+                                { hash: 'Performance_series', name: 'PERFORMANCE SERIES' },
+                                { hash: 'Luxury_series', name: 'LUXURY SERIES' },
+                                { hash: 'Diamond_series', name: 'DIAMOND SERIES' },
+                                { hash: 'Exclusive_series', name: 'EXCLUSIVE SERIES' },
+                                { hash: 'Signature_40', name: 'SIGNATURE 40' },
+                                { hash: 'Ultra_series', name: 'ULTRA SERIES' }
                             ];
 
                             return (
-                                <Link
-                                    key={`series-${index}`}
-                                    href={`/products/androidplayer#${seriesHashes[index]}`}
-                                    className="relative group cursor-pointer block"
-                                >
-                                    <Image
-                                        unoptimized
-                                        src={src}
-                                        alt={`Product Series ${index + 9}`}
-                                        width={400}
-                                        height={400}
-                                        className="w-full h-auto rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105"
-                                    />
-                                </Link>
+                                <div key={`series-${index}`} className="flex flex-col">
+                                    <Link
+                                        href={`/products/androidplayer#${seriesData[index].hash}`}
+                                        className="relative group cursor-pointer block"
+                                    >
+                                        <Image
+                                            unoptimized
+                                            src={src}
+                                            alt={seriesData[index].name}
+                                            width={400}
+                                            height={400}
+                                            className="w-full h-auto rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105"
+                                        />
+                                    </Link>
+                                    <div className="mt-3 text-center">
+                                        <h3 className="text-white font-bold text-sm md:text-base tracking-wider">
+                                            {seriesData[index].name}
+                                        </h3>
+                                    </div>
+                                </div>
                             );
                         })}
                     </div>

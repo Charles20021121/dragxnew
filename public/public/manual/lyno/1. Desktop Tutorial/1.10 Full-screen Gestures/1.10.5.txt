@@ -1,0 +1,1 @@
+When you set the APP shortcut hover window or open the APP application, you can adjust the association or modify the application within the shortcut menu.

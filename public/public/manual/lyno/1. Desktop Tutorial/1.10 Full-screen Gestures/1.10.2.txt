@@ -1,0 +1,1 @@
+Operate as on the right side (release immediately after sliding)

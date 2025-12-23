@@ -1,0 +1,1 @@
+Navigation bar and status bar mode settings (top status bar, bottom navigation bar, both)

@@ -1,0 +1,1 @@
+Navigation bar style 1 (does not support plugin customization)

@@ -1,0 +1,2 @@
+Can adjust the gesture hot zone height and width
+

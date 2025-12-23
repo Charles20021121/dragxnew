@@ -101,7 +101,15 @@ export default function ProductCategoryPage({
         setTimeout(() => {
           const element = document.getElementById(hash);
           if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 获取元素位置
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            // 计算滚动位置，预留一些空间让标题可见 (向上偏移 100px)
+            const offsetPosition = elementPosition - 100;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
           }
         }, 500);
       }

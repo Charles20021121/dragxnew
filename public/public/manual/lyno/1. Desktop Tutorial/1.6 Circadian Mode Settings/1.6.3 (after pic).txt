@@ -1,0 +1,2 @@
+System Brightness Settings. Adjust the screen brightness parameters and the backlight control method.
+Finish

@@ -1,0 +1,1 @@
+Modify homepage plug-in, add APP panel

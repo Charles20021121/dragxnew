@@ -1,0 +1,1 @@
+Navigation bar display position switches to the left

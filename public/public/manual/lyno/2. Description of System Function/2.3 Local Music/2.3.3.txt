@@ -1,0 +1,1 @@
+Album catalogue is automatically generated based on folders
