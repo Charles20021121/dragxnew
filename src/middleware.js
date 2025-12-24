@@ -18,5 +18,9 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: '/admin/:path*'
+  matcher: [
+    '/admin/:path*',
+    // 排除靜態文件、sitemap、robots.txt，避免干擾 SEO 爬蟲
+    '/((?!_next/static|_next/image|favicon\\.ico|robots\\.txt|sitemap\\.xml|sitemap/.*|site\\.webmanifest).*)'
+  ]
 } 

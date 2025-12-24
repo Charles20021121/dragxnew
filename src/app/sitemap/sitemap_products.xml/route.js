@@ -5,63 +5,54 @@ export async function GET() {
   const baseUrl = 'https://dragx.asia';
 
   try {
-    // 设置 5 秒超时
     const dbPromise = async () => {
       const connection = await pool.getConnection();
       try {
-        // 获取所有画廊项目（只获取主图片，Id = same）
-        const [galleryItems] = await connection.query(`
+        const [products] = await connection.query(`
           SELECT Id, Name, categories, date, same
-          FROM gallery
+          FROM products
           ORDER BY categories, date DESC
         `);
 
-        // 过滤出主画廊项目（Id = same）
-        const mainGalleryItems = galleryItems.filter((g) => g.Id == g.same);
+        const mainProducts = products.filter((p) => p.Id == p.same);
+        const productCategories = [...new Set(mainProducts.map((p) => p.categories))];
 
-        // 获取画廊类别
-        const galleryCategories = [...new Set(mainGalleryItems.map((g) => g.categories))];
-
-        return { mainGalleryItems, galleryCategories };
+        return { mainProducts, productCategories };
       } finally {
         connection.release();
       }
     };
 
-    // 使用 Promise.race 实现超时控制
     const timeoutPromise = new Promise((_, reject) =>
       setTimeout(() => reject(new Error('Database query timed out')), 5000)
     );
 
-    const { mainGalleryItems, galleryCategories } = await Promise.race([
+    const { mainProducts, productCategories } = await Promise.race([
       dbPromise(),
       timeoutPromise,
     ]);
 
-    // 生成画廊类别页面
-    const galleryCategoryRoutes = galleryCategories.map((category) => ({
-      url: `${baseUrl}/gallery/${category}`,
+    const productCategoryRoutes = productCategories.map((category) => ({
+      url: `${baseUrl}/products/${category}`,
       lastModified: new Date().toISOString(),
       changeFrequency: 'weekly',
       priority: 0.8,
     }));
 
-    // 生成画廊详情页面
-    const galleryRoutes = mainGalleryItems.map((item) => {
-      const slug = item.Name.toLowerCase()
+    const productRoutes = mainProducts.map((product) => {
+      const slug = product.Name.toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '');
       return {
-        url: `${baseUrl}/gallery/${item.categories}/${slug}`,
-        lastModified: new Date(item.date || new Date()).toISOString(),
+        url: `${baseUrl}/products/${product.categories}/${slug}`,
+        lastModified: new Date(product.date || new Date()).toISOString(),
         changeFrequency: 'monthly',
-        priority: 0.6,
+        priority: 0.7,
       };
     });
 
-    const allRoutes = [...galleryCategoryRoutes, ...galleryRoutes];
+    const allRoutes = [...productCategoryRoutes, ...productRoutes];
 
-    // Generate XML
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allRoutes
@@ -83,8 +74,7 @@ ${allRoutes
       },
     });
   } catch (error) {
-    console.error('Error generating gallery sitemap:', error.message);
-    // 如果数据库超时或出错，返回空的 sitemap
+    console.error('Error generating products sitemap:', error.message);
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </urlset>`;
