@@ -247,9 +247,10 @@ export default function ProductPage({ params: paramsPromise }) {
     try {
       const totalFiles = selectedFiles.length;
       let completedFiles = 0;
+      const uploadedImages = [];
 
-      // 先上傳到 Cloudinary
-      const uploadPromises = selectedFiles.map(async file => {
+      // 順序上傳到 Cloudinary，實時更新進度
+      for (const file of selectedFiles) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'newdragx');
@@ -265,16 +266,14 @@ export default function ProductPage({ params: paramsPromise }) {
         if (!res.ok) throw new Error('Upload failed');
         const data = await res.json();
 
-        completedFiles++;
-        setUploadProgress((completedFiles / totalFiles) * 100);
-
-        return {
+        uploadedImages.push({
           Url: data.secure_url,
           publicId: data.public_id
-        };
-      });
+        });
 
-      const uploadedImages = await Promise.all(uploadPromises);
+        completedFiles++;
+        setUploadProgress((completedFiles / totalFiles) * 100);
+      }
 
       // 如果是新產品（沒有 product.id），先創建主圖片
       if (!product.id) {
@@ -840,19 +839,35 @@ export default function ProductPage({ params: paramsPromise }) {
                       </div>
                     )}
 
+                    {/* 上傳進度條 */}
+                    {isUploading && (
+                      <div className="mt-4">
+                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                          <div
+                            className="bg-[#1c5434] h-2.5 rounded-full transition-all duration-300"
+                            style={{ width: `${uploadProgress}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-2 text-center">
+                          Uploading... {Math.round(uploadProgress)}%
+                        </p>
+                      </div>
+                    )}
+
                     {/* 操作按鈕 */}
                     <div className="flex justify-end gap-3 pt-4 border-t">
                       <button
                         type="button"
                         onClick={() => setShowImageOffcanvas(false)}
-                        className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                        disabled={isUploading}
+                        className={`px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        disabled={selectedFiles.length === 0}
-                        className={`px-4 py-2 rounded-md text-white flex items-center gap-2 ${selectedFiles.length === 0
+                        disabled={selectedFiles.length === 0 || isUploading}
+                        className={`px-4 py-2 rounded-md text-white flex items-center gap-2 ${selectedFiles.length === 0 || isUploading
                           ? 'bg-gray-400 cursor-not-allowed'
                           : 'bg-[#1c5434] hover:bg-[#143a25]'
                           }`}
@@ -860,7 +875,7 @@ export default function ProductPage({ params: paramsPromise }) {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                         </svg>
-                        Upload {selectedFiles.length > 0 ? `(${selectedFiles.length})` : ''}
+                        {isUploading ? 'Uploading...' : `Upload ${selectedFiles.length > 0 ? `(${selectedFiles.length})` : ''}`}
                       </button>
                     </div>
                   </div>
