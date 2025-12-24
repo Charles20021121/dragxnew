@@ -66,8 +66,8 @@ export default function AndroidPlayerPage() {
         '/androidplayer/PC/Android player PC-04.jpg',
         '/androidplayer/PC/Android player PC-05.jpg',
         '/androidplayer/PC/Android player PC-06.jpg',
-        '/androidplayer/Android player link/Android player-08.webp',
         '/androidplayer/Android player link/Android player-09.webp',
+        '/androidplayer/Android player link/Android player-08.webp',
         '/androidplayer/Android player link/Android player-10.webp',
         '/androidplayer/Android player link/Android player-11.webp',
         '/androidplayer/Android player link/Android player-12.webp',
@@ -85,8 +85,8 @@ export default function AndroidPlayerPage() {
         '/androidplayer/phone/Android player Phone-04.webp',
         '/androidplayer/phone/Android player Phone-05.webp',
         '/androidplayer/phone/Android player Phone-06.webp',
-        '/androidplayer/Android player link/Android player-08.webp',
         '/androidplayer/Android player link/Android player-09.webp',
+        '/androidplayer/Android player link/Android player-08.webp',
         '/androidplayer/Android player link/Android player-10.webp',
         '/androidplayer/Android player link/Android player-11.webp',
         '/androidplayer/Android player link/Android player-12.webp',
@@ -127,8 +127,8 @@ export default function AndroidPlayerPage() {
                         {(isDesktop ? pcImages.slice(6) : phoneImages.slice(6)).map((src, index) => {
                             // 定义每个图片对应的系列 hash 和名称
                             const seriesData = [
-                                { hash: 'TRONMMEXT_EI_series', name: 'EI SERIES' },
                                 { hash: 'TRONMMEXT_ES_series', name: 'ES SERIES' },
+                                { hash: 'TRONMMEXT_EI_series', name: 'EI SERIES' },
                                 { hash: 'Advance_series', name: 'ADVANCE SERIES' },
                                 { hash: 'Cyber_series', name: 'CYBER SERIES' },
                                 { hash: 'Performance_series', name: 'PERFORMANCE SERIES' },
