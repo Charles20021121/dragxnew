@@ -40,10 +40,17 @@ export async function POST(request) {
     const data = await request.json()
     console.log('Received data:', data)
 
-    // 先插入圖片
+    // 獲取當前最大 Id
+    const [maxIdResult] = await connection.query(
+      'SELECT COALESCE(MAX(Id), 0) + 1 as nextId FROM gallery'
+    )
+    const nextId = maxIdResult[0].nextId
+
+    // 插入圖片，手動指定 Id
     const [result] = await connection.query(
       `INSERT INTO gallery (
-        Name, 
+        Id,
+        Name,
         categories,
         Url,
         same,
@@ -52,36 +59,33 @@ export async function POST(request) {
         buy,
         publicId,
         date,
-        link
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        link,
+        filter,
+        filter1
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
+        nextId,
         data.Name || '',
         data.categories || '',
         data.Url || '',
-        data.same || '',  // 使用傳入的 same 值
+        data.same || nextId,  // 如果沒有 same，使用新的 Id
         data.description || '',
         data.Specifications || '',
         data.buy || '',
         data.publicId || '',
         data.date || new Date().toISOString().replace('T', ' ').split('.')[0],
-        data.link || ''
+        data.link || '',
+        data.filter || '',
+        data.filter1 || ''
       ]
     )
 
-    // 如果沒有提供 same，則使用新插入的 Id 作為 same
-    if (!data.same) {
-      await connection.query(
-        'UPDATE gallery SET same = ? WHERE Id = ?',
-        [result.insertId, result.insertId]
-      )
-    }
-
     await connection.commit()
-    console.log('Insert successful, ID:', result.insertId)
+    console.log('Insert successful, ID:', nextId)
 
     return NextResponse.json({
       success: true,
-      id: result.insertId
+      id: nextId
     })
   } catch (error) {
     await connection.rollback()

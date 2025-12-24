@@ -11,7 +11,8 @@ cloudinary.config({
 
 // 添加 GET 方法
 export async function GET(request, { params }) {
-  const { category } = params
+  const resolvedParams = await params
+  const { category } = resolvedParams
 
   try {
     const connection = await pool.getConnection()
@@ -37,7 +38,8 @@ export async function GET(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const { category } = params;
+  const resolvedParams = await params
+  const { category } = resolvedParams;
   const { id, publicId, same } = await request.json();
   const connection = await pool.getConnection();
   

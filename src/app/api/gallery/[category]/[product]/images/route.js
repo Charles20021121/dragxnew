@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
 
 export async function GET(request, { params }) {
-  const { category, product } = params
+  const resolvedParams = await params
+  const { category, product } = resolvedParams
   const productSlug = decodeURIComponent(product)
 
   try {

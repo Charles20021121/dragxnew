@@ -1,7 +1,8 @@
 import pool from '@/lib/db';
 
 export async function generateMetadata({ params }) {
-  const { category, slug } = params;
+  const resolvedParams = await params;
+  const { category, slug } = resolvedParams;
  
   
   // 從數據庫獲取產品信息
@@ -34,9 +35,10 @@ export async function generateMetadata({ params }) {
 
   // 將 slug 轉換回可讀的標題
   const title = slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    ? slug.split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+    : 'Product';
 
   // 類別映射
   const categoryTitles = {
@@ -49,7 +51,7 @@ export async function generateMetadata({ params }) {
     bmw: 'BMW',
   };
 
-  const categoryTitle = categoryTitles[category] || category.toUpperCase();
+  const categoryTitle = categoryTitles[category] || (category ? category.toUpperCase() : 'Products');
   
 
   return {

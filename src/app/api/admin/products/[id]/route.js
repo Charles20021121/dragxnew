@@ -77,7 +77,7 @@ export async function PUT(request, { params: paramsPromise }) {
 
     // 更新主產品的其他字段
     const [result] = await connection.query(
-      `UPDATE products SET 
+      `UPDATE products SET
         categories = ?,
         description = ?,
         Specifications = ?,
@@ -89,15 +89,15 @@ export async function PUT(request, { params: paramsPromise }) {
         price = ?
       WHERE Id = ?`,
       [
-        data.categories,
-        data.description,
-        data.Specifications,
-        data.buy,
-        data.filter,
-        data.filter1,
-        data.android_series,
-        data.date,
-        data.price,
+        data.categories || '',
+        data.description || '',
+        data.Specifications || '',
+        data.buy || '',
+        data.filter || '',
+        data.filter1 || '',
+        data.android_series || '',
+        data.date || new Date().toISOString().replace('T', ' ').split('.')[0],
+        data.price || null,
         mainProductId
       ]
     );
@@ -123,7 +123,8 @@ export async function PUT(request, { params: paramsPromise }) {
 
 // 刪除產品
 export async function DELETE(request, { params }) {
-  const { id } = params;
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
   const connection = await pool.getConnection();
 
   try {

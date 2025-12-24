@@ -1,7 +1,8 @@
 import pool from '@/lib/db';
 
 export async function generateMetadata({ params }) {
-  const { category, product } = params;
+  const resolvedParams = await params;
+  const { category, product } = resolvedParams;
   
   // 從數據庫獲取產品信息
   let productImage = 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/lyeylq4n5vfrh5n39izv.webp'; // 默認圖片
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }) {
   }
 
   // 如果沒有找到產品名稱，從 URL 參數生成標題
-  if (!productName) {
+  if (!productName && product) {
     productName = product
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }) {
     toyota: 'Toyota'
   };
 
-  const categoryTitle = categoryTitles[category] || category.toUpperCase();
+  const categoryTitle = categoryTitles[category] || (category ? category.toUpperCase() : 'Gallery');
 
   return {
     title: `${productName} - ${categoryTitle} Gallery | DRAGX`,

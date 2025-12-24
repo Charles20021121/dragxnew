@@ -9,7 +9,8 @@ cloudinary.config({
 })
 
 export async function GET(request, { params }) {
-  const { category, product } = params
+  const resolvedParams = await params
+  const { category, product } = resolvedParams
   const productName = decodeURIComponent(product).replace(/-/g, ' ')
 
   try {
@@ -47,7 +48,8 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const { category, product } = params
+  const resolvedParams = await params
+  const { category, product } = resolvedParams
   let connection;
 
   try {

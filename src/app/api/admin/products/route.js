@@ -6,10 +6,17 @@ export async function POST(request) {
   try {
     const data = await request.json()
 
-    // 先插入產品，不設置 same
+    // 獲取當前最大 Id
+    const [maxIdResult] = await connection.query(
+      'SELECT COALESCE(MAX(Id), 0) + 1 as nextId FROM products'
+    )
+    const nextId = maxIdResult[0].nextId
+
+    // 插入產品，手動指定 Id
     const [result] = await connection.query(
       `INSERT INTO products (
-        Name, 
+        Id,
+        Name,
         categories,
         Url,
         Specifications,
@@ -20,13 +27,15 @@ export async function POST(request) {
         android_series,
         publicId,
         date,
-        price
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        price,
+        same
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        data.Name || '',           // 如果沒有值，使用空字符串
+        nextId,
+        data.Name || '',
         data.categories || '',
         data.Url || '',
-        data.Specifications || '', // 使用空字符串代替 null
+        data.Specifications || '',
         data.description || '',
         data.buy || '',
         data.filter || '',
@@ -34,21 +43,16 @@ export async function POST(request) {
         data.android_series || '',
         data.publicId || '',
         data.date || new Date().toISOString().replace('T', ' ').split('.')[0],
-        data.price || ''
+        data.price || null,
+        data.same || nextId  // 如果沒有 same，使用新的 Id
       ]
-    )
-
-    // 使用插入的 ID 更新 same 字段
-    await connection.query(
-      'UPDATE products SET same = ? WHERE Id = ?',
-      [data.same || result.insertId, result.insertId]
     )
 
     await connection.commit()
 
     return NextResponse.json({
       success: true,
-      id: result.insertId
+      id: nextId
     })
   } catch (error) {
     await connection.rollback()
