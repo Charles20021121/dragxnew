@@ -48,12 +48,16 @@ export default function ProductPage({ params: paramsPromise }) {
 
   const fetchProduct = async () => {
     try {
-      const res = await fetch(`/api/products?category=${category}`);
+      const res = await fetch(`/api/products?category=${category}`, { cache: 'no-store' });
       const products = await res.json();
+
+      console.log('Fetched products:', products.length);
 
       const matchingProducts = products.filter(p =>
         p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
       );
+
+      console.log('Matching products:', matchingProducts.length);
 
       const foundProduct = matchingProducts.sort((a, b) => {
         let scoreA = (a.price ? 2 : 0) + (a.description ? 1 : 0);
@@ -62,23 +66,31 @@ export default function ProductPage({ params: paramsPromise }) {
       })[0];
 
       if (foundProduct) {
+        console.log('Found product:', {
+          id: foundProduct.id,
+          same: foundProduct.same,
+          additionalImages: foundProduct.additionalImages?.length || 0
+        });
+
         // 確保每個圖片對象都有必要的字段
         const relatedImages = [
           {
-            id: foundProduct.Id,
-            src: foundProduct.Url,
-            alt: foundProduct.Name,
+            id: foundProduct.id,
+            src: foundProduct.image,
+            alt: foundProduct.name,
             publicId: foundProduct.publicId,
             same: foundProduct.same
           },
-          ...foundProduct.additionalImages.map(img => ({
+          ...(foundProduct.additionalImages || []).map(img => ({
             id: img.Id,
             src: img.Url,
             alt: img.Name,
             publicId: img.publicId,
-            same: img.same
+            same: foundProduct.same
           }))
         ];
+
+        console.log('Related images count:', relatedImages.length);
 
         setProduct({
           ...foundProduct,
@@ -337,7 +349,15 @@ export default function ProductPage({ params: paramsPromise }) {
           await fetchProduct();
         }
       } else {
-        // 如果是已存在的產品，直接使用 product.id 作為 same
+        // 如果是已存在的產品，使用 product.same（主產品 ID）
+        const mainProductId = product.same || product.id;
+        console.log('Adding images to existing product:', {
+          productId: product.id,
+          productSame: product.same,
+          mainProductId,
+          imageCount: uploadedImages.length
+        });
+
         const savePromises = uploadedImages.map((image, index) => {
           // 每張圖片延遲 1 秒，確保時間戳不同
           const imageDate = new Date(Date.now() + index * 1000);
@@ -351,7 +371,7 @@ export default function ProductPage({ params: paramsPromise }) {
               categories: product.categories,
               Url: image.Url,
               publicId: image.publicId,
-              same: product.id,
+              same: mainProductId,
               date: imageDate.toISOString().replace('T', ' ').split('.')[0],
               Specifications: '',
               description: '',
@@ -366,10 +386,13 @@ export default function ProductPage({ params: paramsPromise }) {
         const results = await Promise.all(savePromises);
         const allSuccessful = results.every(res => res.ok);
 
+        console.log('Upload results:', { allSuccessful, results: results.length });
+
         if (allSuccessful) {
           setShowImageOffcanvas(false);
           setSelectedFiles([]);
           showNotification('success', 'All images added successfully!');
+          console.log('Fetching updated product data...');
           await fetchProduct();
         }
       }

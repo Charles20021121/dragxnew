@@ -6,9 +6,12 @@ export async function POST(request) {
   try {
     const data = await request.json()
 
-    // 獲取當前最大 Id
+    // 開始事務
+    await connection.beginTransaction()
+
+    // 使用 FOR UPDATE 鎖定表，獲取當前最大 Id
     const [maxIdResult] = await connection.query(
-      'SELECT COALESCE(MAX(Id), 0) + 1 as nextId FROM products'
+      'SELECT COALESCE(MAX(Id), 0) + 1 as nextId FROM products FOR UPDATE'
     )
     const nextId = maxIdResult[0].nextId
 

@@ -40,9 +40,12 @@ export async function POST(request) {
     const data = await request.json()
     console.log('Received data:', data)
 
-    // 獲取當前最大 Id
+    // 開始事務
+    await connection.beginTransaction()
+
+    // 使用 FOR UPDATE 鎖定表，獲取當前最大 Id
     const [maxIdResult] = await connection.query(
-      'SELECT COALESCE(MAX(Id), 0) + 1 as nextId FROM gallery'
+      'SELECT COALESCE(MAX(Id), 0) + 1 as nextId FROM gallery FOR UPDATE'
     )
     const nextId = maxIdResult[0].nextId
 
