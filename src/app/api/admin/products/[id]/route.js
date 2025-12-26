@@ -49,35 +49,11 @@ export async function PUT(request, { params: paramsPromise }) {
   try {
     const data = await request.json();
 
-    // 先檢查產品的 Id 和 same 是否相同
-    const [productCheck] = await connection.query(
-      'SELECT Id, same FROM products WHERE Id = ?',
-      [params.id]
-    );
-
-    if (!productCheck.length) {
-      return NextResponse.json(
-        { message: 'Product not found' },
-        { status: 404 }
-      );
-    }
-
-    const product = productCheck[0];
-
-    // 確定要更新的產品 ID（使用主產品 ID）
-    const mainProductId = product.same || product.Id;
-
-    // 更新所有相同 same 值的產品的 Name
-    await connection.query(
-      `UPDATE products SET 
-        Name = ? 
-      WHERE same = ? OR Id = ?`,
-      [data.Name, mainProductId, mainProductId]
-    );
-
-    // 更新主產品的其他字段
+    // 只更新當前產品的資料，不批量更新所有副圖
+    // 不更新 date 字段，保持原來的順序
     const [result] = await connection.query(
       `UPDATE products SET
+        Name = ?,
         categories = ?,
         description = ?,
         Specifications = ?,
@@ -85,10 +61,10 @@ export async function PUT(request, { params: paramsPromise }) {
         filter = ?,
         filter1 = ?,
         android_series = ?,
-        date = ?,
         price = ?
       WHERE Id = ?`,
       [
+        data.Name || '',
         data.categories || '',
         data.description || '',
         data.Specifications || '',
@@ -96,9 +72,8 @@ export async function PUT(request, { params: paramsPromise }) {
         data.filter || '',
         data.filter1 || '',
         data.android_series || '',
-        data.date || new Date().toISOString().replace('T', ' ').split('.')[0],
         data.price || null,
-        mainProductId
+        params.id
       ]
     );
 

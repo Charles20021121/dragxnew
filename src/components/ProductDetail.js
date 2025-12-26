@@ -61,8 +61,13 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
           p.same === product.same
         );
 
-        // 按日期排序（較早的日期排在前面）
+        // 主圖永遠排在第一位，副圖按日期排序
         const sortedProducts = sameProducts.sort((a, b) => {
+          // 如果 a 是主圖，排在前面
+          if (a.id == a.same && b.id != b.same) return -1;
+          // 如果 b 是主圖，排在前面
+          if (b.id == b.same && a.id != a.same) return 1;
+          // 如果都是主圖或都是副圖，按日期排序
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
           return dateA - dateB;
@@ -82,6 +87,11 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
         console.log('related', relatedImages)
 
         setRelatedImages(allImages);
+        // 設置第一張圖片（主圖）為默認顯示
+        if (allImages.length > 0) {
+          setSelectedImage(allImages[0].src);
+          setCurrentImageIndex(0);
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error fetching related images:', error);

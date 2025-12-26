@@ -10,12 +10,12 @@ export async function GET(request) {
 
     if (category) {
       let query = `
-        SELECT 
+        SELECT
           p1.*,
           GROUP_CONCAT(
-            CASE 
+            CASE
               WHEN p2.same = p1.same THEN CONCAT(p2.Id, '|', p2.Name, '|', p2.Url, '|', p2.publicId, '|', p2.date)
-            END 
+            END
             ORDER BY p2.date ASC
             SEPARATOR '|||'
           ) as additional_images
@@ -55,12 +55,12 @@ export async function GET(request) {
       return NextResponse.json(formattedProducts);
     } else {
       let query = `
-        SELECT 
+        SELECT
           p1.*,
           GROUP_CONCAT(
-            CASE 
+            CASE
               WHEN p2.same = p1.same THEN CONCAT(p2.Id, '|', p2.Name, '|', p2.Url, '|', p2.publicId, '|', p2.date)
-            END 
+            END
             ORDER BY p2.date ASC
             SEPARATOR '|||'
           ) as additional_images

@@ -161,7 +161,7 @@ export default function ProductCategoryPage({
   const displayProducts =
     categoryPath === "soundproof"
       ? products
-        .filter(product => product.filter1 === silenceFilter)
+        .filter(product => product.filter1 === silenceFilter && product.id == product.same)
         .sort((a, b) => a.name.localeCompare(b.name, undefined, {
           numeric: true,
           sensitivity: 'base'
@@ -173,7 +173,8 @@ export default function ProductCategoryPage({
               ? (product.filter1 === 'appleCarplay')
               : product.filter1 === contiFilter;
             const carMatch = carFilter === 'all' || product.filter === carFilter;
-            return typeMatch && carMatch;
+            const isMainImage = product.id == product.same;
+            return typeMatch && carMatch && isMainImage;
           })
           .sort((a, b) => a.name.localeCompare(b.name, undefined, {
             numeric: true,
@@ -197,7 +198,7 @@ export default function ProductCategoryPage({
     }
 
     const filteredProducts = products
-      .filter(product => product && product.filter1 === androidFilter)
+      .filter(product => product && product.filter1 === androidFilter && product.id == product.same)
       .sort((a, b) => {
         const nameA = (a.name || '');
         const nameB = (b.name || '');
