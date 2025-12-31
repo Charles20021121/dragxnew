@@ -44,8 +44,25 @@ export default function GalleryCategoryPage({
     product.id == product.same
   );
 
-  // 按照日期排序（最新的在前面）
+  // 按照日期或年份排序（最新的在前面）
   const sortedProducts = [...mainProducts].sort((a, b) => {
+    // 對於 alphard-vellfire 頁面，按名稱中的年份排序
+    if (categoryPath === 'alphard-vellfire') {
+      // 提取年份範圍，例如 "ALPHARD AGH30 (2015-2018)" 提取 2018
+      const extractYear = (name) => {
+        const match = name.match(/\((\d{4})-(\d{4})\)/);
+        if (match) {
+          return parseInt(match[2]); // 返回結束年份
+        }
+        return 0;
+      };
+
+      const yearA = extractYear(a.name || '');
+      const yearB = extractYear(b.name || '');
+      return yearB - yearA; // 新年份在前
+    }
+
+    // 其他頁面按 date 排序
     const dateA = new Date(a.date || 0);
     const dateB = new Date(b.date || 0);
     return dateB - dateA;
