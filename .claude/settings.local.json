@@ -8,7 +8,9 @@
       "Bash(git reset:*)",
       "Bash(mysql:*)",
       "Bash(mysqlsh:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(del:*)",
+      "Bash(rm:*)"
     ]
   }
 }

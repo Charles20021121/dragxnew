@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 禁用 Turbopack 以避免 Windows 上的崩溃问题
+  experimental: {
+    turbo: undefined,
+  },
+
   images: {
     remotePatterns: [
       {

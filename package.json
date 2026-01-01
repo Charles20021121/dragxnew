@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3005",
     "dev:turbo": "next dev --port 3005 --turbopack",
+    "dev:webpack": "next dev --port 3005",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
