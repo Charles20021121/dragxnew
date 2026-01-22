@@ -23,7 +23,7 @@ const manrope = Manrope({
 })
 
 const screenSizes = [
-  { id: '12.3', name: '12.3 INCH', image: '/lyno/screen/12.30 INCh.jpg' },
+  { id: '12.8', name: '12.8 INCH', image: '/lyno/screen/12.80 INCh.jpg' },
   { id: '11.5', name: '11.5 INCH', image: '/lyno/screen/11.50 INCH.jpg' },
   { id: '10.36', name: '10.36 INCH', image: '/lyno/screen/10.36 INCH.jpg' },
   { id: '9.5', name: '9.5 INCH', image: '/lyno/screen/9.5 INCH.jpg' }
@@ -34,7 +34,7 @@ const productDetails = {
   'pro-max-12': {
     name: 'LYNO Quantum Pro Max',
     specs: '12GB+256GB',
-    image: '/lyno/screen/12.30 INCH 2.jpg',
+    image: '/lyno/screen/12.80 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '12GB+256GB',
@@ -52,7 +52,7 @@ const productDetails = {
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'System': 'DXPRO OS',
       'Android Version': '13 (API=33)',
-      'Screen': '12.3" → 2400*896',
+      'Screen': '12.8" → 2400*896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
@@ -63,7 +63,7 @@ const productDetails = {
   'max-12': {
     name: 'LYNO Quantum Max',
     specs: '8GB+128GB',
-    image: '/lyno/screen/12.30 INCH 2.jpg',
+    image: '/lyno/screen/12.80 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '8GB+128GB',
@@ -81,7 +81,7 @@ const productDetails = {
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'System': 'DXPRO OS',
       'Android Version': '13 (API=33)',
-      'Screen': '12.3" → 2400*896',
+      'Screen': '12.8" → 2400*896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Supported',
@@ -92,7 +92,7 @@ const productDetails = {
   'max-lite-12': {
     name: 'LYNO Quantum Lite',
     specs: '6GB+64GB',
-    image: '/lyno/screen/12.30 INCH 2.jpg',
+    image: '/lyno/screen/12.80 INCH 2.jpg',
     details: {
       'CPU': '8-Core UIS7862S A55 2.0GHz (12nm)',
       'RAM+ROM': '6GB+64GB',
@@ -110,7 +110,7 @@ const productDetails = {
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
-      'Screen': '12.3" → 2400*896',
+      'Screen': '12.8" → 2400*896',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
@@ -386,24 +386,24 @@ const productDetails = {
 
 // 所有屏幕尺寸的产品选项
 const productOptions = {
-  '12.3': [
+  '12.8': [
     {
       id: 'pro-max-12',
       name: 'LYNO Quantum Pro Max',
       specs: '12GB+256GB',
-      image: '/lyno/screen/12.30 INCh.jpg'
+      image: '/lyno/screen/12.80 INCh.jpg'
     },
     {
       id: 'max-12',
       name: 'LYNO Quantum Max',
       specs: '8GB+128GB',
-      image: '/lyno/screen/12.30 INCh.jpg'
+      image: '/lyno/screen/12.80 INCh.jpg'
     },
     {
       id: 'max-lite-12',
       name: 'LYNO Quantum Lite',
       specs: '6GB+64GB',
-      image: '/lyno/screen/12.30 INCh.jpg'
+      image: '/lyno/screen/12.80 INCh.jpg'
     }
   ],
   '11.5': [
@@ -470,11 +470,11 @@ const productOptions = {
 
 export default function LynoPage() {
   const { setCurrentProduct } = useProduct()
-  const [selectedScreen, setSelectedScreen] = useState('12.3')
+  const [selectedScreen, setSelectedScreen] = useState('12.8')
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [showProductOptions, setShowProductOptions] = useState(true) // 默认显示产品选项
-  const [selectedProduct, setSelectedProduct] = useState(productOptions['12.3'][0].id) // 默认选中12.3英寸的第一个产品
+  const [selectedProduct, setSelectedProduct] = useState(productOptions['12.8'][0].id) // 默认选中12.8英寸的第一个产品
   const [indicatorPosition, setIndicatorPosition] = useState({ left: 0, width: 0 })
   const [showMoreDetails, setShowMoreDetails] = useState(false) // 控制是否显示产品选择和详情
   const screenRefs = useRef({})
@@ -588,9 +588,11 @@ export default function LynoPage() {
         <Image
           src="/lyno/LYNO PAGE-01.webp"
           alt="LYNO - Light Your New Omni-System - Smart entertainment and control system for your digital life"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
           priority
         />
         {/* SEO文字覆盖 - 对用户不可见但搜索引擎可读 */}
@@ -611,9 +613,11 @@ export default function LynoPage() {
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-02.webp" : "/lyno/PHONE SIZE-02.webp"}
           alt="UIS 7870 - The Smart Heart of Performance - 2.7Ghz 8 core 6nm Process with 204% CPU Boost and 240% GPU Boost"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           UIS 7870 processor featuring 2.7Ghz clock speed, 8 core architecture, 6nm manufacturing process, delivering 204% CPU Boost and 240% GPU Boost performance
@@ -624,9 +628,11 @@ export default function LynoPage() {
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-03.webp" : "/lyno/PHONE SIZE-03.webp"}
           alt="Creative Mode - Customize themes, backgrounds and personalize your dashboard experience"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           Creative Mode lets you customize themes, backgrounds, and personalize your dashboard and multimedia experience to match your style and mood
@@ -637,9 +643,11 @@ export default function LynoPage() {
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-04.webp" : "/lyno/PHONE SIZE-04.webp"}
           alt="Premium Audio System - AKM7739 DSP Experience Studio-Grade Audio, TDA7808 Hear the Road Feel the Power, OpAmp 5532*3 Built for Clarity"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           Crystal-Clear Voice with Digital Noise Blocking featuring AKM7739 DSP for Studio-Grade Audio, TDA7808 amplifier to Hear the Road and Feel the Power, OpAmp 5532*3 Built for Clarity and Tuned for Passion
@@ -650,9 +658,11 @@ export default function LynoPage() {
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-05.webp" : "/lyno/PHONE SIZE-05.webp"}
           alt="Flexible UI Layout Mode - Customize arrangement, size, and position of widgets, media panels, and system controls"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           Flexible UI Layout Mode allows users to freely customize the arrangement, size, and position of on-screen elements such as widgets, media panels, navigation shortcuts, and system controls. This mode provides a personalized, modular dashboard that adapts to individual preferences and usage habits.
@@ -663,9 +673,11 @@ export default function LynoPage() {
         <Image
           src="/lyno/LYNO PAGE-06.webp"
           alt="360° Vision, Zero Blind Spots - Complete real-time panoramic view for safety and control"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           Delivers a complete, real-time panoramic view of the surroundings, ensuring no area is left unseen. Perfect for safety, awareness, and total control.
@@ -676,9 +688,11 @@ export default function LynoPage() {
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-07.webp" : "/lyno/PHONE SIZE-07.webp"}
           alt="More Plugins - Comprehensive dashboard with weather, trip info, TPMS, music, navigation and system controls"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           Advanced plugin system featuring weather updates, trip information, TPMS monitoring, music control, map navigation, energy flow monitoring, compass, and comprehensive vehicle data display
@@ -689,9 +703,11 @@ export default function LynoPage() {
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-08.webp" : "/lyno/PHONE SIZE-08.webp"}
           alt="Stay Connected, Stay Focused - Seamless Android Auto and Apple CarPlay integration"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           Enjoy seamless access to your favorite apps, maps, calls, and music — all directly from your dashboard with Android Auto and Apple CarPlay
@@ -702,9 +718,11 @@ export default function LynoPage() {
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-09.webp" : "/lyno/PHONE SIZE-09.webp"}
           alt="LYNO Advanced Features - Enhanced multimedia and connectivity capabilities"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           Experience advanced multimedia features and seamless connectivity with LYNO's enhanced capabilities
@@ -715,9 +733,11 @@ export default function LynoPage() {
         <Image
           src={isDesktop ? "/lyno/LYNO PAGE-10.webp" : "/lyno/PHONE SIZE-10.webp"}
           alt="LYNO Complete Solution - Comprehensive entertainment and control system"
-          width={1200}
-          height={800}
+          width={2400}
+          height={1600}
           className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
         />
         <figcaption className="sr-only">
           A complete entertainment and control solution that transforms your driving experience
