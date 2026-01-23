@@ -31,13 +31,29 @@ export async function generateMetadata({ params }) {
 
     try {
       // 先获取当前产品行（包含 same）
+      // 处理特殊字符：TRIM 去除前后空格，将 | 替换为空，空格替换为 -，处理多个连续 - 变成单个 -，去除前导 -
       const getProductQuery = `
         SELECT Id, Url, Name, same
         FROM products
         WHERE categories = ?
-        AND LOWER(REPLACE(Name, ' ', '-')) = ?
+        AND LOWER(
+          TRIM(BOTH '-' FROM 
+            REPLACE(
+              REPLACE(
+                REPLACE(
+                  REPLACE(TRIM(Name), ' ', '-'),
+                  '|', ''
+                ),
+                '--', '-'
+              ),
+              '--', '-'
+            )
+          )
+        ) = ?
         LIMIT 1
       `;
+
+      console.log('🔍 查询参数:', { category, slug });
 
       const [productRows] = await Promise.race([
         connection.execute(getProductQuery, [category, slug]),
@@ -45,6 +61,8 @@ export async function generateMetadata({ params }) {
           setTimeout(() => reject(new Error('Query timeout')), 2000)
         )
       ]);
+
+      console.log('🔍 产品查询结果:', productRows.length > 0 ? { Id: productRows[0]?.Id, Name: productRows[0]?.Name, same: productRows[0]?.same, Url: productRows[0]?.Url?.substring(0, 60) } : '无结果');
 
       if (productRows.length > 0) {
         productName = productRows[0].Name || '';
@@ -56,7 +74,7 @@ export async function generateMetadata({ params }) {
             SELECT Url, Name
             FROM products
             WHERE same = ?
-            ORDER BY date ASC
+            ORDER BY (Id = same) DESC, date ASC
             LIMIT 1
           `;
 
@@ -68,6 +86,7 @@ export async function generateMetadata({ params }) {
           ]);
 
           if (firstRows.length > 0 && firstRows[0].Url) {
+            console.log('✅ 主图查询成功:', { Url: firstRows[0].Url?.substring(0, 60) });
             productImage = firstRows[0].Url;
             productName = productName || firstRows[0].Name || '';
           } else if (productRows[0].Url) {
