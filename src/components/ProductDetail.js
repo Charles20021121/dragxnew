@@ -10,14 +10,17 @@ import 'swiper/css/pagination';
 import LoadingSpinner from './LoadingSpinner';
 import { PIXEL_IDS } from '@/components/MetaPixel';
 import { useProduct } from '@/contexts/ProductContext';
+import ProductCard from './ProductCard';
+import { motion, Reorder } from 'framer-motion';
 
-export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage }) {
+export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage, onReorderImages }) {
   const { setCurrentProduct } = useProduct();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [relatedImages, setRelatedImages] = useState([
     { src: product.image, alt: product.name }
   ]);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
   console.log(relatedImages)
   const sliderRef = useRef(null);
@@ -30,6 +33,8 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
 
   // 在文件頂部添加 useState
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showReorderModal, setShowReorderModal] = useState(false);
+  const [tempImages, setTempImages] = useState([]);
 
   // 设置当前产品信息给 WhatsApp 按钮使用
   useEffect(() => {
@@ -53,29 +58,24 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
   useEffect(() => {
     async function fetchRelatedImages() {
       try {
-        const res = await fetch(`/api/products?category=${product.categories}`);
+        // 獲取所有產品以支持跨類別推薦
+        const res = await fetch(`/api/products`);
         const products = await res.json();
 
-        // 找到所有相同 same 值的產品圖片
+        // 1. 獲取本產品的相關圖片（同一 same 組）
         const sameProducts = products.filter(p =>
           p.same === product.same
         );
 
         // 主圖永遠排在第一位，副圖按日期排序
         const sortedProducts = sameProducts.sort((a, b) => {
-          // 如果 a 是主圖，排在前面
           if (a.id == a.same && b.id != b.same) return -1;
-          // 如果 b 是主圖，排在前面
           if (b.id == b.same && a.id != a.same) return 1;
-          // 如果都是主圖或都是副圖，按日期排序
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
           return dateA - dateB;
         });
 
-        console.log(sortedProducts)
-
-        // 設置所有圖片
         const allImages = sortedProducts.map(p => ({
           src: p.image,
           alt: p.name || `Product image ${p.id}`,
@@ -83,24 +83,96 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
           id: p.id,
           same: p.same
         }));
-        console.log('all', allImages)
-        console.log('related', relatedImages)
 
         setRelatedImages(allImages);
-        // 設置第一張圖片（主圖）為默認顯示
         if (allImages.length > 0) {
           setSelectedImage(allImages[0].src);
           setCurrentImageIndex(0);
         }
+
+        // 2. 獲取推薦產品：主圖（id == same）、不包含目前產品所在的 same 組
+        const allPotentialRecs = products
+          .filter(p => p.id == p.same && p.same !== product.same)
+          .map(p => ({
+            ...p,
+            slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+          }));
+
+        let recommendations = [];
+
+        if (product.categories === 'androidplayer') {
+          // Android Player 的智能推薦邏輯
+          const sameSeries = allPotentialRecs.filter(p =>
+            p.categories === 'androidplayer' &&
+            p.filter1 === product.filter1 &&
+            p.android_series === product.android_series
+          );
+
+          const sameType = allPotentialRecs.filter(p =>
+            p.categories === 'androidplayer' &&
+            p.filter1 === product.filter1 &&
+            p.android_series !== product.android_series
+          );
+
+          const sameCategory = allPotentialRecs.filter(p =>
+            p.categories === 'androidplayer' &&
+            p.filter1 !== product.filter1
+          );
+
+          const shuffle = (arr) => arr.sort(() => 0.5 - Math.random());
+          recommendations = [
+            ...shuffle(sameSeries),
+            ...shuffle(sameType),
+            ...shuffle(sameCategory),
+            ...shuffle(allPotentialRecs.filter(p => p.categories !== 'androidplayer')) // 最後用其他分類補充
+          ];
+        } else if (product.categories === 'contidecoder') {
+          // Conti Decoder 的智能推薦邏輯
+          const sameType = allPotentialRecs.filter(p => 
+            p.categories === 'contidecoder' && 
+            p.filter1 === product.filter1
+          );
+
+          const sameCategory = allPotentialRecs.filter(p => 
+            p.categories === 'contidecoder' && 
+            p.filter1 !== product.filter1
+          );
+
+          const shuffle = (arr) => arr.sort(() => 0.5 - Math.random());
+          recommendations = [
+            ...shuffle(sameType),
+            ...shuffle(sameCategory),
+            ...shuffle(allPotentialRecs.filter(p => p.categories !== 'contidecoder')) // 最後用其他分類補充
+          ];
+        } else {
+          // 其他產品：優先推薦同分類產品，不足時用全站隨機產品補充
+          const sameCategory = allPotentialRecs.filter(p => p.categories === product.categories);
+          const others = allPotentialRecs.filter(p => p.categories !== product.categories);
+          
+          const shuffle = (arr) => arr.sort(() => 0.5 - Math.random());
+          recommendations = [
+            ...shuffle(sameCategory),
+            ...shuffle(others)
+          ];
+        }
+
+        setRecommendedProducts(recommendations.slice(0, 5));
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching related images:', error);
+        console.error('Error fetching images and recommendations:', error);
         setLoading(false);
       }
     }
 
     fetchRelatedImages();
   }, [product]);
+
+  const handleSaveReorder = () => {
+    if (onReorderImages) {
+      onReorderImages(tempImages);
+      setShowReorderModal(false);
+    }
+  };
 
   // 添加購買事件追蹤函數
   const handleShopNowClick = (e) => {
@@ -174,7 +246,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
         'Exclusive_series': 'Exclusive Series',
         'Luxury_series': 'Luxury Series',
         'Performance_series': 'Performance Series',
-        'Signature_40': 'Signature 40',
+        'Signature_40': '40 Series',
         'TRONMMEXT_EI_series': 'TRONMMEXT EI Series',
         'TRONMMEXT_ES_series': 'TRONMMEXT ES Series',
         'Ultra_series': 'Ultra Series',
@@ -400,15 +472,12 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                 </div>
               </div>
             </div>
-            {/* Divider Line */}
-            {relatedImages.length > 4 && <div className="w-full h-[1px] bg-gray-200 my-8" />}
-
             {/* Bottom Extra Images */}
-            {relatedImages.length > 4 && (
+            {relatedImages.length > 0 && (
               <div className="mt-8 w-full">
                 {/* Mobile View - Single Column */}
                 <div className="grid grid-cols-1 gap-4 md:hidden">
-                  {relatedImages.slice(4).map((image, index) => (
+                  {relatedImages.map((image, index) => (
                     <div key={index} className="relative aspect-square w-full">
                       <CldImage
                         src={image.src}
@@ -423,11 +492,11 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
 
                 {/* Desktop View - 2 Columns Grid */}
                 <div className="hidden md:grid grid-cols-2 gap-4">
-                  {relatedImages.slice(4).map((image, index) => (
+                  {relatedImages.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => {
-                        setCurrentImageIndex(index + 4);
+                        setCurrentImageIndex(index);
                         setSelectedImage(image.src);
                       }}
                       className="relative aspect-square hover:opacity-90 transition-opacity"
@@ -483,29 +552,34 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
 
       </div>
 
-      {/* 管理員懸浮刪除按鈕 */}
+      {/* 管理員懸浮按鈕組 */}
       {isAdmin && (
-        <button
-          onClick={() => setShowDeleteModal(true)}
-          className="fixed fixed  right-8 p-4 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors duration-300 z-50"
-          title="Delete Images"
-          style={{ bottom: '180px' }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        <div className="fixed right-8 flex flex-col gap-4 z-50" style={{ bottom: '180px' }}>
+          {/* 刪除按鈕 */}
+          <button
+            onClick={() => setShowDeleteModal(true)}
+            className="p-4 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors duration-300"
+            title="Delete Images"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+
+          {/* 排序按鈕 */}
+          <button
+            onClick={() => {
+              setTempImages(relatedImages);
+              setShowReorderModal(true);
+            }}
+            className="p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300"
+            title="Reorder Images"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+            </svg>
+          </button>
+        </div>
       )}
 
       {/* 刪除圖片模態框 */}
@@ -524,11 +598,10 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto max-h-[70vh]"> {/* 限制高度并启用滚动 */}
+            <div className="p-6 overflow-y-auto max-h-[70vh]">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {relatedImages.slice(1).map((image, index) => (
                   <div key={index} className="relative group">
-                    {image.Id}
                     <div className="aspect-square relative rounded-lg overflow-hidden border border-gray-200">
                       <CldImage
                         src={image.src}
@@ -542,14 +615,8 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
                       <button
                         onClick={() => {
                           if (confirm('Are you sure you want to delete this image?')) {
-                            onDeleteImage(
-                              image.id,          // 数据库中的 ID
-                              image.same,        // same 值（如果需要）
-                              image.publicId     // Cloudinary 的 public ID
-                            );
-                            if (relatedImages.length <= 2) {
-                              setShowDeleteModal(false);
-                            }
+                            onDeleteImage(image.id, image.same, image.publicId);
+                            if (relatedImages.length <= 2) setShowDeleteModal(false);
                           }
                         }}
                         className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
@@ -567,6 +634,147 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage 
         </div>
       )}
 
+      {/* 排序圖片模態框 */}
+      {showReorderModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full mx-4 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div className="p-4 bg-[#1c5434] text-white flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                </svg>
+                <h3 className="text-lg font-semibold">Change Image Order</h3>
+              </div>
+              <button onClick={() => setShowReorderModal(false)} className="hover:text-gray-200">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto flex-1">
+              <p className="text-sm text-gray-500 mb-4">
+                Drag and drop images to change their order. The first image will be the <strong>Main Image</strong>.
+              </p>
+              
+              <Reorder.Group axis="y" values={tempImages} onReorder={setTempImages} className="space-y-3">
+                {tempImages.map((image) => (
+                  <Reorder.Item 
+                    key={image.id} 
+                    value={image}
+                    className="flex items-center gap-4 p-3 bg-white border border-gray-200 rounded-xl shadow-sm cursor-grab active:cursor-grabbing hover:border-[#1c5434] transition-colors"
+                  >
+                    <div className="flex-shrink-0 cursor-move text-gray-400">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                      </svg>
+                    </div>
+                    <div className="relative h-16 w-16 rounded-lg overflow-hidden border border-gray-100">
+                      <CldImage
+                        src={image.src}
+                        alt="Thumbnail"
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                    </div>
+                    <div className="flex-1 truncate">
+                      <span className="text-sm font-medium text-gray-700">
+                        {image.id === image.same ? "Main Product Image" : `Additional Image (ID: ${image.id})`}
+                      </span>
+                    </div>
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
+            </div>
+
+            <div className="p-4 bg-gray-50 border-t flex justify-end gap-3">
+              <button
+                onClick={() => setShowReorderModal(false)}
+                className="px-6 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleSaveReorder()}
+                className="px-8 py-2 bg-[#1c5434] text-white rounded-full hover:bg-[#143a25] transition-colors shadow-md flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Save New Order
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          window.handleSaveReorder = function() {
+            // This is a helper for the component
+          }
+        `
+      }} />
+
+
+      {/* Recommendations Section */}
+      {recommendedProducts.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-12">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-[#1c5434] text-xl md:text-2xl font-bold tracking-wider uppercase">
+              YOU MAY ALSO LIKE
+            </h2>
+            <div className="flex-1 h-[1px] bg-gray-300 ml-6"></div>
+          </div>
+          
+          <div className="relative group">
+            <Swiper
+              modules={[Navigation]}
+              spaceBetween={16}
+              navigation={{
+                nextEl: '.swiper-button-next-recommendations',
+                prevEl: '.swiper-button-prev-recommendations',
+              }}
+              breakpoints={{
+                320: {
+                  slidesPerView: 2.2,
+                  spaceBetween: 12,
+                },
+                640: {
+                  slidesPerView: 3.5,
+                  spaceBetween: 16,
+                },
+                1024: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                },
+              }}
+            >
+              {recommendedProducts.map((rec) => (
+                <SwiperSlide key={rec.id}>
+                  <ProductCard 
+                    product={rec} 
+                    categoryPath={rec.categories} 
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            
+            {/* Custom Navigation Buttons */}
+            <div className="swiper-button-prev-recommendations absolute left-[-20px] md:left-[-40px] top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#1c5434] p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer hidden sm:flex border border-gray-100">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </div>
+            <div className="swiper-button-next-recommendations absolute right-[-20px] md:right-[-40px] top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#1c5434] p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer hidden sm:flex border border-gray-100">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

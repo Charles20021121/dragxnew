@@ -49,6 +49,7 @@ export async function GET(request) {
         filter: product.filter,
         filter1: product.filter1,
         android_series: product.android_series,
+        custom_filter: product.custom_filter,
         same: product.same
       }));
 
@@ -93,6 +94,7 @@ export async function GET(request) {
         filter: product.filter,
         filter1: product.filter1,
         android_series: product.android_series,
+        custom_filter: product.custom_filter,
         same: product.same
       }));
 

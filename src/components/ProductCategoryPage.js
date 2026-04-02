@@ -47,7 +47,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 }
 };
 
-const ITEMS_PER_PAGE = 30;
+const ITEMS_PER_PAGE = 32;
 
 // 定義車款選項
 const carModels = [
@@ -64,13 +64,13 @@ const androidSeries = [
   { value: 'Android_Ai_Box', label: 'Android Ai Box' },
   { value: 'Cyber_series', label: 'Cyber series' },
   { value: 'Diamond_series', label: 'Diamond series' },
-  { value: 'Exclusive_series', label: 'Exclusive series' },
   { value: 'Luxury_series', label: 'Luxury series' },
   { value: 'Performance_series', label: 'Performance series' },
-  { value: 'Signature_40', label: 'Signature 40' },
+  { value: 'Signature_40', label: '40 Series' },
   { value: 'TRONMMEXT_EI_series', label: 'TRONMMEXT EI series' },
-  { value: 'TRONMMEXT_ES_series', label: 'TRONMMEXT ES series' },
   { value: 'Ultra_series', label: 'Ultra series' },
+  { value: 'Lyno', label: 'Lyno' },
+  { value: 'Android_Screen', label: 'Android Screen' },
   { value: 'Others', label: 'Others' }
 ];
 
@@ -86,11 +86,34 @@ export default function ProductCategoryPage({
   const searchParams = useSearchParams();
   const { setCurrentProduct } = useProduct();
   const currentPage = Number(searchParams.get('page')) || 1;
-  const [androidFilter, setAndroidFilter] = useState('androidPlayer');
+  const [androidFilter, setAndroidFilter] = useState(() => {
+    const filter = searchParams.get('filter1');
+    if (filter === 'androidPlayer' || filter === 'contiAndroid') return filter;
+    return 'androidPlayer';
+  });
   const [silenceFilter, setSilenceFilter] = useState('hatchback');
   const [contiFilter, setContiFilter] = useState('appleCarplay');
   const [carFilter, setCarFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedCustomFilter, setSelectedCustomFilter] = useState('all');
+
+  // Categories that support custom filtering
+  const customFilterCategories = ['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others'];
+  const isCustomFilterEnabled = customFilterCategories.includes(categoryPath?.toLowerCase());
+
+  // Extract unique custom filter values from products
+  const customFilterOptions = ['all', ...new Set(products
+    .filter(p => p.id == p.same && p.custom_filter)
+    .map(p => p.custom_filter)
+  )].sort();
+
+  // 当 URL 查询参数改变时更新过滤器
+  useEffect(() => {
+    const filter = searchParams.get('filter1');
+    if (filter === 'androidPlayer' || filter === 'contiAndroid') {
+      setAndroidFilter(filter);
+    }
+  }, [searchParams]);
 
   // 处理 URL hash 滚动到对应系列
   useEffect(() => {
@@ -181,7 +204,11 @@ export default function ProductCategoryPage({
             sensitivity: 'base'
           }))
         : products
-          .filter(product => product.id == product.same)
+          .filter(product => {
+            const isMainImage = product.id == product.same;
+            const customFilterMatch = !isCustomFilterEnabled || selectedCustomFilter === 'all' || product.custom_filter === selectedCustomFilter;
+            return isMainImage && customFilterMatch;
+          })
           .sort((a, b) => a.name.localeCompare(b.name, undefined, {
             numeric: true,
             sensitivity: 'base'
@@ -514,6 +541,61 @@ export default function ProductCategoryPage({
           />
         </div>
 
+        {/* Custom Filter Bar */}
+        {isCustomFilterEnabled && customFilterOptions.length > 1 && (
+          <div className="flex flex-wrap justify-center gap-3 mb-8 px-2">
+            {customFilterOptions.map(option => (
+              <button
+                key={option}
+                onClick={() => {
+                  setSelectedCustomFilter(option);
+                  // Reset pagination when filter changes
+                  const params = new URLSearchParams(searchParams);
+                  params.set('page', '1');
+                  router.push(`?${params.toString()}`);
+                }}
+                className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 shadow-sm hover:scale-105 active:scale-95 ${selectedCustomFilter === option
+                  ? 'bg-[#1c5434] text-white shadow-md scale-105'
+                  : 'bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+              >
+                {option.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Top Pagination */}
+        {categoryPath !== "androidplayer" && totalPages > 1 && (
+          <div className="flex justify-center items-center gap-4 mb-8">
+            <button
+              onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+              disabled={currentPage === 1}
+              className="p-2 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white rounded-full transition-all duration-300 shadow-sm hover:scale-110 active:scale-95"
+              aria-label="Previous page"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+            </button>
+
+            <span className="text-lg font-medium bg-white px-4 py-1 rounded-full shadow-sm">
+              {currentPage} / {totalPages}
+            </span>
+
+            <button
+              onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="p-2 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white rounded-full transition-all duration-300 shadow-sm hover:scale-110 active:scale-95"
+              aria-label="Next page"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+          </div>
+        )}
+
         {/* Products Display - Android Player 使用分层显示，其他使用网格 */}
         {categoryPath === "androidplayer" ? (
           /* Android Player 分层显示 */
@@ -771,36 +853,37 @@ export default function ProductCategoryPage({
           </motion.div>
         )}
 
-        {/* Pagination - 只在非 Android Player 页面显示 */}
+        {/* Bottom Pagination */}
         {categoryPath !== "androidplayer" && totalPages > 1 && (
-          <div className="flex justify-center items-center gap-4 mt-8 ">
+          <div className="flex justify-center items-center gap-4 py-12">
             <button
               onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
               disabled={currentPage === 1}
-              className="p-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white rounded-full transition-all duration-300 shadow-sm hover:scale-110 active:scale-95"
+              aria-label="Previous page"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
             </button>
 
-            <span className="text-lg font-medium">
-              {currentPage}/{totalPages}
+            <span className="text-lg font-medium bg-white px-4 py-1 rounded-full shadow-sm">
+              {currentPage} / {totalPages}
             </span>
 
             <button
               onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className="p-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white rounded-full transition-all duration-300 shadow-sm hover:scale-110 active:scale-95"
+              aria-label="Next page"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
             </button>
           </div>
-        )
-        }
-      </div >
-    </main >
+        )}
+      </div>
+    </main>
   );
 }

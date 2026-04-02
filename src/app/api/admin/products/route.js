@@ -28,11 +28,12 @@ export async function POST(request) {
         filter,
         filter1,
         android_series,
+        custom_filter,
         publicId,
         date,
         price,
         same
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         nextId,
         data.Name || '',
@@ -44,6 +45,7 @@ export async function POST(request) {
         data.filter || '',
         data.filter1 || '',
         data.android_series || '',
+        data.custom_filter || '',
         data.publicId || '',
         data.date || new Date().toISOString().replace('T', ' ').split('.')[0],
         data.price || null,

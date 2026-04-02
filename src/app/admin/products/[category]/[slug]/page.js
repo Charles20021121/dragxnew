@@ -26,9 +26,11 @@ export default function ProductPage({ params: paramsPromise }) {
     filter: '',
     filter1: '',
     android_series: '',
+    custom_filter: '',
     price: '',
     date: new Date().toISOString().replace('T', ' ').split('.')[0]
   });
+  const [existingFilters, setExistingFilters] = useState([]);
   const [showImageOffcanvas, setShowImageOffcanvas] = useState(false);
   const [newImageData, setNewImageData] = useState({
     Name: '',
@@ -96,6 +98,13 @@ export default function ProductPage({ params: paramsPromise }) {
           ...foundProduct,
           relatedImages
         });
+
+        // Extract unique custom filter values from all products in this category
+        const filters = [...new Set(products
+          .filter(p => p.custom_filter)
+          .map(p => p.custom_filter)
+        )].sort();
+        setExistingFilters(filters);
       }
       setLoading(false);
     } catch (error) {
@@ -117,6 +126,7 @@ export default function ProductPage({ params: paramsPromise }) {
         filter: product.filter || '',
         filter1: product.filter1 || '',
         android_series: product.android_series || '',
+        custom_filter: product.custom_filter || '',
         price: product.price || '',
         date: product.date || new Date().toISOString().replace('T', ' ').split('.')[0]
       });
@@ -305,7 +315,8 @@ export default function ProductPage({ params: paramsPromise }) {
             buy: '',
             filter: '',
             filter1: '',
-            android_series: ''
+            android_series: '',
+            custom_filter: ''
           }),
         });
 
@@ -334,7 +345,8 @@ export default function ProductPage({ params: paramsPromise }) {
               buy: '',
               filter: '',
               filter1: '',
-              android_series: ''
+              android_series: '',
+              custom_filter: ''
             }),
           });
         });
@@ -378,7 +390,8 @@ export default function ProductPage({ params: paramsPromise }) {
               buy: '',
               filter: '',
               filter1: '',
-              android_series: ''
+              android_series: '',
+              custom_filter: ''
             }),
           });
         });
@@ -436,6 +449,31 @@ export default function ProductPage({ params: paramsPromise }) {
     }
   };
 
+  const handleReorderImages = async (newImages) => {
+    try {
+      setLoading(true);
+      const res = await fetch('/api/admin/products/reorder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ images: newImages }),
+      });
+
+      if (res.ok) {
+        showNotification('success', 'Order updated successfully');
+        await fetchProduct();
+      } else {
+        showNotification('error', 'Failed to update order');
+      }
+    } catch (error) {
+      console.error('Error reordering images:', error);
+      showNotification('error', 'Error reordering images');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -481,6 +519,7 @@ export default function ProductPage({ params: paramsPromise }) {
           isAdmin={true}
           onEdit={() => setShowOffcanvas(true)}
           onDeleteImage={handleDeleteImage}
+          onReorderImages={handleReorderImages}
         />
       </Suspense>
 
@@ -670,12 +709,51 @@ export default function ProductPage({ params: paramsPromise }) {
                             <option value="Exclusive_series">Exclusive series</option>
                             <option value="Luxury_series">Luxury series</option>
                             <option value="Performance_series">Performance series</option>
-                            <option value="Signature_40">Signature 40</option>
+                            <option value="Signature_40">40 Series</option>
                             <option value="TRONMMEXT_EI_series">TRONMMEXT EI series</option>
                             <option value="TRONMMEXT_ES_series">TRONMMEXT ES series</option>
                             <option value="Ultra_series">Ultra series</option>
                             <option value="Others">Others</option>
                           </select>
+                        </div>
+                      )}
+
+                      {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others'].includes(formData.categories.toLowerCase()) && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Custom Filter Category</label>
+                          <div className="mt-1 space-y-2">
+                            <select
+                              className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                              value={existingFilters.includes(formData.custom_filter) ? formData.custom_filter : (formData.custom_filter ? "new" : "")}
+                              onChange={(e) => {
+                                if (e.target.value === "new") {
+                                  setFormData(prev => ({ ...prev, custom_filter: "" }));
+                                } else {
+                                  setFormData(prev => ({ ...prev, custom_filter: e.target.value }));
+                                }
+                              }}
+                            >
+                              <option value="">No Filter (All)</option>
+                              {existingFilters.map(filter => (
+                                <option key={filter} value={filter}>{filter}</option>
+                              ))}
+                              <option value="new" className="font-bold text-[#1c5434]">+ Add New Category...</option>
+                            </select>
+
+                            {(!existingFilters.includes(formData.custom_filter) || formData.custom_filter === "") && (
+                              <div className="relative">
+                                <input
+                                  type="text"
+                                  name="custom_filter"
+                                  value={formData.custom_filter}
+                                  onChange={handleChange}
+                                  className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434] animate-in slide-in-from-top-2 duration-300"
+                                  placeholder="Type new category name here..."
+                                />
+                                <p className="mt-1 text-xs text-gray-500 italic">Enter a new name to create a new filter tag.</p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>

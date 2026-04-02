@@ -61,6 +61,7 @@ export async function PUT(request, { params: paramsPromise }) {
         filter = ?,
         filter1 = ?,
         android_series = ?,
+        custom_filter = ?,
         price = ?
       WHERE Id = ?`,
       [
@@ -72,6 +73,7 @@ export async function PUT(request, { params: paramsPromise }) {
         data.filter || '',
         data.filter1 || '',
         data.android_series || '',
+        data.custom_filter || '',
         data.price || null,
         params.id
       ]
