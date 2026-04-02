@@ -13,45 +13,43 @@ export async function POST(request) {
     await connection.beginTransaction();
 
     try {
-      // 1. Get all current records for this product group
+      // 1. Get all current records for this product group and sort them by date (matching frontend logic)
       const mainId = images[0].same || images[0].id;
-      const [currentRecords] = await connection.query(
-        'SELECT Id, Url, publicId, Name, date FROM products WHERE Id = ? OR same = ?',
+      const [records] = await connection.query(
+        'SELECT Id, Url, publicId, Name, date, same FROM products WHERE Id = ? OR same = ?',
         [mainId, mainId]
       );
 
+      // Sort existing records to identify the "slots" (main first, then by date)
+      const currentRecords = records.sort((a, b) => {
+        if (a.Id == a.same && b.Id != b.same) return -1;
+        if (b.Id == b.same && a.Id != a.same) return 1;
+        return new Date(a.date) - new Date(b.date);
+      });
+
       // 2. Map current records to their desired new content
-      // We want to redistribute the (Url, publicId, Name) from the 'images' array 
-      // into the existing database IDs.
-      
-      // The product with Id == mainId should get the content of images[0]
-      // The other products should get the content of images[1..N]
-      
+      // We redistribute the (Url, publicId) from 'images' array into the existing database IDs.
       const updates = [];
-      const now = new Date();
 
       for (let i = 0; i < images.length; i++) {
-        const targetId = (i === 0) ? mainId : currentRecords.filter(r => r.Id !== mainId)[i-1]?.Id;
+        // targetId is the Id of the record at this position (slot i)
+        const targetId = currentRecords[i]?.Id;
         
         if (targetId) {
-          // 增加日期偏移以確保排序
-          const updatedDate = new Date(now.getTime() + i * 1000)
-            .toISOString().replace('T', ' ').split('.')[0];
-
-          if (i === 0) {
-            // 第一張圖（主產品）：只更換圖片資源，保留原有的產品名稱、價格等所有資料
+          if (targetId == mainId) {
+            // 第一張圖（主產品）：只更換圖片資源，保留原有的產品名稱、價格、日期等所有資料
             updates.push(
               connection.query(
-                'UPDATE products SET Url = ?, publicId = ?, date = ? WHERE Id = ?',
-                [images[i].src, images[i].publicId, updatedDate, targetId]
+                'UPDATE products SET Url = ?, publicId = ? WHERE Id = ?',
+                [images[i].src, images[i].publicId, targetId]
               )
             );
           } else {
-            // 其他副圖：更新圖片資源和日期，並給一個固定的圖片標籤（避免繼承主產品名稱）
+            // 其他副圖：僅更新圖片資源，保留原有日期（保持排序），並清空副圖名稱（避免繼承主產品名稱）
             updates.push(
               connection.query(
-                'UPDATE products SET Url = ?, publicId = ?, Name = ?, date = ? WHERE Id = ?',
-                [images[i].src, images[i].publicId, "", updatedDate, targetId]
+                'UPDATE products SET Url = ?, publicId = ?, Name = ? WHERE Id = ?',
+                [images[i].src, images[i].publicId, "", targetId]
               )
             );
           }
