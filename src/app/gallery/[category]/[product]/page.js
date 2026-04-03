@@ -1,7 +1,7 @@
 "use client"
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import LoadingSpinner from '@/components/LoadingSpinner'
@@ -125,7 +125,7 @@ export default function GalleryProductPage() {
                       className="relative aspect-square cursor-pointer"
                       onClick={() => setSelectedImageIndex(index)}
                     >
-                      <CldImage
+                      <Image
                         src={image.Url}
                         alt={image.Name || 'Product View'}
                         fill
@@ -161,7 +161,7 @@ export default function GalleryProductPage() {
                       className="relative aspect-square cursor-pointer"
                       onClick={() => setSelectedImageIndex(index)}
                     >
-                      <CldImage
+                      <Image
                         src={image.Url}
                         alt={image.Name || 'Product View'}
                         fill

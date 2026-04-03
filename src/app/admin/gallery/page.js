@@ -1,26 +1,26 @@
 "use client"
 import { motion } from "framer-motion"
-import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 import Link from 'next/link'
 
 
 const categories = [
-  { Name: 'Alphard', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/lyeylq4n5vfrh5n39izv.webp', domainUrl: '/admin/gallery/alphard', alt: 'Alphard Gallery Image' },
-  { Name: 'Vellfire', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/eeldtvtiwd3a8nmh50gk.webp', domainUrl: '/admin/gallery/vellfire', alt: 'Vellfire Gallery Image' },
-  { Name: 'Audi', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680833/r9bx7381jafl517oyo23.webp', domainUrl: '/admin/gallery/audi', alt: 'Audi Gallery Image' },
-  { Name: 'Mercedes-Benz', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680833/ltvgxtgdnfvpu6e5lifw.webp', domainUrl: '/admin/gallery/mercedes-benz', alt: 'Mercedes-Benz Gallery Image' },
-  { Name: 'BMW', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680831/pjeo4wxziqxdxsjcfpbb.webp', domainUrl: '/admin/gallery/bmw', alt: 'BMW Gallery Image' },
-  { Name: 'Ford', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680831/fi4zd6q7tys4z37rmtcn.webp', domainUrl: '/admin/gallery/ford', alt: 'Ford Gallery Image' },
-  { Name: 'Honda', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/z38nzrmqjjm52uyfupuq.webp', domainUrl: '/admin/gallery/honda', alt: 'Honda Gallery Image' },
-  { Name: 'Jaguar', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680834/urtqbjjenhfbemtjuoev.webp', domainUrl: '/admin/gallery/jaguar', alt: 'Jaguar Gallery Image' },
-  { Name: 'LandRover', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680831/txytobry5qodcuaymata.webp', domainUrl: '/admin/gallery/landrover', alt: 'LandRover Gallery Image' },
-  { Name: 'Lexus', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680861/z3ezkntpfrnyx5dcbwok.webp', domainUrl: '/admin/gallery/lexus', alt: 'Lexus Gallery Image' },
-  { Name: 'Mini', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/flcw9sygebadae2tqmnr.webp', domainUrl: '/admin/gallery/mini', alt: 'Mini Gallery Image' },
-  { Name: 'Perodua', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/pl7tjz6r3jabunajmlp8.webp', domainUrl: '/admin/gallery/perodua', alt: 'Perodua Gallery Image' },
-  { Name: 'Porsche', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/wjhsc9vxhvtgm4xz9xbp.webp', domainUrl: '/admin/gallery/porsche', alt: 'Porsche Gallery Image' },
-  { Name: 'Proton', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/hxpd5tkmctlyazsp9ewn.webp', domainUrl: '/admin/gallery/proton', alt: 'Proton Gallery Image' },
-  { Name: 'Toyota', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/cvq1aoaa7hjrpj2gplly.webp', domainUrl: '/admin/gallery/toyota', alt: 'Toyota Gallery Image' },
-  { Name: 'Volvo', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/fsyzl1gxnzrwldyuwbhz.webp', domainUrl: '/admin/gallery/volvo', alt: 'Volvo Gallery Image' },
+  { Name: 'Alphard', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/lyeylq4n5vfrh5n39izv.webp', domainUrl: '/admin/gallery/alphard', alt: 'Alphard Gallery Image' },
+  { Name: 'Vellfire', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/eeldtvtiwd3a8nmh50gk.webp', domainUrl: '/admin/gallery/vellfire', alt: 'Vellfire Gallery Image' },
+  { Name: 'Audi', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/r9bx7381jafl517oyo23.webp', domainUrl: '/admin/gallery/audi', alt: 'Audi Gallery Image' },
+  { Name: 'Mercedes-Benz', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ltvgxtgdnfvpu6e5lifw.webp', domainUrl: '/admin/gallery/mercedes-benz', alt: 'Mercedes-Benz Gallery Image' },
+  { Name: 'BMW', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/pjeo4wxziqxdxsjcfpbb.webp', domainUrl: '/admin/gallery/bmw', alt: 'BMW Gallery Image' },
+  { Name: 'Ford', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/fi4zd6q7tys4z37rmtcn.webp', domainUrl: '/admin/gallery/ford', alt: 'Ford Gallery Image' },
+  { Name: 'Honda', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/z38nzrmqjjm52uyfupuq.webp', domainUrl: '/admin/gallery/honda', alt: 'Honda Gallery Image' },
+  { Name: 'Jaguar', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/urtqbjjenhfbemtjuoev.webp', domainUrl: '/admin/gallery/jaguar', alt: 'Jaguar Gallery Image' },
+  { Name: 'LandRover', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/txytobry5qodcuaymata.webp', domainUrl: '/admin/gallery/landrover', alt: 'LandRover Gallery Image' },
+  { Name: 'Lexus', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/z3ezkntpfrnyx5dcbwok.webp', domainUrl: '/admin/gallery/lexus', alt: 'Lexus Gallery Image' },
+  { Name: 'Mini', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/flcw9sygebadae2tqmnr.webp', domainUrl: '/admin/gallery/mini', alt: 'Mini Gallery Image' },
+  { Name: 'Perodua', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/pl7tjz6r3jabunajmlp8.webp', domainUrl: '/admin/gallery/perodua', alt: 'Perodua Gallery Image' },
+  { Name: 'Porsche', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/wjhsc9vxhvtgm4xz9xbp.webp', domainUrl: '/admin/gallery/porsche', alt: 'Porsche Gallery Image' },
+  { Name: 'Proton', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/hxpd5tkmctlyazsp9ewn.webp', domainUrl: '/admin/gallery/proton', alt: 'Proton Gallery Image' },
+  { Name: 'Toyota', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/cvq1aoaa7hjrpj2gplly.webp', domainUrl: '/admin/gallery/toyota', alt: 'Toyota Gallery Image' },
+  { Name: 'Volvo', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/fsyzl1gxnzrwldyuwbhz.webp', domainUrl: '/admin/gallery/volvo', alt: 'Volvo Gallery Image' },
 ]
 
 const containerVariants = {
@@ -84,7 +84,7 @@ export default function Gallery() {
               >
                 <div className="relative overflow-hidden rounded-lg">
                   <div className="relative aspect-[16/9]">
-                    <CldImage
+                    <Image
                       src={category.ImgUrl}
                       alt={category.alt || `${category.Name} Gallery Image`}
                       fill

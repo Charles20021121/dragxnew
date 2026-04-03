@@ -20,14 +20,14 @@ const item = {
 export default function ServiceSection() {
   const services = {
     desktop: [
-      'https://res.cloudinary.com/dmkxx68km/image/upload/v1725422080/slfrg9tkismliphc6brl.png',
-      'https://res.cloudinary.com/dmkxx68km/image/upload/v1725422081/bgw9ezkplypkpl13ytk3.png',
-      'https://res.cloudinary.com/dmkxx68km/image/upload/v1725422080/yn4yehu7iamawkuvap98.png'
+      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/slfrg9tkismliphc6brl.webp',
+      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/bgw9ezkplypkpl13ytk3.webp',
+      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/yn4yehu7iamawkuvap98.webp'
     ],
     mobile: [
-      'https://res.cloudinary.com/dmkxx68km/image/upload/v1725541231/f6a8kk25tzfinll2vjtt.png',
-      'https://res.cloudinary.com/dmkxx68km/image/upload/v1725541443/f6t7tqkagzblbgtxa9nz.png',
-      'https://res.cloudinary.com/dmkxx68km/image/upload/v1725541594/zlytxnv5nrai5qxptqvu.png'
+      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/f6a8kk25tzfinll2vjtt.webp',
+      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/f6t7tqkagzblbgtxa9nz.webp',
+      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/zlytxnv5nrai5qxptqvu.webp'
     ]
   };
 

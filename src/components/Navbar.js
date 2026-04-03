@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 import SearchDrawer from './SearchDrawer'
 import { Outfit } from "next/font/google"
 import { motion } from "framer-motion"
@@ -73,13 +73,14 @@ export default function Navbar() {
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <Link className="navbar-brand" href="/" >
-            <CldImage
+            <Image
               priority
-              width="150"
-              height="48"
-              src={'https://res.cloudinary.com/dmkxx68km/image/upload/v1721035647/zvrfokcnqhxqa8crxgoj.webp'}
+              width={150}
+              height={48}
+              src={'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/zvrfokcnqhxqa8crxgoj.webp'}
               sizes="100vw"
               alt={'Logo'}
+              className="object-contain"
             />
           </Link>
 

@@ -5,7 +5,7 @@ export const metadata = {
   openGraph: {
     title: 'Locations - DRAGX Service Centers',
     description: 'Find DRAGX service centers near you',
-    images: ['https://res.cloudinary.com/dmkxx68km/image/upload/v1732875214/iqdgpdyiobmuiiu5hgd1.jpg'],
+    images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/iqdgpdyiobmuiiu5hgd1.webp'],
   }
 };
 

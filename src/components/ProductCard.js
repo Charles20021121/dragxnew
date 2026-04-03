@@ -1,4 +1,4 @@
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
@@ -15,7 +15,7 @@ export default function ProductCard({ product, categoryPath }) {
       >
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
           <div className="relative aspect-square bg-white">
-            <CldImage
+            <Image
               src={product.image}
               alt={product.name}
               fill

@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import { FaFacebook, FaTiktok, FaWhatsapp } from "react-icons/fa";
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion";
 
@@ -63,13 +63,12 @@ const Footer = () => {
 
 const FooterLogo = () => (
   <div className="flex justify-start items-center">
-    <CldImage
-      width="300"
-      height="95"
-      src="https://res.cloudinary.com/dmkxx68km/image/upload/v1721035647/zvrfokcnqhxqa8crxgoj.webp"
-      sizes="100vw"
-      alt="Logo"
-      className="h-24 w-auto"
+    <Image
+      src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/zvrfokcnqhxqa8crxgoj.webp"
+      alt="Dragx Logo"
+      width={300}
+      height={95}
+      className="h-24 w-auto object-contain"
     />
   </div>
 );

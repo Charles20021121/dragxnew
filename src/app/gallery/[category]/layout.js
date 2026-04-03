@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: `${categoryName} Gallery - DRAGX`,
       description: `${categoryTitles[category] || category} installations and customizations`,
-      images: ['https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/lyeylq4n5vfrh5n39izv.webp'],
+      images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/lyeylq4n5vfrh5n39izv.webp'],
     }
   };
 }

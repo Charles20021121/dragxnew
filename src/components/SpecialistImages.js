@@ -1,11 +1,10 @@
 "use client"
-import { CldImage } from 'next-cloudinary'
 import Image from 'next/image'
 
 const images = {
   desktop: [
     {
-      src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1725297683/yjdovrjq42rrvby6mghn.webp',
+      src: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/yjdovrjq42rrvby6mghn.webp',
       aspect: '3333/1248'
     },
     {
@@ -15,7 +14,7 @@ const images = {
   ],
   mobile: [
     {
-      src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1725539850/iz0vkwimr8lwag91gxsf.webp',
+      src: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/iz0vkwimr8lwag91gxsf.webp',
       aspect: '3333/3034'
     },
     {
@@ -46,7 +45,7 @@ export default function SpecialistImages() {
               priority={index === 0}
             />
           ) : (
-            <CldImage
+            <Image
               src={image.src}
               alt="Specialist Car"
               fill
@@ -75,7 +74,7 @@ export default function SpecialistImages() {
               priority={index === 0}
             />
           ) : (
-            <CldImage
+            <Image
               src={image.src}
               alt="Specialist Car"
               fill

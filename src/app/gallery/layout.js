@@ -5,7 +5,7 @@ export const metadata = {
   openGraph: {
     title: 'Gallery - DRAGX Car Installations',
     description: 'Portfolio of professional car accessory installations and customizations',
-    images: ['https://res.cloudinary.com/dmkxx68km/image/upload/v1729680281/uyzu9ol6jxbsy1phipmg.webp'],
+    images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/uyzu9ol6jxbsy1phipmg.webp'],
   }
 };
 

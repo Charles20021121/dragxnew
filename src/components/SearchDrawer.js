@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Search, X } from 'lucide-react'
 import { Input } from "@/components/ui/input"
-import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from "framer-motion"
 
@@ -189,7 +189,7 @@ export default function SearchDrawer() {
                         <div className="relative aspect-square rounded-lg overflow-hidden mb-2 bg-black/20">
                           {result?.Url ? (
                             <>
-                              <CldImage
+                              <Image
                                 src={result.Url}
                                 alt={result.Name || 'Image'}
                                 fill

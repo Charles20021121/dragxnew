@@ -1,6 +1,6 @@
 "use client"
 import { motion } from "framer-motion";
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingSpinner from './LoadingSpinner';
@@ -317,12 +317,12 @@ export default function GalleryCategoryPage({
               >
                 <div className="relative overflow-hidden rounded-lg">
                   <div className="relative aspect-[1/1]">
-                    <CldImage
+                    <Image
                       src={product.image}
                       alt={`${product.name} - DragX Gallery Image`}
                       fill
-                      className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     {/* 懸停時的遮罩 */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />

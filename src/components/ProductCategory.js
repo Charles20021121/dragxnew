@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import { motion } from "framer-motion";
 import { useInView } from 'react-intersection-observer';
 import 'swiper/css';
@@ -115,7 +115,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
                     className="block"
                   >
                     {inView && (
-                      <CldImage
+                      <Image
                         width="600"
                         height="600"
                         src={product.Url}

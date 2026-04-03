@@ -5,7 +5,7 @@ export const metadata = {
   openGraph: {
     title: 'Products - DRAGX Car Accessories',
     description: 'Complete range of car accessories and automotive solutions',
-    images: ['https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp'],
+    images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp'],
   }
 };
 

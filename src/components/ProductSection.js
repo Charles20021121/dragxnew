@@ -1,5 +1,4 @@
 "use client"
-import { CldImage } from 'next-cloudinary'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '@/css/Product.module.css'
@@ -8,7 +7,7 @@ import { motion } from "framer-motion";
 const products = [
   {
     Name: "SOUNDPROOF",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/v1739512778/i3nqmuukuo4nvq5puo6u.jpg",
+    ImgUrl: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/i3nqmuukuo4nvq5puo6u.webp",
     domainUrl: "/silence"
   },
   {
@@ -92,7 +91,7 @@ export default function ProductSection() {
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
-                      <CldImage
+                      <Image
                         width="600"
                         height="600"
                         src={product.ImgUrl}

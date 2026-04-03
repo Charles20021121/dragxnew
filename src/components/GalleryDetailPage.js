@@ -1,5 +1,5 @@
 "use client"
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
@@ -86,7 +86,7 @@ export default function GalleryDetailPage({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Main Image */}
           <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-            <CldImage
+            <Image
               src={product.image}
               alt={product.name}
               fill
@@ -129,7 +129,7 @@ export default function GalleryDetailPage({
               className="relative aspect-square cursor-pointer group"
               onClick={() => setSelectedImageIndex(index)}
             >
-              <CldImage
+              <Image
                 src={image.Url}
                 alt={image.Name || "Gallery image"}
                 fill

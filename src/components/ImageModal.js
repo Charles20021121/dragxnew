@@ -1,7 +1,7 @@
 "use client"
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
-import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 
 export default function ImageModal({ images, currentIndex, onClose }) {
   const [index, setIndex] = useState(currentIndex)
@@ -107,7 +107,7 @@ export default function ImageModal({ images, currentIndex, onClose }) {
               className="absolute inset-0 flex items-center justify-center p-4"
             >
               <div className="relative w-full h-full max-w-7xl mx-auto">
-                <CldImage
+                <Image
                   src={images[index].Url}
                   alt={images[index].Name || "Gallery image"}
                   fill
@@ -155,14 +155,14 @@ export default function ImageModal({ images, currentIndex, onClose }) {
 
         {/* Preloader for next image */}
         <div className="hidden">
-          <CldImage
+          <Image
             src={images[(index + 1) % images.length].Url}
             alt="preload"
             width={1}
             height={1}
             priority
           />
-          <CldImage
+          <Image
             src={images[(index - 1 + images.length) % images.length].Url}
             alt="preload-prev"
             width={1}

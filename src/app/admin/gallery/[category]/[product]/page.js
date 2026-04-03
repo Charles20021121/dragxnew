@@ -1,7 +1,7 @@
 "use client"
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect, useMemo } from 'react'
-import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence, Reorder } from 'framer-motion'
 import LoadingSpinner from '@/components/LoadingSpinner'
@@ -490,7 +490,7 @@ export default function GalleryProductPage() {
         className="relative w-[90vw] h-[90vh]"
         onClick={e => e.stopPropagation()}
       >
-        <CldImage
+        <Image
           src={image.Url}
           alt={image.Name || 'Gallery Image'}
           fill
@@ -518,7 +518,7 @@ export default function GalleryProductPage() {
             className="aspect-square relative rounded-lg overflow-hidden cursor-pointer"
             onClick={() => setSelectedImage(image)}
           >
-            <CldImage
+            <Image
               src={image.Url}
               alt={image.Name || 'Gallery Image'}
               fill
@@ -589,7 +589,7 @@ export default function GalleryProductPage() {
               {images.map((image, index) => (
                 <div key={index} className="relative group">
                   <div className="aspect-square relative rounded-lg overflow-hidden">
-                    <CldImage
+                    <Image
                       src={image.Url}
                       alt={image.Name || 'Gallery Image'}
                       fill
@@ -685,7 +685,7 @@ export default function GalleryProductPage() {
                       className="aspect-square relative rounded-lg overflow-hidden cursor-pointer"
                       onClick={() => setSelectedImage(image)}
                     >
-                      <CldImage
+                      <Image
                         src={image.Url}
                         alt={image.Name || 'Product Image'}
                         fill
@@ -738,7 +738,7 @@ export default function GalleryProductPage() {
                   className="relative aspect-square cursor-pointer"
                   onClick={() => setSelectedImage(mainImage)}
                 >
-                  <CldImage
+                  <Image
                     src={mainImage.Url}
                     alt={mainImage.Name || 'Product Image'}
                     fill
@@ -757,7 +757,7 @@ export default function GalleryProductPage() {
                     className="relative aspect-square cursor-pointer"
                     onClick={() => setSelectedImage(image)}
                   >
-                    <CldImage
+                    <Image
                       src={image.Url}
                       alt={image.Name || 'Product View'}
                       fill
@@ -894,7 +894,7 @@ export default function GalleryProductPage() {
                         <div className="flex items-center gap-4">
                           {/* Image Thumbnail */}
                           <div className="w-20 h-20 relative flex-shrink-0 mt-6">
-                            <CldImage
+                            <Image
                               src={mainImageItem.Url}
                               alt="Main Image"
                               fill
@@ -962,7 +962,7 @@ export default function GalleryProductPage() {
                         </div>
 
                         <div className="w-16 h-16 relative flex-shrink-0">
-                          <CldImage
+                          <Image
                             src={image.Url}
                             alt={`Image ${index + 2}`}
                             fill

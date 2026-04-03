@@ -1,16 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 禁用 Turbopack 以避免 Windows 上的崩溃问题
-  experimental: {
-    turbo: undefined,
-  },
-
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         pathname: '/dmkxx68km/image/upload/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pub-332f16c726da4f048f11221d7baacb53.r2.dev',
       },
     ],
   },

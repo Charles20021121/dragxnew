@@ -3,13 +3,13 @@ import pool from '@/lib/db'
 
 // 定義車款路由映射
 const carRoutes = {
-  'bmw': { ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680831/pjeo4wxziqxdxsjcfpbb.webp', domainUrl: '/gallery/gbmw' },
-  'mercedes': { ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680833/ltvgxtgdnfvpu6e5lifw.webp', domainUrl: '/gallery/gmercedes' },
-  'audi': { ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680833/r9bx7381jafl517oyo23.webp', domainUrl: '/gallery/audi' },
-  'honda': { ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/z38nzrmqjjm52uyfupuq.webp', domainUrl: '/gallery/honda' },
-  'toyota': { ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/cvq1aoaa7hjrpj2gplly.webp', domainUrl: '/gallery/toyota' },
-  'alphard': { ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/lyeylq4n5vfrh5n39izv.webp', domainUrl: '/gallery/alphard' },
-  'vellfire': { ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/eeldtvtiwd3a8nmh50gk.webp', domainUrl: '/gallery/vellfire' }
+  'bmw': { ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/pjeo4wxziqxdxsjcfpbb.webp', domainUrl: '/gallery/gbmw' },
+  'mercedes': { ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ltvgxtgdnfvpu6e5lifw.webp', domainUrl: '/gallery/gmercedes' },
+  'audi': { ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/r9bx7381jafl517oyo23.webp', domainUrl: '/gallery/audi' },
+  'honda': { ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/z38nzrmqjjm52uyfupuq.webp', domainUrl: '/gallery/honda' },
+  'toyota': { ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/cvq1aoaa7hjrpj2gplly.webp', domainUrl: '/gallery/toyota' },
+  'alphard': { ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/lyeylq4n5vfrh5n39izv.webp', domainUrl: '/gallery/alphard' },
+  'vellfire': { ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/eeldtvtiwd3a8nmh50gk.webp', domainUrl: '/gallery/vellfire' }
 }
 
 export async function GET(request) {

@@ -35,7 +35,7 @@ export const androidProducts = [
     id: 1,
     name: "10 Inch Android Player",
     categories: "android",
-    image: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725422080/slfrg9tkismliphc6brl.png",
+    image: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/slfrg9tkismliphc6brl.webp",
     buy: "https://www.amazon.com",
     specifications: "Specifications of the product",
     get slug() {
@@ -46,7 +46,7 @@ export const androidProducts = [
     id: 2,
     name: "9 Inch Android Player",
     categories: "android",
-    image: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725422081/bgw9ezkplypkpl13ytk3.png",
+    image: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/bgw9ezkplypkpl13ytk3.webp",
     buy: "https://www.amazon.com",
     specifications: "Specifications of the product",
     get slug() {
@@ -57,7 +57,7 @@ export const androidProducts = [
     id: 3,
     name: "7 Inch Android Player",
     categories: "android",
-    image: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725422080/yn4yehu7iamawkuvap98.png",
+    image: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/yn4yehu7iamawkuvap98.webp",
     buy: "https://www.amazon.com",
     specifications: "Specifications of the product",
     get slug() {
@@ -68,7 +68,7 @@ export const androidProducts = [
     id: 4,
     name: "12 Inch Android Player",
     categories: "android",
-    image: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725422080/yn4yehu7iamawkuvap98.png",
+    image: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/yn4yehu7iamawkuvap98.webp",
     buy: "https://www.amazon.com",
     specifications: "Specifications of the product",
     get slug() {
@@ -79,7 +79,7 @@ export const androidProducts = [
     id: 5,
     name: "15 Inch Android Player",
     categories: "android",
-    image: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725422080/yn4yehu7iamawkuvap98.png",
+    image: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/yn4yehu7iamawkuvap98.webp",
     buy: "https://www.amazon.com",
     specifications: "Specifications of the product",
     get slug() {
@@ -93,7 +93,7 @@ export const ambientProducts = [
     id: 1,
     name: "Universal Ambient Light Rainbow",
     categories: "ambient",
-    image: "https://res.cloudinary.com/dmkxx68km/image/upload/v1710422081/bgw9ezkplypkpl13ytk3.jpg",
+    image: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/bgw9ezkplypkpl13ytk3.webp",
     buy: "https://www.amazon.com",
     specifications: "Specifications of the product",
     get slug() {
@@ -104,7 +104,7 @@ export const ambientProducts = [
     id: 2,
     name: "Ambient Light RGB Universal Fullset",
     categories: "ambient",
-    image: "https://res.cloudinary.com/dmkxx68km/image/upload/v1725422081/bgw9ezkplypkpl13ytk3.png",
+    image: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/bgw9ezkplypkpl13ytk3.webp",
     buy: "https://www.amazon.com",
     specifications: "Specifications of the product",
     get slug() {

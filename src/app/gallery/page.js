@@ -1,26 +1,25 @@
 "use client"
 import Image from 'next/image'
 import { motion } from "framer-motion"
-import { CldImage } from 'next-cloudinary'
 import Link from 'next/link'
 import HeroSection from "@/components/HeroSection"
 
 const categories = [
   { Name: 'Alphard & Vellfire', ImgUrl: '/gallery/AP_VF.webp', domainUrl: '/gallery/alphard-vellfire', alt: 'Alphard & Vellfire Gallery Image' },
-  { Name: 'Audi', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680833/r9bx7381jafl517oyo23.webp', domainUrl: '/gallery/audi', alt: 'Audi Gallery Image' },
-  { Name: 'Mercedes-Benz', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680833/ltvgxtgdnfvpu6e5lifw.webp', domainUrl: '/gallery/mercedes-benz', alt: 'Mercedes-Benz Gallery Image' },
-  { Name: 'BMW', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680831/pjeo4wxziqxdxsjcfpbb.webp', domainUrl: '/gallery/bmw', alt: 'BMW Gallery Image' },
-  { Name: 'Ford', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680831/fi4zd6q7tys4z37rmtcn.webp', domainUrl: '/gallery/ford', alt: 'Ford Gallery Image' },
-  { Name: 'Honda', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/z38nzrmqjjm52uyfupuq.webp', domainUrl: '/gallery/honda', alt: 'Honda Gallery Image' },
-  { Name: 'Jaguar', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680834/urtqbjjenhfbemtjuoev.webp', domainUrl: '/gallery/jaguar', alt: 'Jaguar Gallery Image' },
-  { Name: 'LandRover', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680831/txytobry5qodcuaymata.webp', domainUrl: '/gallery/landrover', alt: 'LandRover Gallery Image' },
-  { Name: 'Lexus', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680861/z3ezkntpfrnyx5dcbwok.webp', domainUrl: '/gallery/lexus', alt: 'Lexus Gallery Image' },
-  { Name: 'Mini', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/flcw9sygebadae2tqmnr.webp', domainUrl: '/gallery/mini', alt: 'Mini Gallery Image' },
-  { Name: 'Perodua', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/pl7tjz6r3jabunajmlp8.webp', domainUrl: '/gallery/perodua', alt: 'Perodua Gallery Image' },
-  { Name: 'Porsche', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/wjhsc9vxhvtgm4xz9xbp.webp', domainUrl: '/gallery/porsche', alt: 'Porsche Gallery Image' },
-  { Name: 'Proton', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/hxpd5tkmctlyazsp9ewn.webp', domainUrl: '/gallery/proton', alt: 'Proton Gallery Image' },
-  { Name: 'Toyota', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/cvq1aoaa7hjrpj2gplly.webp', domainUrl: '/gallery/toyota', alt: 'Toyota Gallery Image' },
-  { Name: 'Volvo', ImgUrl: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680827/fsyzl1gxnzrwldyuwbhz.webp', domainUrl: '/gallery/volvo', alt: 'Volvo Gallery Image' },
+  { Name: 'Audi', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/r9bx7381jafl517oyo23.webp', domainUrl: '/gallery/audi', alt: 'Audi Gallery Image' },
+  { Name: 'Mercedes-Benz', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ltvgxtgdnfvpu6e5lifw.webp', domainUrl: '/gallery/mercedes-benz', alt: 'Mercedes-Benz Gallery Image' },
+  { Name: 'BMW', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/pjeo4wxziqxdxsjcfpbb.webp', domainUrl: '/gallery/bmw', alt: 'BMW Gallery Image' },
+  { Name: 'Ford', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/fi4zd6q7tys4z37rmtcn.webp', domainUrl: '/gallery/ford', alt: 'Ford Gallery Image' },
+  { Name: 'Honda', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/z38nzrmqjjm52uyfupuq.webp', domainUrl: '/gallery/honda', alt: 'Honda Gallery Image' },
+  { Name: 'Jaguar', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/urtqbjjenhfbemtjuoev.webp', domainUrl: '/gallery/jaguar', alt: 'Jaguar Gallery Image' },
+  { Name: 'LandRover', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/txytobry5qodcuaymata.webp', domainUrl: '/gallery/landrover', alt: 'LandRover Gallery Image' },
+  { Name: 'Lexus', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/z3ezkntpfrnyx5dcbwok.webp', domainUrl: '/gallery/lexus', alt: 'Lexus Gallery Image' },
+  { Name: 'Mini', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/flcw9sygebadae2tqmnr.webp', domainUrl: '/gallery/mini', alt: 'Mini Gallery Image' },
+  { Name: 'Perodua', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/pl7tjz6r3jabunajmlp8.webp', domainUrl: '/gallery/perodua', alt: 'Perodua Gallery Image' },
+  { Name: 'Porsche', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/wjhsc9vxhvtgm4xz9xbp.webp', domainUrl: '/gallery/porsche', alt: 'Porsche Gallery Image' },
+  { Name: 'Proton', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/hxpd5tkmctlyazsp9ewn.webp', domainUrl: '/gallery/proton', alt: 'Proton Gallery Image' },
+  { Name: 'Toyota', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/cvq1aoaa7hjrpj2gplly.webp', domainUrl: '/gallery/toyota', alt: 'Toyota Gallery Image' },
+  { Name: 'Volvo', ImgUrl: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/fsyzl1gxnzrwldyuwbhz.webp', domainUrl: '/gallery/volvo', alt: 'Volvo Gallery Image' },
 ]
 
 const containerVariants = {
@@ -49,7 +48,7 @@ export default function Gallery() {
   return (
     <div className="min-h-screen bg-[#f8f4ec]">
       <HeroSection
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1729680281/uyzu9ol6jxbsy1phipmg.webp"
+        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/uyzu9ol6jxbsy1phipmg.webp"
         aspectRatio="1920 / 601"
       />
 
@@ -81,7 +80,7 @@ export default function Gallery() {
                         sizes="(max-width: 768px) 50vw, 25vw"
                       />
                     ) : (
-                      <CldImage
+                      <Image
                         src={category.ImgUrl}
                         alt={category.alt || `${category.Name} Gallery Image`}
                         fill

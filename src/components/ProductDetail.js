@@ -1,5 +1,5 @@
 "use client"
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense, useState, useRef, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -366,7 +366,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                 <div className="hidden md:flex gap-4">
                   {/* Main Image */}
                   <div className="relative aspect-square w-4/5">
-                    <CldImage
+                    <Image
                       src={selectedImage}
                       alt={relatedImages[currentImageIndex]?.alt || "Product image"}
                       fill
@@ -390,7 +390,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                           : 'border border-gray-200 hover:border-[#1c5434]'
                           }`}
                       >
-                        <CldImage
+                        <Image
                           src={image.src}
                           alt={image.alt || `Product thumbnail ${index + 1}`}
                           fill
@@ -406,7 +406,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                 <div className="md:hidden">
                   {/* Main Image */}
                   <div className="relative aspect-square w-full">
-                    <CldImage
+                    <Image
                       src={selectedImage}
                       alt={relatedImages[currentImageIndex]?.alt || "Product image"}
                       fill
@@ -430,7 +430,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                           : 'border border-gray-200'
                           }`}
                       >
-                        <CldImage
+                        <Image
                           src={image.src}
                           alt={image.alt || `Product thumbnail ${index + 1}`}
                           fill
@@ -478,13 +478,13 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                 {/* Mobile View - Single Column */}
                 <div className="grid grid-cols-1 gap-4 md:hidden">
                   {relatedImages.map((image, index) => (
-                    <div key={index} className="relative aspect-square w-full">
-                      <CldImage
+                    <div key={index} className="relative aspect-square">
+                      <Image
                         src={image.src}
-                        alt={image.alt || "Related product image"}
+                        alt={image.alt || "Product image"}
                         fill
-                        className="object-contain bg-white rounded-lg"
-                        sizes="100vw"
+                        className="object-cover rounded"
+                        sizes="160px"
                       />
                     </div>
                   ))}
@@ -501,7 +501,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                       }}
                       className="relative aspect-square hover:opacity-90 transition-opacity"
                     >
-                      <CldImage
+                      <Image
                         src={image.src}
                         alt={image.alt || "Related product image"}
                         fill
@@ -603,7 +603,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                 {relatedImages.slice(1).map((image, index) => (
                   <div key={index} className="relative group">
                     <div className="aspect-square relative rounded-lg overflow-hidden border border-gray-200">
-                      <CldImage
+                      <Image
                         src={image.src}
                         alt={image.alt || `Product image ${index + 1}`}
                         fill
@@ -670,7 +670,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                       </svg>
                     </div>
                     <div className="relative h-16 w-16 rounded-lg overflow-hidden border border-gray-100">
-                      <CldImage
+                      <Image
                         src={image.src}
                         alt="Thumbnail"
                         fill

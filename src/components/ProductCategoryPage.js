@@ -1,6 +1,6 @@
 "use client"
 import { motion, AnimatePresence } from "framer-motion";
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingSpinner from './LoadingSpinner';
@@ -650,7 +650,7 @@ export default function ProductCategoryPage({
                               >
                                 <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
                                   <div className="relative aspect-square bg-white">
-                                    <CldImage
+                                    <Image
                                       src={product.image}
                                       alt={product.name}
                                       fill
@@ -729,7 +729,7 @@ export default function ProductCategoryPage({
                                 >
                                   <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
                                     <div className="relative aspect-square bg-white">
-                                      <CldImage
+                                      <Image
                                         src={product.image}
                                         alt={product.name}
                                         fill
@@ -810,7 +810,7 @@ export default function ProductCategoryPage({
                   >
                     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
                       <div className="relative aspect-square bg-white">
-                        <CldImage
+                        <Image
                           src={product.image}
                           alt={product.name}
                           fill

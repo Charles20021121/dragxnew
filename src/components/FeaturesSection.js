@@ -1,17 +1,17 @@
 "use client"
-import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 
 const features = [
   {
-    src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1720977970/ribv7ti1fp88lemo3kqg_yc5ttq.webp',
+    src: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ribv7ti1fp88lemo3kqg_yc5ttq.webp',
     alt: 'XTRAORDINARY'
   },
   {
-    src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1720977969/ihmfp6kd5pz24oqupuum_thcxb6.webp',
+    src: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ihmfp6kd5pz24oqupuum_thcxb6.webp',
     alt: 'XPAND'
   },
   {
-    src: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1720977968/ffj443gnct01sy9rm2lz_lic1fg.webp',
+    src: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ffj443gnct01sy9rm2lz_lic1fg.webp',
     alt: 'XCLUSIVE'
   }
 ]
@@ -42,7 +42,7 @@ export default function FeaturesSection() {
               className="feature-card bg-white rounded-lg p-8 shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
             >
               <div className="flex justify-center items-center">
-                <CldImage
+                <Image
                   src={feature.src}
                   alt={feature.alt}
                   width={800}

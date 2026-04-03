@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: 'DRAGX - Malaysia\'s #1 Car Accessories & Automotive Solutions',
     description: 'Malaysia\'s leading car accessories and automotive solutions provider',
-    images: ['https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp'],
+    images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp'],
   }
 };
 
@@ -21,7 +21,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col">
       <HeroSection
         images={[
-                    "https://res.cloudinary.com/dmkxx68km/image/upload/v1725450335/epz5butosofn5h6jxvqu.webp",
+                    "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp",
           "/home/lynobanner.webp",
           "/home/gallerybanner.webp",
 

@@ -89,7 +89,7 @@ export default function Locations() {
       <div
         className="relative bg-cover bg-center py-5"
         style={{
-          backgroundImage: 'url(https://res.cloudinary.com/dmkxx68km/image/upload/v1725277309/obxfovzofmswunpamu9k.jpg)'
+          backgroundImage: 'url(https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/obxfovzofmswunpamu9k.webp)'
         }}
       >
         {/* 背景遮罩 */}

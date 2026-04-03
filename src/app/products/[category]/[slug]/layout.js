@@ -17,7 +17,7 @@ export async function generateMetadata({ params }) {
   console.log('🔍 generateMetadata 被调用:', { category, slug, baseUrl });
 
   // 從數據庫獲取產品信息（改进：使用 same 组中按日期最早的图片作为 OG 图，即“第一张照片”）
-  let productImage = 'https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp'; // 默認圖片
+  let productImage = 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp'; // 默認圖片
   let productName = '';
 
   try {

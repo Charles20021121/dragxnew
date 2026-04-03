@@ -103,7 +103,7 @@ export default function Products() {
   return (
     <main className="min-h-screen">
       <HeroSection
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp"
+        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp"
         aspectRatio="1601/501"
       />
       <motion.div

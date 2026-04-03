@@ -259,7 +259,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
         products={products}
         categoryPath={category}
         isAdmin={true}
-        heroImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp"
+        heroImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp"
         onDelete={handleDelete}
         onEdit={handleEdit}
         loading={loading}

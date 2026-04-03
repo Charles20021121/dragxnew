@@ -6,7 +6,7 @@ export const metadata = {
     title: 'DX Silence - Automotive Noise Cancellation & Soundproofing | DRAGX Malaysia',
     description: 'Block the car noise with DX Silence. 90% Noise Cancellation, Full Car Protection, and Lifetime Warranty.',
     images: [{
-      url: 'https://res.cloudinary.com/dmkxx68km/image/upload/v1739512778/i3nqmuukuo4nvq5puo6u.jpg',
+      url: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/i3nqmuukuo4nvq5puo6u.webp',
       width: 1200,
       height: 630,
       alt: 'DX Silence - Car Soundproofing System',

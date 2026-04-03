@@ -8,7 +8,7 @@ import 'swiper/css/pagination';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from "framer-motion";
-import { CldImage } from 'next-cloudinary';
+import { Button } from "@/components/ui/button";
 
 export default function HeroSection({ image, images, mobileImage, aspectRatio, mobileAspectRatio }) {
   // 如果传入了images数组，使用轮播；否则使用单张图片
@@ -42,7 +42,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   priority
                 />
               ) : (
-                <CldImage
+                <Image
                   src={heroImages[0]}
                   alt="Hero Image"
                   fill
@@ -65,7 +65,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   priority
                 />
               ) : (
-                <CldImage
+                <Image
                   src={heroImages[0]}
                   alt="Hero Image"
                   fill
@@ -96,7 +96,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   priority
                 />
               ) : (
-                <CldImage
+                <Image
                   src={mobileImage || heroImages[0]}
                   alt="Hero Image"
                   fill
@@ -119,7 +119,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   priority
                 />
               ) : (
-                <CldImage
+                <Image
                   src={mobileImage || heroImages[0]}
                   alt="Hero Image"
                   fill
@@ -196,7 +196,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                             priority={index === 0}
                           />
                         ) : (
-                          <CldImage
+                          <Image
                             src={imageUrl}
                             alt={`Hero Image ${index + 1}`}
                             fill
@@ -219,7 +219,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                             priority={index === 0}
                           />
                         ) : (
-                          <CldImage
+                          <Image
                             src={imageUrl}
                             alt={`Hero Image ${index + 1}`}
                             fill
@@ -243,7 +243,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                           priority={index === 0}
                         />
                       ) : (
-                        <CldImage
+                        <Image
                           src={imageUrl}
                           alt={`Hero Image ${index + 1}`}
                           fill
@@ -275,7 +275,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                             priority={index === 0}
                           />
                         ) : (
-                          <CldImage
+                          <Image
                             src={mobileImage || imageUrl}
                             alt={`Hero Image ${index + 1}`}
                             fill
@@ -298,7 +298,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                             priority={index === 0}
                           />
                         ) : (
-                          <CldImage
+                          <Image
                             src={mobileImage || imageUrl}
                             alt={`Hero Image ${index + 1}`}
                             fill
@@ -322,7 +322,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                           priority={index === 0}
                         />
                       ) : (
-                        <CldImage
+                        <Image
                           src={mobileImage || imageUrl}
                           alt={`Hero Image ${index + 1}`}
                           fill

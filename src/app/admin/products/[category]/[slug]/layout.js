@@ -6,7 +6,7 @@ export async function generateMetadata({ params }) {
  
   
   // 從數據庫獲取產品信息
-  let productImage = 'https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp'; // 默認圖片
+  let productImage = 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp'; // 默認圖片
   
   try {
     const connection = await pool.getConnection();

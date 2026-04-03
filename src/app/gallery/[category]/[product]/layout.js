@@ -5,7 +5,7 @@ export async function generateMetadata({ params }) {
   const { category, product } = resolvedParams;
   
   // 從數據庫獲取產品信息
-  let productImage = 'https://res.cloudinary.com/dmkxx68km/image/upload/v1729680828/lyeylq4n5vfrh5n39izv.webp'; // 默認圖片
+  let productImage = 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/lyeylq4n5vfrh5n39izv.webp'; // 默認圖片
   let productName = '';
   
   try {

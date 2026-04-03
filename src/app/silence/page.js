@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CldImage } from 'next-cloudinary'
+import Image from 'next/image'
 import HeroSection from "@/components/HeroSection"
 import { useProduct } from '@/contexts/ProductContext'
 
@@ -87,11 +87,11 @@ export default function SilencePage() {
   return (
     <main>
       <HeroSection
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1739513529/vezb74clm89wdwzadtud.webp"
+        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/vezb74clm89wdwzadtud.webp"
         aspectRatio="3334/1042"
       />
       <div className="bg-black bg-no-repeat bg-cover bg-center" style={{
-        backgroundImage: `url('https://res.cloudinary.com/dmkxx68km/image/upload/v1739514134/q45ew1xcvjtd43klbcql.webp')`
+        backgroundImage: `url('https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/q45ew1xcvjtd43klbcql.webp')`
       }}>
 
         {/* 分類切換區域 */}
@@ -168,7 +168,7 @@ export default function SilencePage() {
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                   className="relative"
                 >
-                  <CldImage
+                  <Image
                     unoptimized
                     src={product.image}
                     alt="Product Image"
@@ -188,32 +188,32 @@ export default function SilencePage() {
         </div>
       </div>
       <HeroSection
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1739526265/t2nairvmqzh3465yf0ry.webp"
-        mobileImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1739527999/joo4pf3evml9vtfs6ads.webp"
+        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/t2nairvmqzh3465yf0ry.webp"
+        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/joo4pf3evml9vtfs6ads.webp"
         aspectRatio="3334/1277"
         mobileAspectRatio="3334/2479"
       />
       <HeroSection
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1739526656/l9vs63elicroo5p9eocz.webp"
-        mobileImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1739527999/teuxfnrwq7awfns0lsob.webp"
+        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/l9vs63elicroo5p9eocz.webp"
+        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/teuxfnrwq7awfns0lsob.webp"
         aspectRatio="3334/1277"
         mobileAspectRatio="3334/1680"
       />
       <HeroSection
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1739526656/uav09ng6ndhuv84w7aoa.webp"
-        mobileImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1739527999/g5uclbikf5kzfzhnhdde.webp"
+        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/uav09ng6ndhuv84w7aoa.webp"
+        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/g5uclbikf5kzfzhnhdde.webp"
         aspectRatio="3334/1277"
         mobileAspectRatio="3334/2154"
       />
       <HeroSection
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1739526656/to2qmvww2hjs1aeualfc.webp"
-        mobileImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1739527999/tgxoqvacn6rmdm95phit.webp"
+        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/to2qmvww2hjs1aeualfc.webp"
+        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/tgxoqvacn6rmdm95phit.webp"
         aspectRatio="3334/1541"
         mobileAspectRatio="3334/2154"
       />
       <HeroSection
-        image="https://res.cloudinary.com/dmkxx68km/image/upload/v1739526696/r0yi1kfx04qf8ji279pz.webp"
-        mobileImage="https://res.cloudinary.com/dmkxx68km/image/upload/v1739527998/rbb6tvepk4zqpf48b7tk.webp"
+        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/r0yi1kfx04qf8ji279pz.webp"
+        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/rbb6tvepk4zqpf48b7tk.webp"
         aspectRatio="3334/877"
         mobileAspectRatio="3334/1154"
       />

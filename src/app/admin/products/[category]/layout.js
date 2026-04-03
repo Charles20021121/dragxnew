@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: `${categoryName} - DRAGX Car Accessories`,
       description: `Explore our range of ${categoryTitles[category] || category} for your vehicle`,
-      images: ['https://res.cloudinary.com/dmkxx68km/image/upload/v1725611928/ukzmrw5nzcsovbnb31nd.webp'],
+      images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp'],
     }
   };
 }

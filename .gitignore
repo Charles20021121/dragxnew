@@ -1,4 +1,11 @@
 node_modules
 .next
-
 *.zip
+.env.local
+
+# Cloud Migration Backups (Huge files)
+cloudinary_backup/
+compressed_assets/
+
+# Migration Scripts (Single use)
+scripts/
