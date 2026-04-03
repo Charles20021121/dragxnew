@@ -5,7 +5,7 @@ export const metadata = {
     openGraph: {
         title: 'Android Player - Smart Car Infotainment System | DRAGX Malaysia',
         description: 'Upgrade to a smarter driving experience. Features 9"/10"/12" displays, Wireless CarPlay/Android Auto, and unlimited entertainment apps.',
-        images: ['https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977941/lz4oh3mzwlmq7aiquwmf_f5e6ze?_a=BAVFB+DW0'],
+        images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/lz4oh3mzwlmq7aiquwmf_f5e6ze.webp'],
     }
 }
 

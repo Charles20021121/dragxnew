@@ -12,17 +12,17 @@ const products = [
   },
   {
     Name: "ANDROID PLAYER",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977941/lz4oh3mzwlmq7aiquwmf_f5e6ze?_a=BAVFB+DW0",
+    ImgUrl: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/lz4oh3mzwlmq7aiquwmf_f5e6ze.webp",
     domainUrl: "/androidplayer"
   },
   {
     Name: "AMBIENTLIGHT",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977943/m75j3e1uy8kqdc0iiyzy_dnk0kb?_a=BAVFB+DW0",
+    ImgUrl: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/m75j3e1uy8kqdc0iiyzy_dnk0kb.webp",
     domainUrl: "/ambientlight"
   },
   {
     Name: "CONTI DECODER",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1729013791/gcpdyz9k7cs9pgdcggen?_a=BAVFB+DW0",
+    ImgUrl: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/gcpdyz9k7cs9pgdcggen.webp",
     domainUrl: "/contidecoder"
   },
   {
@@ -32,7 +32,7 @@ const products = [
   },
   {
     Name: "POWER BOOT",
-    ImgUrl: "https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977940/hhtep5dkd3wdixyn8fsv_rdiujs?_a=BAVFB+DW0",
+    ImgUrl: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/hhtep5dkd3wdixyn8fsv_rdiujs.webp",
     domainUrl: "/powerboot"
   },
 ];

@@ -5,7 +5,7 @@ export const metadata = {
   openGraph: {
     title: 'DX Conti Decoder - Wireless CarPlay, Android Auto & 360 Camera Interface | DRAGX Malaysia',
     description: 'Upgrade your factory screen with Wireless CarPlay, Android Auto, and 360° View. Standard OEM integration.',
-    images: ['https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1729013791/gcpdyz9k7cs9pgdcggen?_a=BAVAZGBz0'],
+    images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/gcpdyz9k7cs9pgdcggen.webp'],
   }
 }
 

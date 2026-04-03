@@ -103,24 +103,7 @@ export async function generateMetadata({ params }) {
         productImage = `${baseUrl}${productImage}`;
       }
 
-      // 🔧 WhatsApp 兼容性修复：使用 Cloudinary 的自动格式选择
-      // f_auto 会根据客户端自动选择最佳格式（WhatsApp 会得到 JPEG）
-      if (productImage && productImage.includes('cloudinary.com')) {
-        console.log('🔍 原始图片 URL:', productImage);
 
-        if (productImage.includes('/upload/')) {
-          // 添加 Cloudinary 优化参数：
-          // - f_auto: 自动选择格式（浏览器得到 WebP，WhatsApp 得到 JPEG）
-          // - q_auto:good: 自动优化质量
-          // - w_1200,h_630,c_fill: 调整为标准 OG 尺寸
-          productImage = productImage.replace(
-            '/upload/',
-            '/upload/f_auto,q_auto:good,w_1200,h_630,c_fill/'
-          );
-        }
-
-        console.log('✅ 优化后的图片 URL:', productImage);
-      }
     } finally {
       connection.release();
     }
@@ -173,7 +156,7 @@ export async function generateMetadata({ params }) {
         width: 1200,
         height: 630,
         alt: `${title} - ${categoryTitle}`,
-        type: 'image/jpeg',
+        type: 'image/webp',
       }],
     },
     twitter: {

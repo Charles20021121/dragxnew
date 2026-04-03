@@ -17,10 +17,10 @@ export async function generateMetadata({ params }) {
   // 对应首页 ProductSection 的图片
   const categoryImages = {
     soundproof: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/i3nqmuukuo4nvq5puo6u.webp',
-    androidplayer: 'https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977941/lz4oh3mzwlmq7aiquwmf_f5e6ze?_a=BAVFB+DW0',
-    ambientlight: 'https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977943/m75j3e1uy8kqdc0iiyzy_dnk0kb?_a=BAVFB+DW0',
-    contidecoder: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx//res.cloudinary.com/dmkxx68km/image/upload/v1720977940/damwcrijnzpulm62k7ce_b31nnw.webp',
-    powerboot: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx//dragx.asia/alphardvellfire/alphardvellfire.webp',
+    androidplayer: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/lz4oh3mzwlmq7aiquwmf_f5e6ze.webp',
+    ambientlight: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/m75j3e1uy8kqdc0iiyzy_dnk0kb.webp',
+    contidecoder: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/gcpdyz9k7cs9pgdcggen.webp',
+    powerboot: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/hhtep5dkd3wdixyn8fsv_rdiujs.webp',
     bmw: 'https://dragx.asia/bmw/BMW FA.jpg',
     mercedes: 'https://dragx.asia/mercedes/categories-08.jpg',
   };

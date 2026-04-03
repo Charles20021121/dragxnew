@@ -24,10 +24,12 @@ export default function CategoryProducts({ params: paramsPromise }) {
     filter1: '',
     Specifications: '',
     android_series: '',
+    custom_filter: '',
     price: ''
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [existingFilters, setExistingFilters] = useState([]);
   const router = useRouter()
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUploading, setIsUploading] = useState(false)
@@ -48,6 +50,14 @@ export default function CategoryProducts({ params: paramsPromise }) {
       }));
 
       setProducts(processedProducts);
+
+      // 提取已存在的 custom_filter 選項
+      const filters = [...new Set(data
+        .filter(p => p.custom_filter)
+        .map(p => p.custom_filter)
+      )].sort();
+      setExistingFilters(filters);
+
       setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -69,22 +79,18 @@ export default function CategoryProducts({ params: paramsPromise }) {
       setIsUploading(true); // 開始上傳時顯示 loading
       let updatedFormData = { ...formData };
 
-      // 如果有選擇文件，先上傳圖片
+      // 如果有選擇文件，先上傳图片到 R2
       if (selectedFile) {
         setUploadProgress(1);
         const imageFormData = new FormData();
         imageFormData.append('file', selectedFile);
-        imageFormData.append('upload_preset', 'newdragx');
 
-        const uploadRes = await fetch(
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-          {
-            method: 'POST',
-            body: imageFormData
-          }
-        );
+        const uploadRes = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: imageFormData
+        });
 
-        if (!uploadRes.ok) throw new Error('Upload failed');
+        if (!uploadRes.ok) throw new Error('Upload to R2 failed');
 
         const uploadData = await uploadRes.json();
         setUploadProgress(100);
@@ -122,6 +128,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
           filter1: '',
           Specifications: '',
           android_series: '',
+          custom_filter: '',
           price: ''
         });
         setSelectedFile(null);
@@ -544,6 +551,47 @@ export default function CategoryProducts({ params: paramsPromise }) {
                             </select>
                           </div>
                         )}
+
+                        {/* Custom Filter Category - 只在特定類別顯示 */}
+                        {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others'].includes(category.toLowerCase()) && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Custom Filter Category</label>
+                            <div className="mt-1 space-y-2">
+                              <select
+                                className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                                value={existingFilters.includes(formData.custom_filter) ? formData.custom_filter : (formData.custom_filter ? 'new' : '')}
+                                onChange={(e) => {
+                                  if (e.target.value === 'new') {
+                                    setFormData(prev => ({ ...prev, custom_filter: '' }));
+                                  } else {
+                                    setFormData(prev => ({ ...prev, custom_filter: e.target.value }));
+                                  }
+                                }}
+                              >
+                                <option value="">No Filter (All)</option>
+                                {existingFilters.map(filter => (
+                                  <option key={filter} value={filter}>{filter}</option>
+                                ))}
+                                <option value="new" className="font-bold text-[#1c5434]">+ Add New Category...</option>
+                              </select>
+
+                              {(!existingFilters.includes(formData.custom_filter) || formData.custom_filter === '') && (
+                                <div className="relative">
+                                  <input
+                                    type="text"
+                                    name="custom_filter"
+                                    value={formData.custom_filter}
+                                    onChange={handleChange}
+                                    className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                                    placeholder="Type new category name here..."
+                                  />
+                                  <p className="mt-1 text-xs text-gray-500 italic">Enter a new name to create a new filter tag.</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
                       </div>
                     </div>
                   </div>

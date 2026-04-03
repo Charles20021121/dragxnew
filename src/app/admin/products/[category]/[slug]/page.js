@@ -4,7 +4,6 @@ import ProductDetail from "@/components/ProductDetail";
 import { Suspense } from "react";
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { useRouter } from 'next/navigation';
-import { CldUploadWidget } from 'next-cloudinary';
 
 export default function ProductPage({ params: paramsPromise }) {
   const router = useRouter();
@@ -273,19 +272,15 @@ export default function ProductPage({ params: paramsPromise }) {
 
       // 順序上傳到 Cloudinary，實時更新進度
       for (const file of selectedFiles) {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'newdragx');
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', file);
 
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-          {
-            method: 'POST',
-            body: formData
-          }
-        );
+        const res = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: uploadFormData
+        });
 
-        if (!res.ok) throw new Error('Upload failed');
+        if (!res.ok) throw new Error('Upload to R2 failed');
         const data = await res.json();
 
         uploadedImages.push({

@@ -1,17 +1,40 @@
 import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
-import { v2 as cloudinary } from 'cloudinary'
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-})
+const ACCOUNT_ID = "0ec9e4b9094d340d1e3b9530f8a07bcc";
+const ACCESS_KEY_ID = "c3137344dab444cc7d472e85a295c86c";
+const SECRET_ACCESS_KEY = "040469803914f825110df2e3951566dcbd02d099327bf62443257872262e7417";
+const BUCKET_NAME = "dragx";
+const R2_PUBLIC_BASE = "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/";
+
+const s3Client = new S3Client({
+  region: "auto",
+  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: ACCESS_KEY_ID,
+    secretAccessKey: SECRET_ACCESS_KEY,
+  },
+});
+
+// 從 R2 URL 提取 key 並刪除文件（用於替換圖片時刪除舊圖）
+async function deleteFromR2ByUrl(url) {
+  if (!url || !url.includes(R2_PUBLIC_BASE)) return;
+  try {
+    const key = url.replace(R2_PUBLIC_BASE, '');
+    await s3Client.send(new DeleteObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: key,
+    }));
+    console.log('R2 deleted old image:', key);
+  } catch (error) {
+    console.error('R2 delete error:', error);
+  }
+}
 
 export async function GET(request, { params }) {
   const resolvedParams = await params
   const { category, product } = resolvedParams
-  const productName = decodeURIComponent(product).replace(/-/g, ' ')
 
   try {
     const connection = await pool.getConnection()
@@ -54,13 +77,11 @@ export async function PUT(request, { params }) {
 
   try {
     const data = await request.json()
-
     const { Name, buy, Specifications, description } = data
 
     connection = await pool.getConnection()
     await connection.beginTransaction()
 
-    // 首先獲取產品的 same 值和 Id
     const [productRow] = await connection.query(
       `SELECT Id, same FROM gallery 
        WHERE categories = ? 
@@ -75,7 +96,6 @@ export async function PUT(request, { params }) {
 
     const { same, Id } = productRow[0]
 
-    // 更新所有相關圖片的共同資訊
     const [result] = await connection.query(
       `UPDATE gallery 
        SET Name = ?,
@@ -93,22 +113,18 @@ export async function PUT(request, { params }) {
     await connection.commit()
     return NextResponse.json({
       success: true,
-      updatedName: Name  // 返回更新後的名稱
+      updatedName: Name
     })
 
   } catch (error) {
     console.error('Update operation failed:', error)
-    if (connection) {
-      await connection.rollback()
-    }
+    if (connection) await connection.rollback()
     return NextResponse.json(
       { success: false, message: error.message || 'Server error' },
       { status: 500 }
     )
   } finally {
-    if (connection) {
-      connection.release()
-    }
+    if (connection) connection.release()
   }
 }
 
@@ -116,7 +132,6 @@ export async function PATCH(request) {
   let connection;
   try {
     const data = await request.json()
-    // Support both single update and batch updates
     const updates = Array.isArray(data) ? data : [data]
 
     if (updates.length === 0) {
@@ -127,18 +142,13 @@ export async function PATCH(request) {
     await connection.beginTransaction()
 
     for (const update of updates) {
-      const { id, link, date, newUrl, newPublicId, deletePublicId } = update
+      const { id, link, date, newUrl, newPublicId, deleteOldUrl } = update
 
       if (!id) continue
 
-      // Handle Cloudinary deletion if requested
-      if (deletePublicId) {
-        try {
-          await cloudinary.uploader.destroy(deletePublicId)
-        } catch (cloudinaryError) {
-          console.error('Cloudinary deletion failed:', cloudinaryError)
-          // Continue execution - failure to delete old image shouldn't block the update
-        }
+      // 替換舊圖時，從 R2 刪除舊圖文件
+      if (deleteOldUrl) {
+        await deleteFromR2ByUrl(deleteOldUrl)
       }
 
       const fields = []
@@ -176,17 +186,13 @@ export async function PATCH(request) {
     await connection.commit()
     return NextResponse.json({ success: true, message: 'Gallery updated' })
   } catch (error) {
-    if (connection) {
-      await connection.rollback()
-    }
+    if (connection) await connection.rollback()
     console.error('Update gallery failed:', error)
     return NextResponse.json(
       { success: false, message: error.message || 'Server error' },
       { status: 500 }
     )
   } finally {
-    if (connection) {
-      connection.release()
-    }
+    if (connection) connection.release()
   }
 }

@@ -1,13 +1,36 @@
 import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
-import { v2 as cloudinary } from 'cloudinary'
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 
-// 配置 Cloudinary
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-})
+const ACCOUNT_ID = "0ec9e4b9094d340d1e3b9530f8a07bcc";
+const ACCESS_KEY_ID = "c3137344dab444cc7d472e85a295c86c";
+const SECRET_ACCESS_KEY = "040469803914f825110df2e3951566dcbd02d099327bf62443257872262e7417";
+const BUCKET_NAME = "dragx";
+const R2_PUBLIC_BASE = "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/";
+
+const s3Client = new S3Client({
+  region: "auto",
+  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: ACCESS_KEY_ID,
+    secretAccessKey: SECRET_ACCESS_KEY,
+  },
+});
+
+// 從 R2 URL 提取 key 並刪除文件
+async function deleteFromR2(url) {
+  if (!url || !url.includes(R2_PUBLIC_BASE)) return;
+  try {
+    const key = url.replace(R2_PUBLIC_BASE, '');
+    await s3Client.send(new DeleteObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: key,
+    }));
+    console.log('R2 deleted:', key);
+  } catch (error) {
+    console.error('R2 delete error:', error);
+  }
+}
 
 // 獲取單個產品
 export async function GET(request, { params: paramsPromise }) {
@@ -42,15 +65,12 @@ export async function GET(request, { params: paramsPromise }) {
 
 // 更新產品
 export async function PUT(request, { params: paramsPromise }) {
-  // 先等待 params
   const params = await paramsPromise;
   const connection = await pool.getConnection();
 
   try {
     const data = await request.json();
 
-    // 只更新當前產品的資料，不批量更新所有副圖
-    // 不更新 date 字段，保持原來的順序
     const [result] = await connection.query(
       `UPDATE products SET
         Name = ?,
@@ -107,7 +127,6 @@ export async function DELETE(request, { params }) {
   try {
     await connection.beginTransaction();
 
-    // 1. 檢查產品是否存在並獲取相關信息
     const [productCheck] = await connection.query(
       'SELECT * FROM products WHERE Id = ?',
       [id]
@@ -119,26 +138,17 @@ export async function DELETE(request, { params }) {
 
     const product = productCheck[0];
 
-    // 2. 如果是主圖（Id 和 same 相同），刪除所有相關圖片
     if (product.Id === product.same) {
-      // 獲取所有相關圖片
+      // 主圖：刪除整組相關圖片（DB + R2）
       const [relatedImages] = await connection.query(
         'SELECT * FROM products WHERE same = ?',
         [product.same]
       );
 
-      // 從 Cloudinary 刪除所有相關圖片
       for (const image of relatedImages) {
-        if (image.publicId) {
-          try {
-            await cloudinary.uploader.destroy(image.publicId);
-          } catch (error) {
-            console.error('Cloudinary delete error:', error);
-          }
-        }
+        await deleteFromR2(image.Url);
       }
 
-      // 從數據庫刪除所有相關圖片
       const [deleteResult] = await connection.query(
         'DELETE FROM products WHERE same = ?',
         [product.same]
@@ -148,14 +158,8 @@ export async function DELETE(request, { params }) {
         throw new Error('Failed to delete related images');
       }
     } else {
-      // 如果不是主圖，只刪除單張圖片
-      if (product.publicId) {
-        try {
-          await cloudinary.uploader.destroy(product.publicId);
-        } catch (error) {
-          console.error('Cloudinary delete error:', error);
-        }
-      }
+      // 副圖：只刪除這一張（DB + R2）
+      await deleteFromR2(product.Url);
 
       const [deleteResult] = await connection.query(
         'DELETE FROM products WHERE Id = ?',
@@ -186,4 +190,4 @@ export async function DELETE(request, { params }) {
   } finally {
     connection.release();
   }
-} 
+}

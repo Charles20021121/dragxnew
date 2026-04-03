@@ -5,7 +5,7 @@ export const metadata = {
   openGraph: {
     title: 'DX Ambient Light - Custom Car Atmosphere & OEM Lighting | DRAGX Malaysia',
     description: 'Illuminate your drive. Features App control, music sync, and OEM seamless integration for a premium interior.',
-    images: ['https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977943/m75j3e1uy8kqdc0iiyzy_dnk0kb?_a=BAVAZGBz0'],
+    images: ['https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/m75j3e1uy8kqdc0iiyzy_dnk0kb.webp'],
   }
 }
 

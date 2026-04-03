@@ -1,15 +1,38 @@
 import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
-import { v2 as cloudinary } from 'cloudinary'
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 
-// 配置 Cloudinary
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-})
+const ACCOUNT_ID = "0ec9e4b9094d340d1e3b9530f8a07bcc";
+const ACCESS_KEY_ID = "c3137344dab444cc7d472e85a295c86c";
+const SECRET_ACCESS_KEY = "040469803914f825110df2e3951566dcbd02d099327bf62443257872262e7417";
+const BUCKET_NAME = "dragx";
+const R2_PUBLIC_BASE = "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/";
 
-// 添加 GET 方法
+const s3Client = new S3Client({
+  region: "auto",
+  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: ACCESS_KEY_ID,
+    secretAccessKey: SECRET_ACCESS_KEY,
+  },
+});
+
+// 從 R2 URL 提取 key 並刪除文件
+async function deleteFromR2(url) {
+  if (!url || !url.includes(R2_PUBLIC_BASE)) return;
+  try {
+    const key = url.replace(R2_PUBLIC_BASE, '');
+    await s3Client.send(new DeleteObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: key,
+    }));
+    console.log('R2 deleted:', key);
+  } catch (error) {
+    console.error('R2 delete error:', error);
+  }
+}
+
+// 獲取 Gallery 分類列表
 export async function GET(request, { params }) {
   const resolvedParams = await params
   const { category } = resolvedParams
@@ -37,18 +60,18 @@ export async function GET(request, { params }) {
   }
 }
 
+// 刪除 Gallery 圖片
 export async function DELETE(request, { params }) {
   const resolvedParams = await params
   const { category } = resolvedParams;
   const { id, publicId, same } = await request.json();
   const connection = await pool.getConnection();
-  
+
   try {
     await connection.beginTransaction();
-    
+
     console.log('Delete request:', { category, id, publicId, same });
 
-    // 檢查圖片是否存在
     const [galleryCheck] = await connection.query(
       'SELECT * FROM gallery WHERE Id = ? AND categories = ?',
       [id, category]
@@ -60,28 +83,17 @@ export async function DELETE(request, { params }) {
 
     const image = galleryCheck[0];
 
-    // 如果是主圖片（Id 和 same 相同），刪除所有相關圖片
     if (image.Id === image.same) {
-      // 獲取所有相關圖片的 publicId
+      // 主圖：刪除整組相關圖片（DB + R2）
       const [relatedImages] = await connection.query(
-        'SELECT publicId FROM gallery WHERE same = ?',
+        'SELECT Url FROM gallery WHERE same = ?',
         [image.same]
       );
 
-      // 從 Cloudinary 刪除所有相關圖片
       for (const relatedImage of relatedImages) {
-        if (relatedImage.publicId) {
-          try {
-            const cloudinaryResult = await cloudinary.uploader.destroy(relatedImage.publicId);
-            console.log('Cloudinary delete result:', cloudinaryResult);
-          } catch (error) {
-            console.error('Cloudinary delete error:', error);
-            // 繼續刪除其他圖片，不中斷流程
-          }
-        }
+        await deleteFromR2(relatedImage.Url);
       }
 
-      // 從數據庫刪除所有相關圖片
       const [deleteResult] = await connection.query(
         'DELETE FROM gallery WHERE same = ?',
         [image.same]
@@ -89,18 +101,9 @@ export async function DELETE(request, { params }) {
 
       console.log(`Deleted ${deleteResult.affectedRows} related images`);
     } else {
-      // 如果不是主圖片，只刪除單張圖片
-      if (publicId) {
-        try {
-          const cloudinaryResult = await cloudinary.uploader.destroy(publicId);
-          console.log('Cloudinary delete result:', cloudinaryResult);
-        } catch (error) {
-          console.error('Cloudinary delete error:', error);
-          throw new Error('Failed to delete image from Cloudinary');
-        }
-      }
+      // 副圖：只刪除這一張（DB + R2）
+      await deleteFromR2(image.Url);
 
-      // 從數據庫刪除單張圖片
       const [result] = await connection.query(
         'DELETE FROM gallery WHERE Id = ? AND categories = ?',
         [id, category]
@@ -112,7 +115,7 @@ export async function DELETE(request, { params }) {
     }
 
     await connection.commit();
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Image(s) deleted successfully'
     });
@@ -121,8 +124,8 @@ export async function DELETE(request, { params }) {
     await connection.rollback();
     console.error('Delete operation failed:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         message: error.message || 'Failed to delete image(s)'
       },
       { status: 500 }
@@ -130,4 +133,4 @@ export async function DELETE(request, { params }) {
   } finally {
     connection.release();
   }
-} 
+}

@@ -76,21 +76,17 @@ export default function GalleryCategory() {
         publicId: ''
       }
 
-      // 上傳圖片到 Cloudinary
+      // 上傳圖片到 R2
       if (selectedFile) {
-        const formData = new FormData()
-        formData.append('file', selectedFile)
-        formData.append('upload_preset', 'newdragx')
+        const uploadFormData = new FormData()
+        uploadFormData.append('file', selectedFile)
         
-        const uploadResponse = await fetch(
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-          {
-            method: 'POST',
-            body: formData
-          }
-        )
+        const uploadResponse = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: uploadFormData
+        })
 
-        if (!uploadResponse.ok) throw new Error('Image upload failed')
+        if (!uploadResponse.ok) throw new Error('Image upload to R2 failed')
         
         const uploadData = await uploadResponse.json()
         imageData = {

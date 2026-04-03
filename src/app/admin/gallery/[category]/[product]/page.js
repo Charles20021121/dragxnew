@@ -310,19 +310,15 @@ export default function GalleryProductPage() {
         const item = selectedNewImages[index];
         const file = item.file; // Access .file property
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'newdragx');
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', file);
 
-        const uploadRes = await fetch(
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-          {
-            method: 'POST',
-            body: formData
-          }
-        );
+        const uploadRes = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: uploadFormData
+        });
 
-        if (!uploadRes.ok) throw new Error('Failed to upload image');
+        if (!uploadRes.ok) throw new Error('Failed to upload image to R2');
         const uploadData = await uploadRes.json();
 
         // Default logic: New uploads get current time.
@@ -387,20 +383,15 @@ export default function GalleryProductPage() {
 
     setIsUploading(true);
     try {
-      // 1. Upload new image
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'newdragx');
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
 
-      const uploadRes = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: 'POST',
-          body: formData
-        }
-      );
+      const uploadRes = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: uploadFormData
+      });
 
-      if (!uploadRes.ok) throw new Error('Failed to upload new image');
+      if (!uploadRes.ok) throw new Error('Failed to upload new image to R2');
       const uploadData = await uploadRes.json();
 
       // 2. Call PATCH API to replace image and delete old one
@@ -413,7 +404,7 @@ export default function GalleryProductPage() {
           id: mainImageItem.Id,
           newUrl: uploadData.secure_url,
           newPublicId: uploadData.public_id,
-          deletePublicId: mainImageItem.publicId // Tell backend to delete old image
+          deleteOldUrl: mainImageItem.Url // Tell backend to delete old R2 image
         })
       });
 

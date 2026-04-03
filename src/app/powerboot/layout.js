@@ -6,7 +6,7 @@ export const metadata = {
     title: 'DX Power Boot - Smart Electric Tailgate System | DRAGX Malaysia',
     description: 'Electric Tailgate Make Lift Easy. Features Anti-Pinch, Remote Control, and Height Adjustment.',
     images: [{
-      url: 'https://res.cloudinary.com/dmkxx68km/image/upload/c_limit,w_1920/f_auto/q_auto/v1720977940/hhtep5dkd3wdixyn8fsv_rdiujs?_a=BAVFB+DW0',
+      url: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/hhtep5dkd3wdixyn8fsv_rdiujs.webp',
       width: 1200,
       height: 630,
       alt: 'DX Power Boot - Smart Electric Tailgate',
