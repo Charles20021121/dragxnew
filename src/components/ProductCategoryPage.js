@@ -317,7 +317,7 @@ export default function ProductCategoryPage({
     <main className="min-h-screen bg-[#f8f4ec] ">
 
       {/* 添加 Breadcrumb */}
-      <nav className="py-4 px-5">
+      <nav className="py-4 px-2">
         <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
           <li>
             <Link href={isAdmin ? "/admin" : "/"} className="text-black hover:text-[#1c5434]">
@@ -336,7 +336,7 @@ export default function ProductCategoryPage({
           </li>
         </ol>
       </nav>
-      <div className="px-5 pb-5">
+      <div className="px-2 pb-5">
         {/* androidplayer 的分類切換按鈕 */}
         {categoryPath === "androidplayer" && (
           <div className="flex justify-center mb-8 px-2">
@@ -413,93 +413,114 @@ export default function ProductCategoryPage({
           </div>
         )}
 
-
         {/* contidecoder 的分類切換按鈕 */}
         {categoryPath === "contidecoder" && (
-          <>
-            <div className="flex justify-center mb-8">
-              <div className="inline-flex items-center">
-                <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
-                  <button
-                    onClick={() => setContiFilter('appleCarplay')}
-                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${contiFilter === 'appleCarplay'
-                      ? 'bg-[#1c5434] text-white'
-                      : 'text-gray-500 hover:text-[#1c5434]'
-                      }`}
-                  >
-                    APPLE CARPLAY
-                  </button>
-                  <button
-                    onClick={() => setContiFilter('androidSystem')}
-                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${contiFilter === 'androidSystem'
-                      ? 'bg-[#1c5434] text-white'
-                      : 'text-gray-500 hover:text-[#1c5434]'
-                      }`}
-                  >
-                    ANDROID SYSTEM
-                  </button>
-                </div>
-              </div>
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
+              <button
+                onClick={() => setContiFilter('appleCarplay')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${contiFilter === 'appleCarplay'
+                  ? 'bg-[#1c5434] text-white'
+                  : 'text-gray-500 hover:text-[#1c5434]'
+                  }`}
+              >
+                APPLE CARPLAY
+              </button>
+              <button
+                onClick={() => setContiFilter('androidSystem')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${contiFilter === 'androidSystem'
+                  ? 'bg-[#1c5434] text-white'
+                  : 'text-gray-500 hover:text-[#1c5434]'
+                  }`}
+              >
+                ANDROID SYSTEM
+              </button>
             </div>
-
-            {/* 側邊欄 */}
-            <AnimatePresence>
-              {isFilterOpen && (
-                <>
-                  {/* 遮罩層 */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.5 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => setIsFilterOpen(false)}
-                    className="fixed inset-0 bg-black z-40"
-                  />
-
-                  {/* 側邊欄 */}
-                  <motion.div
-                    initial={{ x: '-100%' }}
-                    animate={{ x: 0 }}
-                    exit={{ x: '-100%' }}
-                    transition={{ type: 'tween', duration: 0.3 }}
-                    className="fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50 overflow-y-auto"
-                  >
-                    <div className="p-6">
-                      <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-lg font-bold text-[#1c5434]">Car Models</h3>
-                        <button
-                          onClick={() => setIsFilterOpen(false)}
-                          className="text-gray-400 hover:text-gray-500"
-                        >
-                          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      </div>
-
-                      <div className="space-y-2">
-                        {carModels.map(model => (
-                          <button
-                            key={model}
-                            onClick={() => {
-                              setCarFilter(model);
-                              setIsFilterOpen(false);
-                            }}
-                            className={`w-full px-4 py-2 text-left rounded-md transition-colors capitalize ${carFilter === model
-                              ? 'bg-[#1c5434] text-white'
-                              : 'text-gray-700 hover:bg-gray-100'
-                              }`}
-                          >
-                            {model === 'all' ? 'All Models' : model}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
-          </>
+          </div>
         )}
+
+        {/* 側邊欄 (通用) */}
+        <AnimatePresence>
+          {isFilterOpen && (
+            <>
+              {/* 遮罩層 */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsFilterOpen(false)}
+                className="fixed inset-0 bg-black z-40"
+              />
+
+              {/* 側邊欄 */}
+              <motion.div
+                initial={{ x: '-100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '-100%' }}
+                transition={{ type: 'tween', duration: 0.3 }}
+                className="fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50 overflow-y-auto"
+              >
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-lg font-bold text-[#1c5434]">
+                      {categoryPath === "contidecoder" ? "Car Models" : "Refinement"}
+                    </h3>
+                    <button
+                      onClick={() => setIsFilterOpen(false)}
+                      className="text-gray-400 hover:text-gray-500"
+                    >
+                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    {categoryPath === "contidecoder" ? (
+                      /* Conti Decoder Car Models */
+                      carModels.map(model => (
+                        <button
+                          key={model}
+                          onClick={() => {
+                            setCarFilter(model);
+                            setIsFilterOpen(false);
+                          }}
+                          className={`w-full px-4 py-2 text-left rounded-md transition-colors capitalize ${carFilter === model
+                            ? 'bg-[#1c5434] text-white'
+                            : 'text-gray-700 hover:bg-gray-100'
+                            }`}
+                        >
+                          {model === 'all' ? 'All Models' : model}
+                        </button>
+                      ))
+                    ) : (
+                      /* Custom Filters for other categories */
+                      customFilterOptions.map(option => (
+                        <button
+                          key={option}
+                          onClick={() => {
+                            setSelectedCustomFilter(option);
+                            setIsFilterOpen(false);
+                            // Reset pagination when filter changes
+                            const params = new URLSearchParams(searchParams);
+                            params.set('page', '1');
+                            router.push(`?${params.toString()}`);
+                          }}
+                          className={`w-full px-4 py-2 text-left rounded-md transition-colors capitalize ${selectedCustomFilter === option
+                            ? 'bg-[#1c5434] text-white'
+                            : 'text-gray-700 hover:bg-gray-100'
+                            }`}
+                        >
+                          {option === 'all' ? 'All Models' : option}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
 
         {/* Title Section */}
         <div className="mb-8">
@@ -518,15 +539,18 @@ export default function ProductCategoryPage({
               }
             </motion.h2>
 
-            {/* 漏斗按鈕 - 只在 contidecoder 頁面顯示 */}
-            {categoryPath === "contidecoder" && (
+            {/* 漏斗按鈕 - contidecoder 或 custom filter */}
+            {(categoryPath === "contidecoder" || (isCustomFilterEnabled && customFilterOptions.length > 1)) && (
               <button
                 onClick={() => setIsFilterOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-white rounded-md shadow-sm hover:bg-gray-50 transition-colors"
               >
                 <FaFilter className="text-[#1c5434]" />
                 <span className="text-sm font-medium text-gray-700 capitalize">
-                  {carFilter === 'all' ? 'All Models' : carFilter}
+                  {categoryPath === "contidecoder" 
+                    ? (carFilter === 'all' ? 'All Models' : carFilter)
+                    : (selectedCustomFilter === 'all' ? 'All Models' : selectedCustomFilter)
+                  }
                 </span>
               </button>
             )}
@@ -541,29 +565,7 @@ export default function ProductCategoryPage({
           />
         </div>
 
-        {/* Custom Filter Bar */}
-        {isCustomFilterEnabled && customFilterOptions.length > 1 && (
-          <div className="flex flex-wrap justify-center gap-3 mb-8 px-2">
-            {customFilterOptions.map(option => (
-              <button
-                key={option}
-                onClick={() => {
-                  setSelectedCustomFilter(option);
-                  // Reset pagination when filter changes
-                  const params = new URLSearchParams(searchParams);
-                  params.set('page', '1');
-                  router.push(`?${params.toString()}`);
-                }}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 shadow-sm hover:scale-105 active:scale-95 ${selectedCustomFilter === option
-                  ? 'bg-[#1c5434] text-white shadow-md scale-105'
-                  : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
-              >
-                {option.toUpperCase()}
-              </button>
-            ))}
-          </div>
-        )}
+
 
         {/* Top Pagination */}
         {categoryPath !== "androidplayer" && totalPages > 1 && (
@@ -636,7 +638,7 @@ export default function ProductCategoryPage({
                   >
                     {seriesData.products.length <= 5 ? (
                       /* 产品少时使用网格布局 */
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                         {(seriesData.products || []).map((product) => (
                           <motion.div
                             key={product.id}
@@ -648,13 +650,13 @@ export default function ProductCategoryPage({
                                 href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
                                 className="block"
                               >
-                                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                                  <div className="relative aspect-square bg-white">
+                                <div className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                  <div className="relative aspect-square">
                                     <Image
                                       src={product.image}
                                       alt={product.name}
                                       fill
-                                      className="object-contain p-2"
+                                      className="object-contain"
                                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                     />
                                   </div>
@@ -703,19 +705,19 @@ export default function ProductCategoryPage({
                         breakpoints={{
                           320: {
                             slidesPerView: Math.min(seriesData.products.length, 2),
-                            spaceBetween: 12,
+                            spaceBetween: 8,
                           },
                           640: {
                             slidesPerView: Math.min(seriesData.products.length, 3),
-                            spaceBetween: 16,
+                            spaceBetween: 12,
                           },
                           768: {
                             slidesPerView: Math.min(seriesData.products.length, 4),
-                            spaceBetween: 16,
+                            spaceBetween: 12,
                           },
                           1024: {
                             slidesPerView: Math.min(seriesData.products.length, 5),
-                            spaceBetween: 16,
+                            spaceBetween: 12,
                           },
                         }}
                       >
@@ -727,13 +729,13 @@ export default function ProductCategoryPage({
                                   href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
                                   className="block"
                                 >
-                                  <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                                    <div className="relative aspect-square bg-white">
+                                  <div className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                    <div className="relative aspect-square">
                                       <Image
                                         src={product.image}
                                         alt={product.name}
                                         fill
-                                        className="object-contain p-2"
+                                        className="object-contain"
                                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                       />
                                     </div>
@@ -795,7 +797,7 @@ export default function ProductCategoryPage({
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
           >
             {(currentProducts || []).map((product) => (
               <motion.div
@@ -808,13 +810,13 @@ export default function ProductCategoryPage({
                     href={isAdmin ? `/admin/products/${categoryPath}/${product.slug}` : `/products/${categoryPath}/${product.slug}`}
                     className="block"
                   >
-                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                      <div className="relative aspect-square bg-white">
+                    <div className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                      <div className="relative aspect-square">
                         <Image
                           src={product.image}
                           alt={product.name}
                           fill
-                          className="object-contain p-2"
+                          className="object-contain"
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         />
                       </div>

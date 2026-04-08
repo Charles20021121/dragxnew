@@ -13,13 +13,13 @@ export default function ProductCard({ product, categoryPath }) {
         href={`/products/${categoryPath}/${product.slug}`}
         className="group"
       >
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-          <div className="relative aspect-square bg-white">
+        <div className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <div className="relative aspect-square">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-contain p-2"
+              className="object-contain"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             />
           </div>

@@ -476,14 +476,14 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
             {relatedImages.length > 0 && (
               <div className="mt-8 w-full">
                 {/* Mobile View - Single Column */}
-                <div className="grid grid-cols-1 gap-4 md:hidden">
+                <div className="grid grid-cols-1 gap-0 md:hidden">
                   {relatedImages.map((image, index) => (
                     <div key={index} className="relative aspect-square">
                       <Image
                         src={image.src}
                         alt={image.alt || "Product image"}
                         fill
-                        className="object-cover rounded"
+                        className="object-cover"
                         sizes="160px"
                       />
                     </div>
@@ -491,7 +491,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                 </div>
 
                 {/* Desktop View - 2 Columns Grid */}
-                <div className="hidden md:grid grid-cols-2 gap-4">
+                <div className="hidden md:grid grid-cols-2 gap-0">
                   {relatedImages.map((image, index) => (
                     <button
                       key={index}
@@ -505,7 +505,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                         src={image.src}
                         alt={image.alt || "Related product image"}
                         fill
-                        className="object-contain bg-white rounded-lg p-1"
+                        className="object-contain"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
                     </button>
@@ -731,7 +731,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
           <div className="relative group">
             <Swiper
               modules={[Navigation]}
-              spaceBetween={16}
+              spaceBetween={8}
               navigation={{
                 nextEl: '.swiper-button-next-recommendations',
                 prevEl: '.swiper-button-prev-recommendations',
@@ -739,15 +739,15 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
               breakpoints={{
                 320: {
                   slidesPerView: 2.2,
-                  spaceBetween: 12,
+                  spaceBetween: 8,
                 },
                 640: {
                   slidesPerView: 3.5,
-                  spaceBetween: 16,
+                  spaceBetween: 12,
                 },
                 1024: {
                   slidesPerView: 5,
-                  spaceBetween: 20,
+                  spaceBetween: 12,
                 },
               }}
             >
