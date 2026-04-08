@@ -317,7 +317,7 @@ export default function ProductCategoryPage({
     <main className="min-h-screen bg-[#f8f4ec] ">
 
       {/* 添加 Breadcrumb */}
-      <nav className="py-4 px-2">
+      <nav className="py-4 px-2 md:px-5">
         <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
           <li>
             <Link href={isAdmin ? "/admin" : "/"} className="text-black hover:text-[#1c5434]">
@@ -336,7 +336,7 @@ export default function ProductCategoryPage({
           </li>
         </ol>
       </nav>
-      <div className="px-2 pb-5">
+      <div className="px-2 md:px-5 pb-5">
         {/* androidplayer 的分類切換按鈕 */}
         {categoryPath === "androidplayer" && (
           <div className="flex justify-center mb-8 px-2">
