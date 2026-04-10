@@ -55,7 +55,17 @@ export default function CategoryProducts({ params: paramsPromise }) {
       const filters = [...new Set(data
         .filter(p => p.custom_filter)
         .map(p => p.custom_filter)
-      )].sort();
+      )].sort((a, b) => {
+        const numA = a.match(/\d+/) ? parseInt(a.match(/\d+/)[0], 10) : null;
+        const numB = b.match(/\d+/) ? parseInt(b.match(/\d+/)[0], 10) : null;
+        if (numA !== null && numB !== null) {
+          if (numA !== numB) return numA - numB;
+          return a.localeCompare(b, undefined, { numeric: true });
+        }
+        if (numA !== null) return -1;
+        if (numB !== null) return 1;
+        return a.localeCompare(b, undefined, { numeric: true });
+      });
       setExistingFilters(filters);
 
       setLoading(false);

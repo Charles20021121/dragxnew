@@ -102,10 +102,33 @@ export default function ProductCategoryPage({
   const isCustomFilterEnabled = customFilterCategories.includes(categoryPath?.toLowerCase());
 
   // Extract unique custom filter values from products
-  const customFilterOptions = ['all', ...new Set(products
-    .filter(p => p.id == p.same && p.custom_filter)
-    .map(p => p.custom_filter)
-  )].sort();
+  const customFilterOptions = (() => {
+    const uniqueFilters = [...new Set(products
+      .filter(p => p.id == p.same && p.custom_filter)
+      .map(p => p.custom_filter)
+    )];
+
+    // 排序逻辑：数字优先（完整读取数字），然后是字母
+    uniqueFilters.sort((a, b) => {
+      const numA = a.match(/\d+/) ? parseInt(a.match(/\d+/)[0], 10) : null;
+      const numB = b.match(/\d+/) ? parseInt(b.match(/\d+/)[0], 10) : null;
+
+      // 如果都有数字，按数字大小排序
+      if (numA !== null && numB !== null) {
+        if (numA !== numB) return numA - numB;
+        return a.localeCompare(b, undefined, { numeric: true });
+      }
+      
+      // 有数字的排在没有数字的前面
+      if (numA !== null) return -1;
+      if (numB !== null) return 1;
+      
+      // 都没有数字，按字母排序
+      return a.localeCompare(b, undefined, { numeric: true });
+    });
+
+    return [...uniqueFilters, 'all'];
+  })();
 
   // 当 URL 查询参数改变时更新过滤器
   useEffect(() => {
