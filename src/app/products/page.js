@@ -40,7 +40,7 @@ export default function Products() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch('/api/products');
+        const res = await fetch('/api/products?list=true');
         const products = await res.json();
 
         if (Array.isArray(products)) {

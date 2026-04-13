@@ -58,12 +58,18 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
   useEffect(() => {
     async function fetchRelatedImages() {
       try {
-        // 獲取所有產品以支持跨類別推薦
-        const res = await fetch(`/api/products`);
-        const products = await res.json();
+        // 並發請求：同分類（帶圖片）+ 輕量全量（推薦用）
+        const [categoryRes, listRes] = await Promise.all([
+          fetch(`/api/products?category=${encodeURIComponent(product.categories)}`),
+          fetch(`/api/products?list=true`)
+        ]);
+        const [categoryProducts, listProducts] = await Promise.all([
+          categoryRes.json(),
+          listRes.json()
+        ]);
 
-        // 1. 獲取本產品的相關圖片（同一 same 組）
-        const sameProducts = products.filter(p =>
+        // 1. 從分類結果中過濾同一 same 組的相關圖片
+        const sameProducts = categoryProducts.filter(p =>
           p.same === product.same
         );
 
@@ -90,9 +96,9 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
           setCurrentImageIndex(0);
         }
 
-        // 2. 獲取推薦產品：主圖（id == same）、不包含目前產品所在的 same 組
-        const allPotentialRecs = products
-          .filter(p => p.id == p.same && p.same !== product.same)
+        // 2. 從輕量列表中获取推薦產品（id == same，排除當前 same 組）
+        const allPotentialRecs = listProducts
+          .filter(p => String(p.id) === String(p.same) && p.same !== product.same)
           .map(p => ({
             ...p,
             slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
