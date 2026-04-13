@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import LoadingSpinner from './LoadingSpinner';
 import { useState, useEffect } from 'react';
 
 const containerVariants = {
@@ -75,19 +74,6 @@ export default function GalleryCategoryPage({
     currentPage * ITEMS_PER_PAGE
   );
 
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
 
   // 如果沒有產品，顯示空狀態
   if (!products || products.length === 0) {

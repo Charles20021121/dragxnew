@@ -13,6 +13,51 @@ import { useProduct } from '@/contexts/ProductContext';
 import ProductCard from './ProductCard';
 import { motion, Reorder } from 'framer-motion';
 
+// ─── Recommendation logic (extracted so it can be called without awaiting) ──
+function buildRecommendations(product, allPotentialRecs) {
+  const shuffle = (arr) => arr.sort(() => 0.5 - Math.random());
+
+  if (product.categories === 'androidplayer') {
+    const sameSeries = allPotentialRecs.filter(p =>
+      p.categories === 'androidplayer' &&
+      p.filter1 === product.filter1 &&
+      p.android_series === product.android_series
+    );
+    const sameType = allPotentialRecs.filter(p =>
+      p.categories === 'androidplayer' &&
+      p.filter1 === product.filter1 &&
+      p.android_series !== product.android_series
+    );
+    const sameCategory = allPotentialRecs.filter(p =>
+      p.categories === 'androidplayer' && p.filter1 !== product.filter1
+    );
+    return [
+      ...shuffle(sameSeries),
+      ...shuffle(sameType),
+      ...shuffle(sameCategory),
+      ...shuffle(allPotentialRecs.filter(p => p.categories !== 'androidplayer'))
+    ];
+  }
+
+  if (product.categories === 'contidecoder') {
+    const sameType = allPotentialRecs.filter(p =>
+      p.categories === 'contidecoder' && p.filter1 === product.filter1
+    );
+    const sameCategory = allPotentialRecs.filter(p =>
+      p.categories === 'contidecoder' && p.filter1 !== product.filter1
+    );
+    return [
+      ...shuffle(sameType),
+      ...shuffle(sameCategory),
+      ...shuffle(allPotentialRecs.filter(p => p.categories !== 'contidecoder'))
+    ];
+  }
+
+  const sameCat = allPotentialRecs.filter(p => p.categories === product.categories);
+  const others  = allPotentialRecs.filter(p => p.categories !== product.categories);
+  return [...shuffle(sameCat), ...shuffle(others)];
+}
+
 export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage, onReorderImages }) {
   const { setCurrentProduct } = useProduct();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -23,7 +68,13 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
   const [recommendedProducts, setRecommendedProducts] = useState([]);
 
   const sliderRef = useRef(null);
-  const [loading, setLoading] = useState(true);
+  // imagesReady: controls whether to show main product content
+  // recsLoading: controls the "You may also like" section only
+  const [imagesReady, setImagesReady] = useState(
+    // If additionalImages already comes with the product, we can render immediately
+    Array.isArray(product.additionalImages) && product.additionalImages.length >= 0
+  );
+  const [recsLoading, setRecsLoading] = useState(true);
 
   // 添加拖拽相關的 state
   const [isDragging, setIsDragging] = useState(false);
@@ -57,13 +108,15 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
   useEffect(() => {
     async function fetchRelatedImages() {
       try {
-        // 如果 product 已包含 additionalImages（從分類頁傳來），直接使用，不再重複請求
-        const hasPreloadedImages = Array.isArray(product.additionalImages) && product.additionalImages.length > 0;
+        const hasPreloadedImages =
+          Array.isArray(product.additionalImages) && product.additionalImages.length >= 0;
 
-        let categoryFetch;
         if (hasPreloadedImages) {
-          // 直接構建圖片列表，跳過分類 API 請求
-          const mainImage = { src: product.image, alt: product.name, publicId: product.publicId, id: product.id, same: product.same };
+          // Build image list from preloaded data immediately — no API call needed
+          const mainImage = {
+            src: product.image, alt: product.name,
+            publicId: product.publicId, id: product.id, same: product.same
+          };
           const extraImages = product.additionalImages.map(img => ({
             src: img.Url,
             alt: img.Name || product.name,
@@ -71,106 +124,65 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
             id: img.Id,
             same: product.same
           }));
-          categoryFetch = Promise.resolve([mainImage, ...extraImages]);
-        } else {
-          // 沒有預載圖片，才去請求分類數據
-          categoryFetch = fetch(`/api/products?category=${encodeURIComponent(product.categories)}`)
+          const allImages = [mainImage, ...extraImages];
+          setRelatedImages(allImages);
+          if (allImages.length > 0) {
+            setSelectedImage(allImages[0].src);
+            setCurrentImageIndex(0);
+          }
+          // Show product content right away
+          setImagesReady(true);
+
+          // Load recommendations separately (non-blocking)
+          fetch(`/api/products?list=true`)
             .then(r => r.json())
-            .then(categoryProducts => {
-              const sameProducts = categoryProducts.filter(p => p.same === product.same);
-              return sameProducts
-                .sort((a, b) => {
-                  if (a.id == a.same && b.id != b.same) return -1;
-                  if (b.id == b.same && a.id != a.same) return 1;
-                  return new Date(a.date) - new Date(b.date);
-                })
-                .map(p => ({ src: p.image, alt: p.name || `Product image ${p.id}`, publicId: p.publicId, id: p.id, same: p.same }));
-            });
-        }
-
-        // 並發：圖片列表 + 推薦產品（輕量）
-        const [allImages, listProducts] = await Promise.all([
-          categoryFetch,
-          fetch(`/api/products?list=true`).then(r => r.json())
-        ]);
-
-        setRelatedImages(allImages);
-        if (allImages.length > 0) {
-          setSelectedImage(allImages[0].src);
-          setCurrentImageIndex(0);
-        }
-
-        // 推薦產品（id == same，排除當前 same 組）
-        const allPotentialRecs = listProducts
-          .filter(p => String(p.id) === String(p.same) && p.same !== product.same)
-          .map(p => ({
-            ...p,
-            slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-          }));
-
-        let recommendations = [];
-
-        if (product.categories === 'androidplayer') {
-          // Android Player 的智能推薦邏輯
-          const sameSeries = allPotentialRecs.filter(p =>
-            p.categories === 'androidplayer' &&
-            p.filter1 === product.filter1 &&
-            p.android_series === product.android_series
-          );
-
-          const sameType = allPotentialRecs.filter(p =>
-            p.categories === 'androidplayer' &&
-            p.filter1 === product.filter1 &&
-            p.android_series !== product.android_series
-          );
-
-          const sameCategory = allPotentialRecs.filter(p =>
-            p.categories === 'androidplayer' &&
-            p.filter1 !== product.filter1
-          );
-
-          const shuffle = (arr) => arr.sort(() => 0.5 - Math.random());
-          recommendations = [
-            ...shuffle(sameSeries),
-            ...shuffle(sameType),
-            ...shuffle(sameCategory),
-            ...shuffle(allPotentialRecs.filter(p => p.categories !== 'androidplayer')) // 最後用其他分類補充
-          ];
-        } else if (product.categories === 'contidecoder') {
-          // Conti Decoder 的智能推薦邏輯
-          const sameType = allPotentialRecs.filter(p => 
-            p.categories === 'contidecoder' && 
-            p.filter1 === product.filter1
-          );
-
-          const sameCategory = allPotentialRecs.filter(p => 
-            p.categories === 'contidecoder' && 
-            p.filter1 !== product.filter1
-          );
-
-          const shuffle = (arr) => arr.sort(() => 0.5 - Math.random());
-          recommendations = [
-            ...shuffle(sameType),
-            ...shuffle(sameCategory),
-            ...shuffle(allPotentialRecs.filter(p => p.categories !== 'contidecoder')) // 最後用其他分類補充
-          ];
+            .then(listProducts => {
+              const allPotentialRecs = listProducts
+                .filter(p => String(p.id) === String(p.same) && p.same !== product.same)
+                .map(p => ({
+                  ...p,
+                  slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+                }));
+              setRecommendedProducts(buildRecommendations(product, allPotentialRecs).slice(0, 5));
+              setRecsLoading(false);
+            })
+            .catch(() => setRecsLoading(false));
         } else {
-          // 其他產品：優先推薦同分類產品，不足時用全站隨機產品補充
-          const sameCategory = allPotentialRecs.filter(p => p.categories === product.categories);
-          const others = allPotentialRecs.filter(p => p.categories !== product.categories);
-          
-          const shuffle = (arr) => arr.sort(() => 0.5 - Math.random());
-          recommendations = [
-            ...shuffle(sameCategory),
-            ...shuffle(others)
-          ];
-        }
+          // Fallback: fetch category data for images + list for recs in parallel
+          const [categoryProducts, listProducts] = await Promise.all([
+            fetch(`/api/products?category=${encodeURIComponent(product.categories)}`).then(r => r.json()),
+            fetch(`/api/products?list=true`).then(r => r.json())
+          ]);
 
-        setRecommendedProducts(recommendations.slice(0, 5));
-        setLoading(false);
+          const sameProducts = categoryProducts.filter(p => p.same === product.same);
+          const allImages = sameProducts
+            .sort((a, b) => {
+              if (a.id == a.same && b.id != b.same) return -1;
+              if (b.id == b.same && a.id != a.same) return 1;
+              return new Date(a.date) - new Date(b.date);
+            })
+            .map(p => ({ src: p.image, alt: p.name || `Product image ${p.id}`, publicId: p.publicId, id: p.id, same: p.same }));
+
+          setRelatedImages(allImages);
+          if (allImages.length > 0) {
+            setSelectedImage(allImages[0].src);
+            setCurrentImageIndex(0);
+          }
+          setImagesReady(true);
+
+          const allPotentialRecs = listProducts
+            .filter(p => String(p.id) === String(p.same) && p.same !== product.same)
+            .map(p => ({
+              ...p,
+              slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+            }));
+          setRecommendedProducts(buildRecommendations(product, allPotentialRecs).slice(0, 5));
+          setRecsLoading(false);
+        }
       } catch (error) {
         console.error('Error fetching images and recommendations:', error);
-        setLoading(false);
+        setImagesReady(true);
+        setRecsLoading(false);
       }
     }
 
@@ -295,9 +307,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
     }
   };
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+
 
   return (
     <div className="min-h-screen bg-[#f8f4ec] pb-20">
@@ -728,8 +738,21 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
       }} />
 
 
-      {/* Recommendations Section */}
-      {recommendedProducts.length > 0 && (
+      {/* Recommendations Section - loads non-blocking after main content */}
+      {recsLoading ? (
+        // Subtle skeleton for recs while they load in background
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-12">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-6 w-40 bg-gray-200 rounded animate-pulse" />
+            <div className="flex-1 h-[1px] bg-gray-200" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="aspect-square bg-gray-200 rounded animate-pulse" />
+            ))}
+          </div>
+        </div>
+      ) : recommendedProducts.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-12">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-[#1c5434] text-xl md:text-2xl font-bold tracking-wider uppercase">

@@ -4,8 +4,58 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import LoadingSpinner from '@/components/LoadingSpinner'
 import ImageModal from '@/components/ImageModal'
+
+// Skeleton: breadcrumb + title + square-image grid (2 mobile / 4 desktop)
+function GalleryProductSkeleton() {
+  return (
+    <div className="bg-[#f8f4ec] min-h-screen">
+      <div style={{ padding: '0 5% 0 5%' }}>
+        {/* Breadcrumb */}
+        <nav className="py-4 px-5">
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-10 bg-gray-200 rounded animate-pulse" />
+            <div className="h-3 w-2 bg-gray-200 rounded" />
+            <div className="h-3 w-14 bg-gray-200 rounded animate-pulse" />
+            <div className="h-3 w-2 bg-gray-200 rounded" />
+            <div className="h-3 w-16 bg-gray-200 rounded animate-pulse" />
+            <div className="h-3 w-2 bg-gray-200 rounded" />
+            <div className="h-3 w-28 bg-gray-200 rounded animate-pulse" />
+          </div>
+        </nav>
+
+        {/* Desktop title */}
+        <div className="hidden md:flex py-4 px-5">
+          <div className="h-6 w-64 bg-gray-200 rounded animate-pulse" />
+        </div>
+
+        {/* White card with image grid */}
+        <div className="pb-5">
+          <div className="bg-white rounded-t-3xl p-5">
+            {/* Desktop: 4 cols */}
+            <div className="hidden md:grid grid-cols-4 gap-4">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse" />
+              ))}
+            </div>
+            {/* Mobile: 2 cols */}
+            <div className="md:hidden grid grid-cols-2 gap-4">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile bottom bar skeleton */}
+      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#f8f4ec] shadow-lg px-[5%] py-3 z-10">
+        <div className="h-5 w-48 bg-gray-200 rounded animate-pulse" />
+      </div>
+    </div>
+  );
+}
+
 
 export default function GalleryProductPage() {
   const params = useParams()
@@ -42,7 +92,7 @@ export default function GalleryProductPage() {
     }
   }, [params.category, params.product])
 
-  if (loading) return <LoadingSpinner />
+  if (loading) return <GalleryProductSkeleton />;
   if (!product || !product.Url) return null
 
   // Logic to strictly identify Master Record (Id == same)

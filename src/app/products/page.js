@@ -3,7 +3,43 @@ import { useEffect, useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import ProductCategory from "@/components/ProductCategory";
 import { motion } from "framer-motion";
-import LoadingSpinner from '@/components/LoadingSpinner';
+
+// Skeleton that matches the /products layout:
+// Hero banner + N category cards (title + product strip)
+function ProductsPageSkeleton() {
+  return (
+    <main className="min-h-screen">
+      {/* Hero banner skeleton */}
+      <div className="w-full bg-gray-200 animate-pulse" style={{ aspectRatio: '1601/501' }} />
+
+      <div className="py-4 bg-[#f8f4ec]">
+        <div className="max-w-[1400px] mx-auto px-2 space-y-4">
+          {/* 8 category card skeletons */}
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="mx-1 md:mx-2 bg-white rounded-[25px] px-4 py-6 shadow-lg">
+              {/* Category title row */}
+              <div className="flex items-center justify-center mb-4 gap-3">
+                <div className="h-[2px] bg-gray-200 w-[15%]" />
+                <div className="h-5 w-32 bg-gray-200 rounded animate-pulse" />
+                <div className="h-[2px] bg-gray-200 w-[15%]" />
+              </div>
+              {/* Single row — mirrors Swiper: 3 mobile / 4 tablet / 5 desktop */}
+              <div className="flex gap-2 overflow-hidden">
+                {[...Array(5)].map((_, j) => (
+                  <div key={j} className="w-1/3 md:w-1/4 lg:w-1/5 shrink-0">
+                    <div className="aspect-square bg-gray-200 rounded-lg animate-pulse" />
+                    <div className="mt-2 h-3 bg-gray-200 rounded mx-auto w-3/4 animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -97,7 +133,7 @@ export default function Products() {
   }, []);
 
   if (loading) {
-    return <LoadingSpinner />;
+    return <ProductsPageSkeleton />;
   }
 
   return (

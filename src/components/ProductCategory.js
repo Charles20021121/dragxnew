@@ -20,7 +20,6 @@ const categoryVariants = {
 };
 
 export default function ProductCategory({ name, link, products, index ,isAdmin}) {
-  console.log(name);
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1

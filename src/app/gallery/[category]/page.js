@@ -1,8 +1,43 @@
 "use client"
 import { useParams } from 'next/navigation'
 import GalleryCategoryPage from '@/components/GalleryCategoryPage'
-import HeroSection from '@/components/HeroSection'
 import { useEffect, useState } from 'react'
+
+// Skeleton: exact mirror of GalleryCategoryPage real layout
+function GalleryCategorySkeleton() {
+  return (
+    <main className="min-h-screen bg-[#f8f4ec] relative pb-20">
+      {/* Breadcrumb — py-4 px-5 */}
+      <nav className="py-4 px-5">
+        <div className="flex items-center gap-2">
+          <div className="h-3 w-10 bg-gray-200 rounded animate-pulse" />
+          <span className="text-gray-300">/</span>
+          <div className="h-3 w-14 bg-gray-200 rounded animate-pulse" />
+          <span className="text-gray-300">/</span>
+          <div className="h-3 w-20 bg-gray-200 rounded animate-pulse" />
+        </div>
+      </nav>
+
+      <div className="px-5">
+        {/* Title + divider — same as mb-8 block */}
+        <div className="mb-8">
+          <div className="h-6 w-40 bg-gray-200 rounded animate-pulse mb-5" />
+          <div className="h-[1px] bg-gray-200 w-full" />
+        </div>
+
+        {/* Product grid — grid-cols-2 / md:grid-cols-3 / lg:grid-cols-4, square images */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[...Array(8)].map((_, i) => (
+            <div key={i}>
+              <div className="aspect-square bg-gray-200 rounded-lg animate-pulse" />
+              <div className="mt-3 h-4 w-2/3 bg-gray-200 rounded animate-pulse mx-auto" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
 
 export default function GalleryCategory() {
   const params = useParams()
@@ -47,7 +82,7 @@ export default function GalleryCategory() {
   }, [category]);
 
   if (loading) {
-    return null // 或者顯示載入動畫
+    return <GalleryCategorySkeleton />;
   }
 
   const tabs = isCombined ? [
