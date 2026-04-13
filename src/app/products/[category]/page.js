@@ -19,12 +19,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
         }
         
         const data = await res.json();
-        
-        // 调试信息
-        console.log('API Response:', data);
-        console.log('Data type:', typeof data);
-        console.log('Is array:', Array.isArray(data));
-        
+
         // 确保 data 是数组
         if (!Array.isArray(data)) {
           console.error('API did not return an array:', data);

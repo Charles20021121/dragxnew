@@ -22,7 +22,6 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
   ]);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
 
-  console.log(relatedImages)
   const sliderRef = useRef(null);
   const [loading, setLoading] = useState(true);
 
@@ -58,37 +57,42 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
   useEffect(() => {
     async function fetchRelatedImages() {
       try {
-        // 並發請求：同分類（帶圖片）+ 輕量全量（推薦用）
-        const [categoryRes, listRes] = await Promise.all([
-          fetch(`/api/products?category=${encodeURIComponent(product.categories)}`),
-          fetch(`/api/products?list=true`)
+        // 如果 product 已包含 additionalImages（從分類頁傳來），直接使用，不再重複請求
+        const hasPreloadedImages = Array.isArray(product.additionalImages) && product.additionalImages.length > 0;
+
+        let categoryFetch;
+        if (hasPreloadedImages) {
+          // 直接構建圖片列表，跳過分類 API 請求
+          const mainImage = { src: product.image, alt: product.name, publicId: product.publicId, id: product.id, same: product.same };
+          const extraImages = product.additionalImages.map(img => ({
+            src: img.Url,
+            alt: img.Name || product.name,
+            publicId: img.publicId,
+            id: img.Id,
+            same: product.same
+          }));
+          categoryFetch = Promise.resolve([mainImage, ...extraImages]);
+        } else {
+          // 沒有預載圖片，才去請求分類數據
+          categoryFetch = fetch(`/api/products?category=${encodeURIComponent(product.categories)}`)
+            .then(r => r.json())
+            .then(categoryProducts => {
+              const sameProducts = categoryProducts.filter(p => p.same === product.same);
+              return sameProducts
+                .sort((a, b) => {
+                  if (a.id == a.same && b.id != b.same) return -1;
+                  if (b.id == b.same && a.id != a.same) return 1;
+                  return new Date(a.date) - new Date(b.date);
+                })
+                .map(p => ({ src: p.image, alt: p.name || `Product image ${p.id}`, publicId: p.publicId, id: p.id, same: p.same }));
+            });
+        }
+
+        // 並發：圖片列表 + 推薦產品（輕量）
+        const [allImages, listProducts] = await Promise.all([
+          categoryFetch,
+          fetch(`/api/products?list=true`).then(r => r.json())
         ]);
-        const [categoryProducts, listProducts] = await Promise.all([
-          categoryRes.json(),
-          listRes.json()
-        ]);
-
-        // 1. 從分類結果中過濾同一 same 組的相關圖片
-        const sameProducts = categoryProducts.filter(p =>
-          p.same === product.same
-        );
-
-        // 主圖永遠排在第一位，副圖按日期排序
-        const sortedProducts = sameProducts.sort((a, b) => {
-          if (a.id == a.same && b.id != b.same) return -1;
-          if (b.id == b.same && a.id != a.same) return 1;
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return dateA - dateB;
-        });
-
-        const allImages = sortedProducts.map(p => ({
-          src: p.image,
-          alt: p.name || `Product image ${p.id}`,
-          publicId: p.publicId,
-          id: p.id,
-          same: p.same
-        }));
 
         setRelatedImages(allImages);
         if (allImages.length > 0) {
@@ -96,7 +100,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
           setCurrentImageIndex(0);
         }
 
-        // 2. 從輕量列表中获取推薦產品（id == same，排除當前 same 組）
+        // 推薦產品（id == same，排除當前 same 組）
         const allPotentialRecs = listProducts
           .filter(p => String(p.id) === String(p.same) && p.same !== product.same)
           .map(p => ({

@@ -289,10 +289,6 @@ export default function ProductCategoryPage({
 
   const androidProductsBySeries = getAndroidProductsBySeries();
 
-  // 调试信息
-  console.log('Products in ProductCategoryPage:', products);
-  console.log('Android products by series:', androidProductsBySeries);
-
   const totalPages = Math.ceil(displayProducts.length / ITEMS_PER_PAGE);
 
   // 分頁處理
