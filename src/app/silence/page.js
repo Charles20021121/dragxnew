@@ -52,11 +52,24 @@ export default function SilencePage() {
         const data = await response.json()
 
         // 將產品按 filter1 分類
+        const sortSilenceProducts = (a, b) => {
+          const nameA = (a.name || a.Name || '').toLowerCase();
+          const nameB = (b.name || b.Name || '').toLowerCase();
+          
+          const getRank = (name) => {
+            if (name.includes('comfort max')) return 2;
+            if (name.includes('comfort')) return 1;
+            return 3;
+          };
+          
+          return getRank(nameA) - getRank(nameB);
+        };
+
         const categorizedProducts = {
-          HATCHBACK: data.filter(p => p.filter1?.toLowerCase() === 'hatchback'),
-          SEDAN: data.filter(p => p.filter1?.toLowerCase() === 'sedan'),
-          SUV: data.filter(p => p.filter1?.toLowerCase() === 'suv'),
-          MPV: data.filter(p => p.filter1?.toLowerCase() === 'mpv')
+          HATCHBACK: data.filter(p => p.filter1?.toLowerCase() === 'hatchback').sort(sortSilenceProducts),
+          SEDAN: data.filter(p => p.filter1?.toLowerCase() === 'sedan').sort(sortSilenceProducts),
+          SUV: data.filter(p => p.filter1?.toLowerCase() === 'suv').sort(sortSilenceProducts),
+          MPV: data.filter(p => p.filter1?.toLowerCase() === 'mpv').sort(sortSilenceProducts)
         }
 
         setProducts(categorizedProducts)
