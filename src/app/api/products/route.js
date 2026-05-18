@@ -87,7 +87,7 @@ export async function GET(request) {
         custom_filter: match.custom_filter,
         same: match.same,
       }, {
-        headers: { 'Cache-Control': `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60` },
+        headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' },
       });
     }
 
@@ -139,7 +139,7 @@ export async function GET(request) {
         }));
 
       return NextResponse.json(formatted, {
-        headers: { 'Cache-Control': `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60` },
+        headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' },
       });
     }
 
@@ -167,7 +167,7 @@ export async function GET(request) {
           filter1: p.filter1,
           android_series: p.android_series,
         })),
-        { headers: { 'Cache-Control': `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60` } }
+        { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
       );
     }
 
@@ -196,7 +196,7 @@ export async function GET(request) {
         publicId: p.publicId,
         same: p.same,
       })),
-      { headers: { 'Cache-Control': `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60` } }
+      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
     );
 
   } catch (error) {
