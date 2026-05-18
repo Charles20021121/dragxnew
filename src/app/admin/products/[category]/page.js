@@ -40,7 +40,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`/api/products?category=${category}`);
+      const res = await fetch(`/api/products?category=${category}`, { cache: 'no-store' });
       const data = await res.json();
 
       // 處理產品數據，添加 slug
@@ -174,11 +174,12 @@ export default function CategoryProducts({ params: paramsPromise }) {
     if (window.confirm('Are you sure you want to delete this product and all related images?')) {
       setIsDeleting(true);
       try {
-        // 先獲取產品信息
-        const res = await fetch(`/api/admin/products/${productId}`);
-        const product = await res.json();
+        // 先獲取產品信息（不使用緩存）
+        const res = await fetch(`/api/admin/products/${productId}`, { cache: 'no-store' });
 
         if (!res.ok) throw new Error('Failed to fetch product');
+
+        const product = await res.json();
 
         // 刪除產品及相關圖片
         const deleteRes = await fetch(`/api/admin/products/${productId}`, {
@@ -187,14 +188,14 @@ export default function CategoryProducts({ params: paramsPromise }) {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            same: product.same,  // 傳遞 same 值以刪除相關產品
-            publicId: product.publicId // 傳遞 publicId 以刪除 Cloudinary 圖片
+            same: product.same,
+            publicId: product.publicId
           })
         });
 
         if (deleteRes.ok) {
           showNotification('success', 'Product and related images deleted successfully');
-          // 重新加載產品列表
+          // 重新加載產品列表（不使用緩存）
           fetchProducts();
         } else {
           showNotification('error', 'Failed to delete product');

@@ -55,7 +55,7 @@ export default function ProductPage({ params: paramsPromise }) {
       console.log('Fetched products:', products.length);
 
       const matchingProducts = products.filter(p =>
-        p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
+        p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug.toLowerCase()
       );
 
       console.log('Matching products:', matchingProducts.length);

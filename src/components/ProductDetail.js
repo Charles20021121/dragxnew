@@ -117,13 +117,15 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
             src: product.image, alt: product.name,
             publicId: product.publicId, id: product.id, same: product.same
           };
-          const extraImages = product.additionalImages.map(img => ({
-            src: img.Url,
-            alt: img.Name || product.name,
-            publicId: img.publicId,
-            id: img.Id,
-            same: product.same
-          }));
+          const extraImages = product.additionalImages
+            .filter(img => img.Url && img.Url.trim() !== '')
+            .map(img => ({
+              src: img.Url,
+              alt: img.Name || product.name,
+              publicId: img.publicId,
+              id: img.Id,
+              same: product.same
+            }));
           const allImages = [mainImage, ...extraImages];
           setRelatedImages(allImages);
           if (allImages.length > 0) {
@@ -156,6 +158,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
 
           const sameProducts = categoryProducts.filter(p => p.same === product.same);
           const allImages = sameProducts
+            .filter(p => p.image && p.image.trim() !== '')
             .sort((a, b) => {
               if (a.id == a.same && b.id != b.same) return -1;
               if (b.id == b.same && a.id != a.same) return 1;

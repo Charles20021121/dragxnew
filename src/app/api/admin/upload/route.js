@@ -25,6 +25,8 @@ export async function POST(request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    console.log('Upload request - name:', file.name, 'size:', file.size, 'type:', file.type);
+
     const buffer = Buffer.from(await file.arrayBuffer());
     
     // 生成随机 Public ID 或使用时间戳
@@ -33,9 +35,19 @@ export async function POST(request) {
     const publicId = `dragx_${timestamp}_${randomStr}`;
 
     // 使用 Sharp 将上传的图片转换为 WebP 并压缩
-    const webpBuffer = await sharp(buffer)
-      .webp({ quality: 80 })
-      .toBuffer();
+    let webpBuffer;
+    try {
+      webpBuffer = await sharp(buffer)
+        .webp({ quality: 80 })
+        .toBuffer();
+    } catch (sharpError) {
+      console.error('Sharp conversion error:', sharpError.message);
+      return NextResponse.json({ 
+        error: `图片格式不支持或文件损坏: ${sharpError.message}` 
+      }, { status: 400 });
+    }
+
+    console.log('Converted to WebP, size:', webpBuffer.length, 'bytes');
 
     const objectKey = `dragx/dragx/${publicId}.webp`;
 
@@ -49,6 +61,8 @@ export async function POST(request) {
     await s3Client.send(command);
 
     const r2Url = `https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/${objectKey}`;
+
+    console.log('Upload success:', r2Url);
 
     return NextResponse.json({
       success: true,

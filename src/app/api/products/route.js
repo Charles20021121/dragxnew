@@ -24,6 +24,7 @@ export async function GET(request) {
     const listOnly = searchParams.get('list') === 'true';
 
     const connection = await pool.getConnection();
+    await connection.query('SET SESSION group_concat_max_len = 1000000');
 
     // ─── SINGLE PRODUCT DETAIL  (?category=xxx&slug=yyy) ─────────────────────
     // Only fetches main-image rows (Id = same) in that category, then matches
@@ -55,7 +56,7 @@ export async function GET(request) {
       connection.release();
 
       const match = rows
-        .filter(p => toSlug(p.Name) === slug)
+        .filter(p => toSlug(p.Name) === slug.toLowerCase())
         .sort((a, b) => {
           const sA = (a.price ? 2 : 0) + (a.description ? 1 : 0);
           const sB = (b.price ? 2 : 0) + (b.description ? 1 : 0);
@@ -114,24 +115,26 @@ export async function GET(request) {
       const [products] = await connection.query(query, [category]);
       connection.release();
 
-      const formatted = products.map(p => ({
-        id: p.Id,
-        name: p.Name,
-        categories: p.categories,
-        image: p.Url,
-        date: p.date,
-        price: p.price,
-        additionalImages: parseAdditionalImages(p.additional_images),
-        buy: p.buy,
-        specifications: p.Specifications,
-        description: p.description,
-        publicId: p.publicId,
-        filter: p.filter,
-        filter1: p.filter1,
-        android_series: p.android_series,
-        custom_filter: p.custom_filter,
-        same: p.same,
-      }));
+      const formatted = products
+        .filter(p => p.Url && p.Url.trim() !== '')  // 過濾掉空 URL 的記錄
+        .map(p => ({
+          id: p.Id,
+          name: p.Name,
+          categories: p.categories,
+          image: p.Url,
+          date: p.date,
+          price: p.price,
+          additionalImages: parseAdditionalImages(p.additional_images),
+          buy: p.buy,
+          specifications: p.Specifications,
+          description: p.description,
+          publicId: p.publicId,
+          filter: p.filter,
+          filter1: p.filter1,
+          android_series: p.android_series,
+          custom_filter: p.custom_filter,
+          same: p.same,
+        }));
 
       return NextResponse.json(formatted, {
         headers: { 'Cache-Control': `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60` },
