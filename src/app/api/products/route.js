@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 const CACHE_TTL = 300; // 5 minutes CDN edge cache
 
 // Helper: name → URL slug

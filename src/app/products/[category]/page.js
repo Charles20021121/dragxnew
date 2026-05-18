@@ -50,7 +50,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch(`/api/products?category=${category}`);
+        const res = await fetch(`/api/products?category=${category}`, { cache: 'no-store' });
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);

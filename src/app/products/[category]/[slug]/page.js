@@ -52,7 +52,8 @@ export default function ProductPage({ params: paramsPromise }) {
         // Use the new targeted endpoint: only fetches main-image rows in this
         // category + matches slug server-side → much faster than full category.
         const res = await fetch(
-          `/api/products?category=${encodeURIComponent(category)}&slug=${encodeURIComponent(slug)}`
+          `/api/products?category=${encodeURIComponent(category)}&slug=${encodeURIComponent(slug)}`,
+          { cache: 'no-store' }
         );
 
         if (res.status === 404) {
