@@ -4,6 +4,7 @@ import ProductDetail from "@/components/ProductDetail";
 import { Suspense } from "react";
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { useRouter } from 'next/navigation';
+import CategoryManagerModal from '@/components/CategoryManagerModal';
 
 export default function ProductPage({ params: paramsPromise }) {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function ProductPage({ params: paramsPromise }) {
 
   const [loading, setLoading] = useState(true);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
+  const [showCategoryManager, setShowCategoryManager] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: '', message: '' });
   const [formData, setFormData] = useState({
     Name: '',
@@ -725,7 +727,16 @@ export default function ProductPage({ params: paramsPromise }) {
 
                       {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others'].includes(formData.categories.toLowerCase()) && (
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">Custom Filter Category</label>
+                          <div className="flex justify-between items-center">
+                            <label className="block text-sm font-medium text-gray-700">Custom Filter Category</label>
+                            <button 
+                              type="button" 
+                              onClick={() => setShowCategoryManager(true)}
+                              className="text-xs text-[#1c5434] hover:underline"
+                            >
+                              Manage Categories
+                            </button>
+                          </div>
                           <div className="mt-1 space-y-2">
                             <select
                               className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
@@ -991,6 +1002,15 @@ export default function ProductPage({ params: paramsPromise }) {
           </div>
         </div>
       )}
+
+      {/* Category Manager Modal */}
+      <CategoryManagerModal
+        isOpen={showCategoryManager}
+        onClose={() => setShowCategoryManager(false)}
+        categories={existingFilters}
+        categoryContext={category}
+        onUpdate={fetchProduct}
+      />
     </>
   );
 }

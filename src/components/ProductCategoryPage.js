@@ -127,6 +127,11 @@ export default function ProductCategoryPage({
       return a.localeCompare(b, undefined, { numeric: true });
     });
 
+    const hasUncategorized = products.some(p => p.id == p.same && (!p.custom_filter || p.custom_filter.trim() === ''));
+    if (hasUncategorized) {
+      uniqueFilters.push('uncategorized');
+    }
+
     return [...uniqueFilters, 'all'];
   })();
 
@@ -229,7 +234,9 @@ export default function ProductCategoryPage({
         : products
           .filter(product => {
             const isMainImage = product.id == product.same;
-            const customFilterMatch = !isCustomFilterEnabled || selectedCustomFilter === 'all' || product.custom_filter === selectedCustomFilter;
+            const customFilterMatch = !isCustomFilterEnabled || 
+              selectedCustomFilter === 'all' || 
+              (selectedCustomFilter === 'uncategorized' ? (!product.custom_filter || product.custom_filter.trim() === '') : product.custom_filter === selectedCustomFilter);
             return isMainImage && customFilterMatch;
           })
           .sort((a, b) => a.name.localeCompare(b.name, undefined, {
