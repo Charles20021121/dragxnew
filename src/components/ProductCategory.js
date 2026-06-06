@@ -37,7 +37,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
       return 'AMBIENT LIGHT';
     }
     if (name.toLowerCase() === '360camera') {
-      return '360 CAMERA';
+      return 'DX360';
     }
     if (name.toLowerCase() === 'powerboot') {
       return 'POWER BOOT';

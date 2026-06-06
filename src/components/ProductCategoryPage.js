@@ -324,7 +324,7 @@ export default function ProductCategoryPage({
       return 'AMBIENT LIGHT';
     }
     if (name.toLowerCase() === '360camera') {
-      return '360 CAMERA';
+      return 'DX360';
     }
     if (name.toLowerCase() === 'powerboot') {
       return 'POWER BOOT';
@@ -358,7 +358,7 @@ export default function ProductCategoryPage({
           </li>
           <span>/</span>
           <li className="text-black capitalize">
-            {categoryPath}
+            {categoryPath === '360camera' ? 'DX360' : categoryPath}
           </li>
         </ol>
       </nav>

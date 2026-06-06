@@ -91,7 +91,7 @@ export default function Products() {
             if (!acc[category]) {
               let displayName = category.toUpperCase();
               if (category === '360camera') {
-                displayName = '360';
+                displayName = 'DX360';
               }
 
               acc[category] = {

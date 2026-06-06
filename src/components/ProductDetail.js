@@ -349,7 +349,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                 href={isAdmin ? `/admin/products/${product.categories}` : `/products/${product.categories}`}
                 className="text-black hover:text-[#1c5434] capitalize"
               >
-                {product.categories}
+                {product.categories === '360camera' ? 'DX360' : product.categories}
               </Link>
             </li>
             <span>/</span>

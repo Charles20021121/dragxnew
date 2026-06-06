@@ -121,7 +121,7 @@ export async function generateMetadata({ params }) {
   const categoryTitles = {
     androidplayer: 'Android Player',
     ambientlight: 'Ambient Light',
-    '360camera': '360° Camera',
+    '360camera': 'DX360',
     powerboot: 'Power Boot',
     contidecoder: 'Conti Decoder',
     mercedes: 'Mercedes-Benz',

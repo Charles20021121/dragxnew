@@ -5,7 +5,7 @@ export async function generateMetadata({ params }) {
   const categoryTitles = {
     androidplayer: 'Android Players',
     ambientlight: 'Ambient Lights',
-    '360camera': '360 Cameras',
+    '360camera': 'DX360',
     powerboot: 'Power Boots',
     contidecoder: 'Conti Decoders',
     soundproof: 'Soundproof',
