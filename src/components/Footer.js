@@ -150,9 +150,12 @@ const SocialIconLink = ({ href, icon }) => (
 );
 
 const FooterCopyright = () => (
-  <div className="flex justify-center items-center pt-4">
-    <p className="text-[13px] font-bold text-[#afb1b0]">
+  <div className="flex flex-col md:flex-row justify-between items-center w-full pt-4 gap-4">
+    <p className="text-[13px] font-bold text-[#afb1b0] text-center md:text-left">
       © {new Date().getFullYear()} EXT AUTO SUPPLY SDN BHD 201901034658 &#40;1343988-K&#41; | ALL RIGHTS RESERVED
+    </p>
+    <p className="text-[11px] font-bold uppercase tracking-widest text-[#afb1b0] text-center md:text-right">
+      Website developed by <a href="https://www.htechcode.com.my/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline">HtechCode</a>
     </p>
   </div>
 );
