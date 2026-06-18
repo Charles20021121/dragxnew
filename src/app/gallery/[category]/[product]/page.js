@@ -165,9 +165,9 @@ export default function GalleryProductPage() {
           <div className="bg-white rounded-t-3xl p-5">
             {/* Desktop Layout */}
             <div className="hidden md:block">
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-4 gap-2">
                 {allImagesArray.map((image, index) => (
-                  <div key={`${image.Id}-${index}`} className="flex flex-col gap-2">
+                  <div key={`${image.Id}-${index}`} className="flex flex-col gap-1">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -189,7 +189,7 @@ export default function GalleryProductPage() {
                         href={image.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full bg-[#88bc04] text-white text-center py-2 rounded-lg text-xs font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider"
+                        className="block w-full bg-[#88bc04] text-white text-center py-1 rounded-lg text-[10px] font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider"
                       >
                         MORE INFO
                       </a>
@@ -201,9 +201,9 @@ export default function GalleryProductPage() {
 
             {/* Mobile Layout */}
             <div className="md:hidden">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-2">
                 {allImagesArray.map((image, index) => (
-                  <div key={`${image.Id}-${index}`} className="flex flex-col gap-2">
+                  <div key={`${image.Id}-${index}`} className="flex flex-col gap-1">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -225,7 +225,7 @@ export default function GalleryProductPage() {
                         href={image.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full bg-[#88bc04] text-white text-center py-2 rounded-lg text-xs font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider"
+                        className="block w-full bg-[#88bc04] text-white text-center py-1 rounded-lg text-[10px] font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider"
                       >
                         MORE INFO
                       </a>

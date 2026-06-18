@@ -75,6 +75,7 @@ export async function GET(request) {
         categories: match.categories,
         image: match.Url,
         date: match.date,
+        sort_order: match.sort_order,
         price: match.price,
         additionalImages: parseAdditionalImages(match.additional_images),
         buy: match.buy,
@@ -125,6 +126,7 @@ export async function GET(request) {
           categories: p.categories,
           image: p.Url,
           date: p.date,
+          sort_order: p.sort_order,
           price: p.price,
           additionalImages: parseAdditionalImages(p.additional_images),
           buy: p.buy,
@@ -147,10 +149,10 @@ export async function GET(request) {
     // Lightweight – no JOIN, only main-image rows.
     if (listOnly) {
       const query = `
-        SELECT Id, Name, categories, Url, date, same, filter1, android_series
+        SELECT Id, Name, categories, Url, date, same, filter1, android_series, sort_order
         FROM products
         WHERE same IS NOT NULL AND same != '' AND Id = same
-        ORDER BY date DESC
+        ORDER BY sort_order DESC, date DESC
       `;
 
       const [products] = await connection.query(query);
@@ -163,6 +165,7 @@ export async function GET(request) {
           categories: p.categories,
           image: p.Url,
           date: p.date,
+          sort_order: p.sort_order,
           same: p.same,
           filter1: p.filter1,
           android_series: p.android_series,
@@ -174,7 +177,7 @@ export async function GET(request) {
     // ─── FULL LIST (used by ProductDetail recommendations) ───────────────────
     const query = `
       SELECT Id, Name, categories, Url, date, price,
-             filter, filter1, android_series, same, publicId
+             filter, filter1, android_series, same, publicId, sort_order
       FROM products
       ORDER BY date DESC
     `;
@@ -189,6 +192,7 @@ export async function GET(request) {
         categories: p.categories,
         image: p.Url,
         date: p.date,
+        sort_order: p.sort_order,
         price: p.price,
         filter: p.filter,
         filter1: p.filter1,

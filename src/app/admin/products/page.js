@@ -109,6 +109,12 @@ export default function Products() {
             </li>
             <span>|</span>
             <li>
+              <Link href="/admin/products/reorder" className="text-black hover:text-[#1c5434] font-bold">
+                Reorder Featured Products
+              </Link>
+            </li>
+            <span>|</span>
+            <li>
               <Link href="/admin/gallery" className="text-black hover:text-[#1c5434]">
                 Admin Gallery
               </Link>

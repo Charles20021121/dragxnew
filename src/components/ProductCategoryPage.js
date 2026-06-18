@@ -571,12 +571,19 @@ export default function ProductCategoryPage({
                 onClick={() => setIsFilterOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-white rounded-md shadow-sm hover:bg-gray-50 transition-colors"
               >
-                <FaFilter className="text-[#1c5434]" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#1c5434]">
+                  <path d="M10 5H3"/>
+                  <path d="M12 19H3"/>
+                  <path d="M14 3v4"/>
+                  <path d="M16 17v4"/>
+                  <path d="M21 12h-9"/>
+                  <path d="M21 19h-5"/>
+                  <path d="M21 5h-7"/>
+                  <path d="M8 10v4"/>
+                  <path d="M8 12H3"/>
+                </svg>
                 <span className="text-sm font-medium text-gray-700 capitalize">
-                  {categoryPath === "contidecoder" 
-                    ? (carFilter === 'all' ? 'All Models' : carFilter)
-                    : (selectedCustomFilter === 'all' ? 'All Models' : selectedCustomFilter)
-                  }
+                  Filter
                 </span>
               </button>
             )}

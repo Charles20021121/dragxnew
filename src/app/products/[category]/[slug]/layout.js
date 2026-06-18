@@ -36,31 +36,21 @@ export async function generateMetadata({ params }) {
         SELECT Id, Url, Name, same
         FROM products
         WHERE categories = ?
-        AND LOWER(
-          TRIM(BOTH '-' FROM 
-            REPLACE(
-              REPLACE(
-                REPLACE(
-                  REPLACE(TRIM(Name), ' ', '-'),
-                  '|', ''
-                ),
-                '--', '-'
-              ),
-              '--', '-'
-            )
-          )
-        ) = ?
-        LIMIT 1
       `;
 
       console.log('🔍 查询参数:', { category, slug });
 
-      const [productRows] = await Promise.race([
-        connection.execute(getProductQuery, [category, slug]),
+      const [rawRows] = await Promise.race([
+        connection.execute(getProductQuery, [category]),
         new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Query timeout')), 2000)
+          setTimeout(() => reject(new Error('Query timeout')), 4000)
         )
       ]);
+
+      const toSlug = (name) =>
+        name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+      const productRows = rawRows.filter(row => toSlug(row.Name || '') === slug.toLowerCase());
 
       console.log('🔍 产品查询结果:', productRows.length > 0 ? { Id: productRows[0]?.Id, Name: productRows[0]?.Name, same: productRows[0]?.same, Url: productRows[0]?.Url?.substring(0, 60) } : '无结果');
 
