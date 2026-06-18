@@ -273,13 +273,14 @@ export default function ProductShowcaseSection() {
                         <Link href={productLink} key={product.id || index} className="group flex flex-col h-full bg-white border border-gray-100 shadow-sm overflow-hidden pb-2">
                           <div className="relative aspect-square w-full bg-gray-50 flex items-center justify-center">
                             {imgUrl && (
-                              <Image
-                                src={imgUrl}
-                                alt={product.name || ''}
-                                fill
-                                className="object-cover"
-                                loading="lazy"
-                              />
+                                <Image
+                                  src={imgUrl}
+                                  alt={product.name || ''}
+                                  fill
+                                  className="object-cover"
+                                  priority={index < 4}
+                                  loading={index < 4 ? undefined : "lazy"}
+                                />
                             )}
                           </div>
                           <h3 className="text-[#1c5434] font-bold text-center mt-2 text-[11px] leading-snug line-clamp-2 min-h-[32px] px-1">
@@ -342,7 +343,8 @@ export default function ProductShowcaseSection() {
                                       alt={product.name || ''}
                                       fill
                                       className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                      loading="lazy"
+                                      priority={index < 5}
+                                      loading={index < 5 ? undefined : "lazy"}
                                     />
                                   )}
                                   <div className="absolute inset-0 bg-gradient-to-t from-[#1c5434]/80 via-[#1c5434]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl flex flex-col justify-end items-center pb-6">
