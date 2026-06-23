@@ -5,4 +5,4 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-Sitemap: https://dragx.asia/sitemap/sitemap.xml
+Sitemap: https://www.dragx.asia/sitemap/sitemap.xml

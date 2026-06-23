@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const baseUrl = 'https://dragx.asia';
+  const baseUrl = 'https://www.dragx.asia';
 
   const staticRoutes = [
     {

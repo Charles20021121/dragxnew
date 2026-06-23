@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 // Sitemap Index - Google 推荐的方式
 export async function GET() {
-  const baseUrl = 'https://dragx.asia';
+  const baseUrl = 'https://www.dragx.asia';
 
   const sitemaps = [
     {
