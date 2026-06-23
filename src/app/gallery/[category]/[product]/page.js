@@ -1,102 +1,75 @@
-"use client"
-import { useParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import ImageModal from '@/components/ImageModal'
+import GalleryProductClientWrapper from '@/components/GalleryProductClientWrapper'
+import pool from '@/lib/db'
+import { notFound } from 'next/navigation'
 
-// Skeleton: breadcrumb + title + square-image grid (2 mobile / 4 desktop)
-function GalleryProductSkeleton() {
-  return (
-    <div className="bg-[#f8f4ec] min-h-screen">
-      <div style={{ padding: '0 5% 0 5%' }}>
-        {/* Breadcrumb */}
-        <nav className="py-4 px-5">
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-10 bg-gray-200 rounded animate-pulse" />
-            <div className="h-3 w-2 bg-gray-200 rounded" />
-            <div className="h-3 w-14 bg-gray-200 rounded animate-pulse" />
-            <div className="h-3 w-2 bg-gray-200 rounded" />
-            <div className="h-3 w-16 bg-gray-200 rounded animate-pulse" />
-            <div className="h-3 w-2 bg-gray-200 rounded" />
-            <div className="h-3 w-28 bg-gray-200 rounded animate-pulse" />
-          </div>
-        </nav>
+export const revalidate = 3600;
 
-        {/* Desktop title */}
-        <div className="hidden md:flex py-4 px-5">
-          <div className="h-6 w-64 bg-gray-200 rounded animate-pulse" />
-        </div>
+export default async function GalleryProductPage({ params }) {
+  const { category, product } = await params;
+  const productSlug = decodeURIComponent(product);
+  
+  let mainProduct = null;
+  let relatedImages = [];
 
-        {/* White card with image grid */}
-        <div className="pb-5">
-          <div className="bg-white rounded-t-3xl p-5">
-            {/* Desktop: 4 cols */}
-            <div className="hidden md:grid grid-cols-4 gap-4">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse" />
-              ))}
-            </div>
-            {/* Mobile: 2 cols */}
-            <div className="md:hidden grid grid-cols-2 gap-4">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse" />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+  try {
+    const connection = await pool.getConnection();
 
-      {/* Mobile bottom bar skeleton */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#f8f4ec] shadow-lg px-[5%] py-3 z-10">
-        <div className="h-5 w-48 bg-gray-200 rounded animate-pulse" />
-      </div>
-    </div>
-  );
-}
+    try {
+      // 1. Fetch main product
+      let query;
+      let queryParams;
 
-
-export default function GalleryProductPage() {
-  const params = useParams()
-  const [product, setProduct] = useState(null)
-  const [relatedImages, setRelatedImages] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 獲取主產品數據
-        const productRes = await fetch(`/api/gallery/${params.category}/${params.product}`, { cache: 'no-store' })
-        if (!productRes.ok) throw new Error('Network response was not ok')
-        const productData = await productRes.json()
-        setProduct(productData)
-
-        // 獲取相同 same 值的所有產品
-        const imagesRes = await fetch(`/api/gallery/related?same=${productData.same}`, { cache: 'no-store' })
-        if (!imagesRes.ok) throw new Error('Network response was not ok')
-        const imagesData = await imagesRes.json()
-        const validImages = imagesData.filter(img => img.Url && img.Url.trim() !== '')
-        setRelatedImages(validImages)
-
-        setLoading(false)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-        setLoading(false)
+      if (category === 'alphard-vellfire') {
+        query = `
+          SELECT *
+          FROM gallery
+          WHERE categories IN ('alphard', 'vellfire')
+          AND LOWER(REPLACE(Name, ' ', '-')) = ?
+          ORDER BY date ASC
+        `;
+        queryParams = [productSlug];
+      } else {
+        query = `
+          SELECT *
+          FROM gallery
+          WHERE categories = ? 
+          AND LOWER(REPLACE(Name, ' ', '-')) = ?
+          ORDER BY date ASC
+        `;
+        queryParams = [category, productSlug];
       }
-    }
 
-    if (params.category && params.product) {
-      fetchData()
-    }
-  }, [params.category, params.product])
+      const [rows] = await connection.execute(query, queryParams);
+      
+      if (rows.length > 0) {
+        mainProduct = rows[0];
 
-  if (loading) return <GalleryProductSkeleton />;
-  if (!product || !product.Url) return null
+        // 2. Fetch related images with the same 'same' value
+        const relatedQuery = `
+          SELECT *
+          FROM gallery
+          WHERE same = ?
+          ORDER BY date DESC
+        `;
+        const [relatedRows] = await connection.execute(relatedQuery, [mainProduct.same]);
+        
+        // Filter out empty URLs
+        relatedImages = relatedRows.filter(img => img.Url && img.Url.trim() !== '');
+      }
+
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+
+  if (!mainProduct) {
+    notFound();
+  }
 
   // Logic to strictly identify Master Record (Id == same)
-  const masterId = String(product.same || product.Id);
+  const masterId = String(mainProduct.same || mainProduct.Id);
   const masterImage = relatedImages.find(img => String(img.Id) === masterId);
 
   // All other images sorted by date DESC (newest first)
@@ -107,7 +80,7 @@ export default function GalleryProductPage() {
   let allImagesArray = [];
 
   // Special case: for alphard-vellfire, hide the Main Image (Master Record)
-  if (params.category === 'alphard-vellfire') {
+  if (category === 'alphard-vellfire') {
     allImagesArray = otherImages;
   } else {
     // For others, Lock Main Image (Master Record) at the top
@@ -119,146 +92,20 @@ export default function GalleryProductPage() {
     }
   }
 
+  // Transform data if needed so they are plain objects
+  const safeMainProduct = {
+    ...mainProduct
+  };
+  
+  const safeAllImagesArray = allImagesArray.map(img => ({
+    ...img
+  }));
+
   return (
-    <div className=" bg-[#f8f4ec]">
-      <div style={{ backgroundColor: '#f8f4ec', padding: '0 5% 0 5%' }}>
-        {/* Breadcrumb */}
-        <nav className="py-4 px-5">
-          <ol className="flex items-center gap-2 text-xs whitespace-nowrap overflow-hidden">
-            <li>
-              <Link href="/" className="text-black hover:text-[#1c5434]">
-                Home
-              </Link>
-            </li>
-            <span>/</span>
-            <li>
-              <Link href="/gallery" className="text-black hover:text-[#1c5434]">
-                Gallery
-              </Link>
-            </li>
-            <span>/</span>
-            <li>
-              <Link
-                href={`/gallery/${params.category}`}
-                className="text-black hover:text-[#1c5434] capitalize"
-              >
-                {params.category}
-              </Link>
-            </li>
-            <span>/</span>
-            <li className="text-black capitalize truncate">
-              {product.Name}
-            </li>
-          </ol>
-        </nav>
-
-        {/* Product Title - Desktop */}
-        <div className="hidden md:flex justify-between items-center py-4 px-5">
-          <h1 className="text-[clamp(12.5px,2vw,25px)] font-bold capitalize w-4/5">
-            {product.Name}
-          </h1>
-        </div>
-
-
-        {/* Main Content */}
-        <div className="pb-5">
-          <div className="bg-white rounded-t-3xl p-5">
-            {/* Desktop Layout */}
-            <div className="hidden md:block">
-              <div className="grid grid-cols-4 gap-2">
-                {allImagesArray.map((image, index) => (
-                  <div key={`${image.Id}-${index}`} className="flex flex-col gap-1">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="relative aspect-square cursor-pointer"
-                      onClick={() => setSelectedImageIndex(index)}
-                    >
-                      <Image
-                        src={image.Url}
-                        alt={image.Name || 'Product View'}
-                        fill
-                        className="object-cover rounded-lg hover:opacity-90 transition-opacity"
-                        sizes="25vw"
-                      />
-                    </motion.div>
-
-                    {image.link && image.link.trim() !== '' && (
-                      <a
-                        href={image.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block w-full bg-[#88bc04] text-white text-center py-1 rounded-lg text-[10px] font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider"
-                      >
-                        MORE INFO
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Mobile Layout */}
-            <div className="md:hidden">
-              <div className="grid grid-cols-2 gap-2">
-                {allImagesArray.map((image, index) => (
-                  <div key={`${image.Id}-${index}`} className="flex flex-col gap-1">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="relative aspect-square cursor-pointer"
-                      onClick={() => setSelectedImageIndex(index)}
-                    >
-                      <Image
-                        src={image.Url}
-                        alt={image.Name || 'Product View'}
-                        fill
-                        className="object-cover rounded-lg hover:opacity-90 transition-opacity"
-                        sizes="33vw"
-                      />
-                    </motion.div>
-
-                    {image.link && image.link.trim() !== '' && (
-                      <a
-                        href={image.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block w-full bg-[#88bc04] text-white text-center py-1 rounded-lg text-[10px] font-bold hover:bg-[#6a9603] transition-colors uppercase tracking-wider"
-                      >
-                        MORE INFO
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Image Modal */}
-      <AnimatePresence>
-        {selectedImageIndex !== null && (
-          <ImageModal
-            images={allImagesArray}
-            currentIndex={selectedImageIndex}
-            onClose={() => setSelectedImageIndex(null)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Mobile Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#f8f4ec] shadow-[0_5px_15px_rgba(0,0,0,1)] px-[5%] py-3 z-10">
-        <div className="flex justify-between items-center">
-          <div className="w-full">
-            <h2 className="text-[clamp(10px,2vw,20px)] font-bold capitalize truncate">
-              {product.Name}
-            </h2>
-          </div>
-        </div>
-      </div>
-    </div>
+    <GalleryProductClientWrapper 
+      category={category} 
+      product={safeMainProduct} 
+      allImagesArray={safeAllImagesArray} 
+    />
   )
 }

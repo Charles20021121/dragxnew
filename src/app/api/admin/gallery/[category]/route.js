@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
+import { revalidatePath } from 'next/cache'
 import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 
 const ACCOUNT_ID = "0ec9e4b9094d340d1e3b9530f8a07bcc";
@@ -115,6 +116,9 @@ export async function DELETE(request, { params }) {
     }
 
     await connection.commit();
+    
+    revalidatePath('/gallery', 'layout');
+    
     return NextResponse.json({
       success: true,
       message: 'Image(s) deleted successfully'

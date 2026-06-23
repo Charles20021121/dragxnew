@@ -85,6 +85,9 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReorderModal, setShowReorderModal] = useState(false);
   const [tempImages, setTempImages] = useState([]);
+  
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // 设置当前产品信息给 WhatsApp 按钮使用
   useEffect(() => {
@@ -136,24 +139,29 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
           setImagesReady(true);
 
           // Load recommendations separately (non-blocking)
-          fetch(`/api/products?list=true`)
-            .then(r => r.json())
-            .then(listProducts => {
-              const allPotentialRecs = listProducts
-                .filter(p => String(p.id) === String(p.same) && p.same !== product.same)
-                .map(p => ({
-                  ...p,
-                  slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-                }));
-              setRecommendedProducts(buildRecommendations(product, allPotentialRecs).slice(0, 5));
-              setRecsLoading(false);
-            })
-            .catch(() => setRecsLoading(false));
+          if (product.recommendations) {
+            setRecommendedProducts(buildRecommendations(product, product.recommendations).slice(0, 5));
+            setRecsLoading(false);
+          } else {
+            fetch(`/api/products?list=true`)
+              .then(r => r.json())
+              .then(listProducts => {
+                const allPotentialRecs = listProducts
+                  .filter(p => String(p.id) === String(p.same) && p.same !== product.same)
+                  .map(p => ({
+                    ...p,
+                    slug: (p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+                  }));
+                setRecommendedProducts(buildRecommendations(product, allPotentialRecs).slice(0, 5));
+                setRecsLoading(false);
+              })
+              .catch(() => setRecsLoading(false));
+          }
         } else {
           // Fallback: fetch category data for images + list for recs in parallel
           const [categoryProducts, listProducts] = await Promise.all([
             fetch(`/api/products?category=${encodeURIComponent(product.categories)}`).then(r => r.json()),
-            fetch(`/api/products?list=true`).then(r => r.json())
+            product.recommendations ? Promise.resolve(product.recommendations) : fetch(`/api/products?list=true`).then(r => r.json())
           ]);
 
           const sameProducts = categoryProducts.filter(p => p.same === product.same);
@@ -173,11 +181,11 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
           }
           setImagesReady(true);
 
-          const allPotentialRecs = listProducts
+          const allPotentialRecs = product.recommendations ? product.recommendations : listProducts
             .filter(p => String(p.id) === String(p.same) && p.same !== product.same)
             .map(p => ({
               ...p,
-              slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+              slug: (p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
             }));
           setRecommendedProducts(buildRecommendations(product, allPotentialRecs).slice(0, 5));
           setRecsLoading(false);
@@ -370,7 +378,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
             )}
           </h1>
           <a
-            href={getWhatsAppUrlForProduct()}
+            href={mounted ? getWhatsAppUrlForProduct() : `https://web.whatsapp.com/send?phone=60192776056&text=${encodeURIComponent(`Hi Dragx, I'm interested in this product:\n\n*${product?.name}*`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#88bc04] text-white font-bold px-20 py-2 rounded-full hover:bg-[#7aa703] transition-colors duration-300 whitespace-nowrap"
@@ -556,7 +564,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
           </div>
           <div className="w-2/5">
             <a
-              href={getWhatsAppUrlForProduct()}
+              href={mounted ? getWhatsAppUrlForProduct() : `https://web.whatsapp.com/send?phone=60192776056&text=${encodeURIComponent(`Hi Dragx, I'm interested in this product:\n\n*${product?.name}*`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block bg-[#88bc04] text-white text-sm font-bold px-5 py-1.5 rounded-full text-center hover:bg-[#7aa703] transition-colors duration-300"

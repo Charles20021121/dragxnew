@@ -69,56 +69,29 @@ const getCategoryLink = (categoryKey, product = null) => {
   return `/products/${categoryKey}`;
 };
 
-const toSlug = (name) =>
-  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
-};
-
-export default function ProductShowcaseSection() {
-  const [products, setProducts] = useState([]);
+export default function ProductShowcaseSection({ initialProducts = [] }) {
   const [categories, setCategories] = useState([]);
   const [activeTab, setActiveTab] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    async function loadProducts() {
-      try {
-        const res = await fetch('/api/products?list=true');
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          // Process products: add slugs
-          const processed = data.map(p => ({
-            ...p,
-            slug: toSlug(p.name || p.Name || '')
-          }));
-          setProducts(processed);
+    setIsMounted(true);
+    if (initialProducts.length > 0) {
+      const uniqueCats = [...new Set(initialProducts.map(p => p.categories))].filter(Boolean);
+      const sortedCats = uniqueCats.sort((a, b) => {
+        const orderA = CATEGORY_ORDER[a.toLowerCase()] || 999;
+        const orderB = CATEGORY_ORDER[b.toLowerCase()] || 999;
+        return orderA - orderB;
+      });
 
-          // Extract unique categories and sort them
-          const uniqueCats = [...new Set(processed.map(p => p.categories))].filter(Boolean);
-          const sortedCats = uniqueCats.sort((a, b) => {
-            const orderA = CATEGORY_ORDER[a.toLowerCase()] || 999;
-            const orderB = CATEGORY_ORDER[b.toLowerCase()] || 999;
-            return orderA - orderB;
-          });
-
-          setCategories(sortedCats);
-          if (sortedCats.length > 0) {
-            setActiveTab(sortedCats[0]);
-          }
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error loading products for homepage showcase:', error);
-        setLoading(false);
+      setCategories(sortedCats);
+      if (sortedCats.length > 0) {
+        setActiveTab(sortedCats[0]);
       }
     }
-    loadProducts();
-  }, []);
+  }, [initialProducts]);
 
-  const activeProducts = products.filter(p => p.categories === activeTab).sort((a, b) => {
+  const activeProducts = initialProducts.filter(p => p.categories === activeTab).sort((a, b) => {
     const orderA = a.sort_order || 0;
     const orderB = b.sort_order || 0;
     if (orderA !== orderB) {
@@ -151,7 +124,7 @@ export default function ProductShowcaseSection() {
           </div>
 
           {/* Categories */}
-          {loading ? (
+          {!isMounted ? (
             <div className="flex justify-center pb-4 px-2">
               <div className="h-10 w-full sm:w-[80%] bg-gray-100 rounded-xl animate-pulse" />
             </div>
@@ -245,7 +218,7 @@ export default function ProductShowcaseSection() {
               transition={{ duration: 0.3 }}
               className="min-h-[250px]"
             >
-              {loading ? (
+              {!isMounted ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {[...Array(4)].map((_, i) => (
                     <div key={i} className="flex flex-col items-center">
@@ -359,7 +332,7 @@ export default function ProductShowcaseSection() {
 
                                 <h3 className="text-[#1c5434] font-bold text-center mt-3 text-sm sm:text-base group-hover:text-[#023f1b] transition-colors duration-300 line-clamp-2 min-h-[48px] px-1 leading-snug">
                                   {product.name || product.Name}
-                                </h3>
+                               </h3>
                               </Link>
                             </div>
                           </SwiperSlide>
@@ -389,7 +362,7 @@ export default function ProductShowcaseSection() {
           </AnimatePresence>
 
           {/* View All Redirection Button */}
-          {!loading && activeTab && (
+          {isMounted && activeTab && (
             <div className="flex justify-center mt-4 sm:mt-10">
               <Link
                 href={getCategoryLink(activeTab)}

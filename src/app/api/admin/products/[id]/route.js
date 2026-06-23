@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
+import { revalidatePath } from 'next/cache'
 import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 
 const ACCOUNT_ID = "0ec9e4b9094d340d1e3b9530f8a07bcc";
@@ -106,6 +107,8 @@ export async function PUT(request, { params: paramsPromise }) {
       );
     }
 
+    revalidatePath('/products', 'layout');
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Database error:', error);
@@ -172,6 +175,9 @@ export async function DELETE(request, { params }) {
     }
 
     await connection.commit();
+    
+    revalidatePath('/products', 'layout');
+    
     return NextResponse.json({
       success: true,
       message: 'Product(s) deleted successfully'

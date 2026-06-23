@@ -4,6 +4,9 @@ import ProductSection from "@/components/ProductSection";
 import ProductShowcaseSection from "@/components/ProductShowcaseSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import SpecialistImages from "@/components/SpecialistImages";
+import pool from '@/lib/db';
+
+export const revalidate = 3600;
 
 // 添加 metadata
 export const metadata = {
@@ -17,7 +20,40 @@ export const metadata = {
   }
 };
 
-export default function Home() {
+export default async function Home() {
+  let products = [];
+  try {
+    const connection = await pool.getConnection();
+    try {
+      // Same logic as /api/products?list=true
+      const [rows] = await connection.execute(`
+        SELECT Id, Name, categories, Url, date, same, filter1, android_series, sort_order
+        FROM products
+        WHERE same IS NOT NULL AND same != '' AND Id = same
+        ORDER BY sort_order DESC, date DESC
+      `);
+      products = rows;
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('Error fetching showcase products:', error);
+  }
+
+  // Ensure plain objects and generate slug
+  const safeProducts = products.map(p => ({
+    id: p.Id,
+    name: p.Name,
+    categories: p.categories,
+    image: p.Url,
+    date: p.date,
+    sort_order: p.sort_order,
+    same: p.same,
+    filter1: p.filter1,
+    android_series: p.android_series,
+    slug: (p.Name || p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+  }));
+
   return (
     <main className="flex min-h-screen flex-col">
       <HeroSection
@@ -31,11 +67,10 @@ export default function Home() {
           "/home/specialist/mercedes.webp"
         ]}
         aspectRatio="3333/1458"
-
       />
       <ServiceSection />
       <ProductSection />
-      <ProductShowcaseSection />
+      <ProductShowcaseSection initialProducts={safeProducts} />
       <SpecialistImages />
       <FeaturesSection />
     </main>

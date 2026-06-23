@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
+import { revalidatePath } from 'next/cache'
 
 export async function POST(request) {
   const connection = await pool.getConnection()
@@ -54,6 +55,8 @@ export async function POST(request) {
     )
 
     await connection.commit()
+
+    revalidatePath('/products', 'layout')
 
     return NextResponse.json({
       success: true,

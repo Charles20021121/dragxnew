@@ -1,97 +1,121 @@
-"use client"
-import { useEffect, useState, use } from "react";
-import ProductDetail from "@/components/ProductDetail";
 import { Suspense } from "react";
+import ProductDetail from "@/components/ProductDetail";
+import pool from '@/lib/db';
+import { notFound } from "next/navigation";
 
-// Skeleton shown while the product data is fetching
-function ProductSkeleton() {
-  return (
-    <div className="min-h-screen bg-[#f8f4ec] animate-pulse">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb skeleton */}
-        <div className="py-4 flex gap-2">
-          <div className="h-3 w-12 bg-gray-200 rounded" />
-          <div className="h-3 w-2 bg-gray-200 rounded" />
-          <div className="h-3 w-16 bg-gray-200 rounded" />
-          <div className="h-3 w-2 bg-gray-200 rounded" />
-          <div className="h-3 w-32 bg-gray-200 rounded" />
-        </div>
-        {/* Title skeleton */}
-        <div className="hidden md:flex justify-between items-center py-4">
-          <div className="h-6 w-64 bg-gray-200 rounded" />
-          <div className="h-9 w-36 bg-gray-200 rounded-full" />
-        </div>
-        {/* Main content skeleton */}
-        <div className="bg-white rounded-t-3xl p-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="aspect-square bg-gray-200 rounded-lg" />
-            <div className="space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-full" />
-              <div className="h-4 bg-gray-200 rounded w-5/6" />
-              <div className="h-4 bg-gray-200 rounded w-4/6" />
-              <div className="h-4 bg-gray-200 rounded w-full" />
-              <div className="h-4 bg-gray-200 rounded w-3/6" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+export const revalidate = 3600;
 
-export default function ProductPage({ params: paramsPromise }) {
-  const params = use(paramsPromise);
-  const { category, slug } = params;
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+// Helper: name → URL slug
+const toSlug = (name) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-  useEffect(() => {
-    async function fetchProduct() {
-      try {
-        // Use the new targeted endpoint: only fetches main-image rows in this
-        // category + matches slug server-side → much faster than full category.
-        const res = await fetch(
-          `/api/products?category=${encodeURIComponent(category)}&slug=${encodeURIComponent(slug)}`,
-          { cache: 'no-store' }
-        );
+// Helper: format additional_images string → array
+const parseAdditionalImages = (str) =>
+  str
+    ? str.split('|||').filter(Boolean).map(imgData => {
+        const [Id, Name, Url, publicId, date] = imgData.split('|');
+        return { Id, Name, Url, publicId, date };
+      })
+    : [];
 
-        if (res.status === 404) {
-          setNotFound(true);
-          setLoading(false);
-          return;
-        }
+export default async function ProductPage({ params }) {
+  const { category, slug } = await params;
+  let product = null;
+  let connection;
 
-        const data = await res.json();
-        setProduct(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching product:', error);
-        setLoading(false);
+  try {
+    connection = await pool.getConnection();
+    await connection.query('SET SESSION group_concat_max_len = 1000000');
+
+    const query = `
+      SELECT
+        p1.*,
+        GROUP_CONCAT(
+          CASE
+            WHEN p2.same = p1.same THEN CONCAT(p2.Id, '|', p2.Name, '|', p2.Url, '|', p2.publicId, '|', p2.date)
+          END
+          ORDER BY p2.date ASC
+          SEPARATOR '|||'
+        ) as additional_images
+      FROM products p1
+      LEFT JOIN products p2
+        ON p1.same IS NOT NULL
+        AND p1.same != ''
+        AND p2.same = p1.same
+        AND p2.Id != p1.Id
+      WHERE p1.categories = ?
+        AND p1.Id = p1.same
+      GROUP BY p1.Id
+      ORDER BY p1.date DESC
+    `;
+
+    const [rows] = await connection.query(query, [category]);
+
+    const match = rows
+      .filter(p => toSlug(p.Name) === slug.toLowerCase())
+      .sort((a, b) => {
+        const sA = (a.price ? 2 : 0) + (a.description ? 1 : 0);
+        const sB = (b.price ? 2 : 0) + (b.description ? 1 : 0);
+        return sB - sA;
+      })[0];
+
+    if (match) {
+      product = {
+        id: match.Id,
+        name: match.Name,
+        categories: match.categories,
+        image: match.Url,
+        date: match.date,
+        sort_order: match.sort_order,
+        price: match.price,
+        additionalImages: parseAdditionalImages(match.additional_images),
+        buy: match.buy,
+        specifications: match.Specifications,
+        description: match.description,
+        publicId: match.publicId,
+        filter: match.filter,
+        filter1: match.filter1,
+        android_series: match.android_series,
+        custom_filter: match.custom_filter,
+        same: match.same,
       }
     }
 
-    fetchProduct();
-  }, [category, slug]);
+    // Fetch all potential recommendations on the server
+    const queryList = `
+      SELECT Id as id, Name as name, categories, Url as image, date, same, filter1, android_series, sort_order
+      FROM products
+      WHERE same IS NOT NULL AND same != '' AND Id = same
+      ORDER BY sort_order DESC, date DESC
+    `;
+    const [listRows] = await connection.query(queryList);
+    
+    // Process list for recommendations
+    if (product && listRows.length > 0) {
+      const allPotentialRecs = listRows
+        .filter(p => String(p.id) === String(p.same) && String(p.same) !== String(product.same))
+        .map(p => ({
+          ...p,
+          slug: (p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        }));
+        
+      product.recommendations = allPotentialRecs;
+    }
 
-  if (loading) {
-    return <ProductSkeleton />;
+  } catch (error) {
+    console.error('Error fetching product:', error);
+  } finally {
+    if (connection) {
+      connection.release();
+    }
   }
 
-  if (notFound || !product) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f4ec]">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#1c5434] mb-4">Product not found</h1>
-          <p className="text-gray-500">Category: {category}</p>
-          <p className="text-gray-500">Slug: {slug}</p>
-        </div>
-      </div>
-    );
+  if (!product) {
+    notFound();
   }
 
   return (
-    <Suspense fallback={<ProductSkeleton />}>
+    <Suspense fallback={<div>Loading...</div>}>
       <ProductDetail product={product} />
     </Suspense>
   );

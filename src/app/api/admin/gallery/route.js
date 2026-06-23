@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
+import { revalidatePath } from 'next/cache'
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url)
@@ -85,6 +86,8 @@ export async function POST(request) {
 
     await connection.commit()
     console.log('Insert successful, ID:', nextId)
+
+    revalidatePath('/gallery', 'layout')
 
     return NextResponse.json({
       success: true,
