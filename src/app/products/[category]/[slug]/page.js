@@ -114,9 +114,38 @@ export default async function ProductPage({ params }) {
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.image ? [product.image] : [],
+    "description": product.description || `Buy ${product.name} at DRAGX - Malaysia's #1 Car Accessories`,
+    "brand": {
+      "@type": "Brand",
+      "name": "DRAGX"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": `https://dragx.asia/products/${category}/${slug}`,
+      "priceCurrency": "MYR",
+      "price": product.price ? String(product.price).replace(/[^0-9.]/g, '') || "0.00" : "0.00",
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "DRAGX"
+      }
+    }
+  };
+
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ProductDetail product={product} />
-    </Suspense>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProductDetail product={product} />
+      </Suspense>
+    </>
   );
 }

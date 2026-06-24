@@ -46,6 +46,40 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-GKHQ6L6YMD');
           `
         }} />
+        {/* JSON-LD for WebSite and Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "@id": "https://dragx.asia/#website",
+                  "url": "https://dragx.asia/",
+                  "name": "DRAGX",
+                  "description": "Malaysia's #1 Car Accessories & Automotive Solutions",
+                  "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://dragx.asia/search?q={search_term_string}",
+                    "query-input": "required name=search_term_string"
+                  }
+                },
+                {
+                  "@type": "Organization",
+                  "@id": "https://dragx.asia/#organization",
+                  "name": "DRAGX",
+                  "url": "https://dragx.asia/",
+                  "logo": "https://dragx.asia/logo.png",
+                  "sameAs": [
+                    "https://www.facebook.com/dragx.asia",
+                    "https://www.instagram.com/dragx.asia"
+                  ]
+                }
+              ]
+            })
+          }}
+        />
       </head>
       <body className={inter.className}>
         <ProductProvider>

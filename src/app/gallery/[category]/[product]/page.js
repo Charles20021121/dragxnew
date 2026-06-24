@@ -101,11 +101,26 @@ export default async function GalleryProductPage({ params }) {
     ...img
   }));
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "name": safeMainProduct.Name || "DRAGX Gallery",
+    "description": `Gallery for ${safeMainProduct.Name || 'Car Accessories'} - DRAGX`,
+    "url": `https://dragx.asia/gallery/${category}/${productSlug}`,
+    "image": safeAllImagesArray.map(img => img.Url).filter(Boolean)
+  };
+
   return (
-    <GalleryProductClientWrapper 
-      category={category} 
-      product={safeMainProduct} 
-      allImagesArray={safeAllImagesArray} 
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <GalleryProductClientWrapper 
+        category={category} 
+        product={safeMainProduct} 
+        allImagesArray={safeAllImagesArray} 
+      />
+    </>
   )
 }
