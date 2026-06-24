@@ -18,6 +18,48 @@ const parseAdditionalImages = (str) =>
       })
     : [];
 
+export async function generateMetadata({ params }) {
+  const { category, slug } = await params;
+  let title = "Product - DRAGX";
+  let description = "Buy premium car accessories at DRAGX - Malaysia's leading provider.";
+  let imageUrl = "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp";
+
+  try {
+    const connection = await pool.getConnection();
+    try {
+      const [rows] = await connection.query(`
+        SELECT Name, description, Url
+        FROM products
+        WHERE categories = ? AND Id = same
+      `, [category]);
+      
+      const match = rows.find(p => toSlug(p.Name) === slug.toLowerCase());
+      if (match) {
+        title = `${match.Name} - DRAGX`;
+        if (match.description) description = match.description;
+        if (match.Url) imageUrl = match.Url;
+      }
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('Error fetching metadata:', error);
+  }
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `https://www.dragx.asia/products/${category}/${slug}`
+    },
+    openGraph: {
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
+
 export default async function ProductPage({ params }) {
   const { category, slug } = await params;
   let product = null;

@@ -4,6 +4,69 @@ import { notFound } from 'next/navigation'
 
 export const revalidate = 3600;
 
+export async function generateMetadata({ params }) {
+  const { category, product } = await params;
+  const productSlug = decodeURIComponent(product);
+  
+  let title = "Gallery - DRAGX";
+  let description = "Explore DRAGX Car Accessories Gallery.";
+  let imageUrl = "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp";
+
+  try {
+    const connection = await pool.getConnection();
+    try {
+      let query;
+      let queryParams;
+
+      if (category === 'alphard-vellfire') {
+        query = `
+          SELECT Name, Url
+          FROM gallery
+          WHERE categories IN ('alphard', 'vellfire')
+          AND LOWER(REPLACE(Name, ' ', '-')) = ?
+          LIMIT 1
+        `;
+        queryParams = [productSlug];
+      } else {
+        query = `
+          SELECT Name, Url
+          FROM gallery
+          WHERE categories = ? 
+          AND LOWER(REPLACE(Name, ' ', '-')) = ?
+          LIMIT 1
+        `;
+        queryParams = [category, productSlug];
+      }
+
+      const [rows] = await connection.execute(query, queryParams);
+      
+      if (rows.length > 0) {
+        const match = rows[0];
+        title = `${match.Name} - DRAGX Gallery`;
+        description = `View the gallery for ${match.Name} at DRAGX.`;
+        if (match.Url) imageUrl = match.Url;
+      }
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('Error fetching metadata:', error);
+  }
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `https://www.dragx.asia/gallery/${category}/${productSlug}`
+    },
+    openGraph: {
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
+
 export default async function GalleryProductPage({ params }) {
   const { category, product } = await params;
   const productSlug = decodeURIComponent(product);
