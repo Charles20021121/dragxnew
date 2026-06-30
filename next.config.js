@@ -28,6 +28,22 @@ const nextConfig = {
         source: '/api/:path*',
         destination: '/api/:path*',
       },
+      {
+        source: '/sitemap.xml',
+        destination: '/sitemap/sitemap.xml',
+      },
+      {
+        source: '/sitemap_static.xml',
+        destination: '/sitemap/sitemap_static.xml',
+      },
+      {
+        source: '/sitemap_products.xml',
+        destination: '/sitemap/sitemap_products.xml',
+      },
+      {
+        source: '/sitemap_gallery.xml',
+        destination: '/sitemap/sitemap_gallery.xml',
+      },
     ]
   },
 
