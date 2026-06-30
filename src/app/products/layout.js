@@ -2,6 +2,9 @@ export const metadata = {
   title: 'Products - DRAGX Car Accessories',
   description: 'Browse our complete range of car accessories including Android players, ambient lights, 360 cameras, power boots, and more.',
   keywords: 'car accessories, android player, ambient light, 360 camera, power boot, conti decoder',
+  alternates: {
+    canonical: 'https://www.dragx.asia/products',
+  },
   openGraph: {
     title: 'Products - DRAGX Car Accessories',
     description: 'Complete range of car accessories and automotive solutions',

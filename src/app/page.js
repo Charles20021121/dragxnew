@@ -13,6 +13,9 @@ export const metadata = {
   title: 'DRAGX - Malaysia\'s #1 Car Accessories & Automotive Solutions',
   description: 'Malaysia\'s leading car accessories and automotive solutions provider. Specializing in Android players, ambient lights, power boots, and more. Experience the best in automotive upgrades.',
   keywords: 'No.1 car accessories Malaysia, best android player, premium ambient light, power boot, automotive solutions, DRAGX Malaysia, leading brand',
+  alternates: {
+    canonical: 'https://www.dragx.asia',
+  },
   openGraph: {
     title: 'DRAGX - Malaysia\'s #1 Car Accessories & Automotive Solutions',
     description: 'Malaysia\'s leading car accessories and automotive solutions provider',

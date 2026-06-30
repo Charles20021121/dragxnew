@@ -17,6 +17,9 @@ export async function generateMetadata({ params }) {
     title: `${categoryName} Gallery - DRAGX`,
     description: `View our ${categoryTitles[category] || category} installations and customizations. Professional car accessories and modifications by DRAGX.`,
     keywords: `${category} modifications, car accessories, installations, DRAGX, Malaysia`,
+    alternates: {
+      canonical: `https://www.dragx.asia/gallery/${category}`,
+    },
     openGraph: {
       title: `${categoryName} Gallery - DRAGX`,
       description: `${categoryTitles[category] || category} installations and customizations`,

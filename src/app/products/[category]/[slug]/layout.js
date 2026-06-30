@@ -5,7 +5,7 @@ const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_BASE_URL) {
     return process.env.NEXT_PUBLIC_BASE_URL;
   }
-  return 'https://dragx.asia';
+  return 'https://www.dragx.asia';
 };
 
 export async function generateMetadata({ params }) {

@@ -2,6 +2,9 @@ export const metadata = {
   title: 'Locations - DRAGX Service Centers',
   description: 'Find DRAGX service centers near you. Multiple locations across Malaysia including Cheras, Batu Caves, Shah Alam, and more.',
   keywords: 'DRAGX locations, service centers, car accessories shop, Malaysia',
+  alternates: {
+    canonical: 'https://www.dragx.asia/locations',
+  },
   openGraph: {
     title: 'Locations - DRAGX Service Centers',
     description: 'Find DRAGX service centers near you',

@@ -5,6 +5,9 @@ import Image from "next/image";
 export const metadata = {
   title: 'Lyno Android Player User Manual',
   description: 'Complete user manual for Lyno Android Player, including installation instructions, desktop tutorials, system functions, and more.',
+  alternates: {
+    canonical: 'https://www.dragx.asia/manual/lyno',
+  },
 };
 
 // 手册数据 - Part 1: Desktop Tutorial (完整第1章)

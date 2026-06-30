@@ -26,7 +26,7 @@ export default async function DebugOGPage() {
     error = err.message;
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://dragx.asia';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.dragx.asia';
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

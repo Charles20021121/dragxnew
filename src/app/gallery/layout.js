@@ -2,6 +2,9 @@ export const metadata = {
   title: 'Gallery - DRAGX Car Installations',
   description: 'View our portfolio of professional car accessory installations and customizations. See real examples of our work on various car models.',
   keywords: 'car gallery, installations, customization, BMW, Mercedes, Alphard, Vellfire',
+  alternates: {
+    canonical: 'https://www.dragx.asia/gallery',
+  },
   openGraph: {
     title: 'Gallery - DRAGX Car Installations',
     description: 'Portfolio of professional car accessory installations and customizations',

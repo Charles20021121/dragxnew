@@ -1,5 +1,6 @@
 import ProductCategoryPage from "@/components/ProductCategoryPage";
 import pool from "@/lib/db";
+import { notFound } from "next/navigation";
 
 export const revalidate = 3600;
 
@@ -70,6 +71,10 @@ export default async function CategoryProducts({ params }) {
     }
   } catch (error) {
     console.error('Error fetching category products:', error);
+  }
+
+  if (products.length === 0) {
+    notFound();
   }
 
   return (

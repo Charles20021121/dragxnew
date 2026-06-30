@@ -1,5 +1,6 @@
 import GalleryCategoryClientWrapper from '@/components/GalleryCategoryClientWrapper'
 import pool from '@/lib/db'
+import { notFound } from 'next/navigation'
 
 export const revalidate = 3600;
 
@@ -53,6 +54,10 @@ export default async function GalleryCategory({ params }) {
     rawCategory: item.categories, // To be used by the client wrapper for filtering
     slug: (item.Name || `Product ${item.Id}`).toLowerCase().replace(/\s+/g, '-')
   }));
+
+  if (rawProducts.length === 0) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen">

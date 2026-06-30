@@ -169,7 +169,7 @@ export default async function GalleryProductPage({ params }) {
     "@type": "ImageGallery",
     "name": safeMainProduct.Name || "DRAGX Gallery",
     "description": `Gallery for ${safeMainProduct.Name || 'Car Accessories'} - DRAGX`,
-    "url": `https://dragx.asia/gallery/${category}/${productSlug}`,
+    "url": `https://www.dragx.asia/gallery/${category}/${productSlug}`,
     "image": safeAllImagesArray.map(img => img.Url).filter(Boolean)
   };
 

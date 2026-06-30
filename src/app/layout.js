@@ -17,7 +17,7 @@ const getBaseUrl = () => {
     return process.env.NEXT_PUBLIC_BASE_URL;
   }
   // 生產環境
-  return 'https://dragx.asia';
+  return 'https://www.dragx.asia';
 };
 
 export const metadata = {
@@ -55,22 +55,22 @@ export default function RootLayout({ children }) {
               "@graph": [
                 {
                   "@type": "WebSite",
-                  "@id": "https://dragx.asia/#website",
-                  "url": "https://dragx.asia/",
+                  "@id": "https://www.dragx.asia/#website",
+                  "url": "https://www.dragx.asia/",
                   "name": "DRAGX",
                   "description": "Malaysia's #1 Car Accessories & Automotive Solutions",
                   "potentialAction": {
                     "@type": "SearchAction",
-                    "target": "https://dragx.asia/search?q={search_term_string}",
+                    "target": "https://www.dragx.asia/search?q={search_term_string}",
                     "query-input": "required name=search_term_string"
                   }
                 },
                 {
                   "@type": "Organization",
-                  "@id": "https://dragx.asia/#organization",
+                  "@id": "https://www.dragx.asia/#organization",
                   "name": "DRAGX",
-                  "url": "https://dragx.asia/",
-                  "logo": "https://dragx.asia/logo.png",
+                  "url": "https://www.dragx.asia/",
+                  "logo": "https://www.dragx.asia/logo.png",
                   "sameAs": [
                     "https://www.facebook.com/dragx.asia",
                     "https://www.instagram.com/dragx.asia"

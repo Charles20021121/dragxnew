@@ -21,8 +21,8 @@ export async function generateMetadata({ params }) {
     ambientlight: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/m75j3e1uy8kqdc0iiyzy_dnk0kb.webp',
     contidecoder: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/gcpdyz9k7cs9pgdcggen.webp',
     powerboot: 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/hhtep5dkd3wdixyn8fsv_rdiujs.webp',
-    bmw: 'https://dragx.asia/bmw/BMW FA.jpg',
-    mercedes: 'https://dragx.asia/mercedes/categories-08.jpg',
+    bmw: 'https://www.dragx.asia/bmw/BMW FA.jpg',
+    mercedes: 'https://www.dragx.asia/mercedes/categories-08.jpg',
   };
 
   const defaultImage = 'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp';
@@ -33,6 +33,9 @@ export async function generateMetadata({ params }) {
     title: `${categoryTitles[category] || category.toUpperCase()} - DRAGX Car Accessories`,
     description: `Explore our range of ${categoryTitles[category] || category} for your vehicle. Quality automotive solutions from DRAGX.`,
     keywords: `${category}, car accessories, automotive, DRAGX, Malaysia`,
+    alternates: {
+      canonical: `https://www.dragx.asia/products/${category}`,
+    },
     openGraph: {
       title: `${categoryTitles[category] || category.toUpperCase()} - DRAGX Car Accessories`,
       description: `Explore our range of ${categoryTitles[category] || category} for your vehicle`,

@@ -168,7 +168,7 @@ export default async function ProductPage({ params }) {
     },
     "offers": {
       "@type": "Offer",
-      "url": `https://dragx.asia/products/${category}/${slug}`,
+      "url": `https://www.dragx.asia/products/${category}/${slug}`,
       "priceCurrency": "MYR",
       "price": product.price ? String(product.price).replace(/[^0-9.]/g, '') || "0.00" : "0.00",
       "availability": "https://schema.org/InStock",
