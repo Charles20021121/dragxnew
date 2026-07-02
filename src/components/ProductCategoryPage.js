@@ -96,6 +96,7 @@ export default function ProductCategoryPage({
   const [carFilter, setCarFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedCustomFilter, setSelectedCustomFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Categories that support custom filtering
   const customFilterCategories = ['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others'];
@@ -209,40 +210,37 @@ export default function ProductCategoryPage({
   }, [categoryPath, androidFilter, contiFilter, silenceFilter, title, setCurrentProduct]);
 
   // 根據類別和過濾條件處理產品列表
-  const displayProducts =
-    categoryPath === "soundproof"
-      ? products
-        .filter(product => product.filter1 === silenceFilter && product.id == product.same)
-        .sort((a, b) => a.name.localeCompare(b.name, undefined, {
-          numeric: true,
-          sensitivity: 'base'
-        }))
-      : categoryPath === "contidecoder"
-        ? products
-          .filter(product => {
-            const typeMatch = contiFilter === 'appleCarplay'
-              ? (product.filter1 === 'appleCarplay')
-              : product.filter1 === contiFilter;
-            const carMatch = carFilter === 'all' || product.filter === carFilter;
-            const isMainImage = product.id == product.same;
-            return typeMatch && carMatch && isMainImage;
-          })
-          .sort((a, b) => a.name.localeCompare(b.name, undefined, {
-            numeric: true,
-            sensitivity: 'base'
-          }))
-        : products
-          .filter(product => {
-            const isMainImage = product.id == product.same;
-            const customFilterMatch = !isCustomFilterEnabled || 
-              selectedCustomFilter === 'all' || 
-              (selectedCustomFilter === 'uncategorized' ? (!product.custom_filter || product.custom_filter.trim() === '') : product.custom_filter === selectedCustomFilter);
-            return isMainImage && customFilterMatch;
-          })
-          .sort((a, b) => a.name.localeCompare(b.name, undefined, {
-            numeric: true,
-            sensitivity: 'base'
-          }));
+  const displayProducts = (() => {
+    const searchFilter = (product) =>
+      !searchQuery || product.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+    if (categoryPath === "soundproof") {
+      return products
+        .filter(product => product.filter1 === silenceFilter && product.id == product.same && searchFilter(product))
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+    } else if (categoryPath === "contidecoder") {
+      return products
+        .filter(product => {
+          const typeMatch = contiFilter === 'appleCarplay'
+            ? (product.filter1 === 'appleCarplay')
+            : product.filter1 === contiFilter;
+          const carMatch = carFilter === 'all' || product.filter === carFilter;
+          const isMainImage = product.id == product.same;
+          return typeMatch && carMatch && isMainImage && searchFilter(product);
+        })
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+    } else {
+      return products
+        .filter(product => {
+          const isMainImage = product.id == product.same;
+          const customFilterMatch = !isCustomFilterEnabled ||
+            selectedCustomFilter === 'all' ||
+            (selectedCustomFilter === 'uncategorized' ? (!product.custom_filter || product.custom_filter.trim() === '') : product.custom_filter === selectedCustomFilter);
+          return isMainImage && customFilterMatch && searchFilter(product);
+        })
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+    }
+  })();
 
   // Android Player 专用：按系列分组产品
   const getAndroidProductsBySeries = () => {
@@ -255,7 +253,8 @@ export default function ProductCategoryPage({
     }
 
     const filteredProducts = products
-      .filter(product => product && product.filter1 === androidFilter && product.id == product.same)
+      .filter(product => product && product.filter1 === androidFilter && product.id == product.same &&
+        (!searchQuery || product.name.toLowerCase().includes(searchQuery.toLowerCase())))
       .sort((a, b) => {
         const nameA = (a.name || '');
         const nameB = (b.name || '');
@@ -313,6 +312,14 @@ export default function ProductCategoryPage({
     const params = new URLSearchParams(searchParams);
     params.set('page', page);
     router.push(`?${params.toString()}`);
+  };
+
+  // 格式化價格，加入千位分隔符
+  const formatPrice = (price) => {
+    if (!price) return '';
+    const num = parseFloat(price);
+    if (isNaN(num)) return price;
+    return num.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
   // 添加格式化類別名稱的函數
@@ -548,6 +555,41 @@ export default function ProductCategoryPage({
           )}
         </AnimatePresence>
 
+        {/* Admin Search Bar */}
+        {isAdmin && (
+          <div className="mb-6">
+            <div className="relative max-w-md">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-5 w-5 text-[#1c5434]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg shadow-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1c5434] focus:border-transparent"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+            {searchQuery && (
+              <p className="mt-1.5 text-xs text-gray-500">
+                Showing results for <span className="font-semibold text-[#1c5434]">&ldquo;{searchQuery}&rdquo;</span>
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Title Section */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-5">
@@ -700,7 +742,7 @@ export default function ProductCategoryPage({
                                   </h3>
                                   {product.price && (
                                     <p className="text-black font-medium text-sm mt-1">
-                                      RM {product.price}
+                                      RM {formatPrice(product.price)}
                                     </p>
                                   )}
                                 </div>
@@ -779,7 +821,7 @@ export default function ProductCategoryPage({
                                     </h3>
                                     {product.price && (
                                       <p className="text-black font-medium text-sm mt-1">
-                                        RM {product.price}
+                                        RM {formatPrice(product.price)}
                                       </p>
                                     )}
                                   </div>
@@ -860,7 +902,7 @@ export default function ProductCategoryPage({
                       </h3>
                       {product.price && (
                         <p className="text-black font-medium text-sm mt-1">
-                          RM {product.price}
+                          RM {formatPrice(product.price)}
                         </p>
                       )}
                     </div>

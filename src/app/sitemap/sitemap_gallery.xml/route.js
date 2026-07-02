@@ -40,9 +40,8 @@ export async function GET() {
     }));
 
     const galleryRoutes = mainGalleryItems.map((item) => {
-      const slug = item.Name.toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
+      const name = item.Name || `Product ${item.Id}`;
+      const slug = encodeURIComponent(name.toLowerCase().replace(/\s+/g, '-'));
       return {
         url: `${baseUrl}/gallery/${item.categories}/${slug}`,
         lastModified: new Date(item.date || new Date()).toISOString(),

@@ -237,6 +237,14 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
     }, 300);
   };
 
+  // 格式化價格，加入千位分隔符
+  const formatPrice = (price) => {
+    if (!price) return '';
+    const num = parseFloat(price);
+    if (isNaN(num)) return price;
+    return num.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
   // 使用与右下角 WhatsApp 按钮相同的消息与 URL 生成逻辑
   const getWhatsAppUrlForProduct = () => {
     const isMobileDevice = () => {
@@ -373,7 +381,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
             {product.name}
             {product.price && (
               <span className="block text-black text-lg mt-1">
-                RM {product.price}
+                RM {formatPrice(product.price)}
               </span>
             )}
           </h1>
@@ -479,7 +487,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
                     </h1>
                     {product.price && (
                       <p className="text-black font-bold text-lg">
-                        RM {product.price}
+                        RM {formatPrice(product.price)}
                       </p>
                     )}
 
@@ -558,7 +566,7 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
             <p className="text-xs">{product.specifications}</p>
             {product.price && (
               <p className="text-black font-bold text-sm mt-1">
-                RM {product.price}
+                RM {formatPrice(product.price)}
               </p>
             )}
           </div>
