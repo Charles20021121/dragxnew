@@ -89,7 +89,7 @@ export default function ReorderProducts() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const res = await fetch('/api/products?list=true');
+        const res = await fetch(`/api/products?list=true&_t=${Date.now()}`);
         const data = await res.json();
         if (Array.isArray(data)) {
           setProducts(data);

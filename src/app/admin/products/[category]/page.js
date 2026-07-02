@@ -42,7 +42,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`/api/products?category=${category}`, { cache: 'no-store' });
+      const res = await fetch(`/api/products?category=${category}&_t=${Date.now()}`, { cache: 'no-store' });
       const data = await res.json();
 
       // 處理產品數據，添加 slug

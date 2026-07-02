@@ -51,7 +51,7 @@ export default function ProductPage({ params: paramsPromise }) {
 
   const fetchProduct = async () => {
     try {
-      const res = await fetch(`/api/products?category=${category}`, { cache: 'no-store' });
+      const res = await fetch(`/api/products?category=${category}&_t=${Date.now()}`, { cache: 'no-store' });
       const products = await res.json();
 
       console.log('Fetched products:', products.length);
