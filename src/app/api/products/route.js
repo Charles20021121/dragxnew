@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
-export const dynamic = 'force-dynamic';
-
 const CACHE_TTL = 300; // 5 minutes CDN edge cache
+const CACHE_HEADER = `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60`;
 
 // Helper: name → URL slug
 const toSlug = (name) =>
@@ -88,7 +87,7 @@ export async function GET(request) {
         custom_filter: match.custom_filter,
         same: match.same,
       }, {
-        headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' },
+        headers: { 'Cache-Control': CACHE_HEADER },
       });
     }
 
@@ -141,7 +140,7 @@ export async function GET(request) {
         }));
 
       return NextResponse.json(formatted, {
-        headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' },
+        headers: { 'Cache-Control': CACHE_HEADER },
       });
     }
 
@@ -170,7 +169,7 @@ export async function GET(request) {
           filter1: p.filter1,
           android_series: p.android_series,
         })),
-        { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
+        { headers: { 'Cache-Control': CACHE_HEADER } }
       );
     }
 
@@ -200,7 +199,7 @@ export async function GET(request) {
         publicId: p.publicId,
         same: p.same,
       })),
-      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
+      { headers: { 'Cache-Control': CACHE_HEADER } }
     );
 
   } catch (error) {
