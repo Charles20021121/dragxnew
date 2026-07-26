@@ -64,160 +64,402 @@ export default function PowerBootPage() {
           <figure className="relative">
             <Image
               unoptimized
-              src="/powerboot/Power boot page-01.webp"
+              src="/powerboot/pc/Power boot page-01.webp"
               alt="DX Power Boot - Smart Electric Tailgate System with hands-free operation and advanced safety features"
               width={1200}
               height={800}
               className="w-full h-auto"
               priority
             />
+            {/* Logo and Text Overlay */}
+            <div className="absolute inset-0 flex flex-col pointer-events-none">
+              <div className="absolute top-[6%] lg:top-[8%] left-[8%] lg:left-[10%] w-[25vw] md:w-[15vw] z-10">
+                <Image
+                  unoptimized
+                  src="/powerboot/All logo PNG-05.png"
+                  alt="DX Power Boot Logo"
+                  width={400}
+                  height={120}
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+              <div className="absolute inset-0 flex flex-col justify-center items-start px-[8%] lg:px-[10%] w-[60%]">
+                <h1
+                  className="font-bold text-white tracking-wide whitespace-nowrap"
+                  style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
+                >
+                  SMART BOOT, SMART CHOICE
+                </h1>
+              </div>
+            </div>
+
             <figcaption className="sr-only">
               DX Power Boot presents the ultimate smart electric tailgate solution. Experience the tagline 'Smart Boot, Smart Choice' with our innovative electric tailgate wake lift system that makes trunk operation effortless and intelligent.
             </figcaption>
           </figure>
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/Power boot page-02.webp"
-              alt="Power Boot Smart Upgrade - Intelligent electric tailgate with 9 key features including anti-pinch protection"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Power Boot Smart Upgrade for Your Car: Comprehensive overview showing intelligent anti-pinch protection, wireless remote control, hand-to-one touch operation, mind control technology, optional outfit customization, voluntary easy warning system, abnormal easy warning, high memory storage, and simple operation interface.
-            </figcaption>
-          </figure>
+          {/* Section 2: Smart Upgrade */}
+          <section className="w-full bg-gradient-to-br from-[#2f0000] via-[#1a0000] to-black py-20 px-[5%] lg:px-[8%] relative overflow-hidden border-t border-red-900/30">
+            <div className="max-w-[1400px] mx-auto flex flex-row items-center justify-between">
+              {/* Left Side Product Image */}
+              <div className="w-[45%] flex items-center justify-center relative">
+                <Image src="/powerboot/product.webp" alt="Power Boot Product" width={800} height={800} className="w-full h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700" />
+              </div>
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/Power boot page-03.webp"
-              alt="Power Boot Convenience & Comfort - One-touch operation perfect for busy lifestyles and family use"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Convenience & Comfort: Demonstrates one-touch open/close functionality with remote control or car button operation. Perfect for users carrying shopping bags, luggage, or holding children, eliminating the need to manually lift heavy tailgates.
-            </figcaption>
-          </figure>
+              {/* Right Side Content */}
+              <div className="w-[50%] flex flex-col items-start z-10 text-white">
+                <div className="flex justify-start mb-2">
+                  <div className="relative inline-block">
+                    <div className="absolute top-1/2 left-[-5%] w-[110%] h-[80%] bg-gradient-to-r from-transparent via-red-600/90 to-transparent -translate-y-1/2 blur-[2px] pointer-events-none"></div>
+                    <h2 className="relative z-10 inline-block font-bold tracking-wider text-[2.5vw] lg:text-[2vw] text-white drop-shadow-md" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                      POWER BOOT
+                    </h2>
+                  </div>
+                </div>
+                <h3 className="font-semibold tracking-wide text-[1.5vw] lg:text-[1.2vw] mb-6 text-white drop-shadow-sm">
+                  SMART UPGRADE FOR YOUR CAR
+                </h3>
+                <p className="text-gray-200 text-[1vw] lg:text-[0.9vw] mb-10 text-justify leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                  Upgrade your driving experience with Power Boot, the intelligent electric tailgate designed for comfort and safety. With just one touch—or even hands-free—you can open and close your tailgate effortlessly. Equipped with anti-pinch protection, adjustable height, and smart controls, Power Boot brings convenience, safety, and a premium feel to your car. Smooth, durable, and stylish, it's the upgrade that makes every journey easier.
+                </p>
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/Power boot page-04.webp"
-              alt="Power Boot Smart Integration - Advanced integration with car's central lock and foot-sensor activation"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Smart Integration: Shows how Power Boot integrates with your car's central lock and remote system. Features foot-sensor kick activation for hands-free operation, seamlessly connecting with existing vehicle systems for enhanced functionality.
-            </figcaption>
-          </figure>
+                {/* Icons Grid */}
+                <div className="w-full space-y-8">
+                  <div className="flex justify-between w-full">
+                    {['02', '03', '04', '05', '06'].map(num => (
+                      <div key={num} className="w-[18%] flex flex-col items-center group">
+                        <Image unoptimized src={`/powerboot/icons/ICON-1-${num}.webp`} alt="Feature Icon" width={100} height={100} className="w-[50%] h-auto object-contain mb-3 group-hover:scale-110 transition-transform duration-300" />
+                        <span className="text-[0.7vw] lg:text-[0.6vw] text-center text-gray-300 whitespace-pre-line leading-tight font-light">
+                          {num === '02' ? 'Intelligent\nAnti Pinch' : num === '03' ? 'Wireless\nRemote Control' : num === '04' ? 'Hand In One' : num === '05' ? 'Mind Control' : 'Optional\nOutfit'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-center gap-[8%] w-full">
+                    {['07', '08', '09', '10'].map(num => (
+                      <div key={num} className="w-[18%] flex flex-col items-center group">
+                        <Image unoptimized src={`/powerboot/icons/ICON-1-${num}.webp`} alt="Feature Icon" width={100} height={100} className="w-[50%] h-auto object-contain mb-3 group-hover:scale-110 transition-transform duration-300" />
+                        <span className="text-[0.7vw] lg:text-[0.6vw] text-center text-gray-300 whitespace-pre-line leading-tight font-light">
+                          {num === '07' ? 'Voluntary\nAdjustment' : num === '08' ? 'Abnormal\nEarly Warning' : num === '09' ? 'High Memory' : 'Simple Operation'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/Power boot page-05.webp"
-              alt="Power Boot Safety & Protection - Anti-pinch technology preventing damage and ensuring user safety"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Safety & Protection: Highlights intelligent anti-pinch function that stops and reverses when obstacles are detected. Reduces risk of car damage during forceful closing and prevents accidental injuries to children or pets with advanced safety features.
-            </figcaption>
-          </figure>
+          {/* Sections 3 & 4: Convenience & Smart Integration */}
+          <section className="w-full bg-[#050000] py-16 relative overflow-hidden">
+            <div className="max-w-[1400px] mx-auto px-[5%] lg:px-[8%] flex flex-col gap-24">
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/Power boot page-06.webp"
-              alt="Power Boot Adjustable Height - User-friendly customization for different users and garage clearances"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Adjustable Height & User-Friendly: Demonstrates customizable tailgate opening height to accommodate different users, prevent hitting low garage ceilings, and provide easy operation for elderly or shorter users with personalized settings.
-            </figcaption>
-          </figure>
+              {/* Convenience & Comfort */}
+              <div className="flex flex-row items-center justify-between relative z-10">
+                {/* Left Side Content */}
+                <div className="w-[45%] flex flex-col items-start text-white relative">
+                  <div className="relative inline-block mb-8">
+                    <div className="absolute top-1/2 left-[-10%] w-[130%] h-[120%] bg-gradient-to-r from-red-700/40 via-red-800/20 to-transparent -translate-y-1/2 blur-md pointer-events-none"></div>
+                    <h2 className="relative z-10 font-bold tracking-wider text-[1.8vw] lg:text-[1.5vw] text-white drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                      CONVENIENCE & COMFORT
+                    </h2>
+                  </div>
+                  <div className="space-y-6 text-gray-300 text-[1.2vw] lg:text-[1vw] leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    <p>One-touch open/close with remote control<br />or car button.</p>
+                    <p>No need to manually lift a heavy tailgate.</p>
+                    <p>Suitable for users carrying shopping bags,<br />luggage, or holding children.</p>
+                  </div>
+                </div>
+
+                {/* Right Side Image */}
+                <div className="w-[48%] flex items-center justify-center relative">
+                  <Image src="/powerboot/back/bag-car-trunk 1.webp" alt="Convenience and Comfort" width={800} height={600} className="w-full h-auto object-cover rounded-[16px] shadow-2xl shadow-black border border-white/5" />
+                </div>
+              </div>
+
+              {/* Smart Integration */}
+              <div className="flex flex-row items-center justify-between relative z-10">
+                {/* Left Side Image */}
+                <div className="w-[48%] flex items-center justify-center relative">
+                  <Image src="/powerboot/back/bag-car-trunk 2.webp" alt="Smart Integration" width={800} height={600} className="w-full h-auto object-cover rounded-[16px] shadow-2xl shadow-black border border-white/5" />
+                </div>
+
+                {/* Right Side Content */}
+                <div className="w-[45%] flex flex-col items-start text-white relative">
+                  <div className="relative inline-block mb-8">
+                    <div className="absolute top-1/2 right-[-10%] w-[130%] h-[120%] bg-gradient-to-l from-red-700/40 via-red-800/20 to-transparent -translate-y-1/2 blur-md pointer-events-none"></div>
+                    <h2 className="relative z-10 font-bold tracking-wider text-[1.8vw] lg:text-[1.5vw] text-white drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                      SMART INTEGRATION
+                    </h2>
+                  </div>
+                  <div className="space-y-6 text-gray-300 text-[1.2vw] lg:text-[1vw] leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    <p>Can Integrate with car's central<br />lock and remote system.</p>
+                    <p>Some models allow foot-sensor kick<br />activation for hands-free operation.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          {/* Sections 5 & 6: Safety & Adjustable Height */}
+          <section className="w-full bg-[#1a0000] py-24 px-[5%] lg:px-[8%] relative overflow-hidden">
+            <div className="max-w-[1400px] mx-auto flex flex-col items-center">
+
+              {/* Safety & Protection Title */}
+              <div className="relative inline-block mb-4 text-center">
+                <div className="absolute top-1/2 left-[-5%] w-[110%] h-[80%] bg-gradient-to-r from-transparent via-red-600/90 to-transparent -translate-y-1/2 blur-[2px] pointer-events-none"></div>
+                <h2 className="relative z-10 font-bold tracking-wider text-[2vw] lg:text-[1.8vw] text-white drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                  SAFETY & PROTECTION
+                </h2>
+              </div>
+              <p className="text-gray-300 text-[1.2vw] lg:text-[1vw] mb-12 font-light tracking-wide text-center">
+                Reduces risk of damaging the car when closing forcefully.
+              </p>
+
+              {/* Safety 1 & 2 Row (Side-by-Side) */}
+              <div className="flex flex-row justify-center items-start w-full gap-8 lg:gap-12 mb-20">
+                {/* Safety 1 */}
+                <div className="flex flex-col items-center w-[45%] max-w-[600px]">
+                  <div className="w-full relative rounded-[16px] overflow-hidden shadow-2xl shadow-black border border-white/5 mb-4">
+                    <Image src="/powerboot/safty/safety 1.webp" alt="Anti-pinch function" width={800} height={500} className="w-full h-auto object-cover" />
+                  </div>
+                  <p className="text-gray-300 text-center text-[1.1vw] lg:text-[0.9vw] leading-relaxed font-light">
+                    Intelligent anti-pinch function:<br />stops and reverses if an obstacle is detected.
+                  </p>
+                </div>
+
+                {/* Safety 2 */}
+                <div className="flex flex-col items-center w-[45%] max-w-[600px]">
+                  <div className="w-full relative rounded-[16px] overflow-hidden shadow-2xl shadow-black border border-white/5 mb-4">
+                    <Image src="/powerboot/safty/safety 2.webp" alt="Prevents accidental injuries" width={800} height={500} className="w-full h-auto object-cover" />
+                  </div>
+                  <p className="text-gray-300 text-center text-[1.1vw] lg:text-[0.9vw] leading-relaxed font-light">
+                    Prevents accidental injuries to children or pets.
+                  </p>
+                </div>
+              </div>
+
+              {/* Adjustable Height Title */}
+              <div className="relative inline-block mb-8 text-center">
+                <div className="absolute top-1/2 left-[-5%] w-[110%] h-[80%] bg-gradient-to-r from-transparent via-red-600/90 to-transparent -translate-y-1/2 blur-[2px] pointer-events-none"></div>
+                <h2 className="relative z-10 font-bold tracking-wider text-[2vw] lg:text-[1.8vw] text-white drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                  ADJUSTABLE HEIGHT & USER-FRIENDLY
+                </h2>
+              </div>
+
+              {/* Safety 3 */}
+              <div className="flex flex-row items-center justify-center w-full gap-12 mb-8">
+                {/* Left Side Image */}
+                <div className="w-[45%] max-w-[500px] relative rounded-[16px] overflow-hidden shadow-2xl shadow-black border border-white/5">
+                  <Image src="/powerboot/safty/safety 3.webp" alt="Adjustable height for users" width={800} height={500} className="w-full h-auto object-cover" />
+                </div>
+
+                {/* Right Side Text */}
+                <div className="w-[45%] flex flex-col items-start space-y-6 text-left">
+                  <p className="text-gray-300 text-[1.1vw] lg:text-[0.9vw] leading-relaxed font-light whitespace-nowrap" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    Tailgate opening height can be adjusted to fit different users.
+                  </p>
+                  <p className="text-gray-300 text-[1.1vw] lg:text-[0.9vw] leading-relaxed font-light whitespace-nowrap" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    Prevents hitting low garage ceilings.
+                  </p>
+                  <p className="text-gray-300 text-[1.1vw] lg:text-[0.9vw] leading-relaxed font-light whitespace-nowrap" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    Easy for elderly or shorter users.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </section>
         </>
       ) : (
         <>
           <figure className="relative">
             <Image
               unoptimized
-              src="/powerboot/Power boot page-01.webp"
+              src="/powerboot/pc/Power boot page-01.webp"
               alt="DX Power Boot - Smart Electric Tailgate System with hands-free operation and advanced safety features"
               width={1200}
               height={800}
               className="w-full h-auto"
               priority
             />
+            {/* Logo and Text Overlay */}
+            <div className="absolute inset-0 flex flex-col pointer-events-none">
+              <div className="absolute top-[6%] left-[6%] w-[15vw] sm:w-[12vw] z-10">
+                <Image
+                  unoptimized
+                  src="/powerboot/All logo PNG-05.png"
+                  alt="DX Power Boot Logo"
+                  width={400}
+                  height={120}
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+              <div className="absolute inset-0 flex flex-col justify-center items-start px-[6%] w-full">
+                <h1
+                  className="font-bold text-white tracking-wide drop-shadow-md whitespace-nowrap"
+                  style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
+                >
+                  SMART BOOT, SMART CHOICE
+                </h1>
+              </div>
+            </div>
             <figcaption className="sr-only">
               DX Power Boot presents the ultimate smart electric tailgate solution. Experience the tagline 'Smart Boot, Smart Choice' with our innovative electric tailgate wake lift system that makes trunk operation effortless and intelligent.
             </figcaption>
           </figure>
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/PHONE SIZE-02.webp"
-              alt="Power Boot Smart Upgrade - Intelligent electric tailgate with 9 key features including anti-pinch protection"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Power Boot Smart Upgrade for Your Car: Comprehensive overview showing intelligent anti-pinch protection, wireless remote control, hand-to-one touch operation, mind control technology, optional outfit customization, voluntary easy warning system, abnormal easy warning, high memory storage, and simple operation interface.
-            </figcaption>
-          </figure>
+          {/* Section 2: Smart Upgrade */}
+          <section className="w-full bg-gradient-to-br from-[#2f0000] via-[#1a0000] to-black py-16 px-[6%] border-t border-red-900/30">
+            <div className="w-full max-w-[500px] mx-auto mb-10 mt-4 relative flex justify-center">
+              <Image src="/powerboot/product.webp" alt="Power Boot Product" width={800} height={800} className="w-full h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700" />
+            </div>
+            <div className="flex justify-start mb-2">
+              <div className="relative inline-block">
+                <div className="absolute top-1/2 left-[-5%] w-[110%] h-[80%] bg-gradient-to-r from-transparent via-red-600/90 to-transparent -translate-y-1/2 blur-[2px] pointer-events-none"></div>
+                <h2 className="relative z-10 inline-block font-bold tracking-wider text-[6vw] text-left text-white drop-shadow-md" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                  POWER BOOT
+                </h2>
+              </div>
+            </div>
+            <h3 className="font-semibold tracking-wide text-[4vw] mb-6 text-left text-white drop-shadow-sm">
+              SMART UPGRADE FOR YOUR CAR
+            </h3>
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/PHONE SIZE-03.webp"
-              alt="Power Boot Convenience & Comfort - One-touch operation perfect for busy lifestyles and family use"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Convenience & Comfort: Demonstrates one-touch open/close functionality with remote control or car button operation. Perfect for users carrying shopping bags, luggage, or holding children, eliminating the need to manually lift heavy tailgates.
-            </figcaption>
-          </figure>
+            <p className="text-gray-200 text-[3.5vw] mb-10 text-left leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+              Upgrade your driving experience with Power Boot, the intelligent electric tailgate designed for comfort and safety. With just one touch—or even hands-free—you can open and close your tailgate effortlessly. Equipped with anti-pinch protection, adjustable height, and smart controls, Power Boot brings convenience, safety, and a premium feel to your car. Smooth, durable, and stylish, it's the upgrade that makes every journey easier.
+            </p>
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/PHONE SIZE-04.webp"
-              alt="Power Boot Smart Integration - Advanced integration with car's central lock and foot-sensor activation"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Smart Integration: Shows how Power Boot integrates with your car's central lock and remote system. Features foot-sensor kick activation for hands-free operation, seamlessly connecting with existing vehicle systems for enhanced functionality.
-            </figcaption>
-          </figure>
+            {/* Icons Grid */}
+            <div className="w-full grid grid-cols-3 gap-y-6 gap-x-2">
+              {['02', '03', '04', '05', '06', '07', '08', '09', '10'].map(num => (
+                <div key={num} className="flex flex-col items-center group">
+                  <Image unoptimized src={`/powerboot/icons/ICON-1-${num}.webp`} alt="Feature Icon" width={100} height={100} className="w-[50%] h-auto object-contain mb-3 group-hover:scale-110 transition-transform duration-300" />
+                  <span className="text-[2.5vw] text-center text-gray-300 leading-tight whitespace-pre-line font-light">
+                    {num === '02' ? 'Intelligent\nAnti Pinch' : num === '03' ? 'Wireless\nRemote Control' : num === '04' ? 'Hand In One' : num === '05' ? 'Mind Control' : num === '06' ? 'Optional\nOutfit' : num === '07' ? 'Voluntary\nAdjustment' : num === '08' ? 'Abnormal\nEarly Warning' : num === '09' ? 'High Memory' : 'Simple Operation'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-          <figure className="relative">
-            <Image
-              unoptimized
-              src="/powerboot/PHONE SIZE-05.webp"
-              alt="Power Boot Safety & Protection - Anti-pinch technology preventing damage and ensuring user safety"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-            <figcaption className="sr-only">
-              Safety & Protection: Highlights intelligent anti-pinch function that stops and reverses when obstacles are detected. Reduces risk of car damage during forceful closing and prevents accidental injuries to children or pets with advanced safety features.
-            </figcaption>
-          </figure>
+          {/* Sections 3 & 4: Convenience & Smart Integration (Mobile) */}
+          <section className="w-full bg-[#050000] py-12 px-[4%] relative overflow-hidden">
+            <div className="flex flex-col gap-12 relative z-10">
+
+              {/* Convenience & Comfort */}
+              <div className="flex flex-row items-center justify-between w-full">
+                {/* Left Side Content */}
+                <div className="flex flex-col items-start text-white w-[48%]">
+                  <div className="relative inline-block mb-4">
+                    <div className="absolute top-1/2 left-[-10%] w-[130%] h-[120%] bg-gradient-to-r from-red-700/40 via-red-800/20 to-transparent -translate-y-1/2 blur-sm pointer-events-none"></div>
+                    <h2 className="relative z-10 font-bold tracking-wider text-[2.5vw] text-left text-white drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                      CONVENIENCE & COMFORT
+                    </h2>
+                  </div>
+                  <div className="space-y-3 text-gray-300 text-[2.2vw] leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    <p>One-touch open/close with remote control or car button.</p>
+                    <p>No need to manually lift a heavy tailgate.</p>
+                    <p>Suitable for users carrying shopping bags, luggage, or holding children.</p>
+                  </div>
+                </div>
+
+                {/* Right Side Image */}
+                <div className="w-[48%] relative flex justify-center">
+                  <Image src="/powerboot/back/bag-car-trunk 1.webp" alt="Convenience and Comfort" width={800} height={600} className="w-full h-auto object-cover rounded-[12px] shadow-xl border border-white/5" />
+                </div>
+              </div>
+
+              {/* Smart Integration */}
+              <div className="flex flex-row items-center justify-between w-full">
+                {/* Left Side Image */}
+                <div className="w-[48%] relative flex justify-center">
+                  <Image src="/powerboot/back/bag-car-trunk 2.webp" alt="Smart Integration" width={800} height={600} className="w-full h-auto object-cover rounded-[12px] shadow-xl border border-white/5" />
+                </div>
+
+                {/* Right Side Content */}
+                <div className="flex flex-col items-start text-white w-[48%]">
+                  <div className="relative inline-block mb-4">
+                    <div className="absolute top-1/2 right-[-10%] w-[130%] h-[120%] bg-gradient-to-l from-red-700/40 via-red-800/20 to-transparent -translate-y-1/2 blur-sm pointer-events-none"></div>
+                    <h2 className="relative z-10 font-bold tracking-wider text-[2.5vw] text-left text-white drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                      SMART INTEGRATION
+                    </h2>
+                  </div>
+                  <div className="space-y-3 text-gray-300 text-[2.2vw] leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    <p>Can Integrate with car's central lock and remote system.</p>
+                    <p>Some models allow foot-sensor kick activation for hands-free operation.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          {/* Sections 5 & 6: Safety & Adjustable Height (Mobile) */}
+          <section className="w-full bg-[#1a0000] py-16 px-[6%] relative overflow-hidden">
+            <div className="flex flex-col items-center">
+
+              {/* Safety & Protection Title */}
+              <div className="relative inline-block mb-4 text-center mt-6">
+                <div className="absolute top-1/2 left-[-5%] w-[110%] h-[80%] bg-gradient-to-r from-transparent via-red-600/90 to-transparent -translate-y-1/2 blur-[2px] pointer-events-none"></div>
+                <h2 className="relative z-10 font-bold tracking-wider text-[4.2vw] text-white drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                  SAFETY & PROTECTION
+                </h2>
+              </div>
+              <p className="text-gray-300 text-[2.8vw] mb-10 font-light tracking-wide text-center">
+                Reduces risk of damaging the car when closing forcefully.
+              </p>
+
+              {/* Safety 1 */}
+              <div className="flex flex-col items-center w-[85%] mb-10">
+                <div className="w-full relative rounded-[12px] overflow-hidden shadow-xl border border-white/5 mb-4">
+                  <Image src="/powerboot/safty/safety 1.webp" alt="Anti-pinch function" width={800} height={500} className="w-full h-auto object-cover" />
+                </div>
+                <p className="text-gray-300 text-center text-[2.8vw] leading-relaxed font-light">
+                  Intelligent anti-pinch function:<br />stops and reverses if an obstacle is detected.
+                </p>
+              </div>
+
+              {/* Safety 2 */}
+              <div className="flex flex-col items-center w-[85%] mb-10">
+                <div className="w-full relative rounded-[12px] overflow-hidden shadow-xl border border-white/5 mb-4">
+                  <Image src="/powerboot/safty/safety 2.webp" alt="Prevents accidental injuries" width={800} height={500} className="w-full h-auto object-cover" />
+                </div>
+                <p className="text-gray-300 text-center text-[2.8vw] leading-relaxed font-light">
+                  Prevents accidental injuries to children or pets.
+                </p>
+              </div>
+
+              {/* Adjustable Height Title */}
+              <div className="relative inline-block mb-6 text-center">
+                <div className="absolute top-1/2 left-[-5%] w-[110%] h-[80%] bg-gradient-to-r from-transparent via-red-600/90 to-transparent -translate-y-1/2 blur-[2px] pointer-events-none"></div>
+                <h2 className="relative z-10 font-bold tracking-wider text-[3.5vw] text-white drop-shadow-md whitespace-nowrap" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                  ADJUSTABLE HEIGHT & USER-FRIENDLY
+                </h2>
+              </div>
+
+              {/* Safety 3 */}
+              <div className="flex flex-col items-center w-[85%] mb-8">
+                <div className="w-full relative rounded-[12px] overflow-hidden shadow-xl border border-white/5 mb-6">
+                  <Image src="/powerboot/safty/safety 3.webp" alt="Adjustable height for users" width={800} height={500} className="w-full h-auto object-cover" />
+                </div>
+
+                <div className="flex flex-col items-center space-y-3 text-center">
+                  <p className="text-gray-300 text-[2.2vw] leading-relaxed font-light whitespace-nowrap" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    Tailgate opening height can be adjusted to fit different users.
+                  </p>
+                  <p className="text-gray-300 text-[2.2vw] leading-relaxed font-light whitespace-nowrap" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    Prevents hitting low garage ceilings.
+                  </p>
+                  <p className="text-gray-300 text-[2.2vw] leading-relaxed font-light whitespace-nowrap" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                    Easy for elderly or shorter users.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </section>
         </>
       )}
 
