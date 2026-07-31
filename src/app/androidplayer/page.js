@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useProduct } from '@/contexts/ProductContext'
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 
 export default function AndroidPlayerPage() {
     const { setCurrentProduct } = useProduct()
@@ -100,24 +101,216 @@ export default function AndroidPlayerPage() {
     return (
         <>
             <div className="min-h-screen" style={{ backgroundColor: '#00605b' }}>
-                {/* 第一部分：大图展示 (01-06) */}
-                <div className="w-full">
-                    {(isDesktop ? pcImages.slice(0, 6) : phoneImages.slice(0, 6)).map((src, index) => (
-                        <figure key={`hero-${index}`} className="relative">
-                            <Image
-                                unoptimized
-                                src={src}
-                                alt={`Android Player - ${index + 1}`}
-                                width={1200}
-                                height={800}
-                                className="w-full h-auto"
-                                priority={index === 0}
-                            />
-                        </figure>
-                    ))}
+                {/* 顶部横幅 (背景图模式) */}
+                <div className="relative w-full bg-[#011512] overflow-hidden">
+
+                    {/* Background Image (作为真实流内容撑开高度，保证按比例缩放不被裁剪) */}
+                    <img
+                        src={isDesktop ? "/androidplayer/pc/Android player PC 2-01.webp" : "/androidplayer/phone/Android player Phone-01.webp"}
+                        alt="Android Player Hero Banner"
+                        className="w-full h-auto block"
+                    />
+
+                    {/* Main Content - 参考 Ambient Light 完美百分比缩放排版 */}
+                    <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] lg:px-[12%] w-[45%]">
+                        {/* 第一行大标题 */}
+                        <h2
+                            className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap drop-shadow-lg"
+                            style={{ fontSize: '3vw', lineHeight: '1.1' }}
+                        >
+                            ANDROID PLAYER
+                        </h2>
+                        {/* 第二行副标题 */}
+                        <p
+                            className="text-white mb-2 lg:mb-6 drop-shadow-md whitespace-nowrap"
+                            style={{ fontSize: '1.4vw', lineHeight: '1.4' }}
+                        >
+                            Upgrade to a Smarter Driving Experience
+                        </p>
+                        {/* 段落文本 */}
+                        <p
+                            className="text-gray-200 text-justify drop-shadow-md"
+                            style={{ fontSize: '1.1vw', lineHeight: '1.5' }}
+                        >
+                            It replaces or upgrades your factory head unit, giving your vehicle a tablet-like smart interface with advanced apps, navigation, and entertainment features.
+                        </p>
+                    </div>
                 </div>
 
-                {/* 第二部分：系列选择网格 (09-17) */}
+                {/* 第二部分：更多功能对比 (背景实拍照片) */}
+                <div className="relative w-full bg-black overflow-hidden">
+
+                    {/* Background Image */}
+                    <img
+                        src={isDesktop ? "/androidplayer/pc/Android player PC 2-02.webp" : "/androidplayer/phone/Android player Phone-02.webp"}
+                        alt="Android Player in Car"
+                        className="w-full h-auto block"
+                    />
+
+                    {/* Content Container (参考 Banner 1 使用纯百分比定位和 vw 字体等比例缩放) */}
+                    <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start pl-[50%] lg:pl-[52%] pr-[6%] lg:pr-[8%] w-full">
+                        <div className="w-full flex flex-col text-left">
+                            <h2
+                                className="font-bold text-white uppercase tracking-wide drop-shadow-lg mb-2 lg:mb-4 whitespace-nowrap"
+                                style={{ fontSize: '2.5vw', lineHeight: '1.2' }}
+                            >
+                                MORE FUNCTIONS COMPARED<br className="hidden md:block" /> TO FACTORY HEAD UNITS
+                            </h2>
+                            <p
+                                className="text-gray-200 drop-shadow-md text-justify w-full"
+                                style={{ fontSize: '0.95vw', lineHeight: '1.5' }}
+                            >
+                                Factory systems are limited. An Android Player gives you powerful features like smartphone-style apps, online navigation, 360° cameras, entertainment options, and more.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 第三部分：更大更清晰的屏幕 (背景实拍照片) */}
+                <div className="relative w-full bg-[#01100e] overflow-hidden">
+
+                    {/* Background Image */}
+                    <img
+                        src={isDesktop ? "/androidplayer/pc/Android player PC 2-03.webp" : "/androidplayer/phone/Android player Phone-03.webp"}
+                        alt="Bigger and Clearer Display"
+                        className="w-full h-auto block"
+                    />
+
+                    {/* Content Container (参考 Banner 1 使用纯百分比定位和 vw 字体等比例缩放) */}
+                    <div className="hidden md:flex absolute inset-0 flex-col justify-center items-end pr-[48%] lg:pr-[50%] pl-[6%] lg:pl-[8%] w-full">
+                        <div className="w-fit flex flex-col items-end text-right">
+                            <h2
+                                className="font-bold text-white uppercase tracking-widest drop-shadow-lg mb-2 lg:mb-4 whitespace-nowrap"
+                                style={{ fontSize: '2.5vw', lineHeight: '1.2' }}
+                            >
+                                BIGGER & CLEARER DISPLAY
+                            </h2>
+                            <p
+                                className="text-gray-200 drop-shadow-md text-right w-full"
+                                style={{ fontSize: '1.0vw', lineHeight: '1.5' }}
+                            >
+                                Available in 9" / 10" / 12"/OEM screens, making navigation, reverse camera, and<br className="hidden md:block" /> media viewing much clearer and safer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 第四部分：三大特色功能 (手机版直接显示全图) */}
+                <div className="w-full block md:hidden bg-black overflow-hidden">
+                    <img
+                        src="/androidplayer/phone/Android player Phone-04.webp"
+                        alt="Split Screen, Voice Control & Wireless Features"
+                        className="w-full h-auto block"
+                    />
+                </div>
+
+                {/* 第四部分：三大特色功能 (电脑版：真实图片 + 极简无边框设计) */}
+                <div className="w-full bg-[#002b2a] py-16 md:py-24 hidden md:block">
+                    <div className="container mx-auto px-6 md:px-12 lg:px-16 flex flex-col items-center">
+
+                        {/* Section Title */}
+                        <h2 className="text-3xl md:text-4xl lg:text-[42px] font-bold text-white uppercase text-center leading-tight tracking-wide mb-12 md:mb-16 drop-shadow-md">
+                            SUPPORTS SPLIT SCREEN, VOICE CONTROL<br className="hidden md:block" /> & WIRELESS FEATURES
+                        </h2>
+
+                        {/* Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 w-full max-w-[1400px]">
+
+                            {/* Feature 1: Split Screen */}
+                            <div className="flex flex-col items-center">
+                                <div className="w-full aspect-[16/10] md:aspect-[4/3] relative rounded-2xl overflow-hidden mb-6 md:mb-8 shadow-lg">
+                                    <img src="/androidplayer/5. SS,VC,WF 3张图/link-02.webp" alt="Split Screen" className="w-full h-full object-cover" />
+                                </div>
+                                <h3 className="text-2xl md:text-[28px] font-bold text-white tracking-wide mb-4 text-center">Split Screen</h3>
+                                <p className="text-[#b3c9c6] text-[15px] md:text-[16px] leading-relaxed text-justify px-2 md:px-4">
+                                    Run two apps at the same time - for example, use Google Maps + Music, or YouTube + Car menu. This helps you access more functions without switching screens.
+                                </p>
+                            </div>
+
+                            {/* Feature 2: Voice Control */}
+                            <div className="flex flex-col items-center">
+                                <div className="w-full aspect-[16/10] md:aspect-[4/3] relative rounded-2xl overflow-hidden mb-6 md:mb-8 shadow-lg">
+                                    <img src="/androidplayer/5. SS,VC,WF 3张图/link-03.webp" alt="Voice Control" className="w-full h-full object-cover" />
+                                </div>
+                                <h3 className="text-2xl md:text-[28px] font-bold text-white tracking-wide mb-4 text-center">Voice Control</h3>
+                                <p className="text-[#b3c9c6] text-[15px] md:text-[16px] leading-relaxed text-justify px-2 md:px-4">
+                                    Control your app, call, or music using your voice at just what you need, keeping your hands on the wheel and your focus on the road.
+                                </p>
+                            </div>
+
+                            {/* Feature 3: Wireless Features */}
+                            <div className="flex flex-col items-center">
+                                <div className="w-full aspect-[16/10] md:aspect-[4/3] relative rounded-2xl overflow-hidden mb-6 md:mb-8 shadow-lg">
+                                    <img src="/androidplayer/5. SS,VC,WF 3张图/link-04.webp" alt="Wireless Features" className="w-full h-full object-cover" />
+                                </div>
+                                <h3 className="text-2xl md:text-[28px] font-bold text-white tracking-wide mb-4 text-center">Wireless Features</h3>
+                                <p className="text-[#b3c9c6] text-[15px] md:text-[16px] leading-relaxed text-justify px-2 md:px-4">
+                                    Enjoy wireless Apple CarPlay / Android Auto, Bluetooth music, and wireless updates without messy cables. A cleaner, safer driving experience with fewer distractions.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        {/* Bottom Italic Tagline */}
+                        <p className="text-[#b3c9c6] italic text-sm md:text-[17px] mt-16 text-center font-light tracking-widest drop-shadow-md">
+                            A smoother, smarter driving experience with less distraction.
+                        </p>
+
+                    </div>
+                </div>
+
+                {/* 第五部分：导航功能展示 (背景实拍图) */}
+                <div className="relative w-full bg-[#021a18] overflow-hidden">
+
+                    {/* Background Image */}
+                    <img
+                        src={isDesktop ? "/androidplayer/pc/Android player PC 2-05.webp" : "/androidplayer/phone/Android player Phone-05.webp"}
+                        alt="Supports Navigation"
+                        className="w-full h-auto block"
+                    />
+
+                    {/* Content Overlaid */}
+                    <div className="hidden md:block absolute inset-0 w-full h-full pointer-events-none z-10">
+                        {/* Top Title */}
+                        <div className="absolute top-[6%] lg:top-[8%] w-full px-6 flex justify-center">
+                            <h2 className="text-[3.5vw] md:text-[2.2vw] font-bold text-white uppercase text-center tracking-widest drop-shadow-2xl">
+                                SUPPORTS NAVIGATION (ALWAYS UP TO DATE)
+                            </h2>
+                        </div>
+
+                        {/* Bottom Subtitle */}
+                        <div className="absolute bottom-[4%] lg:bottom-[6%] w-full px-6 flex justify-center">
+                            <p className="text-gray-200 italic text-[2vw] md:text-[0.9vw] text-center tracking-widest font-light drop-shadow-md">
+                                Use Google Maps or Waze with live traffic updates — no paid map updates like OEM units.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 第六部分：车载娱乐升级 (背景实拍图) */}
+                <div className="relative w-full bg-[#04423a] overflow-hidden">
+
+                    {/* Background Image */}
+                    <img
+                        src={isDesktop ? "/androidplayer/pc/Android player PC 2-06.webp" : "/androidplayer/phone/Android player Phone-06.webp"}
+                        alt="Upgraded In-Car Entertainment"
+                        className="w-full h-auto block"
+                    />
+
+                    {/* Content Container (Overlaid) */}
+                    <div className="hidden md:block absolute inset-0 w-full h-full pointer-events-none z-10">
+                        <div className="absolute top-[25%] md:top-[30%] left-[55%] md:left-[58%] w-[40%] md:w-[38%] flex flex-col space-y-2 md:space-y-4 text-left">
+                            <h2 className="text-[4.5vw] md:text-[2.8vw] font-bold text-white uppercase leading-[1.2] tracking-widest drop-shadow-2xl">
+                                UPGRADED IN-CAR<br className="hidden md:block" /> ENTERTAINMENT
+                            </h2>
+                            <p className="text-[2.5vw] md:text-[1.1vw] text-gray-200 leading-relaxed drop-shadow-md tracking-wider font-light">
+                                Perfect for families, long-distance drivers, Grab drivers, or anyone who wants an enjoyable cabin experience.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 第七部分：系列选择网格 (09-17) */}
                 <div className="container mx-auto px-4 py-12">
                     <h2 className="text-white text-3xl md:text-5xl font-bold text-center mb-12 tracking-wider">
                         CHOOSE YOUR SERIES

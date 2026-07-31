@@ -68,12 +68,12 @@ export default function AmbientLightPage() {
   ]
 
   const mobileImages = [
-    '/ambientlight/pc/phone/ambient-light-car-interior-hero-mobile.webp',
-    '/ambientlight/pc/phone/ambient-light-aesthetics-luxury-design-mobile.webp',
-    '/ambientlight/pc/phone/ambient-light-personalization-color-control-mobile.webp',
-    '/ambientlight/pc/phone/ambient-light-visibility-safety-features-mobile.webp',
-    '/ambientlight/pc/phone/ambient-light-oem-integration-background-mobile.webp',
-    '/ambientlight/pc/phone/ambient-light-universal-installation-background-mobile.webp',
+    '/ambientlight/phone/Ambient light Phone-01.webp',
+    '/ambientlight/phone/Ambient light Phone-02.webp',
+    '/ambientlight/phone/Ambient light Phone-03.webp',
+    '/ambientlight/phone/Ambient light Phone-04.webp',
+    '/ambientlight/phone/Ambient light Phone-05.webp',
+    '/ambientlight/phone/Ambient light Phone-06.webp',
     '/ambientlight/pc/phone/ambient-light-customized-car-model-background-mobile.webp',
   ]
 
@@ -106,7 +106,7 @@ export default function AmbientLightPage() {
             <div className="absolute inset-0 flex flex-col">
               {index === 0 && (
                 <>
-                  <div className="absolute top-[4%] lg:top-[6%] left-[10%] w-[15vw] md:w-[18vw] lg:w-[15vw] z-10">
+                  <div className="hidden md:block absolute top-[4%] lg:top-[6%] left-[10%] w-[15vw] md:w-[18vw] lg:w-[15vw] z-10">
                     <Image
                       unoptimized
                       src="/ambientlight/pc/All logo PNG-01.png"
@@ -116,7 +116,7 @@ export default function AmbientLightPage() {
                       className="w-full h-auto object-contain"
                     />
                   </div>
-                  <div className="absolute inset-0 flex flex-col justify-center items-start px-[10%] w-[45%]">
+                  <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[10%] w-[45%]">
                   <h1
                     className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
                     style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.4vw', lineHeight: '1.1' }}
@@ -140,7 +140,7 @@ export default function AmbientLightPage() {
               )}
 
               {index === 1 && (
-                <div className="absolute inset-0 flex flex-col justify-start md:justify-center items-start md:items-end pt-[15%] md:pt-0 px-[8%] md:px-[10%]">
+                <div className="hidden md:flex absolute inset-0 flex-col justify-start md:justify-center items-start md:items-end pt-[15%] md:pt-0 px-[8%] md:px-[10%]">
                   <div className="w-[90%] md:w-[45%] flex flex-col items-start">
                     <h1
                       className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap text-[6vw] md:text-[2.4vw]"
@@ -159,7 +159,7 @@ export default function AmbientLightPage() {
               )}
 
               {index === 2 && (
-                <div className="absolute inset-0 flex flex-col md:flex-row justify-start md:justify-center items-center pt-[5%] md:pt-0 px-[4%] md:px-[10%]">
+                <div className="hidden md:flex absolute inset-0 flex-col md:flex-row justify-start md:justify-center items-center pt-[5%] md:pt-0 px-[4%] md:px-[10%]">
                   {/* Left (Top on Mobile) */}
                   <div className="flex flex-col items-center text-center w-full md:w-[55%] mb-2 md:mb-0">
                     <h1
@@ -226,7 +226,7 @@ export default function AmbientLightPage() {
               )}
 
               {index === 3 && (
-                <div className="absolute inset-0 flex justify-center items-center">
+                <div className="hidden md:flex absolute inset-0 justify-center items-center">
                   <h1
                     className="absolute top-[8%] lg:top-[5%] font-bold text-white tracking-wide text-center text-[6vw] md:text-[2.4vw]"
                     style={{ fontFamily: 'Geometos, sans-serif', lineHeight: '1.2' }}
@@ -243,7 +243,7 @@ export default function AmbientLightPage() {
               )}
 
               {index === 4 && (
-                <div className="absolute inset-0 flex flex-col items-center justify-between py-[8%] md:py-[6%] lg:py-[5%] px-[5%] lg:px-[10%]">
+                <div className="hidden md:flex absolute inset-0 flex-col items-center justify-between py-[8%] md:py-[6%] lg:py-[5%] px-[5%] lg:px-[10%]">
                   {/* Top Header */}
                   <div className="flex flex-col items-center text-center w-full">
                     <h1
@@ -328,7 +328,7 @@ export default function AmbientLightPage() {
               )}
 
               {index === 5 && (
-                <div className="absolute inset-0 flex flex-col items-center justify-between py-[8%] md:py-[6%] lg:py-[5%] px-[5%] lg:px-[10%]">
+                <div className="hidden md:flex absolute inset-0 flex-col items-center justify-between py-[8%] md:py-[6%] lg:py-[5%] px-[5%] lg:px-[10%]">
                   {/* Top Header */}
                   <div className="flex flex-col items-center text-center w-full">
                     <h1

@@ -1,6 +1,11 @@
 import HeroSection from "@/components/HeroSection"
 import pool from '@/lib/db'
 import SilenceClientWrapper from '@/components/SilenceClientWrapper'
+import SilenceLuxurySection from '@/components/SilenceLuxurySection'
+import SilenceProtectionSection from '@/components/SilenceProtectionSection'
+import SilenceNVHSection from '@/components/SilenceNVHSection'
+import SilenceReductionMethodsSection from '@/components/SilenceReductionMethodsSection'
+import SilenceFeaturesGridSection from '@/components/SilenceFeaturesGridSection'
 
 export const revalidate = 3600;
 
@@ -55,7 +60,15 @@ export default async function SilencePage() {
       
       <SilenceClientWrapper categorizedProducts={categorizedProducts} />
 
-
+      <SilenceLuxurySection />
+      
+      <SilenceProtectionSection />
+      
+      <SilenceNVHSection />
+      
+      <SilenceReductionMethodsSection />
+      
+      <SilenceFeaturesGridSection />
 
     </main>
   )
