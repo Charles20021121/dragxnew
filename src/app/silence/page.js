@@ -55,36 +55,7 @@ export default async function SilencePage() {
       
       <SilenceClientWrapper categorizedProducts={categorizedProducts} />
 
-      <HeroSection
-        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/t2nairvmqzh3465yf0ry.webp"
-        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/joo4pf3evml9vtfs6ads.webp"
-        aspectRatio="3334/1277"
-        mobileAspectRatio="3334/2479"
-      />
-      <HeroSection
-        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/l9vs63elicroo5p9eocz.webp"
-        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/teuxfnrwq7awfns0lsob.webp"
-        aspectRatio="3334/1277"
-        mobileAspectRatio="3334/1680"
-      />
-      <HeroSection
-        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/uav09ng6ndhuv84w7aoa.webp"
-        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/g5uclbikf5kzfzhnhdde.webp"
-        aspectRatio="3334/1277"
-        mobileAspectRatio="3334/2154"
-      />
-      <HeroSection
-        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/to2qmvww2hjs1aeualfc.webp"
-        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/tgxoqvacn6rmdm95phit.webp"
-        aspectRatio="3334/1541"
-        mobileAspectRatio="3334/2154"
-      />
-      <HeroSection
-        image="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/r0yi1kfx04qf8ji279pz.webp"
-        mobileImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/rbb6tvepk4zqpf48b7tk.webp"
-        aspectRatio="3334/877"
-        mobileAspectRatio="3334/1154"
-      />
+
 
     </main>
   )
