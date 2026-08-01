@@ -78,13 +78,21 @@ export default function DX360Page() {
       <div className="relative">
         <Image
           unoptimized
-          src={isDesktop ? "/dx360/360 PAGE-01.webp" : "/dx360/PHONE SIZE-01.webp"}
+          src={isDesktop ? "/dx360/pc banner.webp" : "/dx360/PHONE SIZE-01.webp"}
           alt="DX360 - 360° Vision & Safety Upgrades for Every Car - Complete car safety system with 360 camera, dash cam, blind spot monitor and radar sensor"
           width={1200}
           height={800}
           className="w-full h-auto"
           priority
         />
+        <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] md:px-[10%] w-[90%] md:w-[70%] lg:w-[65%]">
+          <h1
+            className="font-bold text-white tracking-wide"
+            style={{ fontFamily: 'Gotham-Bold, Gotham, sans-serif', fontSize: '3vw', lineHeight: '1.2' }}
+          >
+            360° VISION & SAFETY<br />UPGRADES FOR EVERY CAR
+          </h1>
+        </div>
       </div>
 
       <Image

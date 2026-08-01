@@ -65,13 +65,34 @@ export default function ContiDecoderPage() {
           <figure className="relative">
             <Image
               unoptimized
-              src="/contidecoder/pc/conti-decoder-main.webp"
+              src="/contidecoder/pc/CONTI DECODER PAGE 2-01.webp"
               alt="Conti Decoder - Advanced Car Decoding System"
               width={1200}
               height={800}
               className="w-full h-auto"
               priority
             />
+            
+            <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] md:px-[10%] w-[90%] md:w-[55%] lg:w-[48%]">
+              <h1
+                className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
+                style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
+              >
+                CONTI DECODER &<br />360° INTERFACE
+              </h1>
+              <h2
+                className="text-white mb-3 lg:mb-5"
+                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.25vw', lineHeight: '1.4' }}
+              >
+                OEM-Grade image decoding and surround-view integration for modern automotive systems.
+              </h2>
+              <p
+                className="text-gray-200 text-justify"
+                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
+              >
+                Decoder Box is a retrofit CarPlay and Android Auto kit that adds CarPlay and Android Auto functionality to your factory vehicle. The kit provides an OEM look and experience, as it retains the original dashboard display and supports your existing SMEG/MRN controls, including the rotary controller and steering wheel buttons.
+              </p>
+            </div>
             <figcaption className="sr-only">
               Conti Decoder presents the ultimate car decoding solution for modern vehicles.
             </figcaption>
@@ -86,6 +107,20 @@ export default function ContiDecoderPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start left-[50%] w-[45%] pr-[5%]">
+              <h1
+                className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
+                style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
+              >
+                ANDROID DECODER
+              </h1>
+              <p
+                className="text-gray-200 text-justify"
+                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
+              >
+                Native-style Android Auto support using your factory display and controls. Works wired or wireless with automatic connection. Access maps, calls, messages and music through Google voice assistant—clean, safe, OEM feel.
+              </p>
+            </div>
             <figcaption className="sr-only">
               Conti Decoder comprehensive features and capabilities.
             </figcaption>
@@ -100,6 +135,23 @@ export default function ContiDecoderPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] md:px-[10%] w-[90%] md:w-[60%] lg:w-[55%]">
+              <h1
+                className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
+                style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
+              >
+                CARPLAY DECODER
+              </h1>
+              <p
+                className="text-gray-200 text-justify w-full"
+                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
+              >
+                Seamless Apple CarPlay integration with your original screen and controls. Supports wired and wireless connection. Auto-connect every drive and control calls, messages, navigation and music with
+                <span className="block text-right mt-1">
+                  Siri—just like OEM.
+                </span>
+              </p>
+            </div>
             <figcaption className="sr-only">
               Advanced functionality of Conti Decoder system.
             </figcaption>
@@ -114,6 +166,20 @@ export default function ContiDecoderPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="hidden md:flex absolute inset-0 flex-col justify-start items-start left-[52%] w-[45%] pr-[5%] pt-[2%]">
+              <h1
+                className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
+                style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
+              >
+                360° CAM DECODER
+              </h1>
+              <p
+                className="text-gray-200 text-justify w-full"
+                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
+              >
+                The 360 Interface processes four camera inputs to generate a complete surround-view image, providing drivers with enhanced parking and safety visibility.
+              </p>
+            </div>
             <figcaption className="sr-only">
               Conti Decoder integration with vehicle systems.
             </figcaption>
