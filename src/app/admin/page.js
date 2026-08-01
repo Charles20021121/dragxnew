@@ -63,6 +63,21 @@ export default function AdminPage() {
               </p>
             </motion.div>
           </Link>
+
+          <Link href="/admin/silence-prices">
+            <motion.div 
+              className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <h2 className="text-xl font-bold text-[#1c5434] mb-2">
+                Silence Prices Management
+              </h2>
+              <p className="text-gray-600">
+                Manage pricing for Silence packages (BASIC, STANDARD, PRO) and Comfort series.
+              </p>
+            </motion.div>
+          </Link>
         </div>
       </div>
     </div>

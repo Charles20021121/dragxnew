@@ -12,8 +12,6 @@ const SilenceLuxurySection = () => {
           alt="When Silence Becomes a True Luxury" 
           className="w-full h-auto"
         />
-        {/* Optional overlay to ensure text is readable if image is bright */}
-        <div className="absolute inset-0 bg-black/40"></div>
         
         {/* Desktop Left Side: Text Content */}
         <div className="absolute inset-0 flex flex-col justify-center items-start pr-[50%] pl-[8%] z-10" style={{ gap: '1.5vw' }}>
