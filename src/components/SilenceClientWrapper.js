@@ -54,7 +54,7 @@ export default function SilenceClientWrapper({ categorizedProducts, silencePrice
 
   useEffect(() => {
     if (!mounted) return;
-    
+
     setCurrentProduct({
       name: `DX Silence - ${activeCategory}`,
       category: 'soundproof',
@@ -79,10 +79,14 @@ export default function SilenceClientWrapper({ categorizedProducts, silencePrice
       // Fallback 到產品表的價格
       priceStr = defaultProduct.price
     }
-    
+
+    if (priceStr === 'XXX' || priceStr.trim() === '') {
+      return null;
+    }
+
     return (
       <>
-        <span className="font-normal mr-1">RM</span>
+        <span className="mr-1">RM</span>
         {priceStr}
       </>
     )
@@ -164,7 +168,7 @@ export default function SilenceClientWrapper({ categorizedProducts, silencePrice
                     <div className="text-white flex items-center justify-center h-12 md:h-16">
                       <CarIcon type={carType} />
                     </div>
-                    <span className="text-xs md:text-xl font-bold tracking-wider text-white">
+                    <span className="text-xs md:text-xl font-normal tracking-wider text-white">
                       {getPrice(activeCategory, carType, product)}
                     </span>
                   </div>

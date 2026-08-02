@@ -78,21 +78,14 @@ export default function DX360Page() {
       <div className="relative">
         <Image
           unoptimized
-          src={isDesktop ? "/dx360/pc banner.webp" : "/dx360/PHONE SIZE-01.webp"}
+          src={isDesktop ? "/dx360/360 PAGE-01.webp" : "/dx360/PHONE SIZE-01.webp"}
           alt="DX360 - 360° Vision & Safety Upgrades for Every Car - Complete car safety system with 360 camera, dash cam, blind spot monitor and radar sensor"
           width={1200}
           height={800}
           className="w-full h-auto"
           priority
         />
-        <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] md:px-[10%] w-[90%] md:w-[70%] lg:w-[65%]">
-          <h1
-            className="font-bold text-white tracking-wide"
-            style={{ fontFamily: 'Gotham-Bold, Gotham, sans-serif', fontSize: '3vw', lineHeight: '1.2' }}
-          >
-            360° VISION & SAFETY<br />UPGRADES FOR EVERY CAR
-          </h1>
-        </div>
+
       </div>
 
       <Image
@@ -179,29 +172,29 @@ export default function DX360Page() {
         </div>
       </div>
 
+
       <div className="relative">
         <Image
           unoptimized
-          src={isDesktop ? "/dx360/360 PAGE-06.webp" : "/dx360/PHONE SIZE-06.webp"}
-          alt="DX360 Dash Cam - Advanced accident evidence recording, reckless driving deterrent, and 24/7 parking surveillance system"
+          src={isDesktop ? "/dx360/360 PAGE 2-06.png" : "/dx360/PHONE SIZE-06.png"}
+          alt="DX360 Additional Feature"
           width={1200}
           height={800}
-          className="w-full h-auto"
+          className="w-full h-auto block"
         />
-        <div
-          className={`absolute ${isDesktop ? 'left-1/2 -translate-x-1/2 bottom-[10%] w-fit' : 'left-1/2 bottom-[3%] -translate-x-1/2 w-fit'}`}
+      </div>
+
+      <div className="w-full bg-[#012b59] md:bg-[#012c58] flex justify-center items-center py-8 lg:py-12">
+        <a
+          href="/products/360camera"
+          className="inline-block w-fit bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
+          style={{
+            fontSize: isDesktop ? 'min(1.5vw, 18px)' : '15px',
+            padding: isDesktop ? '0.6em 1.8em' : '0.45em 1.3em'
+          }}
         >
-          <a
-            href="/products/360camera"
-            className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
-            style={{
-              fontSize: isDesktop ? 'min(1.5vw, 18px)' : '15px',
-              padding: isDesktop ? '0.6em 1.8em' : '0.45em 1.3em'
-            }}
-          >
-            LEARN MORE
-          </a>
-        </div>
+          LEARN MORE
+        </a>
       </div>
     </>
   )

@@ -73,25 +73,39 @@ export default function ContiDecoderPage() {
               priority
             />
             
-            <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] md:px-[10%] w-[90%] md:w-[55%] lg:w-[48%]">
-              <h1
-                className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
-                style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
-              >
-                CONTI DECODER &<br />360° INTERFACE
-              </h1>
-              <h2
-                className="text-white mb-3 lg:mb-5"
-                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.25vw', lineHeight: '1.4' }}
-              >
-                OEM-Grade image decoding and surround-view integration for modern automotive systems.
-              </h2>
-              <p
-                className="text-gray-200 text-justify"
-                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
-              >
-                Decoder Box is a retrofit CarPlay and Android Auto kit that adds CarPlay and Android Auto functionality to your factory vehicle. The kit provides an OEM look and experience, as it retains the original dashboard display and supports your existing SMEG/MRN controls, including the rotary controller and steering wheel buttons.
-              </p>
+            {/* Logo and Main Content */}
+            <div className="absolute inset-0 flex flex-col z-10 pointer-events-none">
+              <div className="hidden md:block absolute top-[4%] lg:top-[6%] left-[10%] w-[15vw] md:w-[18vw] lg:w-[15vw] z-10 pointer-events-auto">
+                <Image
+                  unoptimized
+                  src="/contidecoder/logo.png"
+                  alt="DX Conti Decoder Logo"
+                  width={400}
+                  height={120}
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+
+              <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] md:px-[10%] w-[90%] md:w-[55%] lg:w-[48%] pointer-events-auto">
+                <h1
+                  className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
+                  style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
+                >
+                  CONTI DECODER &<br />360° INTERFACE
+                </h1>
+                <h2
+                  className="text-white mb-3 lg:mb-5"
+                  style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.25vw', lineHeight: '1.4' }}
+                >
+                  OEM-Grade image decoding and surround-view integration for modern automotive systems.
+                </h2>
+                <p
+                  className="text-gray-200 text-justify"
+                  style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
+                >
+                  Decoder Box is a retrofit CarPlay and Android Auto kit that adds CarPlay and Android Auto functionality to your factory vehicle. The kit provides an OEM look and experience, as it retains the original dashboard display and supports your existing SMEG/MRN controls, including the rotary controller and steering wheel buttons.
+                </p>
+              </div>
             </div>
             <figcaption className="sr-only">
               Conti Decoder presents the ultimate car decoding solution for modern vehicles.

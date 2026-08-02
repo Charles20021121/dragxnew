@@ -2,7 +2,7 @@ import React from 'react';
 
 const SilenceReductionMethodsSection = () => {
     return (
-        <section 
+        <section
             className="text-white w-full relative overflow-hidden flex flex-col bg-black bg-no-repeat bg-cover bg-center"
             style={{ backgroundImage: `url('/silence/Understanding Noise Reduction Methods/backgrond.webp')` }}
         >
@@ -11,9 +11,9 @@ const SilenceReductionMethodsSection = () => {
             {/* MOBILE LAYOUT */}
             {/* ============================== */}
             <div className="md:hidden w-full relative block">
-                <img 
-                    src="/silence/Phone/4.webp" 
-                    alt="Understanding Noise Reduction Methods Mobile Banner" 
+                <img
+                    src="/silence/Phone/4.webp"
+                    alt="Understanding Noise Reduction Methods Mobile Banner"
                     className="w-full h-auto"
                 />
             </div>

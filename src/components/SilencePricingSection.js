@@ -28,9 +28,14 @@ export default function SilencePricingSection({ silencePrices = [] }) {
   const getPrice = (tab, carType) => {
     const item = silencePrices.find(p => p.category === tab && p.car_type === carType)
     const priceStr = (item && item.price) ? item.price : 'XXX'
+    
+    if (priceStr === 'XXX' || priceStr.trim() === '') {
+      return null;
+    }
+    
     return (
       <>
-        <span className="font-normal mr-1">RM</span>
+        <span className="mr-1">RM</span>
         {priceStr}
       </>
     )
@@ -80,8 +85,8 @@ export default function SilencePricingSection({ silencePrices = [] }) {
             >
               <div className="relative px-1 md:px-6 py-2">
                 <span className={`text-[10px] sm:text-xs md:text-base tracking-wider md:tracking-widest whitespace-nowrap ${activeTab === tab
-                    ? 'text-[#64acac] font-bold'
-                    : 'text-gray-400 font-normal'
+                  ? 'text-[#64acac] font-bold'
+                  : 'text-gray-400 font-normal'
                   }`}>
                   {tab}
                 </span>
@@ -137,7 +142,7 @@ export default function SilencePricingSection({ silencePrices = [] }) {
                 <div className="text-white flex items-center justify-center h-12 md:h-16">
                   <CarIcon type={carType} />
                 </div>
-                <span className="text-xs md:text-xl font-bold tracking-wider text-white">
+                <span className="text-xs md:text-xl font-normal tracking-wider text-white">
                   {getPrice(activeTab, carType)}
                 </span>
               </div>
@@ -149,7 +154,7 @@ export default function SilencePricingSection({ silencePrices = [] }) {
       {/* Banner 區域 */}
       <div className="w-full mt-10 md:mt-16 pb-10">
         <AnimatePresence mode="wait">
-          <motion.div 
+          <motion.div
             key={activeTab}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -158,15 +163,15 @@ export default function SilencePricingSection({ silencePrices = [] }) {
             className="w-full"
           >
             {/* 桌面版 Banner */}
-            <img 
-              src={getBannerImage(activeTab)} 
-              alt={`Silence ${activeTab} Banner`} 
+            <img
+              src={getBannerImage(activeTab)}
+              alt={`Silence ${activeTab} Banner`}
               className="w-full h-auto hidden md:block"
             />
             {/* 手機版 Banner */}
-            <img 
-              src={getMobileBannerImage(activeTab)} 
-              alt={`Silence ${activeTab} Mobile Banner`} 
+            <img
+              src={getMobileBannerImage(activeTab)}
+              alt={`Silence ${activeTab} Mobile Banner`}
               className="w-full h-auto block md:hidden"
             />
           </motion.div>

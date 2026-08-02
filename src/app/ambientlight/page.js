@@ -217,7 +217,7 @@ export default function AmbientLightPage() {
                     </div>
                     <h3
                       className="font-bold text-white tracking-wide text-center w-full whitespace-nowrap text-[3.2vw] md:text-[4vw] lg:text-[1.2vw]"
-                      style={{ fontFamily: 'Geometos, sans-serif' }}
+                      style={{ fontFamily: 'Gotham-Ultra, Gotham, sans-serif' }}
                     >
                       Bluetooth Connection Of Your Phone APP Control
                     </h3>
@@ -272,7 +272,7 @@ export default function AmbientLightPage() {
                         height={400}
                         className="w-full h-auto rounded-[10px] md:rounded-[20px] drop-shadow-xl mb-2 md:mb-4"
                       />
-                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         Seamless Integration
                       </h3>
                       <p className="text-gray-300 text-left md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
@@ -290,7 +290,7 @@ export default function AmbientLightPage() {
                         height={400}
                         className="w-full h-auto rounded-[10px] md:rounded-[20px] drop-shadow-xl mb-2 md:mb-4"
                       />
-                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         Smart Control
                       </h3>
                       <p className="text-gray-300 text-left md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
@@ -308,7 +308,7 @@ export default function AmbientLightPage() {
                         height={400}
                         className="w-full h-auto rounded-[10px] md:rounded-[20px] drop-shadow-xl mb-2 md:mb-4"
                       />
-                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         Premium Quality
                       </h3>
                       <p className="text-gray-300 text-center md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
@@ -319,7 +319,7 @@ export default function AmbientLightPage() {
 
                   {/* Bottom Footer */}
                   <p
-                    className="text-gray-200 text-center text-[2.8vw] md:text-[1.25vw] w-full px-[5%] md:px-0"
+                    className="text-gray-200 text-center italic text-[2.8vw] md:text-[1.25vw] w-full px-[5%] md:px-0"
                     style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
                   >
                     Drivers Who Prioritize Factory-Level Design, Quality, And Seamless Integration.
@@ -357,7 +357,7 @@ export default function AmbientLightPage() {
                         height={400}
                         className="w-full h-auto rounded-[10px] md:rounded-[20px] drop-shadow-xl mb-2 md:mb-4"
                       />
-                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         Flexible Control
                       </h3>
                       <p className="text-gray-300 text-left md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
@@ -375,7 +375,7 @@ export default function AmbientLightPage() {
                         height={400}
                         className="w-full h-auto rounded-[10px] md:rounded-[20px] drop-shadow-xl mb-2 md:mb-4"
                       />
-                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         Wide Range of Styles
                       </h3>
                       <p className="text-gray-300 text-left md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
@@ -393,7 +393,7 @@ export default function AmbientLightPage() {
                         height={400}
                         className="w-full h-auto rounded-[10px] md:rounded-[20px] drop-shadow-xl mb-2 md:mb-4"
                       />
-                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                      <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         DIY or Professional Install
                       </h3>
                       <p className="text-gray-300 text-center md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
@@ -404,7 +404,7 @@ export default function AmbientLightPage() {
 
                   {/* Bottom Footer */}
                   <p
-                    className="text-gray-200 text-center text-[2.8vw] md:text-[1.25vw] w-full px-[5%] md:px-0"
+                    className="text-gray-200 text-center italic text-[2.8vw] md:text-[1.25vw] w-full px-[5%] md:px-0"
                     style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
                   >
                     Drivers Who Want Maximum Customization, Creative Lighting Effects, And Easy Installation At A Lower Cost.
@@ -417,7 +417,7 @@ export default function AmbientLightPage() {
                   {/* Title */}
                   <h1
                     className="font-bold text-white tracking-wide text-center whitespace-nowrap mb-6 lg:mb-12 text-[4.5vw] md:text-[3vw] lg:text-[2.4vw]"
-                    style={{ fontFamily: 'Geometos, sans-serif', lineHeight: '1.2' }}
+                    style={{ fontFamily: 'Geometos-Black, Geometos, sans-serif', lineHeight: '1.2' }}
                   >
                     CUSTOMIZED BASED ON<br className="block md:hidden" /> YOUR CAR MODEL
                   </h1>

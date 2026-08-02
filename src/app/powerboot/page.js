@@ -72,7 +72,7 @@ export default function PowerBootPage() {
               priority
             />
             {/* Logo and Text Overlay */}
-            <div className="absolute inset-0 flex flex-col pointer-events-none">
+            <div className="absolute inset-0 flex flex-col z-10">
               <div className="absolute top-[6%] lg:top-[8%] left-[8%] lg:left-[10%] w-[25vw] md:w-[15vw] z-10">
                 <Image
                   unoptimized
