@@ -68,12 +68,12 @@ export default function AmbientLightPage() {
   ]
 
   const mobileImages = [
-    '/ambientlight/phone/Ambient light Phone-01.webp',
-    '/ambientlight/phone/Ambient light Phone-02.webp',
-    '/ambientlight/phone/Ambient light Phone-03.webp',
-    '/ambientlight/phone/Ambient light Phone-04.webp',
-    '/ambientlight/phone/Ambient light Phone-05.webp',
-    '/ambientlight/phone/Ambient light Phone-06.webp',
+    '/ambientlight/Phone/Ambient light Phone-01.webp',
+    '/ambientlight/Phone/Ambient light Phone-02.webp',
+    '/ambientlight/Phone/Ambient light Phone-03.webp',
+    '/ambientlight/Phone/Ambient light Phone-04.webp',
+    '/ambientlight/Phone/Ambient light Phone-05.webp',
+    '/ambientlight/Phone/Ambient light Phone-06.webp',
     '/ambientlight/pc/phone/ambient-light-customized-car-model-background-mobile.webp',
   ]
 
