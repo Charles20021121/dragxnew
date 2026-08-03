@@ -58,23 +58,23 @@ export default function AmbientLightPage() {
   }, [setCurrentProduct])
 
   const pcImages = [
-    '/ambientlight/pc/ambient-light-car-interior-hero.webp',
-    '/ambientlight/pc/ambient-light-aesthetics-luxury-design.webp',
-    '/ambientlight/pc/ambient-light-personalization-color-control.webp',
-    '/ambientlight/pc/ambient-light-visibility-safety-features.webp',
-    '/ambientlight/pc/ambient-light-oem-integration-background.webp',
-    '/ambientlight/pc/ambient-light-universal-installation-background.webp',
-    '/ambientlight/pc/ambient-light-customized-car-model-background.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/ambient-light-car-interior-hero.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/ambient-light-aesthetics-luxury-design.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/ambient-light-personalization-color-control.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/ambient-light-visibility-safety-features.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/ambient-light-oem-integration-background.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/ambient-light-universal-installation-background.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/ambient-light-customized-car-model-background.webp',
   ]
 
   const mobileImages = [
-    '/ambientlight/Phone/Ambient light Phone-01.webp',
-    '/ambientlight/Phone/Ambient light Phone-02.webp',
-    '/ambientlight/Phone/Ambient light Phone-03.webp',
-    '/ambientlight/Phone/Ambient light Phone-04.webp',
-    '/ambientlight/Phone/Ambient light Phone-05.webp',
-    '/ambientlight/Phone/Ambient light Phone-06.webp',
-    '/ambientlight/pc/phone/ambient-light-customized-car-model-background-mobile.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/phone/Ambient light Phone-01.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/phone/Ambient light Phone-02.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/phone/Ambient light Phone-03.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/phone/Ambient light Phone-04.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/phone/Ambient light Phone-05.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/phone/Ambient light Phone-06.webp',
+    'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/phone/ambient-light-customized-car-model-background-mobile.webp',
   ]
 
 
@@ -90,7 +90,7 @@ export default function AmbientLightPage() {
               alt={src.split('/').pop().replace(/-/g, ' ').replace('.webp', '')}
               width={1920}
               height={1080}
-              className="hidden md:block w-full h-auto"
+              className={`hidden md:block w-full ${index === 6 ? 'absolute inset-0 h-full object-cover -z-10' : 'h-auto'}`}
               priority={index === 0}
             />
             {/* Mobile Background */}
@@ -100,16 +100,16 @@ export default function AmbientLightPage() {
               alt={mobileImages[index].split('/').pop().replace(/-/g, ' ').replace('.webp', '')}
               width={1080}
               height={1920}
-              className="block md:hidden w-full h-auto"
+              className={`block md:hidden w-full ${index === 6 ? 'absolute inset-0 h-full object-cover -z-10' : 'h-auto'}`}
               priority={index === 0}
             />
-            <div className="absolute inset-0 flex flex-col">
+            <div className={index === 6 ? "relative w-full flex flex-col bg-[#280059]" : "absolute inset-0 flex flex-col"}>
               {index === 0 && (
                 <>
                   <div className="hidden md:block absolute top-[4%] lg:top-[6%] left-[10%] w-[15vw] md:w-[18vw] lg:w-[15vw] z-10">
                     <Image
                       unoptimized
-                      src="/ambientlight/pc/All logo PNG-01.png"
+                      src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/All logo PNG-01.png"
                       alt="DX Ambient Light Logo"
                       width={400}
                       height={120}
@@ -208,7 +208,7 @@ export default function AmbientLightPage() {
 
                       <Image
                         unoptimized
-                        src="/ambientlight/pc/ambient-light-smartphone-app-control-interface.webp"
+                        src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/ambient-light-smartphone-app-control-interface.webp"
                         alt="Ambient Light Smartphone Bluetooth App Control Interface"
                         width={800}
                         height={600}
@@ -261,7 +261,7 @@ export default function AmbientLightPage() {
                     <div className="flex flex-col w-[48%] md:w-1/3">
                       <Image
                         unoptimized
-                        src="/ambientlight/pc/oem/oem-ambient-light-dashboard-seamless-integration.webp"
+                        src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/oem/oem-ambient-light-dashboard-seamless-integration.webp"
                         alt="OEM Ambient Light Dashboard Seamless Integration"
                         width={600}
                         height={400}
@@ -279,7 +279,7 @@ export default function AmbientLightPage() {
                     <div className="flex flex-col w-[48%] md:w-1/3">
                       <Image
                         unoptimized
-                        src="/ambientlight/pc/oem/oem-ambient-light-infotainment-smart-control.webp"
+                        src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/oem/oem-ambient-light-infotainment-smart-control.webp"
                         alt="OEM Ambient Light Infotainment Smart Control"
                         width={600}
                         height={400}
@@ -297,7 +297,7 @@ export default function AmbientLightPage() {
                     <div className="flex flex-col w-[55%] md:w-1/3 mx-auto mt-2 md:mt-0">
                       <Image
                         unoptimized
-                        src="/ambientlight/pc/oem/oem-ambient-light-door-trim-premium-quality.webp"
+                        src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/oem/oem-ambient-light-door-trim-premium-quality.webp"
                         alt="OEM Ambient Light Door Trim Premium Quality"
                         width={600}
                         height={400}
@@ -346,7 +346,7 @@ export default function AmbientLightPage() {
                     <div className="flex flex-col w-[48%] md:w-1/3">
                       <Image
                         unoptimized
-                        src="/ambientlight/pc/universal/universal-ambient-light-bluetooth-app-control.webp"
+                        src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/universal/universal-ambient-light-bluetooth-app-control.webp"
                         alt="Universal Ambient Light Bluetooth App Control"
                         width={600}
                         height={400}
@@ -364,7 +364,7 @@ export default function AmbientLightPage() {
                     <div className="flex flex-col w-[48%] md:w-1/3">
                       <Image
                         unoptimized
-                        src="/ambientlight/pc/universal/universal-ambient-light-installation-prying-tool.webp"
+                        src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/universal/universal-ambient-light-installation-prying-tool.webp"
                         alt="Universal Ambient Light Installation Prying Tool"
                         width={600}
                         height={400}
@@ -382,7 +382,7 @@ export default function AmbientLightPage() {
                     <div className="flex flex-col w-[55%] md:w-1/3 mx-auto mt-2 md:mt-0">
                       <Image
                         unoptimized
-                        src="/ambientlight/pc/universal/universal-ambient-light-wiring-plug-and-play.webp"
+                        src="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/universal/universal-ambient-light-wiring-plug-and-play.webp"
                         alt="Universal Ambient Light Wiring Plug and Play"
                         width={600}
                         height={400}
@@ -408,31 +408,31 @@ export default function AmbientLightPage() {
               )}
 
               {index === 6 && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center py-[8%] md:py-[6%] lg:py-8 px-[5%] lg:px-[10%]">
+                <div className="flex flex-col items-center justify-center py-12 md:py-24 lg:py-32 px-[5%] lg:px-[10%] w-full min-h-[40vh]">
                   {/* Title */}
                   <h1
-                    className="font-bold text-white tracking-wide text-center whitespace-nowrap mb-6 lg:mb-12 text-[4.5vw] md:text-[3vw] lg:text-[2.4vw]"
+                    className="font-bold text-white tracking-wide text-center whitespace-nowrap text-[6vw] md:text-[3vw] lg:text-[2.4vw] mb-8 md:mb-12"
                     style={{ fontFamily: 'Geometos-Black, Geometos, sans-serif', lineHeight: '1.2' }}
                   >
                     CUSTOMIZED BASED ON<br className="block md:hidden" /> YOUR CAR MODEL
                   </h1>
 
                   {/* Logo Grid */}
-                  <div className="grid grid-cols-4 lg:grid-cols-8 gap-y-4 md:gap-y-6 lg:gap-y-10 gap-x-2 lg:gap-x-[1vw] w-full lg:w-[95%] items-center justify-items-center mb-8 lg:mb-14">
+                  <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6 lg:gap-8 w-full lg:w-[95%] items-center justify-items-center mb-8 md:mb-12">
                     {[
                       'perodua-ambient-light-upgrade', 'proton-ambient-light-upgrade', 'toyota-ambient-light-upgrade', 'honda-ambient-light-upgrade',
-                      'vellfire-ambient-light-upgrade', 'alphard-ambient-light-upgrade', 'bmw-ambient-light-upgrade', 'mercedes-benz-ambient-light-upgrade',
+                      'alphard-ambient-light-upgrade', 'vellfire-ambient-light-upgrade', 'bmw-ambient-light-upgrade', 'mercedes-benz-ambient-light-upgrade',
                       'audi-ambient-light-upgrade', 'lexus-ambient-light-upgrade', 'mini-cooper-ambient-light-upgrade', 'volvo-ambient-light-upgrade',
                       'jaguar-ambient-light-upgrade', 'land-rover-ambient-light-upgrade', 'ford-ambient-light-upgrade', 'porsche-ambient-light-upgrade'
                     ].map((name, i) => (
-                      <div key={i} className="flex justify-center items-center w-full h-[6vh] lg:h-[9vh] px-1">
+                      <div key={i} className="flex justify-center items-center w-full p-2">
                         <Image
                           unoptimized
-                          src={`/ambientlight/pc/brand/${name}.webp`}
+                          src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
                           alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
                           width={200}
                           height={120}
-                          className="w-full h-full object-contain hover:scale-110 transition-transform duration-300"
+                          className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
                         />
                       </div>
                     ))}
@@ -441,7 +441,7 @@ export default function AmbientLightPage() {
                   {/* Button */}
                   <button
                     onClick={() => window.open(getWhatsAppUrl('Hi, I want to inquire about ambient lighting for my car.'), '_blank')}
-                    className="bg-white hover:bg-gray-200 transition-colors text-black font-bold py-2 md:py-3 lg:py-4 px-4 md:px-8 lg:px-12 rounded-lg lg:rounded-xl tracking-wider shadow-xl text-[2.8vw] md:text-[1.8vw] lg:text-[1.2vw] whitespace-nowrap mb-[5%] md:mb-0"
+                    className="bg-white hover:bg-gray-200 transition-colors text-black font-bold py-3 md:py-4 lg:py-5 px-6 md:px-10 lg:px-12 rounded-xl tracking-wider shadow-xl text-[3.5vw] md:text-[1.8vw] lg:text-[1.2vw] whitespace-nowrap"
                     style={{ fontFamily: 'Geometos, sans-serif' }}
                   >
                     CONTACT US WITH YOUR CAR MODEL
