@@ -117,25 +117,25 @@ export default function AmbientLightPage() {
                     />
                   </div>
                   <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[10%] w-[45%]">
-                  <h1
-                    className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
-                    style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.4vw', lineHeight: '1.1' }}
-                  >
-                    CAR AMBIENT LIGHT
-                  </h1>
-                  <h2
-                    className="text-white mb-4 lg:mb-6"
-                    style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.25vw', lineHeight: '1.4' }}
-                  >
-                    Illuminate Your Drive. Redefine Your Style.
-                  </h2>
-                  <p
-                    className="text-gray-200 text-justify"
-                    style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.25vw', lineHeight: '1.5' }}
-                  >
-                    Car ambient lighting brings elegance, comfort, and personality into your vehicle interior. Designed with subtle, low-intensity illumination, it transforms ordinary cabins into premium, mood-enhancing spaces.
-                  </p>
-                </div>
+                    <h1
+                      className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
+                      style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.4vw', lineHeight: '1.1' }}
+                    >
+                      CAR AMBIENT LIGHT
+                    </h1>
+                    <h2
+                      className="text-white mb-4 lg:mb-6"
+                      style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.25vw', lineHeight: '1.4' }}
+                    >
+                      Illuminate Your Drive. Redefine Your Style.
+                    </h2>
+                    <p
+                      className="text-gray-200 text-justify"
+                      style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.25vw', lineHeight: '1.5' }}
+                    >
+                      Car ambient lighting brings elegance, comfort, and personality into your vehicle interior. Designed with subtle, low-intensity illumination, it transforms ordinary cabins into premium, mood-enhancing spaces.
+                    </p>
+                  </div>
                 </>
               )}
 
@@ -215,12 +215,7 @@ export default function AmbientLightPage() {
                         className="w-full h-auto object-contain drop-shadow-2xl"
                       />
                     </div>
-                    <h3
-                      className="font-bold text-white tracking-wide text-center w-full whitespace-nowrap text-[3.2vw] md:text-[4vw] lg:text-[1.2vw]"
-                      style={{ fontFamily: 'Gotham-Ultra, Gotham, sans-serif' }}
-                    >
-                      Bluetooth Connection Of Your Phone APP Control
-                    </h3>
+
                   </div>
                 </div>
               )}
@@ -360,7 +355,7 @@ export default function AmbientLightPage() {
                       <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         Flexible Control
                       </h3>
-                      <p className="text-gray-300 text-left md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
+                      <p className="text-gray-300 text-center text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
                         Operated via remote Bluetooth app
                       </p>
                     </div>
@@ -378,7 +373,7 @@ export default function AmbientLightPage() {
                       <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         Wide Range of Styles
                       </h3>
-                      <p className="text-gray-300 text-left md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
+                      <p className="text-gray-300 text-center text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
                         From simple LED strips to high-end fiber-optic kits that mimic OEM quality.
                       </p>
                     </div>
@@ -396,7 +391,7 @@ export default function AmbientLightPage() {
                       <h3 className="font-bold text-white mb-1 md:mb-2 text-center text-[3.2vw] md:text-[1.4vw]" style={{ fontFamily: 'Geometos-Medium, Geometos, sans-serif' }}>
                         DIY or Professional Install
                       </h3>
-                      <p className="text-gray-300 text-center md:text-justify text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
+                      <p className="text-gray-300 text-center text-[2.2vw] md:text-[0.95vw]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.4' }}>
                         Plug-and-play setup; more advanced systems can be neatly wired behind panels.
                       </p>
                     </div>

@@ -18,89 +18,78 @@ const item = {
 };
 
 export default function ServiceSection() {
-  const services = {
-    desktop: [
-      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/slfrg9tkismliphc6brl.webp',
-      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/bgw9ezkplypkpl13ytk3.webp',
-      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/yn4yehu7iamawkuvap98.webp'
-    ],
-    mobile: [
-      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/f6a8kk25tzfinll2vjtt.webp',
-      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/f6t7tqkagzblbgtxa9nz.webp',
-      'https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/zlytxnv5nrai5qxptqvu.webp'
-    ]
-  };
+  const services = [
+    {
+      id: 'entertainment',
+      title: 'ENTERTAINMENT',
+      description: 'These features enhance the driving experience, catering to the preferences and needs of both drivers and passengers.',
+      icon: '/our service/ENTERTAINMENT.webp'
+    },
+    {
+      id: 'safety',
+      title: 'SAFETY',
+      description: 'Choose safe car accessories, ensure proper installation and maintenance, and prioritize quality and compatibility for enhanced vehicle safety.',
+      icon: '/our service/SAFETY.webp'
+    },
+    {
+      id: 'comfort',
+      title: 'COMFORT',
+      description: 'The beauty of car comfort is in the seamless blend of design, comfort, and technology, enhancing both the look and feel of the driving experience.',
+      icon: '/our service/COMFORT.webp'
+    }
+  ];
 
   return (
-    <section className="relative -mt-5 md:-mt-20 pt-5 bg-[#fff4ec] z-10 rounded-t-[20px]">
+    <section className="relative -mt-5 md:-mt-20 pt-5 pb-10 bg-[#fff4ec] z-10 rounded-t-[20px]">
       {/* Title with lines */}
-      <div className="flex items-center justify-center mb-4">
+      <div className="flex items-center justify-center mb-6 md:mb-10 mt-2 md:mt-6">
         <div className="h-[2px] bg-gradient-to-r from-transparent via-[#023f1b] to-transparent w-[15%]" />
-        <div className="mx-[2%]">
-
-          <h2 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(12px,2vw,32px)] relative">
+        <div className="mx-[3%]">
+          <h2 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(24px,3vw,40px)] relative group cursor-default">
             Our Service
             <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-[#1c5434] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
           </h2>
-
         </div>
         <div className="h-[2px] bg-gradient-to-r from-transparent via-[#023f1b] to-transparent w-[15%]" />
       </div>
 
-      {/* Desktop Images */}
-      <div className="hidden md:block">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-3 gap-4 md:gap-8 px-3"
-        >
-          {services.desktop.map((src, index) => (
+      <motion.div
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="max-w-[1600px] mx-auto px-2 sm:px-6 lg:px-16"
+      >
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-20 lg:gap-32">
+          {services.map((service) => (
             <motion.div
-              key={`desktop-${index}`}
+              key={service.id}
               variants={item}
-              whileHover={{ scale: 1.05 }}
-              className="relative pb-[68%]"
+              className="flex flex-col items-center text-center"
             >
-              <Image
-                src={src}
-                alt={`Service ${index + 1}`}
-                fill
-                className="object-contain"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* Mobile Images */}
-      <div className="block md:hidden px-3">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-3 gap-2"
-        >
-          {services.mobile.map((src, index) => (
-            <motion.div
-              key={`mobile-${index}`}
-              variants={item}
-              className="relative"
-            >
-              <div className="relative w-full aspect-[457/537] overflow-hidden">
+              {/* Icon */}
+              <div className="relative w-16 h-16 sm:w-24 sm:h-24 md:w-44 md:h-44 lg:w-[195px] lg:h-[195px] mb-2 md:mb-5 drop-shadow-sm">
                 <Image
-                  src={src}
-                  alt={`Service ${index + 1}`}
+                  src={service.icon}
+                  alt={service.title}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
               </div>
+
+              {/* Title */}
+              <h3 className="text-[#023f1b] font-[900] text-[10px] sm:text-sm md:text-2xl lg:text-3xl mb-1 md:mb-4 tracking-tight md:tracking-wide">
+                {service.title}
+              </h3>
+
+              {/* Description */}
+              <p className="text-[#3b5847] text-[8px] sm:text-[11px] md:text-base lg:text-lg leading-snug md:leading-relaxed font-medium px-1 md:px-4 lg:px-8 text-justify">
+                {service.description}
+              </p>
             </motion.div>
           ))}
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </section>
   );
 } 

@@ -134,6 +134,19 @@ export default function ContiDecoderPage() {
               >
                 Native-style Android Auto support using your factory display and controls. Works wired or wireless with automatic connection. Access maps, calls, messages and music through Google voice assistant—clean, safe, OEM feel.
               </p>
+              <div className="flex flex-row gap-[1.5vw] mt-[2vw]">
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <div key={num} className="relative w-[3vw] h-[3vw]">
+                    <Image
+                      unoptimized
+                      src={`/contidecoder/pc/5. Android Decoder Apps icon/1-0${num}.webp`}
+                      alt={`Android Decoder App Icon ${num}`}
+                      fill
+                      className="object-contain drop-shadow-md hover:scale-105 transition-transform"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
             <figcaption className="sr-only">
               Conti Decoder comprehensive features and capabilities.
@@ -165,6 +178,19 @@ export default function ContiDecoderPage() {
                   Siri—just like OEM.
                 </span>
               </p>
+              <div className="flex flex-row justify-end w-full gap-[1.5vw] mt-[2vw]">
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <div key={num} className="relative w-[3vw] h-[3vw]">
+                    <Image
+                      unoptimized
+                      src={`/contidecoder/pc/6. Carplay Decoder Apps icon/${num}.webp`}
+                      alt={`Carplay Decoder App Icon ${num}`}
+                      fill
+                      className="object-contain drop-shadow-md hover:scale-105 transition-transform"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
             <figcaption className="sr-only">
               Advanced functionality of Conti Decoder system.

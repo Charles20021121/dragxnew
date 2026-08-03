@@ -61,13 +61,12 @@ export default async function Home() {
     <main className="flex min-h-screen flex-col">
       <HeroSection
         images={[
-          "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp",
-          "/home/lynobanner.webp",
-          "/home/gallerybanner.webp",
-
-          "/home/specialist/bmw.webp",
-          "/home/specialist/alphardvellfire.webp",
-          "/home/specialist/mercedes.webp"
+          "/hero banner/1.webp",
+          "/hero banner/2.jpg",
+          "/hero banner/3.webp",
+          "/hero banner/4 bmw.webp",
+          "/hero banner/5 alphard.webp",
+          "/hero banner/6 merc.webp"
         ]}
         aspectRatio="3333/1458"
       />

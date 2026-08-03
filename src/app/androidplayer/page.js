@@ -126,28 +126,28 @@ export default function AndroidPlayerPage() {
 
                         {/* Main Content - 参考 Ambient Light 完美百分比缩放排版 */}
                         <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] lg:px-[12%] w-[45%] pointer-events-auto">
-                        {/* 第一行大标题 */}
-                        <h2
-                            className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap drop-shadow-lg"
-                            style={{ fontFamily: 'Geometos, sans-serif', fontSize: '3vw', lineHeight: '1.1' }}
-                        >
-                            ANDROID PLAYER
-                        </h2>
-                        {/* 第二行副标题 */}
-                        <p
-                            className="text-white mb-2 lg:mb-6 drop-shadow-md whitespace-nowrap"
-                            style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.4vw', lineHeight: '1.4' }}
-                        >
-                            Upgrade to a Smarter Driving Experience
-                        </p>
-                        {/* 段落文本 */}
-                        <p
-                            className="text-gray-200 text-justify drop-shadow-md"
-                            style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.1vw', lineHeight: '1.5' }}
-                        >
-                            It replaces or upgrades your factory head unit, giving your vehicle a tablet-like smart interface with advanced apps, navigation, and entertainment features.
-                        </p>
-                    </div>
+                            {/* 第一行大标题 */}
+                            <h2
+                                className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap drop-shadow-lg"
+                                style={{ fontFamily: 'Geometos, sans-serif', fontSize: '3vw', lineHeight: '1.1' }}
+                            >
+                                ANDROID PLAYER
+                            </h2>
+                            {/* 第二行副标题 */}
+                            <p
+                                className="text-white mb-2 lg:mb-6 drop-shadow-md whitespace-nowrap"
+                                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.4vw', lineHeight: '1.4' }}
+                            >
+                                Upgrade to a Smarter Driving Experience
+                            </p>
+                            {/* 段落文本 */}
+                            <p
+                                className="text-gray-200 text-justify drop-shadow-md"
+                                style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.1vw', lineHeight: '1.5' }}
+                            >
+                                It replaces or upgrades your factory head unit, giving your vehicle a tablet-like smart interface with advanced apps, navigation, and entertainment features.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
