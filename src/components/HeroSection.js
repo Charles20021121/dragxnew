@@ -167,11 +167,11 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
             bannerLink = '/gallery';
           } else if (isSpecialistBanner) {
             if (imageUrl.includes('bmw')) {
-              bannerLink = '/gallery/bmw';
+              bannerLink = '/products/bmw';
             } else if (imageUrl.includes('alphard')) {
-              bannerLink = '/gallery/alphard-vellfire';
+              bannerLink = '/products/alphardvellfire';
             } else if (imageUrl.includes('merc')) {
-              bannerLink = '/gallery/mercedes-benz';
+              bannerLink = '/products/mercedes';
             }
           }
 
@@ -306,21 +306,9 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   {isLynoBanner && (
                     <div className="absolute inset-0 flex items-center justify-start pl-[5%] lg:pl-[8%] z-20 pointer-events-none">
                       <div className="w-[50%] lg:w-[45%] flex flex-col items-start text-left">
-                        <h1
-                          className="font-bold uppercase mb-0"
-                          style={{
-                            fontFamily: 'Geometos, sans-serif',
-                            fontSize: '7vw',
-                            lineHeight: '1.1',
-                            transform: 'scaleX(1.7) skewX(-15deg)',
-                            transformOrigin: 'left center',
-                            background: 'linear-gradient(135deg, #7b7b7b 0%, #d4d4d4 40%, #888 65%, #5a5a5a 100%)',
-                            WebkitBackgroundClip: 'text',
-                            color: 'transparent'
-                          }}
-                        >
-                          LYNO
-                        </h1>
+                        <div className="relative w-[35vw] lg:w-[28vw] h-[10vw] lg:h-[8vw] mb-2">
+                          <Image src="/lyno/lyno/LYNO.png" alt="LYNO Logo" fill className="object-contain object-left" />
+                        </div>
                         <p
                           className="font-medium text-[#444] mb-6 lg:mb-8 drop-shadow-sm"
                           style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.8vw', letterSpacing: '0.05em' }}
@@ -504,21 +492,9 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   {isLynoBanner && (
                     <div className="absolute inset-0 flex items-center justify-start pl-[5%] z-20 pointer-events-none">
                       <div className="w-[50%] flex flex-col items-start text-left">
-                        <h1
-                          className="font-bold uppercase mb-0"
-                          style={{
-                            fontFamily: 'Geometos, sans-serif',
-                            fontSize: '7vw',
-                            lineHeight: '1.1',
-                            transform: 'scaleX(1.7) skewX(-15deg)',
-                            transformOrigin: 'left center',
-                            background: 'linear-gradient(135deg, #7b7b7b 0%, #d4d4d4 40%, #888 65%, #5a5a5a 100%)',
-                            WebkitBackgroundClip: 'text',
-                            color: 'transparent'
-                          }}
-                        >
-                          LYNO
-                        </h1>
+                        <div className="relative w-[45vw] h-[12vw] mb-2">
+                          <Image src="/lyno/lyno/LYNO.png" alt="LYNO Logo" fill className="object-contain object-left" />
+                        </div>
                         <p
                           className="font-medium text-[#444] mb-6 drop-shadow-sm"
                           style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.8vw', letterSpacing: '0.05em' }}

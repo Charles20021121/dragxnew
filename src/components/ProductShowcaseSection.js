@@ -11,12 +11,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 const CATEGORY_ORDER = {
-  'androidplayer': 1,
-  'ambientlight': 2,
-  'contidecoder': 3,
-  'alphardvellfire': 4,
-  'bmw': 5,
-  'mercedes': 6,
+  'alphardvellfire': 1,
+  'bmw': 2,
+  'mercedes': 3,
+  'androidplayer': 4,
+  'ambientlight': 5,
+  'contidecoder': 6,
   'powerboot': 7,
   'soundproof': 8,
   '360camera': 9,
