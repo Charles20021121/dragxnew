@@ -13,7 +13,7 @@ const CarIcon = ({ type }) => {
     <img
       src={imageUrl}
       alt={`${type} icon`}
-      className="w-20 h-auto md:w-28 object-contain"
+      className="w-16 h-auto md:w-20 object-contain"
     />
   )
 }
@@ -84,20 +84,25 @@ export default function SilenceClientWrapper({ categorizedProducts, silencePrice
       return null;
     }
 
+    let displayPrice = priceStr.toString();
+    if (!displayPrice.includes('.')) {
+      displayPrice += '.00';
+    }
+
     return (
       <>
         <span className="mr-1">RM</span>
-        {priceStr}
+        {displayPrice}
       </>
     )
   }
 
   return (
     <>
-      <div className="w-full relative text-white pt-10">
+      <div className="w-full relative text-white pt-2 md:pt-10">
 
         {/* 分類切換區域 */}
-        <div className="relative px-4 md:px-20 py-6">
+        <div className="relative px-4 md:px-20 py-2 md:py-6">
           {/* 底部的細線 (統一用 Tailwind 控制左右間距) */}
           <div className="absolute h-[2px] bg-[#64acac]/30 left-4 right-4 md:left-20 md:right-20 bottom-[17px]" />
 
@@ -148,54 +153,31 @@ export default function SilenceClientWrapper({ categorizedProducts, silencePrice
           </div>
         </div>
 
-        {/* 獨立的車型 Icon 與價格區域 (與 PricingSection 對齊) */}
-        <div className="max-w-3xl mx-auto mt-2 md:mt-4 mb-8 px-4 md:px-0">
+        {/* 組合展示區域：車型Icon、圖片、價格、按鈕 */}
+        <div className="max-w-[1500px] mx-auto px-4 md:px-8 pb-20 pt-8">
           <AnimatePresence mode="wait">
             <motion.div
-              key={`icons-${activeCategory}`}
+              key={`combined-${activeCategory}`}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="flex justify-between items-center w-full"
+              className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-16 md:gap-8 min-h-[400px]"
             >
               {carTypes.map((carType) => {
                 const product = categorizedProducts[activeCategory]?.find(
                   p => p.filter1?.toLowerCase() === carType.toLowerCase()
                 );
+
                 return (
-                  <div key={carType} className="flex flex-col items-center justify-center w-28 md:w-36 space-y-2 md:space-y-4">
-                    <div className="text-white flex items-center justify-center h-12 md:h-16">
-                      <CarIcon type={carType} />
+                  <div key={carType} className="relative flex flex-col items-center">
+                    {/* Car Name & Icon */}
+                    <div className="text-white flex flex-col items-center mb-4 space-y-2">
+                       <div className="flex items-center justify-center h-12 md:h-16">
+                         <CarIcon type={carType} />
+                       </div>
                     </div>
-                    <span className="text-xs md:text-xl font-normal tracking-wider text-white">
-                      {getPrice(activeCategory, carType, product)}
-                    </span>
-                  </div>
-                );
-              })}
-            </motion.div>
-          </AnimatePresence>
-        </div>
 
-        {/* 產品展示區域 (僅大圖) */}
-        <div className="max-w-[1500px] mx-auto px-4 md:px-8 pb-20 pt-4">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`images-${activeCategory}`}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.3 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 min-h-[400px]"
-            >
-              {carTypes.map((carType, index) => {
-                const product = categorizedProducts[activeCategory]?.find(
-                  p => p.filter1?.toLowerCase() === carType.toLowerCase()
-                );
-
-                return (
-                  <div key={`img-${carType}`} className="relative flex flex-col items-center">
                     {/* 大圖與按鈕 */}
                     {product ? (
                       <div className="flex flex-col items-center w-full mt-0">
@@ -207,8 +189,13 @@ export default function SilenceClientWrapper({ categorizedProducts, silencePrice
                           height={500}
                           className="w-full object-contain scale-[1.02] md:scale-[1.05]"
                         />
-                        <button className="px-8 py-2 mt-8 md:mt-10 bg-[#64acac] hover:bg-[#4d8484] text-white font-bold rounded-full transition-colors w-40 relative z-10 shadow-lg">
-                          <a target="_blank" href={getWhatsAppUrl(product.name || product.Name)} rel="noopener noreferrer">SHOP NOW</a>
+                        {/* Price */}
+                        <div className="mt-4 mb-3 text-lg md:text-xl font-semibold tracking-widest text-white" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                          {getPrice(activeCategory, carType, product)}
+                        </div>
+                        {/* Button */}
+                        <button className="px-6 py-2 bg-[#64acac] hover:bg-[#4d8484] text-white font-bold rounded-full transition-colors w-auto min-w-[140px] md:min-w-[160px] relative z-10 shadow-lg text-sm md:text-base uppercase tracking-wider">
+                          <a target="_blank" href={getWhatsAppUrl(product.name || product.Name)} rel="noopener noreferrer">LEARN MORE</a>
                         </button>
                       </div>
                     ) : (

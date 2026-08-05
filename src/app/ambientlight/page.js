@@ -417,25 +417,85 @@ export default function AmbientLightPage() {
                     CUSTOMIZED BASED ON<br className="block md:hidden" /> YOUR CAR MODEL
                   </h1>
 
-                  {/* Logo Grid */}
-                  <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6 lg:gap-8 w-full lg:w-[95%] items-center justify-items-center mb-8 md:mb-12">
-                    {[
-                      'perodua-ambient-light-upgrade', 'proton-ambient-light-upgrade', 'toyota-ambient-light-upgrade', 'honda-ambient-light-upgrade',
-                      'alphard-ambient-light-upgrade', 'vellfire-ambient-light-upgrade', 'bmw-ambient-light-upgrade', 'mercedes-benz-ambient-light-upgrade',
-                      'audi-ambient-light-upgrade', 'lexus-ambient-light-upgrade', 'mini-cooper-ambient-light-upgrade', 'volvo-ambient-light-upgrade',
-                      'jaguar-ambient-light-upgrade', 'land-rover-ambient-light-upgrade', 'ford-ambient-light-upgrade', 'porsche-ambient-light-upgrade'
-                    ].map((name, i) => (
-                      <div key={i} className="flex justify-center items-center w-full p-2">
-                        <Image
-                          unoptimized
-                          src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
-                          alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
-                          width={200}
-                          height={120}
-                          className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
-                        />
-                      </div>
-                    ))}
+                  {/* Logo Layout */}
+                  <div className="flex flex-col items-center w-full lg:w-[90%] mb-12 md:mb-16 space-y-8 md:space-y-12">
+                    
+                    {/* Alphard / Vellfire */}
+                    <div className="flex justify-center items-center w-full gap-6 md:gap-[60px] lg:gap-[100px] mb-4 md:mb-8">
+                      {[
+                        'vellfire-ambient-light-upgrade', 'alphard-ambient-light-upgrade'
+                      ].map((name, i) => (
+                        <div key={i} className="flex justify-center items-center w-[42%] md:w-[35%] lg:w-[28%]">
+                          <Image
+                            unoptimized
+                            src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                            alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                            width={400}
+                            height={120}
+                            className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Row 1 */}
+                    <div className="flex justify-center items-center w-full gap-5 md:gap-12 lg:gap-16">
+                      {[
+                        'toyota-ambient-light-upgrade', 'honda-ambient-light-upgrade',
+                        'bmw-ambient-light-upgrade', 'mercedes-benz-ambient-light-upgrade',
+                        'audi-ambient-light-upgrade'
+                      ].map((name, i) => (
+                        <div key={i} className="flex justify-center items-center w-[13%] md:w-[10%] lg:w-[8%]">
+                          <Image
+                            unoptimized
+                            src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                            alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                            width={200}
+                            height={120}
+                            className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Row 2 */}
+                    <div className="flex justify-center items-center w-full gap-5 md:gap-12 lg:gap-16">
+                      {[
+                        'perodua-ambient-light-upgrade', 'proton-ambient-light-upgrade',
+                        'lexus-ambient-light-upgrade', 'mini-cooper-ambient-light-upgrade',
+                        'volvo-ambient-light-upgrade'
+                      ].map((name, i) => (
+                        <div key={i} className={`flex justify-center items-center ${name.includes('mini') ? 'w-[18%] md:w-[14%] lg:w-[11%]' : 'w-[13%] md:w-[10%] lg:w-[8%]'}`}>
+                          <Image
+                            unoptimized
+                            src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                            alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                            width={200}
+                            height={120}
+                            className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Row 3 */}
+                    <div className="flex justify-center items-center w-full gap-8 md:gap-16 lg:gap-24">
+                      {[
+                        'jaguar-ambient-light-upgrade', 'land-rover-ambient-light-upgrade',
+                        'ford-ambient-light-upgrade', 'porsche-ambient-light-upgrade'
+                      ].map((name, i) => (
+                        <div key={i} className={`flex justify-center items-center ${name.includes('porsche') ? 'w-[10%] md:w-[7%] lg:w-[5.5%]' : 'w-[18%] md:w-[14%] lg:w-[11%]'}`}>
+                          <Image
+                            unoptimized
+                            src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                            alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                            width={200}
+                            height={120}
+                            className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Button */}

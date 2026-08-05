@@ -16,23 +16,21 @@ const SilenceLuxurySection = () => {
         {/* Desktop Left Side: Text Content */}
         <div className="absolute inset-0 flex flex-col justify-center items-start pr-[50%] pl-[8%] z-10" style={{ gap: '1.5vw' }}>
 
-          {/* Heading with teal background block */}
-          <div className="inline-block bg-gradient-to-r from-[#053d40] via-[#053d40]/40 to-transparent rounded-lg md:rounded-l-[1vw] pl-[1.5vw] pr-[2.5vw] py-[1vw] self-start w-max">
-            <h2 className="font-bold tracking-wide whitespace-nowrap">
-              <span className="text-[#cce4e6]" style={{ fontSize: '2vw', lineHeight: '1.2' }}>When Silence Becomes a True Luxury</span>
+          {/* Heading */}
+          <div className="flex flex-col self-start pl-[1.5vw]">
+            <h2 className="font-bold tracking-wide uppercase text-[#cce4e6]" style={{ fontFamily: 'Geometos, sans-serif' }}>
+              <div style={{ fontSize: '2.8vw', lineHeight: '1.2' }}>WHEN SILENCE</div>
+              <div style={{ fontSize: '2.8vw', lineHeight: '1.2' }}>BECOMES A TRUE LUXURY</div>
             </h2>
           </div>
 
           {/* Paragraphs */}
-          <div className="text-gray-300 text-justify flex flex-col w-full pl-[1.5vw]" style={{ fontSize: '1.05vw', lineHeight: '1.6', gap: '1.5vw' }}>
+          <div className="text-gray-200 text-left flex flex-col w-full pl-[1.5vw] mt-4" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.2vw', lineHeight: '1.6', gap: '1.5vw' }}>
             <p>
-              The often overlooked yet essential components of an automobile are its soundproofing and insulation materials, hidden within its structure. These elements not only shield occupants from external heat but also minimize intrusive noise, ensuring a more peaceful cabin environment.
+              Premium soundproofing and heat insulation help block road noise, reduce heat, and create a quieter, more comfortable cabin.
             </p>
             <p>
-              Upgrading to advanced soundproofing and heat insulation provides an enhanced layer of protection from external elements, delivering an unparalleled sense of serenity and comfort.
-            </p>
-            <p>
-              Our skilled experts are here to guide you in upgrading or adding high-performance sound-deadening and heat-resistant materials, transforming your vehicle's interior into a whisper-quiet haven for the ultimate luxurious ride!
+              Upgrade with high-performance materials professionally installed by our experts for a smoother, cooler, and more luxurious driving experience.
             </p>
           </div>
         </div>

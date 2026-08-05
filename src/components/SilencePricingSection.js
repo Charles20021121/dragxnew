@@ -11,7 +11,7 @@ const CarIcon = ({ type }) => {
     <img
       src={imageUrl}
       alt={`${type} icon`}
-      className="w-20 h-auto md:w-28 object-contain mb-2"
+      className="w-16 h-auto md:w-20 object-contain mb-2"
     />
   )
 }
@@ -33,10 +33,15 @@ export default function SilencePricingSection({ silencePrices = [] }) {
       return null;
     }
     
+    let displayPrice = priceStr.toString();
+    if (!displayPrice.includes('.')) {
+      displayPrice += '.00';
+    }
+
     return (
       <>
         <span className="mr-1">RM</span>
-        {priceStr}
+        {displayPrice}
       </>
     )
   }
@@ -70,9 +75,9 @@ export default function SilencePricingSection({ silencePrices = [] }) {
   }
 
   return (
-    <div className="w-full relative text-white pt-10">
+    <div className="w-full relative text-white pt-2 md:pt-10">
       {/* Tab 切換區域 */}
-      <div className="relative px-4 md:px-20 py-6">
+      <div className="relative px-4 md:px-20 py-2 md:py-6">
         {/* 底部的細線 (統一用 Tailwind 控制左右間距) */}
         <div className="absolute h-[2px] bg-[#64acac]/30 left-4 right-4 md:left-20 md:right-20 bottom-[17px]" />
 
@@ -142,7 +147,7 @@ export default function SilencePricingSection({ silencePrices = [] }) {
                 <div className="text-white flex items-center justify-center h-12 md:h-16">
                   <CarIcon type={carType} />
                 </div>
-                <span className="text-xs md:text-xl font-normal tracking-wider text-white">
+                <span className="text-xs md:text-xl font-semibold tracking-widest text-white" style={{ fontFamily: 'Geometos, sans-serif' }}>
                   {getPrice(activeTab, carType)}
                 </span>
               </div>
@@ -152,7 +157,7 @@ export default function SilencePricingSection({ silencePrices = [] }) {
       </div>
 
       {/* Banner 區域 */}
-      <div className="w-full mt-10 md:mt-16 pb-10">
+      <div className="w-full mt-10 md:mt-16 pb-0 md:pb-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

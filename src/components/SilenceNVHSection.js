@@ -38,16 +38,15 @@ const SilenceNVHSection = () => {
           {/* Top Section: Title & Subtitle */}
           <div className="space-y-6">
             {/* Title Block */}
-            <div className="inline-block bg-gradient-to-r from-[#053d40] via-[#053d40]/40 to-transparent rounded-l-xl px-5 md:px-7 py-3 md:py-4 self-start mb-2">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-wide">
-                <span className="text-[#cce4e6]">NVH </span>
-                <span className="text-[#cce4e6]">Stand for?</span>
+            <div className="mb-2">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-wide uppercase" style={{ fontFamily: 'Geometos, sans-serif' }}>
+                <span className="text-[#9bc7ca]">NVH STAND FOR?</span>
               </h2>
             </div>
 
             {/* Intro Text */}
-            <p className="text-gray-300 text-lg md:text-xl text-justify leading-relaxed pr-8">
-              The three parts of NVH cover a range of sound indicators - how it is heard, how it is felt, and whether it is perceived to be pleasant or annoying.
+            <p className="text-gray-200 text-lg md:text-xl text-left leading-relaxed pr-8" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+              The three parts of NVH cover a range of sound indicators — how it is heard, how it is felt, and whether it is perceived to be pleasant or annoying.
             </p>
           </div>
 
@@ -56,25 +55,25 @@ const SilenceNVHSection = () => {
 
             {/* Column 1: Noise */}
             <div className="flex flex-col space-y-3">
-              <h3 className="text-white text-lg md:text-xl font-bold tracking-wider uppercase">NOISE :</h3>
-              <p className="text-gray-400 text-sm md:text-base text-justify leading-relaxed">
-                The sound propagation caused by a specific object, such as the hum of an opening sunroof, an engine, a door being slammed, an HVAC system, or seat belt buckle clicks.
+              <h3 className="text-white text-lg md:text-xl font-bold tracking-wider uppercase" style={{ fontFamily: 'Geometos, sans-serif' }}>NOISE :</h3>
+              <p className="text-gray-200 text-sm md:text-base text-left leading-relaxed" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                Unwanted sounds from the engine, road, wind, tires, or other vehicle components.
               </p>
             </div>
 
             {/* Column 2: Vibration */}
             <div className="flex flex-col space-y-3">
-              <h3 className="text-white text-lg md:text-xl font-bold tracking-wider uppercase">VIBRATION :</h3>
-              <p className="text-gray-400 text-sm md:text-base text-justify leading-relaxed">
-                The oscillations that occur at a certain frequency. In a car, vibrations can be felt at different speeds through the steering wheel, seat, armrests, floor, and pedals.
+              <h3 className="text-white text-lg md:text-xl font-bold tracking-wider uppercase" style={{ fontFamily: 'Geometos, sans-serif' }}>VIBRATION :</h3>
+              <p className="text-gray-200 text-sm md:text-base text-left leading-relaxed" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                Unwanted movement transmitted through the steering wheel, seats, floor, and pedals.
               </p>
             </div>
 
             {/* Column 3: Harshness */}
             <div className="flex flex-col space-y-3">
-              <h3 className="text-white text-lg md:text-xl font-bold tracking-wider uppercase">HARSHNESS :</h3>
-              <p className="text-gray-400 text-sm md:text-base text-justify leading-relaxed">
-                The subjective quality associated with noise and vibration. While both noise and vibration are quantifiable measurements, harshness deals with the discomfort of hearing unpleasant sounds. What is harsh to one person may not be harsh to another.
+              <h3 className="text-white text-lg md:text-xl font-bold tracking-wider uppercase" style={{ fontFamily: 'Geometos, sans-serif' }}>HARSHNESS :</h3>
+              <p className="text-gray-200 text-sm md:text-base text-left leading-relaxed" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                The uncomfortable feeling caused by excessive noise and vibration, affecting overall ride comfort.
               </p>
             </div>
 
