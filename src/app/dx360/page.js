@@ -487,16 +487,17 @@ export default function DX360Page() {
       </div>
 
 
-      {/* 6th Banner: DIGITAL INNER RECORDER DIM */}
-      <div className="relative w-full bg-[#002447] flex flex-col pt-[4vw] pb-[6vw] px-[8%] overflow-hidden">
-        
-        {/* Mobile View with SEO Text */}
-        <div className="md:hidden">
-          <img 
-            src="/dx360/PHONE SIZE-06.png" 
-            alt="DX360 Digital Inner Recorder DIM. Digital rearview mirror with built-in GPS and Wi-Fi, automatic brightness adjustment, and wide unobstructed live view." 
-            className="w-full h-auto block" 
-          />
+      {/* 6th Banner: DIGITAL INNER RECORDER DIM - Mobile */}
+      <div className="md:hidden w-full">
+        <img 
+          src="/dx360/PHONE SIZE-06.png" 
+          alt="DX360 Digital Inner Recorder DIM. Digital rearview mirror with built-in GPS and Wi-Fi, automatic brightness adjustment, and wide unobstructed live view." 
+          className="w-full h-auto block" 
+        />
+      </div>
+
+      {/* 6th Banner: DIGITAL INNER RECORDER DIM - Desktop */}
+      <div className="relative hidden md:flex w-full bg-[#002447] flex-col pt-[4vw] pb-[6vw] px-[8%] overflow-hidden">
           <div className="sr-only">
             <h2>DIGITAL INNER RECORDER DIM</h2>
             <p>Features: High Frame Rate, Starlight Night Vision, Ai ADS, Ultra-High Resolution Display, Automotive Grade Display.</p>
@@ -508,7 +509,6 @@ export default function DX360Page() {
             <h3>BUILT-IN WI-FI</h3>
             <p>Preview, download, and share recordings via the mobile app.</p>
           </div>
-        </div>
 
         {/* Desktop View container */}
         <div className="hidden md:flex flex-col w-full">

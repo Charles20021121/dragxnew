@@ -72,7 +72,7 @@ export default function ContiDecoderPage() {
               className="w-full h-auto"
               priority
             />
-            
+
             {/* Logo and Main Content */}
             <div className="absolute inset-0 flex flex-col z-10 pointer-events-none">
               <div className="hidden md:block absolute top-[4%] lg:top-[6%] left-[10%] w-[15vw] md:w-[18vw] lg:w-[15vw] z-10 pointer-events-auto">
@@ -173,10 +173,8 @@ export default function ContiDecoderPage() {
                 className="text-gray-200 text-justify w-full"
                 style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
               >
-                Seamless Apple CarPlay integration with your original screen and controls. Supports wired and wireless connection. Auto-connect every drive and control calls, messages, navigation and music with
-                <span className="block text-right mt-1">
-                  Siri—just like OEM.
-                </span>
+                Seamless Apple CarPlay integration with your original screen and controls. Supports wired and wireless connection. Auto-connect every drive and control calls, messages, navigation and music with  Siri—just like OEM.
+
               </p>
               <div className="flex flex-row justify-end w-full gap-[1.5vw] mt-[2vw]">
                 {[1, 2, 3, 4, 5].map((num) => (

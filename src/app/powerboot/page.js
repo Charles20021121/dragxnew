@@ -165,9 +165,9 @@ export default function PowerBootPage() {
                     </h2>
                   </div>
                   <div className="space-y-6 text-gray-300 text-[1.2vw] lg:text-[1vw] leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
-                    <p>One-touch open/close with remote control<br />or car button.</p>
+                    <p>One-touch open/close with remote control or car button.</p>
                     <p>No need to manually lift a heavy tailgate.</p>
-                    <p>Suitable for users carrying shopping bags,<br />luggage, or holding children.</p>
+                    <p>Suitable for users carrying shopping bags, luggage, or holding children.</p>
                   </div>
                 </div>
 
@@ -193,8 +193,8 @@ export default function PowerBootPage() {
                     </h2>
                   </div>
                   <div className="space-y-6 text-gray-300 text-[1.2vw] lg:text-[1vw] leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
-                    <p>Can Integrate with car's central<br />lock and remote system.</p>
-                    <p>Some models allow foot-sensor kick<br />activation for hands-free operation.</p>
+                    <p>Can Integrate with car's central lock and remote system.</p>
+                    <p>Some models allow foot-sensor kick activation for hands-free operation.</p>
                   </div>
                 </div>
               </div>
@@ -224,7 +224,7 @@ export default function PowerBootPage() {
                   <div className="w-full relative rounded-[16px] overflow-hidden shadow-2xl shadow-black border border-white/5 mb-4">
                     <Image src="/powerboot/safty/safety 1.webp" alt="Anti-pinch function" width={800} height={500} className="w-full h-auto object-cover" />
                   </div>
-                  <p className="text-gray-300 text-center text-[1.1vw] lg:text-[0.9vw] leading-relaxed font-light">
+                  <p className="text-white text-center text-[1.2vw] lg:text-[1vw] leading-relaxed font-semibold">
                     Intelligent anti-pinch function:<br />stops and reverses if an obstacle is detected.
                   </p>
                 </div>
@@ -234,7 +234,7 @@ export default function PowerBootPage() {
                   <div className="w-full relative rounded-[16px] overflow-hidden shadow-2xl shadow-black border border-white/5 mb-4">
                     <Image src="/powerboot/safty/safety 2.webp" alt="Prevents accidental injuries" width={800} height={500} className="w-full h-auto object-cover" />
                   </div>
-                  <p className="text-gray-300 text-center text-[1.1vw] lg:text-[0.9vw] leading-relaxed font-light">
+                  <p className="text-white text-center text-[1.2vw] lg:text-[1vw] leading-relaxed font-semibold">
                     Prevents accidental injuries to children or pets.
                   </p>
                 </div>

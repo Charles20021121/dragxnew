@@ -7,12 +7,12 @@ const SilenceProtectionSection = () => {
       {/* DESKTOP LAYOUT */}
       {/* ============================== */}
       <div className="relative w-full hidden md:block">
-        <img 
-          src="/silence/getting/PHONE SIZE-061.webp" 
-          alt="Optimum Vehicle Noise Protection" 
+        <img
+          src="/silence/getting/PHONE SIZE-061.webp"
+          alt="Optimum Vehicle Noise Protection"
           className="w-full h-auto"
         />
-        
+
         <div className="absolute inset-0 flex flex-col justify-center items-start pl-[50%] lg:pl-[54%] pr-[5%] z-10">
           <div className="flex flex-col w-full max-w-3xl" style={{ gap: '0.8vw' }}>
             {/* Desktop Heading */}
@@ -39,9 +39,9 @@ const SilenceProtectionSection = () => {
       {/* MOBILE LAYOUT */}
       {/* ============================== */}
       <div className="md:hidden w-full relative block">
-        <img 
-          src="/silence/Phone/2.webp" 
-          alt="Optimum Vehicle Noise Protection" 
+        <img
+          src="/silence/Phone/2.webp"
+          alt="Optimum Vehicle Noise Protection"
           className="w-full h-auto"
         />
       </div>

@@ -2,7 +2,7 @@ import React from 'react';
 
 const SilenceNVHSection = () => {
   return (
-    <section className="bg-black text-white w-full relative overflow-hidden flex flex-col min-h-[400px] lg:min-h-[700px] z-0">
+    <section className="bg-black text-white w-full relative overflow-hidden flex flex-col z-0">
 
       {/* ============================== */}
       {/* MOBILE LAYOUT (Hidden on Desktop) */}

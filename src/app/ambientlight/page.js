@@ -172,7 +172,7 @@ export default function AmbientLightPage() {
                       className="text-gray-200 mb-3 md:mb-10 text-[2.5vw] md:text-[1.15vw]"
                       style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
                     >
-                      Customize colors, brightness, and lighting effects<br className="block md:hidden" /> through your infotainment system or mobile app<br /> — match your mood, music, or style
+                      Customize colors, brightness, and lighting effects<br /> through your infotainment system or mobile app — match your mood, music, or style
                     </p>
 
                     <div className="flex flex-col items-center gap-2 md:gap-4 w-full">
@@ -317,7 +317,7 @@ export default function AmbientLightPage() {
                     className="text-gray-200 text-center italic text-[2.8vw] md:text-[1.25vw] w-full px-[5%] md:px-0"
                     style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
                   >
-                    Drivers Who Prioritize Factory-Level Design, Quality, And Seamless Integration.
+                    drivers who prioritize factory-level design, quality, and seamless integration.
                   </p>
                 </div>
               )}
@@ -402,7 +402,7 @@ export default function AmbientLightPage() {
                     className="text-gray-200 text-center italic text-[2.8vw] md:text-[1.25vw] w-full px-[5%] md:px-0"
                     style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
                   >
-                    Drivers Who Want Maximum Customization, Creative Lighting Effects, And Easy Installation At A Lower Cost.
+                    drivers who want maximum customization, creative lighting effects, and easy installation at a lower cost.
                   </p>
                 </div>
               )}
@@ -417,85 +417,132 @@ export default function AmbientLightPage() {
                     CUSTOMIZED BASED ON<br className="block md:hidden" /> YOUR CAR MODEL
                   </h1>
 
-                  {/* Logo Layout */}
-                  <div className="flex flex-col items-center w-full lg:w-[90%] mb-12 md:mb-16 space-y-8 md:space-y-12">
+                  {/* Logo Layout - DESKTOP: 2 rows | MOBILE: original layout */}
+                  <div className="flex flex-col items-center w-full lg:w-[95%] mb-12 md:mb-16">
                     
-                    {/* Alphard / Vellfire */}
-                    <div className="flex justify-center items-center w-full gap-6 md:gap-[60px] lg:gap-[100px] mb-4 md:mb-8">
-                      {[
-                        'vellfire-ambient-light-upgrade', 'alphard-ambient-light-upgrade'
-                      ].map((name, i) => (
-                        <div key={i} className="flex justify-center items-center w-[42%] md:w-[35%] lg:w-[28%]">
-                          <Image
-                            unoptimized
-                            src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
-                            alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
-                            width={400}
-                            height={120}
-                            className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
-                          />
-                        </div>
-                      ))}
+                    {/* === DESKTOP LAYOUT === */}
+                    <div className="hidden md:flex flex-col items-center w-full space-y-10 lg:space-y-14">
+                      {/* Desktop Row 1: Alphard + Vellfire + Toyota + Honda + BMW + Mercedes + Audi */}
+                      <div className="flex justify-center items-center w-full gap-8 lg:gap-12">
+                        {/* Alphard & Vellfire text logos */}
+                        {['vellfire-ambient-light-upgrade', 'alphard-ambient-light-upgrade'].map((name, i) => (
+                          <div key={i} className="flex justify-center items-center w-[16%] lg:w-[14%]">
+                            <Image
+                              unoptimized
+                              src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                              alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                              width={400}
+                              height={120}
+                              className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                        ))}
+                        {/* Toyota, Honda, BMW, Mercedes, Audi */}
+                        {['toyota-ambient-light-upgrade', 'honda-ambient-light-upgrade', 'bmw-ambient-light-upgrade', 'mercedes-benz-ambient-light-upgrade', 'audi-ambient-light-upgrade'].map((name, i) => (
+                          <div key={i} className="flex justify-center items-center w-[7%] lg:w-[6%]">
+                            <Image
+                              unoptimized
+                              src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                              alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                              width={200}
+                              height={120}
+                              className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Desktop Row 2: Perodua + Proton + Lexus + Mini + Volvo + Jaguar + Land Rover + Ford + Porsche */}
+                      <div className="flex justify-center items-center w-full gap-8 lg:gap-10">
+                        {[
+                          { name: 'perodua-ambient-light-upgrade', w: 'w-[7%] lg:w-[6%]' },
+                          { name: 'proton-ambient-light-upgrade',  w: 'w-[7%] lg:w-[6%]' },
+                          { name: 'lexus-ambient-light-upgrade',   w: 'w-[7%] lg:w-[6%]' },
+                          { name: 'mini-cooper-ambient-light-upgrade', w: 'w-[10%] lg:w-[8%]' },
+                          { name: 'volvo-ambient-light-upgrade',   w: 'w-[7%] lg:w-[6%]' },
+                          { name: 'jaguar-ambient-light-upgrade',  w: 'w-[10%] lg:w-[8%]' },
+                          { name: 'land-rover-ambient-light-upgrade', w: 'w-[10%] lg:w-[8%]' },
+                          { name: 'ford-ambient-light-upgrade',    w: 'w-[10%] lg:w-[8%]' },
+                          { name: 'porsche-ambient-light-upgrade', w: 'w-[5%] lg:w-[4%]' },
+                        ].map(({ name, w }, i) => (
+                          <div key={i} className={`flex justify-center items-center ${w}`}>
+                            <Image
+                              unoptimized
+                              src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                              alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                              width={200}
+                              height={120}
+                              className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
-                    {/* Row 1 */}
-                    <div className="flex justify-center items-center w-full gap-5 md:gap-12 lg:gap-16">
-                      {[
-                        'toyota-ambient-light-upgrade', 'honda-ambient-light-upgrade',
-                        'bmw-ambient-light-upgrade', 'mercedes-benz-ambient-light-upgrade',
-                        'audi-ambient-light-upgrade'
-                      ].map((name, i) => (
-                        <div key={i} className="flex justify-center items-center w-[13%] md:w-[10%] lg:w-[8%]">
-                          <Image
-                            unoptimized
-                            src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
-                            alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
-                            width={200}
-                            height={120}
-                            className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
-                          />
-                        </div>
-                      ))}
+                    {/* === MOBILE LAYOUT (unchanged) === */}
+                    <div className="flex md:hidden flex-col items-center w-full space-y-8">
+                      {/* Mobile: Alphard / Vellfire */}
+                      <div className="flex justify-center items-center w-full gap-6 mb-4">
+                        {['vellfire-ambient-light-upgrade', 'alphard-ambient-light-upgrade'].map((name, i) => (
+                          <div key={i} className="flex justify-center items-center w-[42%]">
+                            <Image
+                              unoptimized
+                              src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                              alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                              width={400}
+                              height={120}
+                              className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      {/* Mobile Row 1 */}
+                      <div className="flex justify-center items-center w-full gap-5">
+                        {['toyota-ambient-light-upgrade', 'honda-ambient-light-upgrade', 'bmw-ambient-light-upgrade', 'mercedes-benz-ambient-light-upgrade', 'audi-ambient-light-upgrade'].map((name, i) => (
+                          <div key={i} className="flex justify-center items-center w-[13%]">
+                            <Image
+                              unoptimized
+                              src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                              alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                              width={200}
+                              height={120}
+                              className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      {/* Mobile Row 2 */}
+                      <div className="flex justify-center items-center w-full gap-5">
+                        {['perodua-ambient-light-upgrade', 'proton-ambient-light-upgrade', 'lexus-ambient-light-upgrade', 'mini-cooper-ambient-light-upgrade', 'volvo-ambient-light-upgrade'].map((name, i) => (
+                          <div key={i} className={`flex justify-center items-center ${name.includes('mini') ? 'w-[18%]' : 'w-[13%]'}`}>
+                            <Image
+                              unoptimized
+                              src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                              alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                              width={200}
+                              height={120}
+                              className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      {/* Mobile Row 3 */}
+                      <div className="flex justify-center items-center w-full gap-8">
+                        {['jaguar-ambient-light-upgrade', 'land-rover-ambient-light-upgrade', 'ford-ambient-light-upgrade', 'porsche-ambient-light-upgrade'].map((name, i) => (
+                          <div key={i} className={`flex justify-center items-center ${name.includes('porsche') ? 'w-[10%]' : 'w-[18%]'}`}>
+                            <Image
+                              unoptimized
+                              src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
+                              alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
+                              width={200}
+                              height={120}
+                              className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
-                    {/* Row 2 */}
-                    <div className="flex justify-center items-center w-full gap-5 md:gap-12 lg:gap-16">
-                      {[
-                        'perodua-ambient-light-upgrade', 'proton-ambient-light-upgrade',
-                        'lexus-ambient-light-upgrade', 'mini-cooper-ambient-light-upgrade',
-                        'volvo-ambient-light-upgrade'
-                      ].map((name, i) => (
-                        <div key={i} className={`flex justify-center items-center ${name.includes('mini') ? 'w-[18%] md:w-[14%] lg:w-[11%]' : 'w-[13%] md:w-[10%] lg:w-[8%]'}`}>
-                          <Image
-                            unoptimized
-                            src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
-                            alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
-                            width={200}
-                            height={120}
-                            className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
-                          />
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Row 3 */}
-                    <div className="flex justify-center items-center w-full gap-8 md:gap-16 lg:gap-24">
-                      {[
-                        'jaguar-ambient-light-upgrade', 'land-rover-ambient-light-upgrade',
-                        'ford-ambient-light-upgrade', 'porsche-ambient-light-upgrade'
-                      ].map((name, i) => (
-                        <div key={i} className={`flex justify-center items-center ${name.includes('porsche') ? 'w-[10%] md:w-[7%] lg:w-[5.5%]' : 'w-[18%] md:w-[14%] lg:w-[11%]'}`}>
-                          <Image
-                            unoptimized
-                            src={`https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ambientlight/pc/brand/${name}.webp`}
-                            alt={`${name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`}
-                            width={200}
-                            height={120}
-                            className="w-full h-auto object-contain hover:scale-110 transition-transform duration-300"
-                          />
-                        </div>
-                      ))}
-                    </div>
                   </div>
 
                   {/* Button */}
