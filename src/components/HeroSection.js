@@ -307,7 +307,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                     <div className="absolute inset-0 flex items-center justify-start pl-[5%] lg:pl-[8%] z-20 pointer-events-none">
                       <div className="w-[50%] lg:w-[45%] flex flex-col items-start text-left">
                         <div className="relative w-[35vw] lg:w-[28vw] h-[10vw] lg:h-[8vw] mb-2">
-                          <Image src="/lyno/lyno/LYNO.png" alt="LYNO Logo" fill className="object-contain object-left" />
+                          <Image src="/lyno/lyno/LYNO.webp" alt="LYNO Logo" fill className="object-contain object-left" />
                         </div>
                         <p
                           className="font-medium text-[#444] mb-6 lg:mb-8 drop-shadow-sm"
@@ -493,7 +493,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                     <div className="absolute inset-0 flex items-center justify-start pl-[5%] z-20 pointer-events-none">
                       <div className="w-[50%] flex flex-col items-start text-left">
                         <div className="relative w-[45vw] h-[12vw] mb-2">
-                          <Image src="/lyno/lyno/LYNO.png" alt="LYNO Logo" fill className="object-contain object-left" />
+                          <Image src="/lyno/lyno/LYNO.webp" alt="LYNO Logo" fill className="object-contain object-left" />
                         </div>
                         <p
                           className="font-medium text-[#444] mb-6 drop-shadow-sm"
