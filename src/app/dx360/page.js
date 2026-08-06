@@ -143,12 +143,23 @@ export default function DX360Page() {
 
       {/* 3rd Banner: 360° Surrounding View */}
       <div className="relative w-full bg-[#00050b] overflow-hidden">
-        {/* Mobile View */}
-        <img
-          src="/dx360/PHONE SIZE-03.webp"
-          alt="DX360 360° Surrounding View"
-          className="w-full h-auto block md:hidden"
-        />
+        {/* Mobile View with SEO Text */}
+        <div className="md:hidden">
+          <img
+            src="/dx360/PHONE SIZE-03.webp"
+            alt="DX360 360° Surrounding View System. Eliminates blind spots, prevents scratches & collisions, and offers safer parking with bird's-eye view cameras."
+            className="w-full h-auto block"
+          />
+          <div className="sr-only">
+            <h2>360° SURROUNDING VIEW</h2>
+            <h3>Eliminates Blind Spots</h3>
+            <p>Provides a bird's-eye view around the vehicle.</p>
+            <h3>Prevents Scratches & Collisions</h3>
+            <p>Helps maneuver safely in tight spaces and near obstacles.</p>
+            <h3>Safer Parking</h3>
+            <p>Offers a complete view, reducing the risk of reversing accidents.</p>
+          </div>
+        </div>
 
         {/* Desktop Custom Component */}
         <div className="hidden md:flex w-full min-h-[45vh] flex-row items-stretch justify-between gap-[4vw] pl-[12%] pr-[8%] pt-[3%] pb-0">
@@ -241,12 +252,24 @@ export default function DX360Page() {
 
       {/* 4th Banner: Radar Sensor */}
       <div className="relative w-full bg-[#000e1c] overflow-hidden">
-        {/* Mobile View */}
-        <img
-          src="/dx360/PHONE SIZE-04.webp"
-          alt="DX360 Radar Sensor System"
-          className="w-full h-auto block md:hidden"
-        />
+        {/* Mobile View with SEO Text */}
+        <div className="md:hidden">
+          <img
+            src="/dx360/PHONE SIZE-04.webp"
+            alt="DX360 Radar Sensor System. Collision prevention, parking assistance, and enhanced awareness in low-visibility conditions."
+            className="w-full h-auto block"
+          />
+          <div className="sr-only">
+            <h2>RADAR SENSOR</h2>
+            <h3>Collision Prevention</h3>
+            <p>Detects obstacles in front or behind the car to avoid impact.</p>
+            <h3>Parking Assistance</h3>
+            <p>Beeps or alerts as you get close to walls or other vehicles.</p>
+            <h3>Enhanced Awareness</h3>
+            <p>Improves safety in low-visibility conditions where cameras alone may not be enough.</p>
+            <p>Features: Microwave Radar, Central Control, Microporous Installation, Distance Reminder, Upgraded Radar, Host Sound, Waterproof.</p>
+          </div>
+        </div>
 
         {/* Desktop Custom Component */}
         <div className="hidden md:flex flex-col w-full px-[8%] py-[4%]">
@@ -360,12 +383,23 @@ export default function DX360Page() {
 
       {/* 5th Banner: Blind Spot Monitor (BSM) */}
       <div className="relative w-full bg-[#001f40] overflow-hidden">
-        {/* Mobile View */}
-        <img
-          src="/dx360/PHONE SIZE-05.webp"
-          alt="DX360 Blind Spot Monitor (BSM)"
-          className="w-full h-auto block md:hidden"
-        />
+        {/* Mobile View with SEO Text */}
+        <div className="md:hidden">
+          <img
+            src="/dx360/PHONE SIZE-05.webp"
+            alt="DX360 Blind Spot Monitor (BSM). Safer lane changes, enhanced highway safety, and all-weather support."
+            className="w-full h-auto block"
+          />
+          <div className="sr-only">
+            <h2>BLIND SPOT MONITOR (BSM)</h2>
+            <h3>Safer Lane Changes</h3>
+            <p>Alerts when vehicles are in your blind spot.</p>
+            <h3>Enhanced Highway Safety</h3>
+            <p>Warns about fast-approaching cars during lane switching.</p>
+            <h3>All-Weather Support</h3>
+            <p>Works even in low visibility conditions such as night or rain.</p>
+          </div>
+        </div>
 
         {/* Desktop Custom Component */}
         <div className="hidden md:flex flex-row w-full items-stretch justify-between pl-[10%] pr-[5%] py-[4%] gap-[4vw]">
@@ -456,8 +490,25 @@ export default function DX360Page() {
       {/* 6th Banner: DIGITAL INNER RECORDER DIM */}
       <div className="relative w-full bg-[#002447] flex flex-col pt-[4vw] pb-[6vw] px-[8%] overflow-hidden">
         
-        {/* Mobile View Placeholder */}
-        <img src="/dx360/PHONE SIZE-06.png" alt="DX360 Digital Inner Recorder DIM" className="w-full h-auto block md:hidden" />
+        {/* Mobile View with SEO Text */}
+        <div className="md:hidden">
+          <img 
+            src="/dx360/PHONE SIZE-06.png" 
+            alt="DX360 Digital Inner Recorder DIM. Digital rearview mirror with built-in GPS and Wi-Fi, automatic brightness adjustment, and wide unobstructed live view." 
+            className="w-full h-auto block" 
+          />
+          <div className="sr-only">
+            <h2>DIGITAL INNER RECORDER DIM</h2>
+            <p>Features: High Frame Rate, Starlight Night Vision, Ai ADS, Ultra-High Resolution Display, Automotive Grade Display.</p>
+            <p>Enjoy a clearer and safer rear view with a digital rearview mirror. Unlike traditional mirrors that can be blocked by passengers or luggage, the built-in rear camera provides a wide, unobstructed live view, reducing blind spots and improving driving safety in all weather conditions.</p>
+            <h3>AUTOMATIC BRIGHTNESS ADJUSTMENT</h3>
+            <p>The advanced ambient light sensor automatically detects surrounding lighting conditions and adjusts the screen brightness for optimal visibility and a more comfortable driving experience.</p>
+            <h3>BUILT-IN GPS</h3>
+            <p>Records route, speed, and location data in real time.</p>
+            <h3>BUILT-IN WI-FI</h3>
+            <p>Preview, download, and share recordings via the mobile app.</p>
+          </div>
+        </div>
 
         {/* Desktop View container */}
         <div className="hidden md:flex flex-col w-full">
