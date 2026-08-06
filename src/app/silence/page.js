@@ -80,8 +80,13 @@ export default async function SilencePage() {
       
       {/* New Banners under Hero */}
       <div className="w-full flex flex-col bg-black">
-        <img src="/silence/New folder/DX Silence PC 2-02.webp" alt="Silence Intro 1" className="w-full h-auto block" />
-        <img src="/silence/New folder/DX Silence PC 2-03.webp" alt="Silence Intro 2" className="w-full h-auto block" />
+        {/* Banner 1 */}
+        <img src="/silence/New folder/DX Silence PC 2-02.webp" alt="Silence Intro 1" className="w-full h-auto hidden md:block" />
+        <img src="/silence/Phone/car audio.webp" alt="Silence Intro 1 Mobile" className="w-full h-auto block md:hidden" />
+        
+        {/* Banner 2 */}
+        <img src="/silence/New folder/DX Silence PC 2-03.webp" alt="Silence Intro 2" className="w-full h-auto hidden md:block" />
+        <img src="/silence/Phone/premium.webp" alt="Silence Intro 2 Mobile" className="w-full h-auto block md:hidden" />
       </div>
 
       <div className="bg-black bg-no-repeat bg-cover bg-center w-full" style={{

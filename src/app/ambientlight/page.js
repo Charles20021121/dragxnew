@@ -172,7 +172,7 @@ export default function AmbientLightPage() {
                       className="text-gray-200 mb-3 md:mb-10 text-[2.5vw] md:text-[1.15vw]"
                       style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
                     >
-                      Customize colors, brightness, and lighting effects<br /> through your infotainment system or mobile app — match your mood, music, or style
+                      Customize colors, brightness, and lighting effects<br /> through your infotainment system or mobile app <br />— match your mood, music, or style
                     </p>
 
                     <div className="flex flex-col items-center gap-2 md:gap-4 w-full">
@@ -317,7 +317,7 @@ export default function AmbientLightPage() {
                     className="text-gray-200 text-center italic text-[2.8vw] md:text-[1.25vw] w-full px-[5%] md:px-0"
                     style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
                   >
-                    drivers who prioritize factory-level design, quality, and seamless integration.
+                    Drivers who prioritize factory-level design, quality, and seamless integration.
                   </p>
                 </div>
               )}
@@ -402,7 +402,7 @@ export default function AmbientLightPage() {
                     className="text-gray-200 text-center italic text-[2.8vw] md:text-[1.25vw] w-full px-[5%] md:px-0"
                     style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
                   >
-                    drivers who want maximum customization, creative lighting effects, and easy installation at a lower cost.
+                    Drivers who want maximum customization, creative lighting effects, and easy installation at a lower cost.
                   </p>
                 </div>
               )}
@@ -419,7 +419,7 @@ export default function AmbientLightPage() {
 
                   {/* Logo Layout - DESKTOP: 2 rows | MOBILE: original layout */}
                   <div className="flex flex-col items-center w-full lg:w-[95%] mb-12 md:mb-16">
-                    
+
                     {/* === DESKTOP LAYOUT === */}
                     <div className="hidden md:flex flex-col items-center w-full space-y-10 lg:space-y-14">
                       {/* Desktop Row 1: Alphard + Vellfire + Toyota + Honda + BMW + Mercedes + Audi */}
@@ -456,13 +456,13 @@ export default function AmbientLightPage() {
                       <div className="flex justify-center items-center w-full gap-8 lg:gap-10">
                         {[
                           { name: 'perodua-ambient-light-upgrade', w: 'w-[7%] lg:w-[6%]' },
-                          { name: 'proton-ambient-light-upgrade',  w: 'w-[7%] lg:w-[6%]' },
-                          { name: 'lexus-ambient-light-upgrade',   w: 'w-[7%] lg:w-[6%]' },
+                          { name: 'proton-ambient-light-upgrade', w: 'w-[7%] lg:w-[6%]' },
+                          { name: 'lexus-ambient-light-upgrade', w: 'w-[7%] lg:w-[6%]' },
                           { name: 'mini-cooper-ambient-light-upgrade', w: 'w-[10%] lg:w-[8%]' },
-                          { name: 'volvo-ambient-light-upgrade',   w: 'w-[7%] lg:w-[6%]' },
-                          { name: 'jaguar-ambient-light-upgrade',  w: 'w-[10%] lg:w-[8%]' },
+                          { name: 'volvo-ambient-light-upgrade', w: 'w-[7%] lg:w-[6%]' },
+                          { name: 'jaguar-ambient-light-upgrade', w: 'w-[10%] lg:w-[8%]' },
                           { name: 'land-rover-ambient-light-upgrade', w: 'w-[10%] lg:w-[8%]' },
-                          { name: 'ford-ambient-light-upgrade',    w: 'w-[10%] lg:w-[8%]' },
+                          { name: 'ford-ambient-light-upgrade', w: 'w-[10%] lg:w-[8%]' },
                           { name: 'porsche-ambient-light-upgrade', w: 'w-[5%] lg:w-[4%]' },
                         ].map(({ name, w }, i) => (
                           <div key={i} className={`flex justify-center items-center ${w}`}>
