@@ -64,13 +64,13 @@ export default function SilencePricingSection({ silencePrices = [] }) {
   const getMobileBannerImage = (tab) => {
     switch (tab) {
       case 'BASIC':
-        return '/silence/basic/phone/PHONE SIZE-BASIC.webp'
+        return '/silence/basic/PHONE SIZE-BASIC 1.webp'
       case 'STANDARD':
-        return '/silence/basic/phone/PHONE SIZE-STANDARD.webp'
+        return '/silence/basic/PHONE SIZE-STANDARD 3.webp'
       case 'PRO':
-        return '/silence/basic/phone/PHONE SIZE-PRO.webp'
+        return '/silence/basic/PHONE SIZE-PRO 2.webp'
       default:
-        return '/silence/basic/phone/PHONE SIZE-BASIC.webp'
+        return '/silence/basic/PHONE SIZE-BASIC 1.webp'
     }
   }
 
