@@ -488,12 +488,25 @@ export default function DX360Page() {
 
 
       {/* 6th Banner: DIGITAL INNER RECORDER DIM - Mobile */}
-      <div className="md:hidden w-full">
+      <div className="md:hidden w-full bg-[#002d59] flex flex-col">
         <img 
           src="/dx360/PHONE SIZE-06.png" 
           alt="DX360 Digital Inner Recorder DIM. Digital rearview mirror with built-in GPS and Wi-Fi, automatic brightness adjustment, and wide unobstructed live view." 
           className="w-full h-auto block" 
         />
+        {/* Mobile Button Below Banner */}
+        <div className="w-full flex justify-center py-6">
+          <a
+            href="/products/360camera"
+            className="inline-block bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
+            style={{
+              fontSize: '15px',
+              padding: '0.45em 1.3em'
+            }}
+          >
+            LEARN MORE
+          </a>
+        </div>
       </div>
 
       {/* 6th Banner: DIGITAL INNER RECORDER DIM - Desktop */}
