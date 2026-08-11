@@ -17,11 +17,13 @@ export default async function GalleryCategory({ params }) {
       let query;
       let queryParams;
 
+      // Filter only the main products (Id = same) directly in SQL
       if (isCombined) {
         query = `
           SELECT *
           FROM gallery
           WHERE categories IN ('alphard', 'vellfire')
+            AND Id = same
           ORDER BY date DESC
         `;
         queryParams = [];
@@ -30,6 +32,7 @@ export default async function GalleryCategory({ params }) {
           SELECT *
           FROM gallery
           WHERE categories = ?
+            AND Id = same
           ORDER BY date DESC
         `;
         queryParams = [category];

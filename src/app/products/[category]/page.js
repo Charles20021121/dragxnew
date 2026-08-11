@@ -11,60 +11,38 @@ export default async function CategoryProducts({ params }) {
   try {
     const connection = await pool.getConnection();
     try {
-      // Fetch products based on category, same logic as /api/products?category=...
+      // Fetch only the main products (Id = same) and skip the expensive LEFT JOIN of additional images
       const query = `
-        SELECT
-          p1.*,
-          GROUP_CONCAT(
-            CASE
-              WHEN p2.same = p1.same THEN CONCAT(p2.Id, '|', p2.Name, '|', p2.Url, '|', p2.publicId, '|', p2.date)
-            END
-            ORDER BY p2.date ASC
-            SEPARATOR '|||'
-          ) as additional_images
-        FROM products p1
-        LEFT JOIN products p2
-          ON p1.same IS NOT NULL
-          AND p1.same != ''
-          AND p2.same = p1.same
-          AND p2.Id != p1.Id
-        WHERE p1.categories = ?
-        GROUP BY p1.Id
-        ORDER BY p1.date DESC
+        SELECT *
+        FROM products
+        WHERE categories = ?
+          AND Id = same
+          AND Url IS NOT NULL
+          AND Url != ''
+        ORDER BY date DESC
       `;
       const [rows] = await connection.execute(query, [category]);
-      
-      const parseAdditionalImages = (str) =>
-        str
-          ? str.split('|||').filter(Boolean).map(imgData => {
-              const [Id, Name, Url, publicId, date] = imgData.split('|');
-              return { Id, Name, Url, publicId, date };
-            })
-          : [];
 
-      // Process products to ensure plain objects and generate slug
-      products = rows
-        .filter(p => p.Url && p.Url.trim() !== '')
-        .map(p => ({
-          id: p.Id,
-          name: p.Name,
-          categories: p.categories,
-          image: p.Url,
-          date: p.date,
-          sort_order: p.sort_order,
-          price: p.price,
-          additionalImages: parseAdditionalImages(p.additional_images),
-          buy: p.buy,
-          specifications: p.Specifications,
-          description: p.description,
-          publicId: p.publicId,
-          filter: p.filter,
-          filter1: p.filter1,
-          android_series: p.android_series,
-          custom_filter: p.custom_filter,
-          same: p.same,
-          slug: (p.Name || p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-        }));
+      products = rows.map(p => ({
+        id: p.Id,
+        name: p.Name,
+        categories: p.categories,
+        image: p.Url,
+        date: p.date,
+        sort_order: p.sort_order,
+        price: p.price,
+        additionalImages: [], // Not needed on the category page listing
+        buy: p.buy,
+        specifications: p.Specifications,
+        description: p.description,
+        publicId: p.publicId,
+        filter: p.filter,
+        filter1: p.filter1,
+        android_series: p.android_series,
+        custom_filter: p.custom_filter,
+        same: p.same,
+        slug: (p.Name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      }));
 
     } finally {
       connection.release();

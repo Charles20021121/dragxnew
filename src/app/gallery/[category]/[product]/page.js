@@ -1,8 +1,71 @@
 import GalleryProductClientWrapper from '@/components/GalleryProductClientWrapper'
 import pool from '@/lib/db'
 import { notFound } from 'next/navigation'
+import { cache } from 'react'
 
 export const revalidate = 3600;
+
+// Cached fetcher to deduplicate queries between metadata and page render
+const getGalleryProductBySlug = cache(async (category, productSlug) => {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+
+    // 1. Fetch main product
+    let query;
+    let queryParams;
+
+    if (category === 'alphard-vellfire') {
+      query = `
+        SELECT *
+        FROM gallery
+        WHERE categories IN ('alphard', 'vellfire')
+        AND LOWER(REPLACE(Name, ' ', '-')) = ?
+        ORDER BY date ASC
+      `;
+      queryParams = [productSlug];
+    } else {
+      query = `
+        SELECT *
+        FROM gallery
+        WHERE categories = ? 
+        AND LOWER(REPLACE(Name, ' ', '-')) = ?
+        ORDER BY date ASC
+      `;
+      queryParams = [category, productSlug];
+    }
+
+    const [rows] = await connection.execute(query, queryParams);
+    
+    if (rows.length === 0) return null;
+
+    const mainProduct = rows[0];
+
+    // 2. Fetch related images with the same 'same' value
+    const relatedQuery = `
+      SELECT *
+      FROM gallery
+      WHERE same = ?
+      ORDER BY date DESC
+    `;
+    const [relatedRows] = await connection.execute(relatedQuery, [mainProduct.same]);
+    
+    // Filter out empty URLs
+    const relatedImages = relatedRows.filter(img => img.Url && img.Url.trim() !== '');
+
+    return {
+      mainProduct,
+      relatedImages
+    };
+  } catch (error) {
+    console.error('Error fetching gallery product:', error);
+    return null;
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+});
 
 export async function generateMetadata({ params }) {
   const { category, product } = await params;
@@ -12,45 +75,12 @@ export async function generateMetadata({ params }) {
   let description = "Explore DRAGX Car Accessories Gallery.";
   let imageUrl = "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp";
 
-  try {
-    const connection = await pool.getConnection();
-    try {
-      let query;
-      let queryParams;
-
-      if (category === 'alphard-vellfire') {
-        query = `
-          SELECT Name, Url
-          FROM gallery
-          WHERE categories IN ('alphard', 'vellfire')
-          AND LOWER(REPLACE(Name, ' ', '-')) = ?
-          LIMIT 1
-        `;
-        queryParams = [productSlug];
-      } else {
-        query = `
-          SELECT Name, Url
-          FROM gallery
-          WHERE categories = ? 
-          AND LOWER(REPLACE(Name, ' ', '-')) = ?
-          LIMIT 1
-        `;
-        queryParams = [category, productSlug];
-      }
-
-      const [rows] = await connection.execute(query, queryParams);
-      
-      if (rows.length > 0) {
-        const match = rows[0];
-        title = `${match.Name} - DRAGX Gallery`;
-        description = `View the gallery for ${match.Name} at DRAGX.`;
-        if (match.Url) imageUrl = match.Url;
-      }
-    } finally {
-      connection.release();
-    }
-  } catch (error) {
-    console.error('Error fetching metadata:', error);
+  const result = await getGalleryProductBySlug(category, productSlug);
+  if (result) {
+    const { mainProduct } = result;
+    title = `${mainProduct.Name} - DRAGX Gallery`;
+    description = `View the gallery for ${mainProduct.Name} at DRAGX.`;
+    if (mainProduct.Url) imageUrl = mainProduct.Url;
   }
 
   return {
@@ -71,65 +101,12 @@ export default async function GalleryProductPage({ params }) {
   const { category, product } = await params;
   const productSlug = decodeURIComponent(product);
   
-  let mainProduct = null;
-  let relatedImages = [];
-
-  try {
-    const connection = await pool.getConnection();
-
-    try {
-      // 1. Fetch main product
-      let query;
-      let queryParams;
-
-      if (category === 'alphard-vellfire') {
-        query = `
-          SELECT *
-          FROM gallery
-          WHERE categories IN ('alphard', 'vellfire')
-          AND LOWER(REPLACE(Name, ' ', '-')) = ?
-          ORDER BY date ASC
-        `;
-        queryParams = [productSlug];
-      } else {
-        query = `
-          SELECT *
-          FROM gallery
-          WHERE categories = ? 
-          AND LOWER(REPLACE(Name, ' ', '-')) = ?
-          ORDER BY date ASC
-        `;
-        queryParams = [category, productSlug];
-      }
-
-      const [rows] = await connection.execute(query, queryParams);
-      
-      if (rows.length > 0) {
-        mainProduct = rows[0];
-
-        // 2. Fetch related images with the same 'same' value
-        const relatedQuery = `
-          SELECT *
-          FROM gallery
-          WHERE same = ?
-          ORDER BY date DESC
-        `;
-        const [relatedRows] = await connection.execute(relatedQuery, [mainProduct.same]);
-        
-        // Filter out empty URLs
-        relatedImages = relatedRows.filter(img => img.Url && img.Url.trim() !== '');
-      }
-
-    } finally {
-      connection.release();
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-
-  if (!mainProduct) {
+  const result = await getGalleryProductBySlug(category, productSlug);
+  if (!result) {
     notFound();
   }
+
+  const { mainProduct, relatedImages } = result;
 
   // Logic to strictly identify Master Record (Id == same)
   const masterId = String(mainProduct.same || mainProduct.Id);

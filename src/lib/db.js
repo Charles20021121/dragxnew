@@ -26,16 +26,13 @@ if (process.env.DB_SSL === 'true') {
   };
 }
 
-const pool = mysql.createPool(dbConfig);
+// 使用全局變量緩存數據庫連接池，避免 Next.js 在開發模式下因熱重載(HMR)頻繁創建新連接
+const globalForDb = globalThis;
 
-// 添加連接測試
-pool.getConnection()
-  .then(connection => {
-    console.log('Database connected successfully');
-    connection.release();
-  })
-  .catch(err => {
-    console.error('Database connection failed:', err);
-  });
+const pool = globalForDb.mysqlPool || mysql.createPool(dbConfig);
 
-export default pool; 
+if (process.env.NODE_ENV !== 'production') {
+  globalForDb.mysqlPool = pool;
+}
+
+export default pool;

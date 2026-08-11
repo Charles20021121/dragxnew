@@ -8,13 +8,13 @@ export async function GET() {
     const dbPromise = async () => {
       const connection = await pool.getConnection();
       try {
-        const [products] = await connection.query(`
+        const [mainProducts] = await connection.query(`
           SELECT Id, Name, categories, date, same
           FROM products
+          WHERE Id = same
           ORDER BY categories, date DESC
         `);
 
-        const mainProducts = products.filter((p) => p.Id == p.same);
         const productCategories = [...new Set(mainProducts.map((p) => p.categories))];
 
         return { mainProducts, productCategories };

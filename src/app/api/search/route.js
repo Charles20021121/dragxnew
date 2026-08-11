@@ -37,9 +37,12 @@ export async function GET(request) {
           'product' as type
         FROM products 
         WHERE 
-          LOWER(Name) LIKE LOWER(?) OR
-          LOWER(categories) LIKE LOWER(?) OR
-          LOWER(Specifications) LIKE LOWER(?)
+          same IS NOT NULL AND same != '' AND Id = same
+          AND (
+            LOWER(Name) LIKE LOWER(?) OR
+            LOWER(categories) LIKE LOWER(?) OR
+            LOWER(Specifications) LIKE LOWER(?)
+          )
       `
       const searchTerm = `%${query}%`
       const [products] = await connection.execute(

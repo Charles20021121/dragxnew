@@ -8,13 +8,13 @@ export async function GET() {
     const dbPromise = async () => {
       const connection = await pool.getConnection();
       try {
-        const [galleryItems] = await connection.query(`
+        const [mainGalleryItems] = await connection.query(`
           SELECT Id, Name, categories, date, same
           FROM gallery
+          WHERE Id = same
           ORDER BY categories, date DESC
         `);
 
-        const mainGalleryItems = galleryItems.filter((g) => g.Id == g.same);
         const galleryCategories = [...new Set(mainGalleryItems.map((g) => g.categories))];
 
         return { mainGalleryItems, galleryCategories };

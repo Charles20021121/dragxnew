@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, cache } from "react";
 import ProductDetail from "@/components/ProductDetail";
 import pool from '@/lib/db';
 import { notFound } from "next/navigation";
@@ -18,57 +18,23 @@ const parseAdditionalImages = (str) =>
       })
     : [];
 
-export async function generateMetadata({ params }) {
-  const { category, slug } = await params;
-  let title = "Product - DRAGX";
-  let description = "Buy premium car accessories at DRAGX - Malaysia's leading provider.";
-  let imageUrl = "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp";
-
-  try {
-    const connection = await pool.getConnection();
-    try {
-      const [rows] = await connection.query(`
-        SELECT Name, description, Url
-        FROM products
-        WHERE categories = ? AND Id = same
-      `, [category]);
-      
-      const match = rows.find(p => toSlug(p.Name) === slug.toLowerCase());
-      if (match) {
-        title = `${match.Name} - DRAGX`;
-        if (match.description) description = match.description;
-        if (match.Url) imageUrl = match.Url;
-      }
-    } finally {
-      connection.release();
-    }
-  } catch (error) {
-    console.error('Error fetching metadata:', error);
-  }
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `https://www.dragx.asia/products/${category}/${slug}`
-    },
-    openGraph: {
-      title,
-      description,
-      images: [imageUrl],
-    },
-  };
-}
-
-export default async function ProductPage({ params }) {
-  const { category, slug } = await params;
-  let product = null;
+// Cached data fetcher to deduplicate DB queries between metadata and page render
+const getProductBySlug = cache(async (category, slug) => {
   let connection;
-
   try {
     connection = await pool.getConnection();
-    await connection.query('SET SESSION group_concat_max_len = 1000000');
 
+    // 1. Fetch lightweight info (Id and Name) to match the slug
+    const [summaryRows] = await connection.query(`
+      SELECT Id, Name
+      FROM products
+      WHERE categories = ? AND Id = same
+    `, [category]);
+
+    const matchSummary = summaryRows.find(p => toSlug(p.Name) === slug.toLowerCase());
+    if (!matchSummary) return null;
+
+    // 2. Fetch detailed info ONLY for the matched product ID (avoid loading the entire category)
     const query = `
       SELECT
         p1.*,
@@ -85,45 +51,35 @@ export default async function ProductPage({ params }) {
         AND p1.same != ''
         AND p2.same = p1.same
         AND p2.Id != p1.Id
-      WHERE p1.categories = ?
-        AND p1.Id = p1.same
+      WHERE p1.Id = ?
       GROUP BY p1.Id
-      ORDER BY p1.date DESC
     `;
 
-    const [rows] = await connection.query(query, [category]);
+    const [rows] = await connection.query(query, [matchSummary.Id]);
+    if (rows.length === 0) return null;
 
-    const match = rows
-      .filter(p => toSlug(p.Name) === slug.toLowerCase())
-      .sort((a, b) => {
-        const sA = (a.price ? 2 : 0) + (a.description ? 1 : 0);
-        const sB = (b.price ? 2 : 0) + (b.description ? 1 : 0);
-        return sB - sA;
-      })[0];
+    const match = rows[0];
+    const product = {
+      id: match.Id,
+      name: match.Name,
+      categories: match.categories,
+      image: match.Url,
+      date: match.date,
+      sort_order: match.sort_order,
+      price: match.price,
+      additionalImages: parseAdditionalImages(match.additional_images),
+      buy: match.buy,
+      specifications: match.Specifications,
+      description: match.description,
+      publicId: match.publicId,
+      filter: match.filter,
+      filter1: match.filter1,
+      android_series: match.android_series,
+      custom_filter: match.custom_filter,
+      same: match.same,
+    };
 
-    if (match) {
-      product = {
-        id: match.Id,
-        name: match.Name,
-        categories: match.categories,
-        image: match.Url,
-        date: match.date,
-        sort_order: match.sort_order,
-        price: match.price,
-        additionalImages: parseAdditionalImages(match.additional_images),
-        buy: match.buy,
-        specifications: match.Specifications,
-        description: match.description,
-        publicId: match.publicId,
-        filter: match.filter,
-        filter1: match.filter1,
-        android_series: match.android_series,
-        custom_filter: match.custom_filter,
-        same: match.same,
-      }
-    }
-
-    // Fetch all potential recommendations on the server
+    // 3. Fetch potential recommendations
     const queryList = `
       SELECT Id as id, Name as name, categories, Url as image, date, same, filter1, android_series, sort_order
       FROM products
@@ -132,8 +88,7 @@ export default async function ProductPage({ params }) {
     `;
     const [listRows] = await connection.query(queryList);
     
-    // Process list for recommendations
-    if (product && listRows.length > 0) {
+    if (listRows.length > 0) {
       const allPotentialRecs = listRows
         .filter(p => String(p.id) === String(p.same) && String(p.same) !== String(product.same))
         .map(p => ({
@@ -144,13 +99,44 @@ export default async function ProductPage({ params }) {
       product.recommendations = allPotentialRecs;
     }
 
+    return product;
   } catch (error) {
-    console.error('Error fetching product:', error);
+    console.error('Error fetching product in cache:', error);
+    return null;
   } finally {
     if (connection) {
       connection.release();
     }
   }
+});
+
+export async function generateMetadata({ params }) {
+  const { category, slug } = await params;
+  const product = await getProductBySlug(category, slug);
+
+  if (!product) {
+    return {
+      title: "Product Not Found - DRAGX",
+    };
+  }
+
+  return {
+    title: `${product.name} - DRAGX`,
+    description: product.description || "Buy premium car accessories at DRAGX - Malaysia's leading provider.",
+    alternates: {
+      canonical: `https://www.dragx.asia/products/${category}/${slug}`
+    },
+    openGraph: {
+      title: `${product.name} - DRAGX`,
+      description: product.description || "Buy premium car accessories at DRAGX - Malaysia's leading provider.",
+      images: [product.image || "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp"],
+    },
+  };
+}
+
+export default async function ProductPage({ params }) {
+  const { category, slug } = await params;
+  const product = await getProductBySlug(category, slug);
 
   if (!product) {
     notFound();
