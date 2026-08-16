@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useProduct } from '@/contexts/ProductContext'
 
@@ -119,9 +120,18 @@ export default function PowerBootPage() {
                 <h3 className="font-semibold tracking-wide text-[1.5vw] lg:text-[1.2vw] mb-6 text-white drop-shadow-sm">
                   SMART UPGRADE FOR YOUR CAR
                 </h3>
-                <p className="text-gray-200 text-[1vw] lg:text-[0.9vw] mb-10 text-justify leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
+                <p className="text-gray-200 text-[1vw] lg:text-[0.9vw] mb-6 text-justify leading-relaxed font-light" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif' }}>
                   Upgrade your driving experience with Power Boot, the intelligent electric tailgate designed for comfort and safety. With just one touch—or even hands-free—you can open and close your tailgate effortlessly. Equipped with anti-pinch protection, adjustable height, and smart controls, Power Boot brings convenience, safety, and a premium feel to your car. Smooth, durable, and stylish, it's the upgrade that makes every journey easier.
                 </p>
+
+                <div className="mb-10">
+                  <Link
+                    href="/products/powerboot"
+                    className="inline-flex items-center justify-center px-8 py-3.5 border border-red-600 bg-red-600/10 hover:bg-red-600 text-white font-bold text-[1vw] lg:text-[0.85vw] uppercase tracking-wider rounded-md transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(220,38,38,0.25)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)]"
+                  >
+                    View Products
+                  </Link>
+                </div>
 
                 {/* Icons Grid */}
                 <div className="w-full space-y-8">
@@ -276,6 +286,14 @@ export default function PowerBootPage() {
         <div className="flex flex-col w-full">
           <img src="/powerboot/phone/PHONE SIZE.webp" alt="Power Boot Hero" className="w-full h-auto block" />
           <img src="/powerboot/phone/PHONE SIZE-01.webp" alt="Smart Upgrade" className="w-full h-auto block" />
+          <div className="bg-gradient-to-b from-[#100000] to-[#050000] flex justify-center pb-8 pt-4">
+            <Link
+              href="/products/powerboot"
+              className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider rounded-md transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.4)] active:scale-95"
+            >
+              View Products
+            </Link>
+          </div>
           <img src="/powerboot/phone/PHONE SIZE-02.webp" alt="Convenience and Comfort" className="w-full h-auto block" />
           <img src="/powerboot/phone/PHONE SIZE-03.webp" alt="Smart Integration" className="w-full h-auto block" />
           <img src="/powerboot/phone/PHONE SIZE-04.webp" alt="Safety and Adjustable Height" className="w-full h-auto block" />

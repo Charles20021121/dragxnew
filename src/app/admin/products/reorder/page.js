@@ -12,7 +12,7 @@ const CATEGORY_ORDER = {
   'bmw': 5,
   'mercedes': 6,
   'powerboot': 7,
-  'soundproof': 8,
+  'silence': 8,
   '360camera': 9,
 };
 
@@ -26,7 +26,7 @@ const formatCategoryName = (name) => {
   if (lowerName === 'contidecoder') return 'CONTI DECODER';
   if (lowerName === 'mercedes') return 'MERCEDES-BENZ';
   if (lowerName === 'bmw') return 'BMW';
-  if (lowerName === 'soundproof') return 'SOUNDPROOF';
+  if (lowerName === 'silence') return 'SILENCE';
   return name.toUpperCase();
 };
 
@@ -92,10 +92,11 @@ export default function ReorderProducts() {
         const res = await fetch(`/api/products?list=true&_t=${Date.now()}`);
         const data = await res.json();
         if (Array.isArray(data)) {
-          setProducts(data);
+          const filteredData = data.filter(p => p.categories && p.categories.toLowerCase() !== 'soundproof');
+          setProducts(filteredData);
           
           // Organize by categories
-          const uniqueCats = [...new Set(data.map(p => p.categories))].filter(Boolean);
+          const uniqueCats = [...new Set(filteredData.map(p => p.categories))].filter(Boolean);
           const sortedCats = uniqueCats.sort((a, b) => {
             const orderA = CATEGORY_ORDER[a.toLowerCase()] || 999;
             const orderB = CATEGORY_ORDER[b.toLowerCase()] || 999;

@@ -591,7 +591,7 @@ export default function ProductPage({ params: paramsPromise }) {
                   </div>
 
                   {/* Description and Specifications */}
-                  {category.toLowerCase() !== "soundproof" && (
+                  {/* Description and Specifications */}
                     <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                       <h3 className="font-medium text-gray-900">Description & Specifications</h3>
                       <div className="space-y-4">
@@ -617,7 +617,6 @@ export default function ProductPage({ params: paramsPromise }) {
                         </div>
                       </div>
                     </div>
-                  )}
 
                   {/* Additional Information */}
                   <div className="bg-gray-50 p-4 rounded-lg space-y-4">
@@ -635,7 +634,7 @@ export default function ProductPage({ params: paramsPromise }) {
                       </div>
 
                       {/* 只在特定類別顯示 filter1 選項 */}
-                      {(formData.categories.toLowerCase() === 'androidplayer' || formData.categories.toLowerCase() === 'contidecoder' || formData.categories.toLowerCase() === 'soundproof') && (
+                      {(formData.categories.toLowerCase() === 'androidplayer' || formData.categories.toLowerCase() === 'contidecoder' || formData.categories.toLowerCase() === 'silence') && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700">System Type</label>
                           <select
@@ -655,14 +654,31 @@ export default function ProductPage({ params: paramsPromise }) {
                                 <option value="contiAndroid">Android Screen</option>
                                 <option value="androidPlayer">Android Player</option>
                               </>
-                            ) : formData.categories.toLowerCase() === 'soundproof' ? (
-                              <>
-                                <option value="hatchback">Hatchback</option>
-                                <option value="sedan">Sedan</option>
-                                <option value="suv">SUV</option>
-                                <option value="mpv">MPV</option>
-                              </>
-                            ) : null}
+                            ) : formData.categories.toLowerCase() === 'silence' ? (
+                                <>
+                                  <option value="silence">Soundproof</option>
+                                  <option value="audio">Audio</option>
+                                </>
+                              ) : null}
+                          </select>
+                        </div>
+                      )}
+
+                      {/* 只在 silence 類別顯示 Car Type 選項 */}
+                      {formData.categories.toLowerCase() === 'silence' && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Car Type</label>
+                          <select
+                            name="filter"
+                            value={formData.filter}
+                            onChange={handleChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                          >
+                            <option value="">Select Car Type</option>
+                            <option value="hatchback">Hatchback</option>
+                            <option value="sedan">Sedan</option>
+                            <option value="suv">SUV</option>
+                            <option value="mpv">MPV</option>
                           </select>
                         </div>
                       )}
@@ -725,53 +741,84 @@ export default function ProductPage({ params: paramsPromise }) {
                         </div>
                       )}
 
-                      {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others'].includes(formData.categories.toLowerCase()) && (
+                      {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'silence', 'others'].includes(formData.categories.toLowerCase()) && (
                         <div>
                           <div className="flex justify-between items-center">
-                            <label className="block text-sm font-medium text-gray-700">Custom Filter Category</label>
-                            <button 
-                              type="button" 
-                              onClick={() => setShowCategoryManager(true)}
-                              className="text-xs text-[#1c5434] hover:underline"
-                            >
-                              Manage Categories
-                            </button>
+                            <label className="block text-sm font-medium text-gray-700">
+                              {formData.categories.toLowerCase() === 'silence' ? 'Series Subcategory' : 'Custom Filter Category'}
+                            </label>
+                            {formData.categories.toLowerCase() !== 'silence' && (
+                              <button 
+                                type="button" 
+                                onClick={() => setShowCategoryManager(true)}
+                                className="text-xs text-[#1c5434] hover:underline"
+                              >
+                                Manage Categories
+                              </button>
+                            )}
                           </div>
                           <div className="mt-1 space-y-2">
-                            <select
-                              className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                              value={existingFilters.includes(formData.custom_filter) ? formData.custom_filter : (formData.custom_filter ? "new" : "")}
-                              onChange={(e) => {
-                                if (e.target.value === "new") {
-                                  setFormData(prev => ({ ...prev, custom_filter: "" }));
-                                } else {
-                                  setFormData(prev => ({ ...prev, custom_filter: e.target.value }));
-                                }
-                              }}
-                            >
-                              <option value="">No Filter (All)</option>
-                              {existingFilters.map(filter => (
-                                <option key={filter} value={filter}>{filter}</option>
-                              ))}
-                              <option value="new" className="font-bold text-[#1c5434]">+ Add New Category...</option>
-                            </select>
+                            {formData.categories.toLowerCase() === 'silence' ? (
+                              <select
+                                className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                                value={formData.custom_filter}
+                                onChange={(e) => setFormData(prev => ({ ...prev, custom_filter: e.target.value }))}
+                                required
+                              >
+                                <option value="">Select Series...</option>
+                                {formData.filter1 === 'silence' ? (
+                                  <>
+                                    <option value="BASIC">BASIC</option>
+                                    <option value="STANDARD">STANDARD</option>
+                                    <option value="PRO">PRO</option>
+                                  </>
+                                ) : (
+                                  <>
+                                    <option value="COMFORT">COMFORT</option>
+                                    <option value="COMFORT MAX">COMFORT MAX</option>
+                                    <option value="ACOUSTIC PROMAX">ACOUSTIC PROMAX</option>
+                                  </>
+                                )}
+                              </select>
+                            ) : (
+                              <>
+                                <select
+                                  className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                                  value={existingFilters.includes(formData.custom_filter) ? formData.custom_filter : (formData.custom_filter ? "new" : "")}
+                                  onChange={(e) => {
+                                    if (e.target.value === "new") {
+                                      setFormData(prev => ({ ...prev, custom_filter: "" }));
+                                    } else {
+                                      setFormData(prev => ({ ...prev, custom_filter: e.target.value }));
+                                    }
+                                  }}
+                                >
+                                  <option value="">No Filter (All)</option>
+                                  {existingFilters.map(filter => (
+                                    <option key={filter} value={filter}>{filter}</option>
+                                  ))}
+                                  <option value="new" className="font-bold text-[#1c5434]">+ Add New Category...</option>
+                                </select>
 
-                            {(!existingFilters.includes(formData.custom_filter) || formData.custom_filter === "") && (
-                              <div className="relative">
-                                <input
-                                  type="text"
-                                  name="custom_filter"
-                                  value={formData.custom_filter}
-                                  onChange={handleChange}
-                                  className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434] animate-in slide-in-from-top-2 duration-300"
-                                  placeholder="Type new category name here..."
-                                />
-                                <p className="mt-1 text-xs text-gray-500 italic">Enter a new name to create a new filter tag.</p>
-                              </div>
+                                {(!existingFilters.includes(formData.custom_filter) || formData.custom_filter === "") && (
+                                  <div className="relative">
+                                    <input
+                                      type="text"
+                                      name="custom_filter"
+                                      value={formData.custom_filter}
+                                      onChange={handleChange}
+                                      className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434] animate-in slide-in-from-top-2 duration-300"
+                                      placeholder="Type new category name here..."
+                                    />
+                                    <p className="mt-1 text-xs text-gray-500 italic">Enter a new name to create a new filter tag.</p>
+                                  </div>
+                                )}
+                              </>
                             )}
                           </div>
                         </div>
                       )}
+
                     </div>
                   </div>
 
@@ -814,7 +861,7 @@ export default function ProductPage({ params: paramsPromise }) {
         </button>
 
         {/* 添加圖片按鈕 */}
-        {category.toLowerCase() !== "soundproof" && (
+        {/* 添加圖片按鈕 */}
           <button
             onClick={() => setShowImageOffcanvas(true)}
             className="bg-[#1c5434] hover:bg-[#143a25] text-white p-4 rounded-full shadow-lg flex items-center gap-2 transition-colors"
@@ -823,7 +870,6 @@ export default function ProductPage({ params: paramsPromise }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </button>
-        )}
       </div>
 
       {/* 添加圖片的 Offcanvas */}

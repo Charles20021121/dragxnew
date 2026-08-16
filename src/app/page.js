@@ -6,6 +6,9 @@ import FeaturesSection from "@/components/FeaturesSection";
 import SpecialistImages from "@/components/SpecialistImages";
 import pool from '@/lib/db';
 
+// 排除的類別
+const excludedCategories = ['soundproof'];
+
 export const revalidate = 3600;
 
 // 添加 metadata
@@ -43,19 +46,21 @@ export default async function Home() {
     console.error('Error fetching showcase products:', error);
   }
 
-  // Ensure plain objects and generate slug
-  const safeProducts = products.map(p => ({
-    id: p.Id,
-    name: p.Name,
-    categories: p.categories,
-    image: p.Url,
-    date: p.date,
-    sort_order: p.sort_order,
-    same: p.same,
-    filter1: p.filter1,
-    android_series: p.android_series,
-    slug: (p.Name || p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-  }));
+  // Ensure plain objects and generate slug, filter out old soundproof category
+  const safeProducts = products
+    .filter(p => p.categories && p.categories.toLowerCase() !== 'soundproof')
+    .map(p => ({
+      id: p.Id,
+      name: p.Name,
+      categories: p.categories,
+      image: p.Url,
+      date: p.date,
+      sort_order: p.sort_order,
+      same: p.same,
+      filter1: p.filter1,
+      android_series: p.android_series,
+      slug: (p.Name || p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    }));
 
   return (
     <main className="flex min-h-screen flex-col">

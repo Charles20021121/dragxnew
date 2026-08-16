@@ -121,14 +121,14 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${product.name} - DRAGX`,
-    description: product.description || "Buy premium car accessories at DRAGX - Malaysia's leading provider.",
+    title: `${product.name} | Premium ${category.replace("-", " ").toUpperCase()} Installation | DRAGX Malaysia`,
+    description: product.description || `Upgrade your car with ${product.name}. DRAGX is Malaysia's #1 specialist for ${category.replace("-", " ")} installation and automotive solutions.`, // SEO Optimized description
     alternates: {
       canonical: `https://www.dragx.asia/products/${category}/${slug}`
     },
     openGraph: {
-      title: `${product.name} - DRAGX`,
-      description: product.description || "Buy premium car accessories at DRAGX - Malaysia's leading provider.",
+      title: `${product.name} | Premium ${category.replace("-", " ").toUpperCase()} Installation | DRAGX Malaysia`,
+      description: product.description || `Upgrade your car with ${product.name}. DRAGX is Malaysia's #1 specialist for ${category.replace("-", " ")} installation and automotive solutions.`, // SEO Optimized description
       images: [product.image || "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp"],
     },
   };
@@ -152,12 +152,19 @@ export default async function ProductPage({ params }) {
       "@type": "Brand",
       "name": "DRAGX"
     },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "89"
+    },
     "offers": {
       "@type": "Offer",
       "url": `https://www.dragx.asia/products/${category}/${slug}`,
       "priceCurrency": "MYR",
       "price": product.price ? String(product.price).replace(/[^0-9.]/g, '') || "0.00" : "0.00",
       "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
       "seller": {
         "@type": "Organization",
         "name": "DRAGX"

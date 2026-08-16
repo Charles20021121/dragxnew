@@ -429,7 +429,6 @@ export default function CategoryProducts({ params: paramsPromise }) {
                     </div>
 
                     {/* Description and Specifications */}
-                    {category.toLowerCase() !== "soundproof" && (
                       <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                         <h3 className="font-medium text-gray-900">Description & Specifications</h3>
                         <div className="space-y-4">
@@ -455,8 +454,6 @@ export default function CategoryProducts({ params: paramsPromise }) {
                           </div>
                         </div>
                       </div>
-                    )}
-
                     {/* Additional Information */}
                     <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                       <h3 className="font-medium text-gray-900">Additional Information</h3>
@@ -473,7 +470,7 @@ export default function CategoryProducts({ params: paramsPromise }) {
                         </div>
 
                         {/* 只在特定類別顯示 filter1 選項 */}
-                        {(category.toLowerCase() === 'androidplayer' || category.toLowerCase() === 'contidecoder' || category.toLowerCase() === 'soundproof') && (
+                        {(category.toLowerCase() === 'androidplayer' || category.toLowerCase() === 'contidecoder' || category.toLowerCase() === 'silence') && (
                           <div>
                             <label className="block text-sm font-medium text-gray-700">System Type</label>
                             <select
@@ -494,14 +491,32 @@ export default function CategoryProducts({ params: paramsPromise }) {
                                   <option value="contiAndroid">Android Screen</option>
                                   <option value="androidPlayer">Android Player</option>
                                 </>
-                              ) : category.toLowerCase() === 'soundproof' ? (
+                              ) : category.toLowerCase() === 'silence' ? (
                                 <>
-                                  <option value="hatchback">Hatchback</option>
-                                  <option value="sedan">Sedan</option>
-                                  <option value="suv">SUV</option>
-                                  <option value="mpv">MPV</option>
+                                  <option value="silence">Soundproof</option>
+                                  <option value="audio">Audio</option>
                                 </>
                               ) : null}
+                            </select>
+                          </div>
+                        )}
+
+                        {/* 只在 silence 類別顯示 Car Type 選項 */}
+                        {category.toLowerCase() === 'silence' && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Car Type</label>
+                            <select
+                              name="filter"
+                              value={formData.filter}
+                              onChange={handleChange}
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                              required
+                            >
+                              <option value="">Select Car Type</option>
+                              <option value="hatchback">Hatchback</option>
+                              <option value="sedan">Sedan</option>
+                              <option value="suv">SUV</option>
+                              <option value="mpv">MPV</option>
                             </select>
                           </div>
                         )}
@@ -566,49 +581,79 @@ export default function CategoryProducts({ params: paramsPromise }) {
                         )}
 
                         {/* Custom Filter Category - 只在特定類別顯示 */}
-                        {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others'].includes(category.toLowerCase()) && (
+                        {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'silence', 'others'].includes(category.toLowerCase()) && (
                           <div>
                             <div className="flex justify-between items-center">
-                              <label className="block text-sm font-medium text-gray-700">Custom Filter Category</label>
-                              <button 
-                                type="button" 
-                                onClick={() => setShowCategoryManager(true)}
-                                className="text-xs text-[#1c5434] hover:underline"
-                              >
-                                Manage Categories
-                              </button>
+                              <label className="block text-sm font-medium text-gray-700">
+                                {category.toLowerCase() === 'silence' ? 'Series Subcategory' : 'Custom Filter Category'}
+                              </label>
+                              {category.toLowerCase() !== 'silence' && (
+                                <button 
+                                  type="button" 
+                                  onClick={() => setShowCategoryManager(true)}
+                                  className="text-xs text-[#1c5434] hover:underline"
+                                >
+                                  Manage Categories
+                                </button>
+                              )}
                             </div>
                             <div className="mt-1 space-y-2">
-                              <select
-                                className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                                value={existingFilters.includes(formData.custom_filter) ? formData.custom_filter : (formData.custom_filter ? 'new' : '')}
-                                onChange={(e) => {
-                                  if (e.target.value === 'new') {
-                                    setFormData(prev => ({ ...prev, custom_filter: '' }));
-                                  } else {
-                                    setFormData(prev => ({ ...prev, custom_filter: e.target.value }));
-                                  }
-                                }}
-                              >
-                                <option value="">No Filter (All)</option>
-                                {existingFilters.map(filter => (
-                                  <option key={filter} value={filter}>{filter}</option>
-                                ))}
-                                <option value="new" className="font-bold text-[#1c5434]">+ Add New Category...</option>
-                              </select>
-
-                              {(!existingFilters.includes(formData.custom_filter) || formData.custom_filter === '') && (
-                                <div className="relative">
-                                  <input
-                                    type="text"
-                                    name="custom_filter"
-                                    value={formData.custom_filter}
-                                    onChange={handleChange}
+                              {category.toLowerCase() === 'silence' ? (
+                                <select
+                                  className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                                  value={formData.custom_filter}
+                                  onChange={(e) => setFormData(prev => ({ ...prev, custom_filter: e.target.value }))}
+                                  required
+                                >
+                                  <option value="">Select Series...</option>
+                                  {formData.filter1 === 'silence' ? (
+                                    <>
+                                      <option value="BASIC">BASIC</option>
+                                      <option value="STANDARD">STANDARD</option>
+                                      <option value="PRO">PRO</option>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <option value="COMFORT">COMFORT</option>
+                                      <option value="COMFORT MAX">COMFORT MAX</option>
+                                      <option value="ACOUSTIC PROMAX">ACOUSTIC PROMAX</option>
+                                    </>
+                                  )}
+                                </select>
+                              ) : (
+                                <>
+                                  <select
                                     className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                                    placeholder="Type new category name here..."
-                                  />
-                                  <p className="mt-1 text-xs text-gray-500 italic">Enter a new name to create a new filter tag.</p>
-                                </div>
+                                    value={existingFilters.includes(formData.custom_filter) ? formData.custom_filter : (formData.custom_filter ? 'new' : '')}
+                                    onChange={(e) => {
+                                      if (e.target.value === 'new') {
+                                        setFormData(prev => ({ ...prev, custom_filter: '' }));
+                                      } else {
+                                        setFormData(prev => ({ ...prev, custom_filter: e.target.value }));
+                                      }
+                                    }}
+                                  >
+                                    <option value="">No Filter (All)</option>
+                                    {existingFilters.map(filter => (
+                                      <option key={filter} value={filter}>{filter}</option>
+                                    ))}
+                                    <option value="new" className="font-bold text-[#1c5434]">+ Add New Category...</option>
+                                  </select>
+
+                                  {(!existingFilters.includes(formData.custom_filter) || formData.custom_filter === '') && (
+                                    <div className="relative">
+                                      <input
+                                        type="text"
+                                        name="custom_filter"
+                                        value={formData.custom_filter}
+                                        onChange={handleChange}
+                                        className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
+                                        placeholder="Type new category name here..."
+                                      />
+                                      <p className="mt-1 text-xs text-gray-500 italic">Enter a new name to create a new filter tag.</p>
+                                    </div>
+                                  )}
+                                </>
                               )}
                             </div>
                           </div>

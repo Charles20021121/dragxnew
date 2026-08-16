@@ -258,14 +258,14 @@ export default function ProductDetail({ product, isAdmin, onEdit, onDeleteImage,
       if (product.isLyno) return 'LYNO';
       if (product.isDX360) return 'DX360';
       if (product.isPowerBoot) return 'POWER BOOT';
-      if (product.isSoundproof) {
+      if (product.isSoundproof || product.categories === 'silence') {
         const soundproofMap = {
-          'hatchback': 'SOUNDPROOF - HATCHBACK',
-          'sedan': 'SOUNDPROOF - SEDAN',
-          'suv': 'SOUNDPROOF - SUV',
-          'mpv': 'SOUNDPROOF - MPV'
+          'hatchback': 'SILENCE - HATCHBACK',
+          'sedan': 'SILENCE - SEDAN',
+          'suv': 'SILENCE - SUV',
+          'mpv': 'SILENCE - MPV'
         };
-        return soundproofMap[product.filter1] || 'SOUNDPROOF';
+        return soundproofMap[product.filter1] || 'SILENCE';
       }
 
       if (product.filter1 === 'androidPlayer') {

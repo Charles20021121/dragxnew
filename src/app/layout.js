@@ -75,6 +75,24 @@ export default function RootLayout({ children }) {
                     "https://www.facebook.com/dragx.asia",
                     "https://www.instagram.com/dragx.asia"
                   ]
+                },
+                {
+                  "@type": "AutoPartsStore",
+                  "@id": "https://www.dragx.asia/#store",
+                  "name": "DRAGX - Malaysia's #1 Car Accessories",
+                  "url": "https://www.dragx.asia/",
+                  "logo": "https://www.dragx.asia/logo.png",
+                  "image": "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp",
+                  "description": "Malaysia's leading car accessories and automotive solutions provider. Specializing in Android players, ambient lights, and power boots.",
+                  "areaServed": {
+                    "@type": "Country",
+                    "name": "Malaysia"
+                  },
+                  "priceRange": "$$",
+                  "sameAs": [
+                    "https://www.facebook.com/dragx.asia",
+                    "https://www.instagram.com/dragx.asia"
+                  ]
                 }
               ]
             })

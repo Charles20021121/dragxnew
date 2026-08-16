@@ -205,7 +205,7 @@ export default function DX360Page() {
             </div>
 
             <a
-              href="/products/360camera"
+              href="/products/360camera?filter=DX%20360"
               className="inline-block bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] mb-[2vw]"
               style={{
                 fontSize: '0.7vw',
@@ -238,7 +238,7 @@ export default function DX360Page() {
         {/* Original Mobile Button (Overlaying mobile image) */}
         <div className="absolute left-1/2 bottom-[3%] -translate-x-1/2 w-fit md:hidden">
           <a
-            href="/products/360camera"
+            href="/products/360camera?filter=DX%20360"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
               fontSize: '15px',
@@ -325,7 +325,7 @@ export default function DX360Page() {
               </div>
 
               <a
-                href="/products/360camera"
+                href="/products/360camera?filter=RADAR%20SENSOR"
                 className="inline-block bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] my-[1vw]"
                 style={{
                   fontSize: '0.7vw',
@@ -369,7 +369,7 @@ export default function DX360Page() {
         {/* Original Mobile Button (Overlaying mobile image) */}
         <div className="absolute left-1/2 bottom-[3%] -translate-x-1/2 w-fit md:hidden">
           <a
-            href="/products/360camera"
+            href="/products/360camera?filter=RADAR%20SENSOR"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
               fontSize: '15px',
@@ -454,7 +454,7 @@ export default function DX360Page() {
 
               {/* Button */}
               <a
-                href="/products/360camera"
+                href="/products/360camera?filter=BLIND%20SPOT%20DETECTION%20(BSD)"
                 className="inline-block bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
                 style={{
                   fontSize: '0.7vw',
@@ -474,7 +474,7 @@ export default function DX360Page() {
         {/* Mobile Button Overlay */}
         <div className="absolute left-[8%] bottom-[34%] w-fit md:hidden">
           <a
-            href="/products/360camera"
+            href="/products/360camera?filter=BLIND%20SPOT%20DETECTION%20(BSD)"
             className="inline-block w-full bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
               fontSize: '15px',
@@ -497,7 +497,7 @@ export default function DX360Page() {
         {/* Mobile Button Below Banner */}
         <div className="w-full flex justify-center py-6">
           <a
-            href="/products/360camera"
+            href="/products/360camera?filter=DRIVING%20RECORDING%20%26%20SAFETY"
             className="inline-block bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em] whitespace-nowrap"
             style={{
               fontSize: '15px',
@@ -625,7 +625,7 @@ export default function DX360Page() {
           {/* Learn More Button */}
           <div className="w-full flex justify-center mt-[2vw]">
             <a
-              href="/products/360camera"
+              href="/products/360camera?filter=DRIVING%20RECORDING%20%26%20SAFETY"
               className="inline-block bg-[#4b4c53] hover:bg-[#5b5c63] text-white font-bold rounded-[0.6em] transition-all duration-300 transform hover:scale-105 text-center tracking-[0.2em]"
               style={{
                 fontSize: '1vw',

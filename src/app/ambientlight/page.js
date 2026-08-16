@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useProduct } from '@/contexts/ProductContext'
 
@@ -135,6 +136,22 @@ export default function AmbientLightPage() {
                     >
                       Car ambient lighting brings elegance, comfort, and personality into your vehicle interior. Designed with subtle, low-intensity illumination, it transforms ordinary cabins into premium, mood-enhancing spaces.
                     </p>
+                    <div className="mt-[2vw]">
+                      <Link
+                        href="/products/ambientlight"
+                        className="inline-flex items-center justify-center px-6 lg:px-8 py-2.5 lg:py-3.5 border border-white/50 bg-white/10 hover:bg-white hover:text-black text-white font-bold text-[1.2vw] lg:text-[0.9vw] uppercase tracking-wider rounded-md transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)]"
+                      >
+                        View Products
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="md:hidden absolute bottom-[8%] left-[8%] z-10">
+                    <Link
+                      href="/products/ambientlight"
+                      className="inline-block px-3 py-1 border border-white/40 bg-black/40 backdrop-blur-md hover:bg-white hover:text-black text-white font-bold text-[9px] uppercase tracking-wider rounded-sm transition-all duration-300 active:scale-95 shadow-lg"
+                    >
+                      View Products
+                    </Link>
                   </div>
                 </>
               )}

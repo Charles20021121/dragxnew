@@ -21,7 +21,7 @@ const categoryOrder = {
 };
 
 // 排除的類別
-const excludedCategories = [];
+const excludedCategories = ['soundproof'];
 
 export default async function Products() {
   let categories = [];

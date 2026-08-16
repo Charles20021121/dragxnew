@@ -39,7 +39,8 @@ export default function Products() {
         const products = await res.json();
 
         if (Array.isArray(products)) {
-          const categorizedProducts = products.reduce((acc, product) => {
+          const filteredProducts = products.filter(product => product.categories && product.categories.toLowerCase() !== 'soundproof');
+          const categorizedProducts = filteredProducts.reduce((acc, product) => {
             const category = product.categories;
             if (!acc[category]) {
               acc[category] = {

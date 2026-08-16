@@ -51,7 +51,7 @@ export default async function CategoryProducts({ params }) {
     console.error('Error fetching category products:', error);
   }
 
-  if (products.length === 0) {
+  if (products.length === 0 && category !== 'silence') {
     notFound();
   }
 

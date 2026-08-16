@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 const products = [
   {
-    Name: "SOUNDPROOF",
+    Name: "SILENCE",
     ImgUrl: "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/i3nqmuukuo4nvq5puo6u.webp",
     domainUrl: "/silence"
   },

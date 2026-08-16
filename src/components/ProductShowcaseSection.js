@@ -18,7 +18,7 @@ const CATEGORY_ORDER = {
   'ambientlight': 5,
   'contidecoder': 6,
   'powerboot': 7,
-  'soundproof': 8,
+  'silence': 8,
   '360camera': 9,
 };
 
@@ -32,7 +32,7 @@ const formatCategoryName = (name) => {
   if (lowerName === 'contidecoder') return 'CONTI DECODER';
   if (lowerName === 'mercedes') return 'MERCEDES-BENZ';
   if (lowerName === 'bmw') return 'BMW';
-  if (lowerName === 'soundproof') return 'SOUNDPROOF';
+  if (lowerName === 'silence') return 'SILENCE';
   return name.toUpperCase();
 };
 
@@ -58,8 +58,8 @@ const getCategoryLink = (categoryKey, product = null) => {
     return '/products/contidecoder';
   }
 
-  if (key === 'soundproof' || key === 'silence') {
-    return '/products/soundproof';
+  if (key === 'silence') {
+    return '/products/silence';
   }
 
   if (key === '360camera') {
@@ -131,29 +131,57 @@ export default function ProductShowcaseSection({ initialProducts = [] }) {
           ) : (
             <div className="mb-4 sm:mb-8 px-0 sm:px-4">
               {/* Desktop Tabs */}
-              <div className="hidden sm:flex flex-wrap justify-center gap-2">
-                {categories.map((cat) => {
-                  const isActive = activeTab === cat;
-                  return (
-                    <button
-                      key={cat}
-                      onClick={() => setActiveTab(cat)}
-                      className={`relative px-6 py-2.5 rounded-full text-sm font-bold transition-colors duration-300 whitespace-nowrap ${
-                        isActive ? 'text-white border border-transparent' : 'text-gray-600 hover:text-[#1c5434] bg-white border border-gray-200 shadow-sm'
-                      }`}
-                    >
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeTabIndicator"
-                          className="absolute inset-0 bg-gradient-to-r from-[#1c5434] to-[#0a4020] rounded-full shadow-md"
-                          initial={false}
-                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        />
-                      )}
-                      <span className="relative z-10">{formatCategoryName(cat)}</span>
-                    </button>
-                  );
-                })}
+              <div className="hidden sm:flex flex-col items-center gap-3">
+                {/* Top Row */}
+                <div className="flex flex-wrap justify-center gap-2">
+                  {categories.filter(cat => ['alphardvellfire', 'bmw', 'mercedes'].includes(cat.toLowerCase())).map((cat) => {
+                    const isActive = activeTab === cat;
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveTab(cat)}
+                        className={`relative px-6 py-2.5 rounded-full text-sm font-bold transition-colors duration-300 whitespace-nowrap ${
+                          isActive ? 'text-white border border-transparent' : 'text-gray-600 hover:text-[#1c5434] bg-white border border-gray-200 shadow-sm'
+                        }`}
+                      >
+                        {isActive && (
+                          <motion.div
+                            layoutId="activeTabIndicator"
+                            className="absolute inset-0 bg-gradient-to-r from-[#1c5434] to-[#0a4020] rounded-full shadow-md"
+                            initial={false}
+                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                          />
+                        )}
+                        <span className="relative z-10">{formatCategoryName(cat)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* Bottom Row */}
+                <div className="flex flex-wrap justify-center gap-2">
+                  {categories.filter(cat => !['alphardvellfire', 'bmw', 'mercedes'].includes(cat.toLowerCase())).map((cat) => {
+                    const isActive = activeTab === cat;
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveTab(cat)}
+                        className={`relative px-6 py-2.5 rounded-full text-sm font-bold transition-colors duration-300 whitespace-nowrap ${
+                          isActive ? 'text-white border border-transparent' : 'text-gray-600 hover:text-[#1c5434] bg-white border border-gray-200 shadow-sm'
+                        }`}
+                      >
+                        {isActive && (
+                          <motion.div
+                            layoutId="activeTabIndicator"
+                            className="absolute inset-0 bg-gradient-to-r from-[#1c5434] to-[#0a4020] rounded-full shadow-md"
+                            initial={false}
+                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                          />
+                        )}
+                        <span className="relative z-10">{formatCategoryName(cat)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Mobile Scrollable Tabs */}
@@ -237,10 +265,7 @@ export default function ProductShowcaseSection({ initialProducts = [] }) {
                   <div className="grid grid-cols-2 gap-3 sm:hidden px-2">
                     {activeProducts.slice(0, 4).map((product, index) => {
                       const imgUrl = product.image || product.Url || '';
-                      const productLink =
-                        product.categories === 'soundproof'
-                          ? '/silence'
-                          : `/products/${product.categories}/${product.slug}`;
+                      const productLink = `/products/${product.categories}/${product.slug}`;
 
                       return (
                         <Link href={productLink} key={product.id || index} className="group flex flex-col h-full bg-white border border-gray-100 shadow-sm overflow-hidden pb-2">
@@ -298,10 +323,7 @@ export default function ProductShowcaseSection({ initialProducts = [] }) {
                     >
                       {activeProducts.map((product, index) => {
                         const imgUrl = product.image || product.Url || '';
-                        const productLink =
-                          product.categories === 'soundproof'
-                            ? '/silence'
-                            : `/products/${product.categories}/${product.slug}`;
+                        const productLink = `/products/${product.categories}/${product.slug}`;
 
                         return (
                           <SwiperSlide key={product.id || index} className="h-auto">

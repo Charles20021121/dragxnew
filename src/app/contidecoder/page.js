@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useProduct } from '@/contexts/ProductContext'
 
@@ -147,6 +148,14 @@ export default function ContiDecoderPage() {
                   </div>
                 ))}
               </div>
+              <div className="mt-[2vw]">
+                <Link
+                  href="/products/contidecoder"
+                  className="inline-flex items-center justify-center px-6 lg:px-8 py-2.5 lg:py-3.5 border border-white/50 bg-white/10 hover:bg-white hover:text-black text-white font-bold text-[1.2vw] lg:text-[0.9vw] uppercase tracking-wider rounded-md transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)]"
+                >
+                  View Products
+                </Link>
+              </div>
             </div>
             <figcaption className="sr-only">
               Conti Decoder comprehensive features and capabilities.
@@ -188,6 +197,14 @@ export default function ContiDecoderPage() {
                     />
                   </div>
                 ))}
+              </div>
+              <div className="flex justify-end w-full mt-[2vw]">
+                <Link
+                  href="/products/contidecoder"
+                  className="inline-flex items-center justify-center px-6 lg:px-8 py-2.5 lg:py-3.5 border border-white/50 bg-white/10 hover:bg-white hover:text-black text-white font-bold text-[1.2vw] lg:text-[0.9vw] uppercase tracking-wider rounded-md transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)]"
+                >
+                  View Products
+                </Link>
               </div>
             </div>
             <figcaption className="sr-only">
@@ -302,6 +319,14 @@ export default function ContiDecoderPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="absolute bottom-[7%] right-[8%] z-10">
+              <Link
+                href="/products/contidecoder"
+                className="inline-block px-4 py-1.5 border border-white/40 bg-black/40 backdrop-blur-md hover:bg-white hover:text-black text-white font-bold text-[10px] uppercase tracking-wider rounded-md transition-all duration-300 active:scale-95 shadow-lg"
+              >
+                View Products
+              </Link>
+            </div>
             <figcaption className="sr-only">
               Conti Decoder comprehensive features and capabilities.
             </figcaption>
@@ -316,6 +341,14 @@ export default function ContiDecoderPage() {
               height={800}
               className="w-full h-auto"
             />
+            <div className="absolute bottom-[10%] left-[8%] z-10">
+              <Link
+                href="/products/contidecoder"
+                className="inline-block px-4 py-1.5 border border-white/40 bg-black/40 backdrop-blur-md hover:bg-white hover:text-black text-white font-bold text-[10px] uppercase tracking-wider rounded-md transition-all duration-300 active:scale-95 shadow-lg"
+              >
+                View Products
+              </Link>
+            </div>
             <figcaption className="sr-only">
               Advanced functionality of Conti Decoder system.
             </figcaption>

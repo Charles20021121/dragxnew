@@ -49,14 +49,14 @@ export default function WhatsAppButton() {
     }
 
     // 如果是 Soundproof 页面
-    if (currentProduct.isSoundproof || pathname.includes('/silence')) {
+    if (currentProduct.isSoundproof || currentProduct.category === 'silence' || pathname.includes('/silence')) {
       const soundproofMap = {
-        'hatchback': 'SOUNDPROOF - HATCHBACK',
-        'sedan': 'SOUNDPROOF - SEDAN',
-        'suv': 'SOUNDPROOF - SUV',
-        'mpv': 'SOUNDPROOF - MPV'
+        'hatchback': 'SILENCE - HATCHBACK',
+        'sedan': 'SILENCE - SEDAN',
+        'suv': 'SILENCE - SUV',
+        'mpv': 'SILENCE - MPV'
       }
-      return soundproofMap[currentProduct.filter1] || 'SOUNDPROOF'
+      return soundproofMap[currentProduct.filter1] || 'SILENCE'
     }
 
     // 根据 filter1 判断分类

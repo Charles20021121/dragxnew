@@ -56,6 +56,9 @@ const carModels = [
   'toyota', 'volvo', 'alphard', 'vellfire'
 ];
 
+// 定義 Silence 車型選項
+const carTypes = ['all', 'hatchback', 'sedan', 'suv', 'mpv'];
+
 // 定義 Android Series 選項
 const androidSeries = [
   { value: 'all', label: 'All Series' },
@@ -91,11 +94,13 @@ export default function ProductCategoryPage({
     if (filter === 'androidPlayer' || filter === 'contiAndroid') return filter;
     return 'androidPlayer';
   });
-  const [silenceFilter, setSilenceFilter] = useState('hatchback');
+  const [soundproofFilter, setSoundproofFilter] = useState('silence');
   const [contiFilter, setContiFilter] = useState('appleCarplay');
   const [carFilter, setCarFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [selectedCustomFilter, setSelectedCustomFilter] = useState('all');
+  const [selectedCustomFilter, setSelectedCustomFilter] = useState(() => {
+    return searchParams.get('filter') || 'all';
+  });
   const [searchQuery, setSearchQuery] = useState('');
 
   // Categories that support custom filtering
@@ -142,6 +147,10 @@ export default function ProductCategoryPage({
     if (filter === 'androidPlayer' || filter === 'contiAndroid') {
       setAndroidFilter(filter);
     }
+    const customFilter = searchParams.get('filter');
+    if (customFilter) {
+      setSelectedCustomFilter(customFilter);
+    }
   }, [searchParams]);
 
   // 处理 URL hash 滚动到对应系列
@@ -186,11 +195,11 @@ export default function ProductCategoryPage({
         url: window.location.href,
         isListPage: true
       });
-    } else if (categoryPath === 'soundproof') {
+    } else if (categoryPath === 'silence') {
       setCurrentProduct({
-        name: `Soundproof ${silenceFilter.toUpperCase()} Products`,
-        category: 'soundproof',
-        filter1: silenceFilter,
+        name: `Silence ${soundproofFilter.toUpperCase()} Products`,
+        category: 'silence',
+        filter1: soundproofFilter,
         url: window.location.href,
         isListPage: true
       });
@@ -207,16 +216,21 @@ export default function ProductCategoryPage({
     return () => {
       setCurrentProduct(null);
     };
-  }, [categoryPath, androidFilter, contiFilter, silenceFilter, title, setCurrentProduct]);
+  }, [categoryPath, androidFilter, contiFilter, soundproofFilter, title, setCurrentProduct]);
 
   // 根據類別和過濾條件處理產品列表
   const displayProducts = (() => {
     const searchFilter = (product) =>
       !searchQuery || product.name.toLowerCase().includes(searchQuery.toLowerCase());
 
-    if (categoryPath === "soundproof") {
+    if (categoryPath === "silence") {
       return products
-        .filter(product => product.filter1 === silenceFilter && product.id == product.same && searchFilter(product))
+        .filter(product => {
+          const typeMatch = product.filter1 === soundproofFilter;
+          const carMatch = carFilter === 'all' || product.filter === carFilter;
+          const isMainImage = product.id == product.same;
+          return typeMatch && carMatch && isMainImage && searchFilter(product);
+        })
         .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
     } else if (categoryPath === "contidecoder") {
       return products
@@ -293,7 +307,55 @@ export default function ProductCategoryPage({
     );
   };
 
+  const getSoundproofProductsBySeries = () => {
+    if (categoryPath !== "silence") return {};
+
+    // 确保 products 是数组
+    if (!Array.isArray(products)) {
+      return {};
+    }
+
+    const filteredProducts = products
+      .filter(product => product && product.filter1 === soundproofFilter && product.id == product.same &&
+        (carFilter === 'all' || product.filter === carFilter) &&
+        (!searchQuery || product.name.toLowerCase().includes(searchQuery.toLowerCase())))
+      .sort((a, b) => {
+        const nameA = (a.name || '');
+        const nameB = (b.name || '');
+        return nameA.localeCompare(nameB, undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        });
+      });
+
+    const seriesDef = soundproofFilter === 'silence' 
+      ? [{value: 'BASIC', label: 'BASIC'}, {value: 'STANDARD', label: 'STANDARD'}, {value: 'PRO', label: 'PRO'}]
+      : [{value: 'COMFORT', label: 'COMFORT'}, {value: 'COMFORT MAX', label: 'COMFORT MAX'}, {value: 'ACOUSTIC PROMAX', label: 'ACOUSTIC PROMAX'}];
+
+    const productsBySeries = {};
+
+    seriesDef.forEach(series => {
+      productsBySeries[series.value] = {
+        label: series.label,
+        products: filteredProducts.filter(product => product.custom_filter === series.value)
+      };
+    });
+
+    const uncategorized = filteredProducts.filter(product => !product.custom_filter || product.custom_filter === '');
+    if (uncategorized.length > 0) {
+      productsBySeries['uncategorized'] = {
+        label: 'Uncategorized',
+        products: uncategorized
+      };
+    }
+
+    return Object.fromEntries(
+      Object.entries(productsBySeries).filter(([key, value]) => value.products.length > 0)
+    );
+  };
+
   const androidProductsBySeries = getAndroidProductsBySeries();
+  const soundproofProductsBySeries = getSoundproofProductsBySeries();
 
   const totalPages = Math.ceil(displayProducts.length / ITEMS_PER_PAGE);
 
@@ -403,44 +465,26 @@ export default function ProductCategoryPage({
           </div>
         )}
 
-        {categoryPath === "soundproof" && (
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
+        {categoryPath === "silence" && (
+          <div className="flex justify-center mb-8 px-2">
+            <div className="inline-flex rounded-md bg-white p-1 shadow-sm w-full max-w-2xl">
               <button
-                onClick={() => setSilenceFilter('hatchback')}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'hatchback'
+                onClick={() => setSoundproofFilter('silence')}
+                className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${soundproofFilter === 'silence'
                   ? 'bg-[#1c5434] text-white'
                   : 'text-gray-500 hover:text-[#1c5434]'
                   }`}
               >
-                HATCHBACK
+                SOUNDPROOF
               </button>
               <button
-                onClick={() => setSilenceFilter('sedan')}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'sedan'
+                onClick={() => setSoundproofFilter('audio')}
+                className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${soundproofFilter === 'audio'
                   ? 'bg-[#1c5434] text-white'
                   : 'text-gray-500 hover:text-[#1c5434]'
                   }`}
               >
-                SEDAN
-              </button>
-              <button
-                onClick={() => setSilenceFilter('suv')}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'suv'
-                  ? 'bg-[#1c5434] text-white'
-                  : 'text-gray-500 hover:text-[#1c5434]'
-                  }`}
-              >
-                SUV
-              </button>
-              <button
-                onClick={() => setSilenceFilter('mpv')}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${silenceFilter === 'mpv'
-                  ? 'bg-[#1c5434] text-white'
-                  : 'text-gray-500 hover:text-[#1c5434]'
-                  }`}
-              >
-                MPV
+                AUDIO
               </button>
             </div>
           </div>
@@ -496,7 +540,7 @@ export default function ProductCategoryPage({
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="text-lg font-bold text-[#1c5434]">
-                      {categoryPath === "contidecoder" ? "Car Models" : "Refinement"}
+                      {categoryPath === "contidecoder" ? "Car Models" : categoryPath === "silence" ? "Car Types" : "Refinement"}
                     </h3>
                     <button
                       onClick={() => setIsFilterOpen(false)}
@@ -509,9 +553,9 @@ export default function ProductCategoryPage({
                   </div>
 
                   <div className="space-y-2">
-                    {categoryPath === "contidecoder" ? (
-                      /* Conti Decoder Car Models */
-                      carModels.map(model => (
+                    {categoryPath === "contidecoder" || categoryPath === "silence" ? (
+                      /* Car Models or Types */
+                      (categoryPath === "contidecoder" ? carModels : carTypes).map(model => (
                         <button
                           key={model}
                           onClick={() => {
@@ -523,7 +567,7 @@ export default function ProductCategoryPage({
                             : 'text-gray-700 hover:bg-gray-100'
                             }`}
                         >
-                          {model === 'all' ? 'All Models' : model}
+                          {model === 'all' ? (categoryPath === "contidecoder" ? 'All Models' : 'All Types') : model}
                         </button>
                       ))
                     ) : (
@@ -603,12 +647,14 @@ export default function ProductCategoryPage({
                 ? (androidFilter === 'androidPlayer' ? 'ANDROID PLAYER' : 'ANDROID SCREEN')
                 : categoryPath === "contidecoder"
                   ? `${contiFilter === 'appleCarplay' ? 'APPLE CARPLAY' : 'ANDROID SYSTEM'}`
-                  : formatCategoryName(title)
+                  : categoryPath === "silence"
+                    ? (soundproofFilter === 'silence' ? 'SOUNDPROOF' : soundproofFilter.toUpperCase())
+                    : formatCategoryName(title)
               }
             </motion.h2>
 
-            {/* 漏斗按鈕 - contidecoder 或 custom filter */}
-            {(categoryPath === "contidecoder" || (isCustomFilterEnabled && customFilterOptions.length > 1)) && (
+            {/* 漏斗按鈕 - contidecoder 或 silence 或 custom filter */}
+            {(categoryPath === "contidecoder" || categoryPath === "silence" || (isCustomFilterEnabled && customFilterOptions.length > 1)) && (
               <button
                 onClick={() => setIsFilterOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-white rounded-md shadow-sm hover:bg-gray-50 transition-colors"
@@ -643,7 +689,7 @@ export default function ProductCategoryPage({
 
 
         {/* Top Pagination */}
-        {categoryPath !== "androidplayer" && totalPages > 1 && (
+        {categoryPath !== "androidplayer" && categoryPath !== "silence" && totalPages > 1 && (
           <div className="flex justify-center items-center gap-4 mb-8">
             <button
               onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
@@ -673,20 +719,20 @@ export default function ProductCategoryPage({
           </div>
         )}
 
-        {/* Products Display - Android Player 使用分层显示，其他使用网格 */}
-        {categoryPath === "androidplayer" ? (
-          /* Android Player 分层显示 */
+        {/* Products Display - Android Player / Silence 使用分层显示，其他使用网格 */}
+        {categoryPath === "androidplayer" || categoryPath === "silence" ? (
+          /* Android Player / Silence 分层显示 */
           <div>
             {loading ? (
               <div className="flex justify-center items-center py-20">
                 <div className="text-lg text-gray-600">Loading products...</div>
               </div>
-            ) : Object.entries(androidProductsBySeries || {}).length === 0 ? (
+            ) : Object.entries(categoryPath === "androidplayer" ? androidProductsBySeries : soundproofProductsBySeries || {}).length === 0 ? (
               <div className="flex justify-center items-center py-20">
                 <div className="text-lg text-gray-600">No products found</div>
               </div>
             ) : (
-              Object.entries(androidProductsBySeries || {}).map(([seriesKey, seriesData], index) => (
+              Object.entries(categoryPath === "androidplayer" ? androidProductsBySeries : soundproofProductsBySeries || {}).map(([seriesKey, seriesData], index) => (
                 <motion.div
                   key={seriesKey}
                   id={seriesKey}
@@ -709,10 +755,10 @@ export default function ProductCategoryPage({
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className={seriesData.products.length <= 5 ? "" : "swiper-container"}
+                    className={(seriesData.products.length <= 5 || seriesKey === 'Signature_40') ? "" : "swiper-container"}
                   >
-                    {seriesData.products.length <= 5 ? (
-                      /* 产品少时使用网格布局 */
+                    {(seriesData.products.length <= 5 || seriesKey === 'Signature_40') ? (
+                      /* 产品少或40系列使用网格布局 */
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                         {(seriesData.products || []).map((product) => (
                           <motion.div

@@ -52,6 +52,10 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
       return 'BMW';
     }
     
+    if (name.toLowerCase() === 'silence') {
+      return 'SILENCE';
+    }
+    
     return name.toUpperCase();
   };
 
@@ -77,7 +81,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
           <div className="h-[2px] bg-gradient-to-r from-transparent via-[#023f1b] to-transparent w-[15%]" />
           <div className="mx-[2%]">
             <Link 
-              href={ name.toLowerCase() === "soundproof" && !isAdmin ? `/silence` : link}
+              href={link}
               className="no-underline group"
             >
               <h2 className="text-[#1c5434] font-[900] text-center m-0 text-[clamp(12px,2vw,32px)] relative">
@@ -110,7 +114,7 @@ export default function ProductCategory({ name, link, products, index ,isAdmin})
               >
                 <div className="aspect-square relative rounded-lg overflow-hidden bg-gray-50">
                   <Link 
-                    href={ product.categories === "soundproof" && !isAdmin ? `/silence` : isAdmin ? `/admin/products/${product.categories}/${product.slug}` : `/products/${product.categories}/${product.slug}`}
+                    href={ isAdmin ? `/admin/products/${product.categories}/${product.slug}` : `/products/${product.categories}/${product.slug}`}
                     className="block"
                   >
                     {inView && (
