@@ -17,13 +17,13 @@ export default function SilencePage() {
       
       {/* New Banners under Hero */}
       <div className="w-full flex flex-col bg-black">
-        {/* Banner 1 */}
+        {/* Banner 1: Premium Soundproofing */}
         <img src="/silence/New folder/DX Silence PC 2-02.webp" alt="Silence Intro 1" className="w-full h-auto hidden md:block" />
-        <img src="/silence/Phone/car audio.webp" alt="Silence Intro 1 Mobile" className="w-full h-auto block md:hidden" />
+        <img src="/silence/Phone/premium.webp" alt="Silence Intro 1 Mobile" className="w-full h-auto block md:hidden" />
         
-        {/* Banner 2 */}
+        {/* Banner 2: Car Audio Enhancement */}
         <img src="/silence/New folder/DX Silence PC 2-03.webp" alt="Silence Intro 2" className="w-full h-auto hidden md:block" />
-        <img src="/silence/Phone/premium.webp" alt="Silence Intro 2 Mobile" className="w-full h-auto block md:hidden" />
+        <img src="/silence/Phone/car audio.webp" alt="Silence Intro 2 Mobile" className="w-full h-auto block md:hidden" />
 
         {/* Banner 3: Why Upgrade Your Car Audio? */}
         <img src="/silence/New%20folder%20(2)/DX%20Silence%20PAGE%20FA%203-04.webp" alt="Why Upgrade Your Car Audio" className="w-full h-auto hidden md:block" />

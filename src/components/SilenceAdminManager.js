@@ -1429,7 +1429,7 @@ export default function SilenceAdminManager({
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    {modalForm.filter1 === 'audio' ? (
                       <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1.5">
                           Price (RM)
@@ -1442,24 +1442,39 @@ export default function SilenceAdminManager({
                           className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm font-semibold focus:outline-none focus:border-[#1c5434] focus:bg-white"
                         />
                       </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                            Price (RM)
+                          </label>
+                          <input
+                            type="text"
+                            value={modalForm.price}
+                            onChange={(e) => setModalForm(prev => ({ ...prev, price: e.target.value }))}
+                            placeholder="e.g. 580"
+                            className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm font-semibold focus:outline-none focus:border-[#1c5434] focus:bg-white"
+                          />
+                        </div>
 
-                      <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                          Vehicle / Scope Type
-                        </label>
-                        <select
-                          value={modalForm.filter}
-                          onChange={(e) => setModalForm(prev => ({ ...prev, filter: e.target.value }))}
-                          className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm font-semibold focus:outline-none focus:border-[#1c5434] focus:bg-white"
-                        >
-                          <option value="all">Universal / All</option>
-                          <option value="hatchback">Hatchback</option>
-                          <option value="sedan">Sedan</option>
-                          <option value="suv">SUV</option>
-                          <option value="mpv">MPV</option>
-                        </select>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                            Vehicle / Scope Type
+                          </label>
+                          <select
+                            value={modalForm.filter}
+                            onChange={(e) => setModalForm(prev => ({ ...prev, filter: e.target.value }))}
+                            className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm font-semibold focus:outline-none focus:border-[#1c5434] focus:bg-white"
+                          >
+                            <option value="all">Universal / All</option>
+                            <option value="hatchback">Hatchback</option>
+                            <option value="sedan">Sedan</option>
+                            <option value="suv">SUV</option>
+                            <option value="mpv">MPV</option>
+                          </select>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Main Image Upload */}
                     <div>

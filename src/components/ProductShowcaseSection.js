@@ -130,80 +130,23 @@ export default function ProductShowcaseSection({ initialProducts = [] }) {
             </div>
           ) : (
             <div className="mb-4 sm:mb-8 px-0 sm:px-4">
-              {/* Desktop Tabs */}
-              <div className="hidden sm:flex flex-col items-center gap-3">
-                {/* Top Row */}
-                <div className="flex flex-wrap justify-center gap-2">
+              <div className="flex flex-col items-center gap-2 sm:gap-3">
+                {/* Top Row: ALPHARD/VELLFIRE, BMW, MERCEDES-BENZ */}
+                <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
                   {categories.filter(cat => ['alphardvellfire', 'bmw', 'mercedes'].includes(cat.toLowerCase())).map((cat) => {
                     const isActive = activeTab === cat;
                     return (
                       <button
                         key={cat}
                         onClick={() => setActiveTab(cat)}
-                        className={`relative px-6 py-2.5 rounded-full text-sm font-bold transition-colors duration-300 whitespace-nowrap ${
-                          isActive ? 'text-white border border-transparent' : 'text-gray-600 hover:text-[#1c5434] bg-white border border-gray-200 shadow-sm'
-                        }`}
-                      >
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeTabIndicator"
-                            className="absolute inset-0 bg-gradient-to-r from-[#1c5434] to-[#0a4020] rounded-full shadow-md"
-                            initial={false}
-                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                          />
-                        )}
-                        <span className="relative z-10">{formatCategoryName(cat)}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-                {/* Bottom Row */}
-                <div className="flex flex-wrap justify-center gap-2">
-                  {categories.filter(cat => !['alphardvellfire', 'bmw', 'mercedes'].includes(cat.toLowerCase())).map((cat) => {
-                    const isActive = activeTab === cat;
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveTab(cat)}
-                        className={`relative px-6 py-2.5 rounded-full text-sm font-bold transition-colors duration-300 whitespace-nowrap ${
-                          isActive ? 'text-white border border-transparent' : 'text-gray-600 hover:text-[#1c5434] bg-white border border-gray-200 shadow-sm'
-                        }`}
-                      >
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeTabIndicator"
-                            className="absolute inset-0 bg-gradient-to-r from-[#1c5434] to-[#0a4020] rounded-full shadow-md"
-                            initial={false}
-                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                          />
-                        )}
-                        <span className="relative z-10">{formatCategoryName(cat)}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Mobile Scrollable Tabs */}
-              <div className="sm:hidden relative w-full">
-                <div className="flex gap-2 overflow-x-auto scrollbar-none px-2 py-2 snap-x scroll-smooth -mx-2">
-                  {categories.map((cat) => {
-                    const isActive = activeTab === cat;
-                    return (
-                      <button
-                        key={cat}
-                        onClick={(e) => {
-                          setActiveTab(cat);
-                          e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                        }}
-                        className={`relative px-4 py-2 rounded-full text-[12px] font-bold transition-colors duration-300 whitespace-nowrap shrink-0 snap-center ${
+                        className={`relative px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-colors duration-300 whitespace-nowrap ${
                           isActive ? 'text-white border border-transparent' : 'text-gray-600 hover:text-[#1c5434] bg-white border border-gray-200 shadow-sm'
                         }`}
                         style={{ WebkitTapHighlightColor: 'transparent' }}
                       >
                         {isActive && (
                           <motion.div
-                            layoutId="activeTabIndicatorMobile"
+                            layoutId="activeTabIndicator"
                             className="absolute inset-0 bg-gradient-to-r from-[#1c5434] to-[#0a4020] rounded-full shadow-md"
                             initial={false}
                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
@@ -213,24 +156,32 @@ export default function ProductShowcaseSection({ initialProducts = [] }) {
                       </button>
                     );
                   })}
-                  {/* Back to First Button */}
-                  {categories.length > 3 && (
-                    <button
-                      onClick={(e) => {
-                        if (categories.length > 0) {
-                          setActiveTab(categories[0]);
-                          e.currentTarget.parentNode.scrollTo({ left: 0, behavior: 'smooth' });
-                        }
-                      }}
-                      className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#1c5434] to-[#0a4020] shadow-md shrink-0 snap-center hover:scale-105 active:scale-95 transition-all duration-300 ml-1"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform duration-300">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
-                      </svg>
-                    </button>
-                  )}
-                  {/* Padding block so last item doesn't stick to the edge */}
-                  <div className="shrink-0 w-4" />
+                </div>
+                {/* Bottom Row: Other Categories */}
+                <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
+                  {categories.filter(cat => !['alphardvellfire', 'bmw', 'mercedes'].includes(cat.toLowerCase())).map((cat) => {
+                    const isActive = activeTab === cat;
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveTab(cat)}
+                        className={`relative px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-colors duration-300 whitespace-nowrap ${
+                          isActive ? 'text-white border border-transparent' : 'text-gray-600 hover:text-[#1c5434] bg-white border border-gray-200 shadow-sm'
+                        }`}
+                        style={{ WebkitTapHighlightColor: 'transparent' }}
+                      >
+                        {isActive && (
+                          <motion.div
+                            layoutId="activeTabIndicator"
+                            className="absolute inset-0 bg-gradient-to-r from-[#1c5434] to-[#0a4020] rounded-full shadow-md"
+                            initial={false}
+                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                          />
+                        )}
+                        <span className="relative z-10">{formatCategoryName(cat)}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>

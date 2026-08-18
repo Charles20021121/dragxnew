@@ -100,7 +100,11 @@ export default function ProductCategoryPage({
     return 'androidPlayer';
   });
   const [soundproofFilter, setSoundproofFilter] = useState('silence');
-  const [contiFilter, setContiFilter] = useState('appleCarplay');
+  const [contiFilter, setContiFilter] = useState(() => {
+    const filter = searchParams.get('filter1');
+    if (filter === 'appleCarplay' || filter === 'androidSystem') return filter;
+    return 'appleCarplay';
+  });
   const [carFilter, setCarFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedCustomFilter, setSelectedCustomFilter] = useState(() => {
@@ -156,6 +160,9 @@ export default function ProductCategoryPage({
     const filter = searchParams.get('filter1');
     if (filter === 'androidPlayer' || filter === 'contiAndroid') {
       setAndroidFilter(filter);
+    }
+    if (filter === 'appleCarplay' || filter === 'androidSystem') {
+      setContiFilter(filter);
     }
     const customFilter = searchParams.get('filter');
     setSelectedCustomFilter(customFilter || 'all');
@@ -562,7 +569,13 @@ export default function ProductCategoryPage({
           <div className="flex justify-center mb-8">
             <div className="inline-flex rounded-md bg-white p-1 shadow-sm">
               <button
-                onClick={() => setContiFilter('appleCarplay')}
+                onClick={() => {
+                  setContiFilter('appleCarplay');
+                  const params = new URLSearchParams(searchParams);
+                  params.set('filter1', 'appleCarplay');
+                  params.set('page', '1');
+                  router.push(`?${params.toString()}`);
+                }}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${contiFilter === 'appleCarplay'
                   ? 'bg-[#1c5434] text-white'
                   : 'text-gray-500 hover:text-[#1c5434]'
@@ -571,7 +584,13 @@ export default function ProductCategoryPage({
                 APPLE CARPLAY
               </button>
               <button
-                onClick={() => setContiFilter('androidSystem')}
+                onClick={() => {
+                  setContiFilter('androidSystem');
+                  const params = new URLSearchParams(searchParams);
+                  params.set('filter1', 'androidSystem');
+                  params.set('page', '1');
+                  router.push(`?${params.toString()}`);
+                }}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${contiFilter === 'androidSystem'
                   ? 'bg-[#1c5434] text-white'
                   : 'text-gray-500 hover:text-[#1c5434]'
