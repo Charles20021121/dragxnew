@@ -66,6 +66,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
+      url: r2Url,
       secure_url: r2Url,
       public_id: publicId
     });

@@ -5,6 +5,8 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import CategoryManagerModal from '@/components/CategoryManagerModal';
+import SilenceAdminManager from '@/components/SilenceAdminManager';
+import LynoAdminManager from '@/components/LynoAdminManager';
 
 export default function CategoryProducts({ params: paramsPromise }) {
   const params = use(paramsPromise);
@@ -29,16 +31,34 @@ export default function CategoryProducts({ params: paramsPromise }) {
     custom_filter: '',
     price: ''
   });
+  const [silencePrices, setSilencePrices] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [existingFilters, setExistingFilters] = useState([]);
+  const [existingAndroidSeries, setExistingAndroidSeries] = useState([]);
+  const [customAndroidSeriesMode, setCustomAndroidSeriesMode] = useState(false);
   const router = useRouter()
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
     fetchProducts();
+    if (category === 'silence') {
+      fetchSilencePrices();
+    }
   }, [category]);
+
+  const fetchSilencePrices = async () => {
+    try {
+      const res = await fetch('/api/admin/silence-prices');
+      const data = await res.json();
+      if (data.success) {
+        setSilencePrices(data.prices || []);
+      }
+    } catch (e) {
+      console.error('Error fetching silence prices in admin:', e);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -52,6 +72,13 @@ export default function CategoryProducts({ params: paramsPromise }) {
       }));
 
       setProducts(processedProducts);
+
+      // 提取目前在产品中实际存在的所有 android_series 系列
+      const seriesList = [...new Set(data
+        .map(p => p.android_series)
+        .filter(s => s && s.trim() !== '')
+      )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+      setExistingAndroidSeries(seriesList);
 
       // 提取已存在的 custom_filter 選項
       const filters = [...new Set(data
@@ -273,33 +300,50 @@ export default function CategoryProducts({ params: paramsPromise }) {
         </div>
       )}
 
-      {/* 產品列表 */}
-      <ProductCategoryPage
-        title={category.toUpperCase()}
-        products={products}
-        categoryPath={category}
-        isAdmin={true}
-        heroImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp"
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-        loading={loading}
-      />
+      {/* Silence 专属可视化管理面板 vs LYNO 专属可视化管理面板 vs 常规产品分类列表 */}
+      {category === 'silence' ? (
+        <SilenceAdminManager
+          initialProducts={products}
+          initialSilencePrices={silencePrices}
+          onRefresh={() => {
+            fetchProducts();
+            fetchSilencePrices();
+          }}
+        />
+      ) : category === 'lyno' ? (
+        <LynoAdminManager />
+      ) : (
+        <>
+          {/* 產品列表 */}
+          <ProductCategoryPage
+            title={category.toUpperCase()}
+            products={products}
+            categoryPath={category}
+            silencePrices={silencePrices}
+            isAdmin={true}
+            heroImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp"
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            loading={loading}
+          />
 
-      {/* 新增按鈕 */}
-      <button
-        onClick={() => setShowOffcanvas(true)}
-        className="fixed bottom-6 right-6 z-50 p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 transform group-hover:rotate-90 transition-transform duration-300"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-        </svg>
-      </button>
+          {/* 新增按鈕 */}
+          <button
+            onClick={() => setShowOffcanvas(true)}
+            className="fixed bottom-6 right-6 z-50 p-4 bg-[#1c5434] text-white rounded-full shadow-lg hover:bg-[#143a25] transition-colors duration-300 group"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 transform group-hover:rotate-90 transition-transform duration-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+        </>
+      )}
 
       {/* 美化後的 Offcanvas */}
       {showOffcanvas && (
@@ -501,22 +545,25 @@ export default function CategoryProducts({ params: paramsPromise }) {
                           </div>
                         )}
 
-                        {/* 只在 silence 類別顯示 Car Type 選項 */}
+                        {/* 只在 silence 類別顯示 Car Type 選項 (Soundproofing 時顯示) */}
                         {category.toLowerCase() === 'silence' && (
                           <div>
-                            <label className="block text-sm font-medium text-gray-700">Car Type</label>
+                            <label className="block text-sm font-medium text-gray-700">
+                              Car Type {formData.filter1 === 'audio' ? '(Optional)' : ''}
+                            </label>
                             <select
                               name="filter"
                               value={formData.filter}
                               onChange={handleChange}
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                              required
+                              required={formData.filter1 !== 'audio'}
                             >
                               <option value="">Select Car Type</option>
                               <option value="hatchback">Hatchback</option>
                               <option value="sedan">Sedan</option>
                               <option value="suv">SUV</option>
                               <option value="mpv">MPV</option>
+                              <option value="all">All Car Types</option>
                             </select>
                           </div>
                         )}
@@ -553,39 +600,63 @@ export default function CategoryProducts({ params: paramsPromise }) {
                           </div>
                         )}
 
-                        {/* 只在 androidplayer 類別顯示 android series 選項 */}
-                        {category.toLowerCase() === 'androidplayer' && (
+                        {/* 只在 androidplayer 且 System Type 为 Android Player 时顯示 android series 選項 */}
+                        {category.toLowerCase() === 'androidplayer' && formData.filter1 === 'androidPlayer' && (
                           <div>
-                            <label className="block text-sm font-medium text-gray-700">Android Series</label>
-                            <select
-                              name="android_series"
-                              value={formData.android_series}
-                              onChange={handleChange}
-                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                            >
-                              <option value="">Select Android Series</option>
-                              <option value="Advance_series">Advance series</option>
-                              <option value="Android_Ai_Box">Android Ai Box</option>
-                              <option value="Cyber_series">Cyber series</option>
-                              <option value="Diamond_series">Diamond series</option>
-                              <option value="Exclusive_series">Exclusive series</option>
-                              <option value="Luxury_series">Luxury series</option>
-                              <option value="Performance_series">Performance series</option>
-                              <option value="Signature_40">40 Series</option>
-                              <option value="TRONMMEXT_EI_series">TRONMMEXT EI series</option>
-                              <option value="TRONMMEXT_ES_series">TRONMMEXT ES series</option>
-                              <option value="Ultra_series">Ultra series</option>
-                              <option value="Others">Others</option>
-                            </select>
+                            <div className="flex justify-between items-center mb-1">
+                              <label className="block text-sm font-medium text-gray-700">Android Series</label>
+                              <button
+                                type="button"
+                                onClick={() => setCustomAndroidSeriesMode(prev => !prev)}
+                                className="text-xs text-[#1c5434] font-bold hover:underline cursor-pointer"
+                              >
+                                {customAndroidSeriesMode ? '← Select from list' : '+ Custom series name'}
+                              </button>
+                            </div>
+
+                            {customAndroidSeriesMode ? (
+                              <input
+                                type="text"
+                                name="android_series"
+                                value={formData.android_series || ''}
+                                onChange={handleChange}
+                                placeholder="Type your custom Android Series name..."
+                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434] text-sm"
+                              />
+                            ) : (
+                              <select
+                                name="android_series"
+                                value={formData.android_series || ''}
+                                onChange={(e) => {
+                                  if (e.target.value === '__custom__') {
+                                    setCustomAndroidSeriesMode(true);
+                                    setFormData(prev => ({ ...prev, android_series: '' }));
+                                  } else {
+                                    handleChange(e);
+                                  }
+                                }}
+                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434] text-sm"
+                              >
+                                <option value="">Select Android Series</option>
+                                {existingAndroidSeries.map((s) => (
+                                  <option key={s} value={s}>
+                                    {s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                                  </option>
+                                ))}
+                                <option value="__custom__" className="font-bold text-[#1c5434]">+ Type new custom series name...</option>
+                              </select>
+                            )}
                           </div>
                         )}
 
-                        {/* Custom Filter Category - 只在特定類別顯示 */}
-                        {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'silence', 'others'].includes(category.toLowerCase()) && (
+                        {/* Custom Filter Category - 只在特定類別或 Android Screen 顯示 */}
+                        {(['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'silence', 'others'].includes(category.toLowerCase()) || (category.toLowerCase() === 'androidplayer' && formData.filter1 === 'contiAndroid')) && (
                           <div>
                             <div className="flex justify-between items-center">
                               <label className="block text-sm font-medium text-gray-700">
-                                {category.toLowerCase() === 'silence' ? 'Series Subcategory' : 'Custom Filter Category'}
+                                {category.toLowerCase() === 'silence' 
+                                  ? (formData.filter1 === 'audio' ? 'Audio Brand' : 'Soundproof Series')
+                                  : 'Custom Filter Category'}
                               </label>
                               {category.toLowerCase() !== 'silence' && (
                                 <button 
@@ -605,18 +676,22 @@ export default function CategoryProducts({ params: paramsPromise }) {
                                   onChange={(e) => setFormData(prev => ({ ...prev, custom_filter: e.target.value }))}
                                   required
                                 >
-                                  <option value="">Select Series...</option>
-                                  {formData.filter1 === 'silence' ? (
+                                  <option value="">Select Subcategory...</option>
+                                  {formData.filter1 === 'audio' ? (
                                     <>
-                                      <option value="BASIC">BASIC</option>
-                                      <option value="STANDARD">STANDARD</option>
-                                      <option value="PRO">PRO</option>
+                                      <option value="ALPINE">ALPINE</option>
+                                      <option value="RAINBOW">RAINBOW</option>
+                                      <option value="ADAMDIGITAL">ADAMDIGITAL</option>
+                                      <option value="CROSSFIRE">CROSSFIRE</option>
                                     </>
                                   ) : (
                                     <>
                                       <option value="COMFORT">COMFORT</option>
                                       <option value="COMFORT MAX">COMFORT MAX</option>
                                       <option value="ACOUSTIC PROMAX">ACOUSTIC PROMAX</option>
+                                      <option value="BASIC">BASIC</option>
+                                      <option value="STANDARD">STANDARD</option>
+                                      <option value="PRO">PRO</option>
                                     </>
                                   )}
                                 </select>

@@ -15,17 +15,17 @@ const containerVariants = {
   }
 };
 
-// 定義類別順序
 const categoryOrder = {
   'androidplayer': 1,
   'ambientlight': 2,
   '360camera': 3,
   'powerboot': 4,
   'contidecoder': 5,
-  'alphardvellfire': 6,
-  'bmw': 7,
-  'mercedes': 8,
-  'other': 9
+  'silence': 6,
+  'alphardvellfire': 7,
+  'bmw': 8,
+  'mercedes': 9,
+  'other': 10
 };
 
 export default function Products() {
@@ -39,9 +39,11 @@ export default function Products() {
         const products = await res.json();
 
         if (Array.isArray(products)) {
-          const filteredProducts = products.filter(product => product.categories && product.categories.toLowerCase() !== 'soundproof');
-          const categorizedProducts = filteredProducts.reduce((acc, product) => {
-            const category = product.categories;
+          const categorizedProducts = products.reduce((acc, product) => {
+            if (!product.categories) return acc;
+            const rawCat = product.categories.toLowerCase();
+            if (rawCat === 'lyno') return acc; // LYNO 在后台首页独立管理
+            const category = (rawCat === 'soundproof') ? 'silence' : rawCat;
             if (!acc[category]) {
               acc[category] = {
                 name: category.toUpperCase(),

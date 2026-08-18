@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import pool from '@/lib/db';
 
 export async function POST(request) {
@@ -19,12 +20,18 @@ export async function POST(request) {
           continue;
         }
         
-        // We update all rows that share the same main 'same' ID if they are linked
-        const query = 'UPDATE products SET sort_order = ? WHERE same = ?';
-        await connection.query(query, [item.sort_order, item.id]);
+        // Update both main and associated images
+        const query = 'UPDATE products SET sort_order = ? WHERE same = ? OR Id = ?';
+        await connection.query(query, [item.sort_order, item.id, item.id]);
       }
 
       await connection.commit();
+
+      revalidatePath('/products', 'layout');
+      revalidatePath('/products/silence', 'page');
+      revalidatePath('/products/soundproof', 'page');
+      revalidatePath('/', 'layout');
+
       return NextResponse.json({ message: 'Order updated successfully' });
     } catch (error) {
       await connection.rollback();

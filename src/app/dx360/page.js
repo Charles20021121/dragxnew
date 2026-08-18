@@ -638,6 +638,37 @@ export default function DX360Page() {
 
         </div>
       </div>
+
+      {/* Schema.org Product / Service JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "DX360 - 360° Vision & Car Safety Upgrade System",
+            "image": "https://www.dragx.asia/dx360/logo/dx360.jpg",
+            "description": "Comprehensive car safety upgrade in Malaysia including 360 Surround View Camera, Blind Spot Monitoring (BSM), Radar Sensors, and 4-way Dash Cam.",
+            "brand": {
+              "@type": "Brand",
+              "name": "DRAGX"
+            },
+            "category": "Vehicle Safety & Camera Systems",
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "MYR",
+              "lowPrice": "999",
+              "highPrice": "2699",
+              "offerCount": "6",
+              "availability": "https://schema.org/InStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "DRAGX"
+              }
+            }
+          })
+        }}
+      />
     </>
   )
 }

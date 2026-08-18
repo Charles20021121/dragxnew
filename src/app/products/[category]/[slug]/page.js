@@ -25,11 +25,13 @@ const getProductBySlug = cache(async (category, slug) => {
     connection = await pool.getConnection();
 
     // 1. Fetch lightweight info (Id and Name) to match the slug
+    const isSilence = category.toLowerCase() === 'silence' || category.toLowerCase() === 'soundproof';
     const [summaryRows] = await connection.query(`
       SELECT Id, Name
       FROM products
-      WHERE categories = ? AND Id = same
-    `, [category]);
+      WHERE (${isSilence ? "categories = 'silence' OR categories = 'soundproof'" : "categories = ?"}) 
+        AND (same IS NULL OR same = '' OR same = Id)
+    `, isSilence ? [] : [category]);
 
     const matchSummary = summaryRows.find(p => toSlug(p.Name) === slug.toLowerCase());
     if (!matchSummary) return null;

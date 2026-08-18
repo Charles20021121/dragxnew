@@ -2,26 +2,49 @@ import ProductCategoryPage from "@/components/ProductCategoryPage";
 import pool from "@/lib/db";
 import { notFound } from "next/navigation";
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function CategoryProducts({ params }) {
   const { category } = await params;
   let products = [];
+  let silencePrices = [];
 
   try {
     const connection = await pool.getConnection();
     try {
+      if (category === 'silence') {
+        try {
+          const [priceRows] = await connection.execute('SELECT * FROM silence_prices');
+          silencePrices = priceRows;
+        } catch (priceErr) {
+          console.error('Error fetching silence prices:', priceErr);
+        }
+      }
+
       // Fetch only the main products (Id = same) and skip the expensive LEFT JOIN of additional images
-      const query = `
-        SELECT *
-        FROM products
-        WHERE categories = ?
-          AND Id = same
-          AND Url IS NOT NULL
-          AND Url != ''
-        ORDER BY date DESC
-      `;
-      const [rows] = await connection.execute(query, [category]);
+      const query = category === 'silence'
+        ? `
+          SELECT *
+          FROM products
+          WHERE (categories = 'silence' OR categories = 'soundproof')
+            AND Id = same
+            AND Url IS NOT NULL
+            AND Url != ''
+          ORDER BY date DESC
+        `
+        : `
+          SELECT *
+          FROM products
+          WHERE categories = ?
+            AND Id = same
+            AND Url IS NOT NULL
+            AND Url != ''
+          ORDER BY date DESC
+        `;
+      const [rows] = category === 'silence'
+        ? await connection.execute(query)
+        : await connection.execute(query, [category]);
 
       products = rows.map(p => ({
         id: p.Id,
@@ -59,6 +82,7 @@ export default async function CategoryProducts({ params }) {
     <ProductCategoryPage
       title={category.toUpperCase()}
       products={products}
+      silencePrices={silencePrices}
       categoryPath={category}
       loading={false}
       heroImage="https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/ukzmrw5nzcsovbnb31nd.webp"

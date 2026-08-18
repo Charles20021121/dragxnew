@@ -340,56 +340,36 @@ export default function PowerBootPage() {
         </div>
       </div>
 
-      {/* SEO Content - Hidden from visual display but readable by search engines  */}
-      <div className="sr-only">
-        <h1>Power Boot - Smart Electric Tailgate System by DX Power Boot</h1>
-        <h2>Electric Tailgate Wake Lift Easy - Smart Boot, Smart Choice</h2>
-
-        <section>
-          <h3>Power Boot Smart Upgrade for Your Car</h3>
-          <p>Upgrade your driving experience with Power Boot, the intelligent electric tailgate designed for comfort and safety. With just one touch—or even hands-free—you can open and close your tailgate effortlessly. Equipped with anti-pinch protection, adjustable height, and smart controls, Power Boot brings convenience, safety, and a premium feel to your car. Smooth, durable, and stylish, it's the upgrade that makes every journey easier.</p>
-
-          <div>
-            <h4>Key Features:</h4>
-            <ul>
-              <li>Intelligent Anti-Pinch Protection</li>
-              <li>Wireless Remote Control</li>
-              <li>Hand to One Touch Operation</li>
-              <li>Mind Control Technology</li>
-              <li>Optional Outfit Customization</li>
-              <li>Voluntary Easy Warning System</li>
-              <li>Abnormal Easy Warning</li>
-              <li>High Memory Storage</li>
-              <li>Simple Operation Interface</li>
-            </ul>
-          </div>
-        </section>
-
-        <section>
-          <h3>Convenience & Comfort</h3>
-          <p>One-touch open/close with remote control or car button. No need to manually lift a heavy tailgate. Suitable for users carrying shopping bags, luggage, or holding children. Experience ultimate convenience with our smart electric tailgate system.</p>
-        </section>
-
-        <section>
-          <h3>Smart Integration</h3>
-          <p>Can integrate with car's central lock and remote system. Some models allow foot-sensor kick activation for hands-free operation. Seamlessly connects with your vehicle's existing systems for enhanced functionality.</p>
-        </section>
-
-        <section>
-          <h3>Safety & Protection</h3>
-          <p>Reduces risk of damaging the car when closing forcefully. Intelligent anti-pinch function stops and reverses if an obstacle is detected. Prevents accidental injuries to children or pets. Advanced safety features ensure peace of mind during operation.</p>
-        </section>
-
-        <section>
-          <h3>Adjustable Height & User-Friendly</h3>
-          <p>Tailgate opening height can be adjusted to fit different users. Prevents hitting low garage ceilings. Easy for elderly or shorter users. Customizable settings accommodate various needs and environments.</p>
-        </section>
-
-        <section>
-          <h3>Compatible Vehicle Models</h3>
-          <p>Our Power Boot system is available for a wide range of vehicle models including BMW, Mercedes-Benz, Mazda, Nissan, Honda, Toyota, Perodua, and Proton. Professional installation ensures perfect compatibility and optimal performance for your specific vehicle model.</p>
-        </section>
-      </div>
+      {/* Schema.org Product / Service JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "DX Power Boot - Smart Electric Tailgate System",
+            "image": "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/hhtep5dkd3wdixyn8fsv_rdiujs.webp",
+            "description": "Smart electric tailgate retrofit with Anti-Pinch protection, Height Memory, OEM Remote integration, and Hands-Free foot kick sensor in Malaysia.",
+            "brand": {
+              "@type": "Brand",
+              "name": "DRAGX"
+            },
+            "category": "Automotive Electric Tailgate Systems",
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "MYR",
+              "lowPrice": "1299",
+              "highPrice": "2899",
+              "offerCount": "8",
+              "availability": "https://schema.org/InStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "DRAGX"
+              }
+            }
+          })
+        }}
+      />
     </>
   )
 }

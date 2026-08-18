@@ -126,13 +126,13 @@ export default function AndroidPlayerPage() {
 
                         {/* Main Content - 参考 Ambient Light 完美百分比缩放排版 */}
                         <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] lg:px-[12%] w-[45%] pointer-events-auto">
-                            {/* 第一行大标题 */}
-                            <h2
+                            {/* 第一行大標題 */}
+                            <h1
                                 className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap drop-shadow-lg"
                                 style={{ fontFamily: 'Geometos, sans-serif', fontSize: '3vw', lineHeight: '1.1' }}
                             >
                                 ANDROID PLAYER
-                            </h2>
+                            </h1>
                             {/* 第二行副标题 */}
                             <p
                                 className="text-white mb-2 lg:mb-6 drop-shadow-md whitespace-nowrap"
@@ -374,29 +374,36 @@ export default function AndroidPlayerPage() {
                     </div>
                 </div>
 
-                {/* SEO Content - Hidden from visual display but readable by search engines */}
-                <div className="sr-only">
-                    <h1>Android Player - Premium Car Media System by DRAGX</h1>
-                    <h2>Advanced Entertainment and Control System for Your Vehicle</h2>
-
-                    <section>
-                        <h3>Android Player High-Performance System</h3>
-                        <p>Upgrade your car with our premium Android Player system. Experience high-speed performance, crystal-clear display, and seamless integration with your vehicle's features. Perfect for navigation, music, and apps on the go.</p>
-
-                        <div>
-                            <h4>Key Features:</h4>
-                            <ul>
-                                <li>High-Resolution Display</li>
-                                <li>Responsive Touch Surface</li>
-                                <li>Bluetooth and Wi-Fi Connectivity</li>
-                                <li>Multiple App Support</li>
-                                <li>Seamless Car Integration</li>
-                                <li>Smooth Performance</li>
-                                <li>Professional Installation</li>
-                            </ul>
-                        </div>
-                    </section>
-                </div>
+                {/* Schema.org Service / Product JSON-LD */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "Product",
+                            "name": "DRAGX Android Player - Smart Car Infotainment System",
+                            "image": "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/lz4oh3mzwlmq7aiquwmf_f5e6ze.webp",
+                            "description": "Premium car Android player upgrade in Malaysia. Features Wireless CarPlay, Android Auto, HD display, Split Screen, and live GPS navigation with plug-and-play OEM integration.",
+                            "brand": {
+                                "@type": "Brand",
+                                "name": "DRAGX"
+                            },
+                            "category": "Car Electronics & Infotainment",
+                            "offers": {
+                                "@type": "AggregateOffer",
+                                "priceCurrency": "MYR",
+                                "lowPrice": "599",
+                                "highPrice": "2999",
+                                "offerCount": "10",
+                                "availability": "https://schema.org/InStock",
+                                "seller": {
+                                    "@type": "Organization",
+                                    "name": "DRAGX"
+                                }
+                            }
+                        })
+                    }}
+                />
             </div>
         </>
     )

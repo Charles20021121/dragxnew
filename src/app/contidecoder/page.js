@@ -123,12 +123,12 @@ export default function ContiDecoderPage() {
               className="w-full h-auto"
             />
             <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start left-[50%] w-[45%] pr-[5%]">
-              <h1
+              <h2
                 className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
                 style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
               >
                 ANDROID DECODER
-              </h1>
+              </h2>
               <p
                 className="text-gray-200 text-justify"
                 style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
@@ -172,12 +172,12 @@ export default function ContiDecoderPage() {
               className="w-full h-auto"
             />
             <div className="hidden md:flex absolute inset-0 flex-col justify-center items-start px-[8%] md:px-[10%] w-[90%] md:w-[60%] lg:w-[55%]">
-              <h1
+              <h2
                 className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
                 style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
               >
                 CARPLAY DECODER
-              </h1>
+              </h2>
               <p
                 className="text-gray-200 text-justify w-full"
                 style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
@@ -222,12 +222,12 @@ export default function ContiDecoderPage() {
               className="w-full h-auto"
             />
             <div className="hidden md:flex absolute inset-0 flex-col justify-start items-start left-[52%] w-[45%] pr-[5%] pt-[2%]">
-              <h1
+              <h2
                 className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap"
                 style={{ fontFamily: 'Geometos, sans-serif', fontSize: '2.5vw', lineHeight: '1.2' }}
               >
                 360° CAM DECODER
-              </h1>
+              </h2>
               <p
                 className="text-gray-200 text-justify w-full"
                 style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.15vw', lineHeight: '1.6' }}
@@ -423,41 +423,27 @@ export default function ContiDecoderPage() {
         </>
       )}
 
-
-
-      {/* SEO Content - Hidden from visual display but readable by search engines */}
-      <div className="sr-only">
-        <h1>Conti Decoder - Advanced Car Decoding System by DRAGX</h1>
-        <h2>Professional Car Decoder Solution for Modern Vehicles</h2>
-
-        <section>
-          <h3>Conti Decoder Smart System</h3>
-          <p>Upgrade your vehicle with Conti Decoder, the advanced car decoding system designed for professional diagnostics and vehicle customization. Our system provides comprehensive decoding capabilities for modern vehicles, enabling enhanced features and functionality.</p>
-
-          <div>
-            <h4>Key Features:</h4>
-            <ul>
-              <li>Advanced Vehicle Diagnostics</li>
-              <li>Professional Decoding Capabilities</li>
-              <li>Compatible with Multiple Vehicle Brands</li>
-              <li>Easy Integration with Existing Systems</li>
-              <li>Real-time Data Processing</li>
-              <li>User-Friendly Interface</li>
-              <li>Secure and Reliable Operation</li>
-            </ul>
-          </div>
-        </section>
-
-        <section>
-          <h3>Professional Solution</h3>
-          <p>Conti Decoder provides professional-grade decoding capabilities for automotive specialists and enthusiasts. Access advanced vehicle features and customize your car's functionality with our comprehensive system.</p>
-        </section>
-
-        <section>
-          <h3>Wide Compatibility</h3>
-          <p>Our Conti Decoder system is compatible with a wide range of vehicle brands and models. Professional installation ensures optimal performance and seamless integration with your vehicle's systems.</p>
-        </section>
-      </div>
+      {/* Schema.org Service JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": "DX Conti Decoder - OEM CarPlay & Android Auto Retrofit",
+            "provider": {
+              "@type": "Organization",
+              "name": "DRAGX"
+            },
+            "serviceType": "Car Multimedia & Decoder Retrofit",
+            "description": "Retrofit Wireless Apple CarPlay, Android Auto, and 360 Camera interface into OEM factory vehicle screens for Mercedes, BMW, Audi, Porsche in Malaysia.",
+            "areaServed": {
+              "@type": "Country",
+              "name": "Malaysia"
+            }
+          })
+        }}
+      />
     </>
   )
 }

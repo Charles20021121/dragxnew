@@ -72,10 +72,21 @@ export async function PUT(request, { params: paramsPromise }) {
   try {
     const data = await request.json();
 
+    // 檢查是否有舊圖片需要清理
+    if (data.Url) {
+      const [oldRows] = await connection.query('SELECT Url FROM products WHERE Id = ?', [params.id]);
+      const oldUrl = oldRows[0]?.Url;
+      if (oldUrl && data.Url !== oldUrl) {
+        await deleteFromR2(oldUrl);
+      }
+    }
+
     const [result] = await connection.query(
       `UPDATE products SET
         Name = ?,
         categories = ?,
+        Url = COALESCE(?, Url),
+        publicId = COALESCE(?, publicId),
         description = ?,
         Specifications = ?,
         buy = ?,
@@ -88,6 +99,8 @@ export async function PUT(request, { params: paramsPromise }) {
       [
         data.Name || '',
         data.categories || '',
+        data.Url || null,
+        data.publicId || null,
         data.description || '',
         data.Specifications || '',
         data.buy || '',
@@ -108,6 +121,9 @@ export async function PUT(request, { params: paramsPromise }) {
     }
 
     revalidatePath('/products', 'layout');
+    revalidatePath('/products/silence', 'page');
+    revalidatePath('/products/soundproof', 'page');
+    revalidatePath('/', 'layout');
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -141,20 +157,22 @@ export async function DELETE(request, { params }) {
 
     const product = productCheck[0];
 
-    if (product.Id === product.same) {
+    if (product.Id === product.same || !product.same) {
       // 主圖：刪除整組相關圖片（DB + R2）
       const [relatedImages] = await connection.query(
-        'SELECT * FROM products WHERE same = ?',
-        [product.same]
+        'SELECT * FROM products WHERE same = ? OR Id = ?',
+        [product.same || id, id]
       );
 
       for (const image of relatedImages) {
-        await deleteFromR2(image.Url);
+        if (image.Url) {
+          await deleteFromR2(image.Url);
+        }
       }
 
       const [deleteResult] = await connection.query(
-        'DELETE FROM products WHERE same = ?',
-        [product.same]
+        'DELETE FROM products WHERE same = ? OR Id = ?',
+        [product.same || id, id]
       );
 
       if (deleteResult.affectedRows === 0) {
@@ -162,7 +180,9 @@ export async function DELETE(request, { params }) {
       }
     } else {
       // 副圖：只刪除這一張（DB + R2）
-      await deleteFromR2(product.Url);
+      if (product.Url) {
+        await deleteFromR2(product.Url);
+      }
 
       const [deleteResult] = await connection.query(
         'DELETE FROM products WHERE Id = ?',
@@ -177,6 +197,9 @@ export async function DELETE(request, { params }) {
     await connection.commit();
     
     revalidatePath('/products', 'layout');
+    revalidatePath('/products/silence', 'page');
+    revalidatePath('/products/soundproof', 'page');
+    revalidatePath('/', 'layout');
     
     return NextResponse.json({
       success: true,

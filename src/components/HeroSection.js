@@ -330,7 +330,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   {isGalleryBanner && (
                     <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
                       <div className="flex flex-col items-center text-center">
-                        <h1
+                        <h2
                           className="text-white font-black uppercase mb-4"
                           style={{
                             fontFamily: 'Geometos, sans-serif',
@@ -341,7 +341,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                           }}
                         >
                           UPGRADE YOUR RIDE<br />ELEVATE YOUR JOURNEY!
-                        </h1>
+                        </h2>
                         <Link
                           href={bannerLink || '#'}
                           className="px-8 py-3 bg-white text-black rounded-xl shadow-lg font-medium tracking-wide inline-block pointer-events-auto cursor-pointer hover:bg-gray-100 transition-colors"
@@ -516,7 +516,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                   {isGalleryBanner && (
                     <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none bg-black/10">
                       <div className="flex flex-col items-center text-center">
-                        <h1
+                        <h2
                           className="text-white font-black uppercase mb-4"
                           style={{
                             fontFamily: 'Geometos, sans-serif',
@@ -527,7 +527,7 @@ export default function HeroSection({ image, images, mobileImage, aspectRatio, m
                           }}
                         >
                           UPGRADE YOUR RIDE<br />ELEVATE YOUR JOURNEY!
-                        </h1>
+                        </h2>
                         <Link
                           href={bannerLink || '#'}
                           className="px-5 py-1.5 bg-white text-black rounded shadow-lg font-medium tracking-wide inline-block pointer-events-auto cursor-pointer active:bg-gray-100 transition-colors"

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Separator } from '@/components/ui/separator'
 import { Quicksand, Manrope } from 'next/font/google'
@@ -22,7 +23,7 @@ const manrope = Manrope({
   weight: '500'
 })
 
-const screenSizes = [
+const DEFAULT_SCREEN_SIZES = [
   { id: '12.8', name: '12.8 INCH', image: '/lyno/screen/12.80 INCh.jpg' },
   { id: '11.5', name: '11.5 INCH', image: '/lyno/screen/11.50 INCH.jpg' },
   { id: '10.36', name: '10.36 INCH', image: '/lyno/screen/10.36 INCH.jpg' },
@@ -30,7 +31,7 @@ const screenSizes = [
 ]
 
 // 产品详细规格数据
-const productDetails = {
+const DEFAULT_PRODUCT_DETAILS = {
   'pro-max-12': {
     name: 'LYNO Quantum Pro Max',
     specs: '12GB+256GB',
@@ -118,7 +119,6 @@ const productDetails = {
       'Voice Control': 'Built-in support'
     }
   },
-  // 11.5英寸产品详细规格
   'vision-pro-11': {
     name: 'LYNO Vision Pro Max',
     specs: '12GB+256GB',
@@ -206,11 +206,10 @@ const productDetails = {
       'Voice Control': 'Built-in support'
     }
   },
-  // 10.36英寸产品详细规格
   'air-max-10': {
     name: 'LYNO OS Pro Max',
     specs: '12GB+256GB',
-    image: '/lyno/screen/10.36 INCH 2.jpg',
+    image: '/lyno/screen/10.36 INCH.jpg',
     details: {
       'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '12GB+256GB',
@@ -239,50 +238,50 @@ const productDetails = {
   'air-10': {
     name: 'LYNO OS Max',
     specs: '8GB+128GB',
-    image: '/lyno/screen/10.36 INCH 2.jpg',
+    image: '/lyno/screen/10.36 INCH.jpg',
     details: {
-      'CPU': '8-Core UIS7862',
+      'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '8GB+128GB',
-      'Storage': 'EMMC',
-      'GPS': '3 mode (L1 E1 G1)',
-      'MIC': 'Condenser MIC',
-      'USB': 'USB 2.0 ×3',
-      'Audio Chip': 'ROHM32107 (DSP)',
-      'Power Amplifier': 'TDA7851',
-      'Amplifier Output': 'None',
-      'Filter Capacitance': '6800μF',
+      'Storage': 'UFS (Up to 1700MB/s R, 128GB+)',
+      'GPS': 'Dual Band 7 mode (L1 L5 B1 B2a E1 G1 E5a)',
+      'MIC': 'Digital Noise Cancelling MIC',
+      'USB': 'USB 3.2 Gen1 (Type-C) + USB 2.0 ×3',
+      'Audio Chip': 'AKM7739 (DSP, VELVET Audio Technology)',
+      'Power Amplifier': 'TDA7808 Digital Enhanced Class AB Power Amplifier',
+      'Amplifier Output': '5532 ×3 (Enhanced Audio Signal)',
+      'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'Optical + Coaxial + USB DAC, RCA2.1',
-      'Bluetooth': 'Realtek 8761',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
+      'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'System': 'DXPRO OS',
-      'Android Version': '10 (API=29)',
+      'Android Version': '13 (API=33)',
       'Screen': '10.36" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
-      'Front & Rear Recording': 'Not Supported',
-      '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
-      'Voice Control': 'Requires extra software'
+      'Front & Rear Recording': 'Supported',
+      '360° Panorama': 'Supported\n(requires 360 camera)',
+      'Voice Control': 'Built-in support'
     }
   },
   'core-10': {
     name: 'LYNO OS Lite',
     specs: '4GB+64GB',
-    image: '/lyno/screen/10.36 INCH 2.jpg',
+    image: '/lyno/screen/10.36 INCH.jpg',
     details: {
-      'CPU': '8-Core UIS7862',
+      'CPU': '8-Core UIS7862S A55 2.0GHz (12nm)',
       'RAM+ROM': '4GB+64GB',
       'Storage': 'EMMC',
       'GPS': '3 mode (L1 E1 G1)',
       'MIC': 'Condenser MIC',
       'USB': 'USB 2.0 ×3',
-      'Audio Chip': 'ROHM32107 (DSP)',
-      'Power Amplifier': 'TDA7851',
-      'Amplifier Output': 'None',
-      'Filter Capacitance': '6800μF',
+      'Audio Chip': 'AKM7738 (DSP)',
+      'Power Amplifier': 'TDA7850',
+      'Amplifier Output': '2582 ×3',
+      'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'Optical + Coaxial + USB DAC, RCA2.1',
-      'Bluetooth': 'Realtek 8761',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
+      'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
@@ -291,14 +290,13 @@ const productDetails = {
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
       '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
-      'Voice Control': 'Requires extra software'
+      'Voice Control': 'Built-in support'
     }
   },
-  // 9.5英寸产品详细规格
   'air-max-9': {
     name: 'LYNO OS Pro Max',
     specs: '12GB+256GB',
-    image: '/lyno/screen/9.5 INCH 2.jpg',
+    image: '/lyno/screen/9.5 INCH.jpg',
     details: {
       'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '12GB+256GB',
@@ -327,50 +325,50 @@ const productDetails = {
   'air-9': {
     name: 'LYNO OS Max',
     specs: '8GB+128GB',
-    image: '/lyno/screen/9.5 INCH 2.jpg',
+    image: '/lyno/screen/9.5 INCH.jpg',
     details: {
-      'CPU': '8-Core UIS7862',
+      'CPU': '8-Core UIS7870 A76 2.7GHz (6nm)',
       'RAM+ROM': '8GB+128GB',
-      'Storage': 'EMMC',
-      'GPS': '3 mode (L1 E1 G1)',
-      'MIC': 'Condenser MIC',
-      'USB': 'USB 2.0 ×3',
-      'Audio Chip': 'ROHM32107 (DSP)',
-      'Power Amplifier': 'TDA7851',
-      'Amplifier Output': 'None',
-      'Filter Capacitance': '6800μF',
+      'Storage': 'UFS (Up to 1700MB/s R, 128GB+)',
+      'GPS': 'Dual Band 7 mode (L1 L5 B1 B2a E1 G1 E5a)',
+      'MIC': 'Digital Noise Cancelling MIC',
+      'USB': 'USB 3.2 Gen1 (Type-C) + USB 2.0 ×3',
+      'Audio Chip': 'AKM7739 (DSP, VELVET Audio Technology)',
+      'Power Amplifier': 'TDA7808 Digital Enhanced Class AB Power Amplifier',
+      'Amplifier Output': '5532 ×3 (Enhanced Audio Signal)',
+      'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'Optical + Coaxial + USB DAC, RCA2.1',
-      'Bluetooth': 'Realtek 8761',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
+      'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'System': 'DXPRO OS',
-      'Android Version': '10 (API=29)',
+      'Android Version': '13 (API=33)',
       'Screen': '9.5" → 2000*1200',
       'CarPlay/Android Auto': 'Wired + Wireless',
       'Network': '4G LTE external card slot + Wi-Fi',
-      'Front & Rear Recording': 'Not Supported',
-      '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
-      'Voice Control': 'Requires extra software'
+      'Front & Rear Recording': 'Supported',
+      '360° Panorama': 'Supported\n(requires 360 camera)',
+      'Voice Control': 'Built-in support'
     }
   },
   'core-9': {
     name: 'LYNO OS Lite',
     specs: '4GB+64GB',
-    image: '/lyno/screen/9.5 INCH 2.jpg',
+    image: '/lyno/screen/9.5 INCH.jpg',
     details: {
-      'CPU': '8-Core UIS7862',
+      'CPU': '8-Core UIS7862S A55 2.0GHz (12nm)',
       'RAM+ROM': '4GB+64GB',
       'Storage': 'EMMC',
       'GPS': '3 mode (L1 E1 G1)',
       'MIC': 'Condenser MIC',
       'USB': 'USB 2.0 ×3',
-      'Audio Chip': 'ROHM32107 (DSP)',
-      'Power Amplifier': 'TDA7851',
-      'Amplifier Output': 'None',
-      'Filter Capacitance': '6800μF',
+      'Audio Chip': 'AKM7738 (DSP)',
+      'Power Amplifier': 'TDA7850',
+      'Amplifier Output': '2582 ×3',
+      'Filter Capacitance': '10000μF',
       'Radio': 'TDA7708 FM/AM',
-      'Audio Output': 'Optical + Coaxial + USB DAC, RCA2.1',
-      'Bluetooth': 'Realtek 8761',
+      'Audio Output': 'Optical + Coaxial + USB DAC + RCA5.1',
+      'Bluetooth': 'Qualcomm 3031 (BT 5.0, aptX HD)',
       'System Mode': 'Simplified + Enthusiast Mode\n(supports 3D car models, dynamic wallpaper)',
       'System': 'DXPRO OS',
       'Android Version': '10 (API=29)',
@@ -379,105 +377,76 @@ const productDetails = {
       'Network': '4G LTE external card slot + Wi-Fi',
       'Front & Rear Recording': 'Not Supported',
       '360° Panorama': 'Supported\n(requires 360IC + 360 camera)',
-      'Voice Control': 'Requires extra software'
+      'Voice Control': 'Built-in support'
     }
-  },
+  }
 }
 
-// 所有屏幕尺寸的产品选项
-const productOptions = {
+// 默认屏幕对应的产品列表
+const DEFAULT_PRODUCT_OPTIONS = {
   '12.8': [
-    {
-      id: 'pro-max-12',
-      name: 'LYNO Quantum Pro Max',
-      specs: '12GB+256GB',
-      image: '/lyno/screen/12.80 INCh.jpg'
-    },
-    {
-      id: 'max-12',
-      name: 'LYNO Quantum Max',
-      specs: '8GB+128GB',
-      image: '/lyno/screen/12.80 INCh.jpg'
-    },
-    {
-      id: 'max-lite-12',
-      name: 'LYNO Quantum Lite',
-      specs: '6GB+64GB',
-      image: '/lyno/screen/12.80 INCh.jpg'
-    }
+    { id: 'pro-max-12', name: 'LYNO Quantum Pro Max', specs: '12GB+256GB', image: '/lyno/screen/12.80 INCh.jpg' },
+    { id: 'max-12', name: 'LYNO Quantum Max', specs: '8GB+128GB', image: '/lyno/screen/12.80 INCh.jpg' },
+    { id: 'max-lite-12', name: 'LYNO Quantum Lite', specs: '6GB+64GB', image: '/lyno/screen/12.80 INCh.jpg' }
   ],
   '11.5': [
-    {
-      id: 'vision-pro-11',
-      name: 'LYNO Vision Pro Max',
-      specs: '12GB+256GB',
-      image: '/lyno/screen/11.50 INCH.jpg'
-    },
-    {
-      id: 'vision-11',
-      name: 'LYNO Vision Max',
-      specs: '8GB+128GB',
-      image: '/lyno/screen/11.50 INCH.jpg'
-    },
-    {
-      id: 'vision-lite-11',
-      name: 'LYNO Vision Lite',
-      specs: '6GB+64GB',
-      image: '/lyno/screen/11.50 INCH.jpg'
-    }
+    { id: 'vision-pro-11', name: 'LYNO Vision Pro Max', specs: '12GB+256GB', image: '/lyno/screen/11.50 INCH.jpg' },
+    { id: 'vision-11', name: 'LYNO Vision Max', specs: '8GB+128GB', image: '/lyno/screen/11.50 INCH.jpg' },
+    { id: 'vision-lite-11', name: 'LYNO Vision Lite', specs: '6GB+64GB', image: '/lyno/screen/11.50 INCH.jpg' }
   ],
   '10.36': [
-    {
-      id: 'air-max-10',
-      name: 'LYNO OS Pro Max',
-      specs: '12GB+256GB',
-      image: '/lyno/screen/10.36 INCH.jpg'
-    },
-    {
-      id: 'air-10',
-      name: 'LYNO OS Max',
-      specs: '8GB+128GB',
-      image: '/lyno/screen/10.36 INCH.jpg'
-    },
-    {
-      id: 'core-10',
-      name: 'LYNO OS Lite',
-      specs: '4GB+64GB',
-      image: '/lyno/screen/10.36 INCH.jpg'
-    }
+    { id: 'air-max-10', name: 'LYNO OS Pro Max', specs: '12GB+256GB', image: '/lyno/screen/10.36 INCH.jpg' },
+    { id: 'air-10', name: 'LYNO OS Max', specs: '8GB+128GB', image: '/lyno/screen/10.36 INCH.jpg' },
+    { id: 'core-10', name: 'LYNO OS Lite', specs: '4GB+64GB', image: '/lyno/screen/10.36 INCH.jpg' }
   ],
   '9.5': [
-    {
-      id: 'air-max-9',
-      name: 'LYNO OS Pro Max',
-      specs: '12GB+256GB',
-      image: '/lyno/screen/9.5 INCH.jpg'
-    },
-    {
-      id: 'air-9',
-      name: 'LYNO OS Max',
-      specs: '8GB+128GB',
-      image: '/lyno/screen/9.5 INCH.jpg'
-    },
-    {
-      id: 'core-9',
-      name: 'LYNO OS Lite',
-      specs: '4GB+64GB',
-      image: '/lyno/screen/9.5 INCH.jpg'
-    }
+    { id: 'air-max-9', name: 'LYNO OS Pro Max', specs: '12GB+256GB', image: '/lyno/screen/9.5 INCH.jpg' },
+    { id: 'air-9', name: 'LYNO OS Max', specs: '8GB+128GB', image: '/lyno/screen/9.5 INCH.jpg' },
+    { id: 'core-9', name: 'LYNO OS Lite', specs: '4GB+64GB', image: '/lyno/screen/9.5 INCH.jpg' }
   ]
 }
 
 export default function LynoPage() {
   const { setCurrentProduct } = useProduct()
+  const [screenSizes, setScreenSizes] = useState(DEFAULT_SCREEN_SIZES)
+  const [productOptions, setProductOptions] = useState(DEFAULT_PRODUCT_OPTIONS)
+  const [productDetails, setProductDetails] = useState(DEFAULT_PRODUCT_DETAILS)
   const [selectedScreen, setSelectedScreen] = useState('12.8')
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [showProductOptions, setShowProductOptions] = useState(true) // 默认显示产品选项
-  const [selectedProduct, setSelectedProduct] = useState(productOptions['12.8'][0].id) // 默认选中12.8英寸的第一个产品
+  const [showProductOptions, setShowProductOptions] = useState(true)
+  const [selectedProduct, setSelectedProduct] = useState('pro-max-12')
   const [indicatorPosition, setIndicatorPosition] = useState({ left: 0, width: 0 })
-  const [showMoreDetails, setShowMoreDetails] = useState(false) // 控制是否显示产品选择和详情
+  const [showMoreDetails, setShowMoreDetails] = useState(false)
   const screenRefs = useRef({})
+
+  // 动态从数据库读取最新的 LYNO 产品与屏幕数据
+  useEffect(() => {
+    async function loadDynamicLynoData() {
+      try {
+        const res = await fetch(`/api/admin/lyno-products?_t=${Date.now()}`)
+        const data = await res.json()
+        if (data.success && data.screenSizes && data.screenSizes.length > 0) {
+          setScreenSizes(data.screenSizes)
+          setProductOptions(data.productOptions || {})
+          setProductDetails(data.productDetails || {})
+
+          const foundScreen = data.screenSizes.find(s => s.id === selectedScreen)
+          const targetScreenId = foundScreen ? selectedScreen : data.screenSizes[0].id
+          setSelectedScreen(targetScreenId)
+
+          const models = (data.productOptions || {})[targetScreenId] || []
+          if (models.length > 0) {
+            const foundModel = models.find(m => m.id === selectedProduct)
+            setSelectedProduct(foundModel ? selectedProduct : models[0].id)
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching dynamic lyno data:', err)
+      }
+    }
+    loadDynamicLynoData()
+  }, [])
 
   // 设置 LYNO 产品信息给 WhatsApp 按钮使用
   useEffect(() => {
@@ -572,18 +541,66 @@ export default function LynoPage() {
   const handleScreenClick = (screenId) => {
     setSelectedScreen(screenId)
 
-    // 如果点击的屏幕有产品选项，显示产品选项并默认选中第一个
-    if (productOptions[screenId]) {
+    const models = productOptions[screenId] || []
+    if (models.length > 0) {
       setShowProductOptions(true)
-      setSelectedProduct(productOptions[screenId][0].id) // 默认选中第一个产品
+      setSelectedProduct(models[0].id)
     } else {
       setShowProductOptions(false)
       setSelectedProduct(null)
     }
   }
+
   return (
     <>
-      <div className="relative">
+      {/* Breadcrumbs */}
+      <nav aria-label="Breadcrumb" className="px-6 sm:px-8 md:px-12 lg:px-16 pt-4 pb-2">
+        <ol className="flex items-center space-x-2 text-xs text-gray-500">
+          <li>
+            <Link href="/" className="hover:text-black">
+              Home
+            </Link>
+          </li>
+          <li>/</li>
+          <li>
+            <Link href="/products" className="hover:text-black">
+              Products
+            </Link>
+          </li>
+          <li>/</li>
+          <li className="text-black font-semibold">
+            Lyno
+          </li>
+        </ol>
+      </nav>
+
+      {/* 专属独立区域（开一个位子，不漂浮） */}
+      <div className="px-2 md:px-5 pb-5">
+        <div className="flex justify-center mb-4 md:mb-6 px-2">
+          <div className="inline-flex rounded-md bg-white p-1 shadow-sm w-full max-w-2xl border border-gray-200">
+            <Link
+              href="/lyno"
+              className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors bg-[#1c5434] text-white text-center whitespace-nowrap"
+            >
+              LYNO
+            </Link>
+            <Link
+              href="/products/androidplayer?filter1=androidPlayer"
+              className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors text-gray-500 hover:text-[#1c5434] text-center whitespace-nowrap"
+            >
+              ANDROID PLAYER
+            </Link>
+            <Link
+              href="/products/androidplayer?filter1=contiAndroid"
+              className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors text-gray-500 hover:text-[#1c5434] text-center whitespace-nowrap"
+            >
+              ANDROID SCREEN
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative w-full">
         {/* 背景图片 */}
         <Image
           src="/lyno/LYNO PAGE-01.webp"
@@ -606,147 +623,9 @@ export default function LynoPage() {
         </div>
       </div>
 
-
-
-      {/* Additional Images Below Screen Section */}
-      <figure className="relative">
-        <Image
-          src={isDesktop ? "/lyno/LYNO PAGE-02.webp" : "/lyno/PHONE SIZE-02.webp"}
-          alt="UIS 7870 - The Smart Heart of Performance - 2.7Ghz 8 core 6nm Process with 204% CPU Boost and 240% GPU Boost"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          UIS 7870 processor featuring 2.7Ghz clock speed, 8 core architecture, 6nm manufacturing process, delivering 204% CPU Boost and 240% GPU Boost performance
-        </figcaption>
-      </figure>
-
-      <figure className="relative">
-        <Image
-          src={isDesktop ? "/lyno/LYNO PAGE-03.webp" : "/lyno/PHONE SIZE-03.webp"}
-          alt="Creative Mode - Customize themes, backgrounds and personalize your dashboard experience"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          Creative Mode lets you customize themes, backgrounds, and personalize your dashboard and multimedia experience to match your style and mood
-        </figcaption>
-      </figure>
-
-      <figure className="relative">
-        <Image
-          src={isDesktop ? "/lyno/LYNO PAGE-04.webp" : "/lyno/PHONE SIZE-04.webp"}
-          alt="Premium Audio System - AKM7739 DSP Experience Studio-Grade Audio, TDA7808 Hear the Road Feel the Power, OpAmp 5532*3 Built for Clarity"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          Crystal-Clear Voice with Digital Noise Blocking featuring AKM7739 DSP for Studio-Grade Audio, TDA7808 amplifier to Hear the Road and Feel the Power, OpAmp 5532*3 Built for Clarity and Tuned for Passion
-        </figcaption>
-      </figure>
-
-      <figure className="relative">
-        <Image
-          src={isDesktop ? "/lyno/LYNO PAGE-05.webp" : "/lyno/PHONE SIZE-05.webp"}
-          alt="Flexible UI Layout Mode - Customize arrangement, size, and position of widgets, media panels, and system controls"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          Flexible UI Layout Mode allows users to freely customize the arrangement, size, and position of on-screen elements such as widgets, media panels, navigation shortcuts, and system controls. This mode provides a personalized, modular dashboard that adapts to individual preferences and usage habits.
-        </figcaption>
-      </figure>
-
-      <figure className="relative">
-        <Image
-          src="/lyno/LYNO PAGE-06.webp"
-          alt="360° Vision, Zero Blind Spots - Complete real-time panoramic view for safety and control"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          Delivers a complete, real-time panoramic view of the surroundings, ensuring no area is left unseen. Perfect for safety, awareness, and total control.
-        </figcaption>
-      </figure>
-
-      <figure className="relative">
-        <Image
-          src={isDesktop ? "/lyno/LYNO PAGE-07.webp" : "/lyno/PHONE SIZE-07.webp"}
-          alt="More Plugins - Comprehensive dashboard with weather, trip info, TPMS, music, navigation and system controls"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          Advanced plugin system featuring weather updates, trip information, TPMS monitoring, music control, map navigation, energy flow monitoring, compass, and comprehensive vehicle data display
-        </figcaption>
-      </figure>
-
-      <figure className="relative">
-        <Image
-          src={isDesktop ? "/lyno/LYNO PAGE-08.webp" : "/lyno/PHONE SIZE-08.webp"}
-          alt="Stay Connected, Stay Focused - Seamless Android Auto and Apple CarPlay integration"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          Enjoy seamless access to your favorite apps, maps, calls, and music — all directly from your dashboard with Android Auto and Apple CarPlay
-        </figcaption>
-      </figure>
-
-      <figure className="relative">
-        <Image
-          src={isDesktop ? "/lyno/LYNO PAGE-09.webp" : "/lyno/PHONE SIZE-09.webp"}
-          alt="LYNO Advanced Features - Enhanced multimedia and connectivity capabilities"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          Experience advanced multimedia features and seamless connectivity with LYNO's enhanced capabilities
-        </figcaption>
-      </figure>
-
-      <figure className="relative">
-        <Image
-          src={isDesktop ? "/lyno/LYNO PAGE-10.webp" : "/lyno/PHONE SIZE-10.webp"}
-          alt="LYNO Complete Solution - Comprehensive entertainment and control system"
-          width={2400}
-          height={1600}
-          className="w-full h-auto"
-          quality={100}
-          sizes="100vw"
-        />
-        <figcaption className="sr-only">
-          A complete entertainment and control solution that transforms your driving experience
-        </figcaption>
-      </figure>
-
-      {/* Screen Sizes Section */}
+      {/* Screen Sizes Section (Placed right below first banner) */}
       <div className="bg-white py-16">
-        <div className="max-w-7xl mx-auto  sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           {/* Screen Grid with Separators */}
           <div className="flex flex-row items-center justify-center divide-x divide-gray-300 gap-1 md:gap-8 relative">
             {/* Desktop: 显示所有屏幕 */}
@@ -949,7 +828,7 @@ export default function LynoPage() {
               {/* 右侧：产品详细规格 */}
               <div className="space-y-4">
                 <div className="grid grid-cols-1 gap-3">
-                  {Object.entries(productDetails[selectedProduct].details).map(([key, value]) => (
+                  {Object.entries(productDetails[selectedProduct].details || {}).map(([key, value]) => (
                     <div key={key} className="flex justify-between py-2 border-b border-gray-200">
                       <span className="font-semibold text-gray-700 text-sm">{key}:</span>
                       <span className="text-gray-600 text-right text-sm max-w-xs whitespace-pre-line">{value}</span>
@@ -961,6 +840,142 @@ export default function LynoPage() {
           </div>
         </div>
       )}
+
+      {/* Additional Images Below Screen Section */}
+      <figure className="relative">
+        <Image
+          src={isDesktop ? "/lyno/LYNO PAGE-02.webp" : "/lyno/PHONE SIZE-02.webp"}
+          alt="UIS 7870 - The Smart Heart of Performance - 2.7Ghz 8 core 6nm Process with 204% CPU Boost and 240% GPU Boost"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          UIS 7870 processor featuring 2.7Ghz clock speed, 8 core architecture, 6nm manufacturing process, delivering 204% CPU Boost and 240% GPU Boost performance
+        </figcaption>
+      </figure>
+
+      <figure className="relative">
+        <Image
+          src={isDesktop ? "/lyno/LYNO PAGE-03.webp" : "/lyno/PHONE SIZE-03.webp"}
+          alt="Creative Mode - Customize themes, backgrounds and personalize your dashboard experience"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          Creative Mode lets you customize themes, backgrounds, and personalize your dashboard and multimedia experience to match your style and mood
+        </figcaption>
+      </figure>
+
+      <figure className="relative">
+        <Image
+          src={isDesktop ? "/lyno/LYNO PAGE-04.webp" : "/lyno/PHONE SIZE-04.webp"}
+          alt="Premium Audio System - AKM7739 DSP Experience Studio-Grade Audio, TDA7808 Hear the Road Feel the Power, OpAmp 5532*3 Built for Clarity"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          Crystal-Clear Voice with Digital Noise Blocking featuring AKM7739 DSP for Studio-Grade Audio, TDA7808 amplifier to Hear the Road and Feel the Power, OpAmp 5532*3 Built for Clarity and Tuned for Passion
+        </figcaption>
+      </figure>
+
+      <figure className="relative">
+        <Image
+          src={isDesktop ? "/lyno/LYNO PAGE-05.webp" : "/lyno/PHONE SIZE-05.webp"}
+          alt="Flexible UI Layout Mode - Customize arrangement, size, and position of widgets, media panels, and system controls"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          Flexible UI Layout Mode allows users to freely customize the arrangement, size, and position of on-screen elements such as widgets, media panels, navigation shortcuts, and system controls. This mode provides a personalized, modular dashboard that adapts to individual preferences and usage habits.
+        </figcaption>
+      </figure>
+
+      <figure className="relative">
+        <Image
+          src="/lyno/LYNO PAGE-06.webp"
+          alt="360° Vision, Zero Blind Spots - Complete real-time panoramic view for safety and control"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          Delivers a complete, real-time panoramic view of the surroundings, ensuring no area is left unseen. Perfect for safety, awareness, and total control.
+        </figcaption>
+      </figure>
+
+      <figure className="relative">
+        <Image
+          src={isDesktop ? "/lyno/LYNO PAGE-07.webp" : "/lyno/PHONE SIZE-07.webp"}
+          alt="More Plugins - Comprehensive dashboard with weather, trip info, TPMS, music, navigation and system controls"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          Advanced plugin system featuring weather updates, trip information, TPMS monitoring, music control, map navigation, energy flow monitoring, compass, and comprehensive vehicle data display
+        </figcaption>
+      </figure>
+
+      <figure className="relative">
+        <Image
+          src={isDesktop ? "/lyno/LYNO PAGE-08.webp" : "/lyno/PHONE SIZE-08.webp"}
+          alt="Stay Connected, Stay Focused - Seamless Android Auto and Apple CarPlay integration"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          Enjoy seamless access to your favorite apps, maps, calls, and music — all directly from your dashboard with Android Auto and Apple CarPlay
+        </figcaption>
+      </figure>
+
+      <figure className="relative">
+        <Image
+          src={isDesktop ? "/lyno/LYNO PAGE-09.webp" : "/lyno/PHONE SIZE-09.webp"}
+          alt="LYNO Advanced Features - Enhanced multimedia and connectivity capabilities"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          Experience advanced multimedia features and seamless connectivity with LYNO's enhanced capabilities
+        </figcaption>
+      </figure>
+
+      <figure className="relative">
+        <Image
+          src={isDesktop ? "/lyno/LYNO PAGE-10.webp" : "/lyno/PHONE SIZE-10.webp"}
+          alt="LYNO Complete Solution - Comprehensive entertainment and control system"
+          width={2400}
+          height={1600}
+          className="w-full h-auto"
+          quality={100}
+          sizes="100vw"
+        />
+        <figcaption className="sr-only">
+          A complete entertainment and control solution that transforms your driving experience
+        </figcaption>
+      </figure>
 
       <style jsx global>{`
         .screen-sizes-swiper {
@@ -983,6 +998,35 @@ export default function LynoPage() {
           cursor: not-allowed;
         }
       `}</style>
+
+      {/* Schema.org Product JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "LYNO - Flagship Android Car Player",
+            "image": "https://www.dragx.asia/home/lynobanner.webp",
+            "description": "LYNO flagship 6nm 8-core Android car player by DRAGX Malaysia. Featuring Wireless CarPlay, Android Auto, 2K QLED display, and audiophile DSP.",
+            "brand": {
+              "@type": "Brand",
+              "name": "DRAGX"
+            },
+            "category": "Car Electronics & Infotainment",
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "MYR",
+              "price": "1499",
+              "availability": "https://schema.org/InStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "DRAGX"
+              }
+            }
+          })
+        }}
+      />
     </>
   )
 }

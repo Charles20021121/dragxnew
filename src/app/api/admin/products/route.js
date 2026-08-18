@@ -57,6 +57,9 @@ export async function POST(request) {
     await connection.commit()
 
     revalidatePath('/products', 'layout')
+    revalidatePath('/products/silence', 'page')
+    revalidatePath('/products/soundproof', 'page')
+    revalidatePath('/', 'layout')
 
     return NextResponse.json({
       success: true,

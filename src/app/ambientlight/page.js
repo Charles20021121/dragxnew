@@ -159,12 +159,12 @@ export default function AmbientLightPage() {
               {index === 1 && (
                 <div className="hidden md:flex absolute inset-0 flex-col justify-start md:justify-center items-start md:items-end pt-[15%] md:pt-0 px-[8%] md:px-[10%]">
                   <div className="w-[90%] md:w-[45%] flex flex-col items-start">
-                    <h1
+                    <h2
                       className="font-bold text-white mb-2 lg:mb-4 tracking-wide whitespace-nowrap text-[6vw] md:text-[2.4vw]"
                       style={{ fontFamily: 'Geometos, sans-serif', lineHeight: '1.1' }}
                     >
                       AESTHETICS & LUXURY
-                    </h1>
+                    </h2>
                     <p
                       className="text-gray-200 text-left md:text-justify text-[3.5vw] md:text-[1.25vw]"
                       style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
@@ -179,12 +179,12 @@ export default function AmbientLightPage() {
                 <div className="hidden md:flex absolute inset-0 flex-col md:flex-row justify-start md:justify-center items-center pt-[5%] md:pt-0 px-[4%] md:px-[10%]">
                   {/* Left (Top on Mobile) */}
                   <div className="flex flex-col items-center text-center w-full md:w-[55%] mb-2 md:mb-0">
-                    <h1
+                    <h2
                       className="font-bold text-white mb-1 md:mb-4 tracking-wide whitespace-nowrap text-[5vw] md:text-[2.4vw]"
                       style={{ fontFamily: 'Geometos, sans-serif', lineHeight: '1.1' }}
                     >
                       PERSONALIZATION
-                    </h1>
+                    </h2>
                     <p
                       className="text-gray-200 mb-3 md:mb-10 text-[2.5vw] md:text-[1.15vw]"
                       style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
@@ -239,12 +239,12 @@ export default function AmbientLightPage() {
 
               {index === 3 && (
                 <div className="hidden md:flex absolute inset-0 justify-center items-center">
-                  <h1
+                  <h2
                     className="absolute top-[8%] lg:top-[5%] font-bold text-white tracking-wide text-center text-[6vw] md:text-[2.4vw]"
                     style={{ fontFamily: 'Geometos, sans-serif', lineHeight: '1.2' }}
                   >
                     ENHANCED VISIBILITY<br className="block md:hidden" /> AND SAFETY
-                  </h1>
+                  </h2>
                   <p
                     className="absolute bottom-[8%] lg:bottom-[5%] text-gray-200 text-left md:text-center italic w-full px-[8%] md:px-[10%] text-[3.5vw] md:text-[1.25vw]"
                     style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
@@ -258,12 +258,12 @@ export default function AmbientLightPage() {
                 <div className="hidden md:flex absolute inset-0 flex-col items-center justify-between py-[8%] md:py-[6%] lg:py-[5%] px-[5%] lg:px-[10%]">
                   {/* Top Header */}
                   <div className="flex flex-col items-center text-center w-full">
-                    <h1
+                    <h2
                       className="font-bold text-white mb-1 md:mb-2 tracking-wide whitespace-nowrap text-[6vw] md:text-[2.4vw]"
                       style={{ fontFamily: 'Geometos, sans-serif', lineHeight: '1.1' }}
                     >
                       OEM AMBIENT LIGHT
-                    </h1>
+                    </h2>
                     <p
                       className="text-gray-200 text-[2.8vw] md:text-[1.25vw] px-[4%] md:px-0"
                       style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
@@ -343,12 +343,12 @@ export default function AmbientLightPage() {
                 <div className="hidden md:flex absolute inset-0 flex-col items-center justify-between py-[8%] md:py-[6%] lg:py-[5%] px-[5%] lg:px-[10%]">
                   {/* Top Header */}
                   <div className="flex flex-col items-center text-center w-full">
-                    <h1
+                    <h2
                       className="font-bold text-white mb-1 md:mb-2 tracking-wide whitespace-nowrap text-[6vw] md:text-[2.4vw]"
                       style={{ fontFamily: 'Geometos, sans-serif', lineHeight: '1.1' }}
                     >
                       UNIVERSAL AMBIENT LIGHT
-                    </h1>
+                    </h2>
                     <p
                       className="text-gray-200 text-[2.8vw] md:text-[1.25vw] px-[4%] md:px-0"
                       style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', lineHeight: '1.5' }}
@@ -427,12 +427,12 @@ export default function AmbientLightPage() {
               {index === 6 && (
                 <div className="flex flex-col items-center justify-center py-12 md:py-24 lg:py-32 px-[5%] lg:px-[10%] w-full min-h-[40vh]">
                   {/* Title */}
-                  <h1
+                  <h2
                     className="font-bold text-white tracking-wide text-center whitespace-nowrap text-[6vw] md:text-[3vw] lg:text-[2.4vw] mb-8 md:mb-12"
                     style={{ fontFamily: 'Geometos-Black, Geometos, sans-serif', lineHeight: '1.2' }}
                   >
                     CUSTOMIZED BASED ON<br className="block md:hidden" /> YOUR CAR MODEL
-                  </h1>
+                  </h2>
 
                   {/* Logo Layout - DESKTOP: 2 rows | MOBILE: original layout */}
                   <div className="flex flex-col items-center w-full lg:w-[95%] mb-12 md:mb-16">
@@ -577,15 +577,27 @@ export default function AmbientLightPage() {
         ))}
       </div>
 
-      {/* SEO Content - Hidden from visual display but readable by search engines */}
-      <div className="sr-only">
-        <h1>Ambient Light - Premium Car Interior Lighting System by DRAGX</h1>
-        <h2>Transform Your Car Interior with Advanced Ambient Lighting</h2>
-        <section>
-          <h3>Ambient Light Premium System</h3>
-          <p>Upgrade your vehicle's interior with Ambient Light, the premium car lighting system designed to create the perfect atmosphere. Our advanced RGB ambient lighting system offers customizable colors, effects, and brightness levels to match your mood and style.</p>
-        </section>
-      </div>
+      {/* Schema.org Service JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": "DX Ambient Light Installation & Customization",
+            "provider": {
+              "@type": "Organization",
+              "name": "DRAGX"
+            },
+            "serviceType": "Automotive Interior Lighting",
+            "description": "Custom car ambient light installation in Malaysia. Offering 64-128 color RGB lighting, music synchronization, OEM factory integration, and smartphone app control.",
+            "areaServed": {
+              "@type": "Country",
+              "name": "Malaysia"
+            }
+          })
+        }}
+      />
     </div>
   )
 }

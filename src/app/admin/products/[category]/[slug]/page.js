@@ -32,6 +32,8 @@ export default function ProductPage({ params: paramsPromise }) {
     date: new Date().toISOString().replace('T', ' ').split('.')[0]
   });
   const [existingFilters, setExistingFilters] = useState([]);
+  const [existingAndroidSeries, setExistingAndroidSeries] = useState([]);
+  const [customAndroidSeriesMode, setCustomAndroidSeriesMode] = useState(false);
   const [showImageOffcanvas, setShowImageOffcanvas] = useState(false);
   const [newImageData, setNewImageData] = useState({
     Name: '',
@@ -100,6 +102,13 @@ export default function ProductPage({ params: paramsPromise }) {
           relatedImages
         });
 
+        // 提取目前在产品中实际存在的所有 android_series 系列
+        const seriesList = [...new Set(products
+          .map(p => p.android_series)
+          .filter(s => s && s.trim() !== '')
+        )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+        setExistingAndroidSeries(seriesList);
+
         // Extract unique custom filter values from all products in this category
         const filters = [...new Set(products
           .filter(p => p.custom_filter)
@@ -141,6 +150,15 @@ export default function ProductPage({ params: paramsPromise }) {
         price: product.price || '',
         date: product.date || new Date().toISOString().replace('T', ' ').split('.')[0]
       });
+
+      const PRESETS = [
+        'Advance_series', 'Android_Ai_Box', 'Cyber_series', 'Diamond_series',
+        'Exclusive_series', 'Luxury_series', 'Performance_series', 'Signature_40',
+        'TRONMMEXT_EI_series', 'TRONMMEXT_ES_series', 'Ultra_series', 'Others', ''
+      ];
+      if (product.android_series && !PRESETS.includes(product.android_series)) {
+        setCustomAndroidSeriesMode(true);
+      }
     }
   }, [product, category]);
 
@@ -714,34 +732,57 @@ export default function ProductPage({ params: paramsPromise }) {
                         </div>
                       )}
 
-                      {/* 只在 androidplayer 類別顯示 android series 選項 */}
-                      {formData.categories.toLowerCase() === 'androidplayer' && (
+                      {/* 只在 androidplayer 且 System Type 为 Android Player 时顯示 android series 選項 */}
+                      {formData.categories.toLowerCase() === 'androidplayer' && formData.filter1 === 'androidPlayer' && (
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">Android Series</label>
-                          <select
-                            name="android_series"
-                            value={formData.android_series || ""}
-                            onChange={handleChange}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434]"
-                          >
-                            <option value="">Select Android Series</option>
-                            <option value="Advance_series">Advance series</option>
-                            <option value="Android_Ai_Box">Android Ai Box</option>
-                            <option value="Cyber_series">Cyber series</option>
-                            <option value="Diamond_series">Diamond series</option>
-                            <option value="Exclusive_series">Exclusive series</option>
-                            <option value="Luxury_series">Luxury series</option>
-                            <option value="Performance_series">Performance series</option>
-                            <option value="Signature_40">40 Series</option>
-                            <option value="TRONMMEXT_EI_series">TRONMMEXT EI series</option>
-                            <option value="TRONMMEXT_ES_series">TRONMMEXT ES series</option>
-                            <option value="Ultra_series">Ultra series</option>
-                            <option value="Others">Others</option>
-                          </select>
+                          <div className="flex justify-between items-center mb-1">
+                            <label className="block text-sm font-medium text-gray-700">Android Series</label>
+                            <button
+                              type="button"
+                              onClick={() => setCustomAndroidSeriesMode(prev => !prev)}
+                              className="text-xs text-[#1c5434] font-bold hover:underline cursor-pointer"
+                            >
+                              {customAndroidSeriesMode ? '← Select from list' : '+ Custom series name'}
+                            </button>
+                          </div>
+
+                          {customAndroidSeriesMode ? (
+                            <input
+                              type="text"
+                              name="android_series"
+                              value={formData.android_series || ''}
+                              onChange={handleChange}
+                              placeholder="Type your custom Android Series name..."
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434] text-sm"
+                            />
+                          ) : (
+                            <select
+                              name="android_series"
+                              value={formData.android_series || ""}
+                              onChange={(e) => {
+                                if (e.target.value === '__custom__') {
+                                  setCustomAndroidSeriesMode(true);
+                                  setFormData(prev => ({ ...prev, android_series: '' }));
+                                } else {
+                                  handleChange(e);
+                                }
+                              }}
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#1c5434] focus:border-[#1c5434] text-sm"
+                            >
+                              <option value="">Select Android Series</option>
+                              {existingAndroidSeries.map((s) => (
+                                <option key={s} value={s}>
+                                  {s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                                </option>
+                              ))}
+                              <option value="__custom__" className="font-bold text-[#1c5434]">+ Type new custom series name...</option>
+                            </select>
+                          )}
                         </div>
                       )}
 
-                      {['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'silence', 'others'].includes(formData.categories.toLowerCase()) && (
+                      {/* Custom Filter Category - 只在特定類別或 Android Screen 顯示 */}
+                      {(['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'silence', 'others'].includes(formData.categories.toLowerCase()) || (formData.categories.toLowerCase() === 'androidplayer' && formData.filter1 === 'contiAndroid')) && (
                         <div>
                           <div className="flex justify-between items-center">
                             <label className="block text-sm font-medium text-gray-700">

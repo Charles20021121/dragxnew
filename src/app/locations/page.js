@@ -152,6 +152,36 @@ export default function Locations() {
           </div>
         </motion.div>
       </div>
+
+      {/* Schema.org LocalBusiness / AutoPartsStore for all branches */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": locations
+              .filter((loc) => loc.address)
+              .map((loc) => ({
+                "@type": "AutoPartsStore",
+                "name": loc.name,
+                "url": "https://www.dragx.asia/locations",
+                "telephone": "+60192776056",
+                "priceRange": "$$",
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": loc.address,
+                  "addressCountry": "MY"
+                },
+                "hasMap": loc.mapLink,
+                "parentOrganization": {
+                  "@type": "Organization",
+                  "name": "DRAGX",
+                  "url": "https://www.dragx.asia/"
+                }
+              }))
+          })
+        }}
+      />
     </div>
   )
 }

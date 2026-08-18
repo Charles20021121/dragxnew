@@ -6,9 +6,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingSpinner from './LoadingSpinner';
 import { useState, useEffect } from 'react';
 import { FaFilter } from "react-icons/fa";
+import { useProduct } from '@/contexts/ProductContext';
+import SilencePricingSection from './SilencePricingSection';
+import SilenceTailoredSolutionsSection from './SilenceTailoredSolutionsSection';
+import SilenceCuratedSolutionsSection from './SilenceCuratedSolutionsSection';
+import SilenceAudioSystemsSection from './SilenceAudioSystemsSection';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import { useProduct } from '@/contexts/ProductContext';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -80,6 +84,7 @@ const androidSeries = [
 export default function ProductCategoryPage({
   title,
   products,
+  silencePrices = [],
   categoryPath,
   isAdmin,
   onDelete,
@@ -104,13 +109,17 @@ export default function ProductCategoryPage({
   const [searchQuery, setSearchQuery] = useState('');
 
   // Categories that support custom filtering
-  const customFilterCategories = ['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others'];
+  const customFilterCategories = ['ambientlight', 'alphardvellfire', 'bmw', 'mercedes', 'powerboot', '360camera', 'others', 'androidplayer'];
   const isCustomFilterEnabled = customFilterCategories.includes(categoryPath?.toLowerCase());
 
-  // Extract unique custom filter values from products
+  // Extract unique custom filter values from products (completely dynamic, no hardcoded models)
   const customFilterOptions = (() => {
-    const uniqueFilters = [...new Set(products
-      .filter(p => p.id == p.same && p.custom_filter)
+    const targetProducts = (categoryPath === 'androidplayer' && androidFilter === 'contiAndroid')
+      ? products.filter(p => p.filter1 === 'contiAndroid' && p.id == p.same)
+      : products.filter(p => p.id == p.same);
+
+    const uniqueFilters = [...new Set(targetProducts
+      .filter(p => p.custom_filter && p.custom_filter.trim() !== '')
       .map(p => p.custom_filter)
     )];
 
@@ -133,12 +142,13 @@ export default function ProductCategoryPage({
       return a.localeCompare(b, undefined, { numeric: true });
     });
 
-    const hasUncategorized = products.some(p => p.id == p.same && (!p.custom_filter || p.custom_filter.trim() === ''));
+    const result = ['all', ...uniqueFilters];
+    const hasUncategorized = targetProducts.some(p => (!p.custom_filter || p.custom_filter.trim() === ''));
     if (hasUncategorized) {
-      uniqueFilters.push('uncategorized');
+      result.push('uncategorized');
     }
 
-    return [...uniqueFilters, 'all'];
+    return result;
   })();
 
   // 当 URL 查询参数改变时更新过滤器
@@ -148,9 +158,7 @@ export default function ProductCategoryPage({
       setAndroidFilter(filter);
     }
     const customFilter = searchParams.get('filter');
-    if (customFilter) {
-      setSelectedCustomFilter(customFilter);
-    }
+    setSelectedCustomFilter(customFilter || 'all');
   }, [searchParams]);
 
   // 处理 URL hash 滚动到对应系列
@@ -243,6 +251,19 @@ export default function ProductCategoryPage({
           return typeMatch && carMatch && isMainImage && searchFilter(product);
         })
         .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+    } else if (categoryPath === "androidplayer" && androidFilter === "contiAndroid") {
+      return products
+        .filter(product => {
+          const isMainImage = product.id == product.same;
+          const typeMatch = product.filter1 === 'contiAndroid';
+          const customFilterMatch = 
+            selectedCustomFilter === 'all' ||
+            (selectedCustomFilter === 'uncategorized' 
+              ? (!product.custom_filter || product.custom_filter.trim() === '') 
+              : (product.custom_filter && product.custom_filter.toLowerCase() === selectedCustomFilter.toLowerCase()));
+          return isMainImage && typeMatch && customFilterMatch && searchFilter(product);
+        })
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
     } else {
       return products
         .filter(product => {
@@ -282,29 +303,49 @@ export default function ProductCategoryPage({
 
     const productsBySeries = {};
 
-    // 为每个系列创建分组
+    // 1. 先为预设系列创建分组（保留原有顺序）
+    const presetValues = new Set();
     androidSeries.forEach(series => {
       if (series.value === 'all') return; // 跳过 "All Series"
+      presetValues.add(series.value);
 
       if (series.value === 'uncategorized') {
-        productsBySeries[series.value] = {
-          label: series.label,
-          products: filteredProducts.filter(product =>
-            !product.android_series || product.android_series === '' || product.android_series === null
-          )
-        };
+        const matching = filteredProducts.filter(product =>
+          !product.android_series || product.android_series === '' || product.android_series === null
+        );
+        if (matching.length > 0) {
+          productsBySeries[series.value] = {
+            label: series.label,
+            products: matching
+          };
+        }
       } else {
-        productsBySeries[series.value] = {
-          label: series.label,
-          products: filteredProducts.filter(product => product.android_series === series.value)
-        };
+        const matching = filteredProducts.filter(product => product.android_series === series.value);
+        if (matching.length > 0) {
+          productsBySeries[series.value] = {
+            label: series.label,
+            products: matching
+          };
+        }
       }
     });
 
-    // 只返回有产品的系列
-    return Object.fromEntries(
-      Object.entries(productsBySeries).filter(([key, value]) => value.products.length > 0)
-    );
+    // 2. 动态扫描所有自定义 Series（支持任意自定义输入的系列名，如 'test'、'Quantum Series' 等）
+    filteredProducts.forEach(product => {
+      const sVal = product.android_series;
+      if (sVal && !presetValues.has(sVal)) {
+        if (!productsBySeries[sVal]) {
+          const formattedLabel = sVal.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+          productsBySeries[sVal] = {
+            label: formattedLabel,
+            products: []
+          };
+        }
+        productsBySeries[sVal].products.push(product);
+      }
+    });
+
+    return productsBySeries;
   };
 
   const getSoundproofProductsBySeries = () => {
@@ -353,6 +394,32 @@ export default function ProductCategoryPage({
       Object.entries(productsBySeries).filter(([key, value]) => value.products.length > 0)
     );
   };
+
+  const categorizedSilenceProducts = (() => {
+    if (categoryPath !== 'silence') return {};
+    const sortSilenceByCarType = (a, b) => {
+      const filterA = (a.filter1 || '').toLowerCase();
+      const filterB = (b.filter1 || '').toLowerCase();
+      const rank = { hatchback: 1, sedan: 2, suv: 3, mpv: 4 };
+      return (rank[filterA] || 5) - (rank[filterB] || 5);
+    };
+
+    const safeList = Array.isArray(products) ? products : [];
+    return {
+      'COMFORT': safeList.filter(p => {
+        const name = (p.name || '').toLowerCase();
+        return name.includes('comfort') && !name.includes('max');
+      }).sort(sortSilenceByCarType),
+      'COMFORT MAX': safeList.filter(p => {
+        const name = (p.name || '').toLowerCase();
+        return name.includes('comfort max');
+      }).sort(sortSilenceByCarType),
+      'ACOUSTIC PROMAX': safeList.filter(p => {
+        const name = (p.name || '').toLowerCase();
+        return name.includes('acoustic promax') || name.includes('promax');
+      }).sort(sortSilenceByCarType)
+    };
+  })();
 
   const androidProductsBySeries = getAndroidProductsBySeries();
   const soundproofProductsBySeries = getSoundproofProductsBySeries();
@@ -466,25 +533,25 @@ export default function ProductCategoryPage({
         )}
 
         {categoryPath === "silence" && (
-          <div className="flex justify-center mb-8 px-2">
-            <div className="inline-flex rounded-md bg-white p-1 shadow-sm w-full max-w-2xl">
+          <div className="flex justify-center mb-5 md:mb-8 px-2">
+            <div className="inline-flex rounded-xl bg-white border-2 border-[#1c5434]/30 p-1 shadow-xs w-full max-w-xl">
               <button
                 onClick={() => setSoundproofFilter('silence')}
-                className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${soundproofFilter === 'silence'
-                  ? 'bg-[#1c5434] text-white'
-                  : 'text-gray-500 hover:text-[#1c5434]'
+                className={`flex-1 py-2.5 sm:py-3 px-4 text-xs sm:text-sm md:text-base font-extrabold rounded-lg transition-all duration-300 whitespace-nowrap uppercase tracking-wider ${soundproofFilter === 'silence'
+                  ? 'bg-[#1c5434] text-white shadow-sm'
+                  : 'text-gray-600 hover:text-[#1c5434]'
                   }`}
               >
-                SOUNDPROOF
+                SOUNDPROOFING
               </button>
               <button
                 onClick={() => setSoundproofFilter('audio')}
-                className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${soundproofFilter === 'audio'
-                  ? 'bg-[#1c5434] text-white'
-                  : 'text-gray-500 hover:text-[#1c5434]'
+                className={`flex-1 py-2.5 sm:py-3 px-4 text-xs sm:text-sm md:text-base font-extrabold rounded-lg transition-all duration-300 whitespace-nowrap uppercase tracking-wider ${soundproofFilter === 'audio'
+                  ? 'bg-[#1c5434] text-white shadow-sm'
+                  : 'text-gray-600 hover:text-[#1c5434]'
                   }`}
               >
-                AUDIO
+                AUDIO SYSTEMS
               </button>
             </div>
           </div>
@@ -544,7 +611,7 @@ export default function ProductCategoryPage({
                     </h3>
                     <button
                       onClick={() => setIsFilterOpen(false)}
-                      className="text-gray-400 hover:text-gray-500"
+                      className="text-gray-400 hover:text-gray-500 cursor-pointer"
                     >
                       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -555,40 +622,45 @@ export default function ProductCategoryPage({
                   <div className="space-y-2">
                     {categoryPath === "contidecoder" || categoryPath === "silence" ? (
                       /* Car Models or Types */
-                      (categoryPath === "contidecoder" ? carModels : carTypes).map(model => (
+                      (categoryPath === "silence" ? carTypes : carModels).map(model => (
                         <button
                           key={model}
                           onClick={() => {
                             setCarFilter(model);
                             setIsFilterOpen(false);
                           }}
-                          className={`w-full px-4 py-2 text-left rounded-md transition-colors capitalize ${carFilter === model
-                            ? 'bg-[#1c5434] text-white'
+                          className={`w-full px-4 py-2 text-left rounded-md transition-colors capitalize cursor-pointer ${carFilter === model
+                            ? 'bg-[#1c5434] text-white font-bold'
                             : 'text-gray-700 hover:bg-gray-100'
                             }`}
                         >
-                          {model === 'all' ? (categoryPath === "contidecoder" ? 'All Models' : 'All Types') : model}
+                          {model === 'all' ? (categoryPath === "silence" ? 'All Types' : 'All Models') : model}
                         </button>
                       ))
                     ) : (
-                      /* Custom Filters for other categories */
+                      /* Dynamic Custom Filters for categories (only existing categories + uncategorized) */
                       customFilterOptions.map(option => (
                         <button
                           key={option}
                           onClick={() => {
                             setSelectedCustomFilter(option);
                             setIsFilterOpen(false);
-                            // Reset pagination when filter changes
+                            // Update URL params
                             const params = new URLSearchParams(searchParams);
                             params.set('page', '1');
+                            if (option === 'all') {
+                              params.delete('filter');
+                            } else {
+                              params.set('filter', option);
+                            }
                             router.push(`?${params.toString()}`);
                           }}
-                          className={`w-full px-4 py-2 text-left rounded-md transition-colors capitalize ${selectedCustomFilter === option
-                            ? 'bg-[#1c5434] text-white'
+                          className={`w-full px-4 py-2 text-left rounded-md transition-colors capitalize cursor-pointer ${selectedCustomFilter === option
+                            ? 'bg-[#1c5434] text-white font-bold'
                             : 'text-gray-700 hover:bg-gray-100'
                             }`}
                         >
-                          {option === 'all' ? 'All Models' : option}
+                          {option === 'all' ? 'All Models' : option === 'uncategorized' ? 'Uncategorized' : option}
                         </button>
                       ))
                     )}
@@ -634,62 +706,62 @@ export default function ProductCategoryPage({
           </div>
         )}
 
-        {/* Title Section */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-5">
-            <motion.h2
-              className="text-[#023f1b] font-bold text-[clamp(18px,2vw,24px)] uppercase"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              {categoryPath === "androidplayer"
-                ? (androidFilter === 'androidPlayer' ? 'ANDROID PLAYER' : 'ANDROID SCREEN')
-                : categoryPath === "contidecoder"
-                  ? `${contiFilter === 'appleCarplay' ? 'APPLE CARPLAY' : 'ANDROID SYSTEM'}`
-                  : categoryPath === "silence"
-                    ? (soundproofFilter === 'silence' ? 'SOUNDPROOF' : soundproofFilter.toUpperCase())
-                    : formatCategoryName(title)
-              }
-            </motion.h2>
-
-            {/* 漏斗按鈕 - contidecoder 或 silence 或 custom filter */}
-            {(categoryPath === "contidecoder" || categoryPath === "silence" || (isCustomFilterEnabled && customFilterOptions.length > 1)) && (
-              <button
-                onClick={() => setIsFilterOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white rounded-md shadow-sm hover:bg-gray-50 transition-colors"
+        {/* Title and Filter Section */}
+        {categoryPath !== "silence" && (
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-5">
+              <motion.h2
+                className="text-[#023f1b] font-bold text-[clamp(18px,2vw,24px)] uppercase"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#1c5434]">
-                  <path d="M10 5H3"/>
-                  <path d="M12 19H3"/>
-                  <path d="M14 3v4"/>
-                  <path d="M16 17v4"/>
-                  <path d="M21 12h-9"/>
-                  <path d="M21 19h-5"/>
-                  <path d="M21 5h-7"/>
-                  <path d="M8 10v4"/>
-                  <path d="M8 12H3"/>
-                </svg>
-                <span className="text-sm font-medium text-gray-700 capitalize">
-                  Filter
-                </span>
-              </button>
-            )}
+                {categoryPath === "androidplayer"
+                  ? (androidFilter === 'androidPlayer' ? 'ANDROID PLAYER' : 'ANDROID SCREEN')
+                  : categoryPath === "contidecoder"
+                    ? `${contiFilter === 'appleCarplay' ? 'APPLE CARPLAY' : 'ANDROID SYSTEM'}`
+                    : categoryPath === "silence"
+                      ? 'AUDIO SYSTEMS'
+                      : formatCategoryName(title)
+                }
+              </motion.h2>
+
+              {/* 漏斗按鈕 - contidecoder 或 android screen (contiAndroid) 或 silence (audio) 或 custom filter */}
+              {(categoryPath === "contidecoder" || (categoryPath === "androidplayer" && androidFilter === "contiAndroid") || (categoryPath === "silence" && soundproofFilter === 'audio') || (isCustomFilterEnabled && customFilterOptions.length > 1)) && (
+                <button
+                  onClick={() => setIsFilterOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white rounded-md shadow-sm hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#1c5434]">
+                    <path d="M10 5H3"/>
+                    <path d="M12 19H3"/>
+                    <path d="M14 3v4"/>
+                    <path d="M16 17v4"/>
+                    <path d="M21 12h-9"/>
+                    <path d="M21 19h-5"/>
+                    <path d="M21 5h-7"/>
+                    <path d="M8 10v4"/>
+                    <path d="M8 12H3"/>
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700 capitalize">
+                    Filter
+                  </span>
+                </button>
+              )}
+            </div>
+
+            <motion.div
+              className="h-[1px] bg-[#023f1b] w-full opacity-50"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              style={{ transformOrigin: 'left' }}
+            />
           </div>
-
-          <motion.div
-            className="h-[1px] bg-[#023f1b] w-full opacity-50"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            style={{ transformOrigin: 'left' }}
-          />
-        </div>
-
-
+        )}
 
         {/* Top Pagination */}
-        {categoryPath !== "androidplayer" && categoryPath !== "silence" && totalPages > 1 && (
+        {((categoryPath !== "androidplayer" || androidFilter === "contiAndroid") && categoryPath !== "silence") && totalPages > 1 && (
           <div className="flex justify-center items-center gap-4 mb-8">
             <button
               onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
@@ -719,9 +791,23 @@ export default function ProductCategoryPage({
           </div>
         )}
 
-        {/* Products Display - Android Player / Silence 使用分层显示，其他使用网格 */}
-        {categoryPath === "androidplayer" || categoryPath === "silence" ? (
-          /* Android Player / Silence 分层显示 */
+        {/* Products Display */}
+        {categoryPath === "silence" && soundproofFilter === "silence" ? (
+          <div>
+            <div className="-mx-2 md:-mx-5">
+              <SilencePricingSection silencePrices={silencePrices} theme="light" />
+            </div>
+            <SilenceTailoredSolutionsSection products={products} silencePrices={silencePrices} />
+            <SilenceCuratedSolutionsSection 
+              categorizedProducts={categorizedSilenceProducts} 
+              products={products}
+              silencePrices={silencePrices} 
+            />
+          </div>
+        ) : categoryPath === "silence" && soundproofFilter === "audio" ? (
+          <SilenceAudioSystemsSection products={products} />
+        ) : categoryPath === "androidplayer" && androidFilter === "androidPlayer" ? (
+          /* Android Player / Silence Audio 分层显示 */
           <div>
             {loading ? (
               <div className="flex justify-center items-center py-20">
@@ -977,7 +1063,7 @@ export default function ProductCategoryPage({
         )}
 
         {/* Bottom Pagination */}
-        {categoryPath !== "androidplayer" && totalPages > 1 && (
+        {(categoryPath !== "androidplayer" || androidFilter === "contiAndroid") && totalPages > 1 && (
           <div className="flex justify-center items-center gap-4 py-12">
             <button
               onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}

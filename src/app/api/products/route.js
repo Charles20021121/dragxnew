@@ -20,12 +20,71 @@ const parseAdditionalImages = (str) =>
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
     const category = searchParams.get('category');
     const slug = searchParams.get('slug');
     const listOnly = searchParams.get('list') === 'true';
 
     const connection = await pool.getConnection();
     await connection.query('SET SESSION group_concat_max_len = 1000000');
+
+    // ─── SINGLE PRODUCT BY ID (?id=xxx) ──────────────────────────────────────
+    if (id) {
+      const query = `
+        SELECT
+          p1.*,
+          GROUP_CONCAT(
+            CASE
+              WHEN p2.same = p1.same THEN CONCAT(p2.Id, '|', p2.Name, '|', p2.Url, '|', p2.publicId, '|', p2.date)
+            END
+            ORDER BY p2.date ASC
+            SEPARATOR '|||'
+          ) as additional_images
+        FROM products p1
+        LEFT JOIN products p2
+          ON p1.same IS NOT NULL
+          AND p1.same != ''
+          AND p2.same = p1.same
+          AND p2.Id != p1.Id
+        WHERE p1.Id = ?
+        GROUP BY p1.Id
+      `;
+
+      const [rows] = await connection.query(query, [id]);
+      connection.release();
+
+      if (!rows || rows.length === 0) {
+        return NextResponse.json(null, { status: 404 });
+      }
+
+      const match = rows[0];
+      const extraList = parseAdditionalImages(match.additional_images);
+
+      return NextResponse.json({
+        id: match.Id,
+        Id: match.Id,
+        name: match.Name,
+        Name: match.Name,
+        categories: match.categories,
+        image: match.Url,
+        Url: match.Url,
+        date: match.date,
+        sort_order: match.sort_order,
+        price: match.price,
+        additional_images: extraList,
+        additionalImages: extraList,
+        buy: match.buy,
+        specifications: match.Specifications,
+        Specifications: match.Specifications,
+        description: match.description,
+        publicId: match.publicId,
+        filter: match.filter,
+        filter1: match.filter1,
+        android_series: match.android_series,
+        custom_filter: match.custom_filter,
+        same: match.same,
+      });
+    }
 
     // ─── SINGLE PRODUCT DETAIL  (?category=xxx&slug=yyy) ─────────────────────
     // Only fetches main-image rows (Id = same) in that category, then matches
@@ -92,7 +151,9 @@ export async function GET(request) {
     }
 
     // ─── CATEGORY PAGE  (?category=xxx) ──────────────────────────────────────
+    // ─── CATEGORY PAGE  (?category=xxx) ──────────────────────────────────────
     if (category) {
+      const isSilence = category.toLowerCase() === 'silence' || category.toLowerCase() === 'soundproof';
       const query = `
         SELECT
           p1.*,
@@ -109,12 +170,14 @@ export async function GET(request) {
           AND p1.same != ''
           AND p2.same = p1.same
           AND p2.Id != p1.Id
-        WHERE p1.categories = ?
+        WHERE ${isSilence ? "(p1.categories = 'silence' OR p1.categories = 'soundproof')" : "p1.categories = ?"}
         GROUP BY p1.Id
         ORDER BY p1.date DESC
       `;
 
-      const [products] = await connection.query(query, [category]);
+      const [products] = isSilence 
+        ? await connection.query(query)
+        : await connection.query(query, [category]);
       connection.release();
 
       const formatted = products

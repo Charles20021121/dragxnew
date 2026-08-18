@@ -64,17 +64,17 @@ export default function AdminPage() {
             </motion.div>
           </Link>
 
-          <Link href="/admin/silence-prices">
+          <Link href="/admin/products/lyno">
             <motion.div 
               className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
               <h2 className="text-xl font-bold text-[#1c5434] mb-2">
-                Silence Prices Management
+                LYNO Management
               </h2>
               <p className="text-gray-600">
-                Manage pricing for Silence packages (BASIC, STANDARD, PRO) and Comfort series.
+                Manage LYNO screen sizes (inches), model tiers, RAM/ROM specs, product showcase photos, and technical specifications.
               </p>
             </motion.div>
           </Link>
