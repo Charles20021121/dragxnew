@@ -166,16 +166,26 @@ export default function Locations() {
                 "name": loc.name,
                 "url": "https://www.dragx.asia/locations",
                 "telephone": "+60192776056",
+                "logo": "https://www.dragx.asia/logo.webp",
                 "priceRange": "$$",
                 "address": {
                   "@type": "PostalAddress",
                   "streetAddress": loc.address,
                   "addressCountry": "MY"
                 },
+                "openingHoursSpecification": [
+                  {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                    "opens": "10:00",
+                    "closes": "19:00"
+                  }
+                ],
                 "hasMap": loc.mapLink,
                 "parentOrganization": {
                   "@type": "Organization",
                   "name": "DRAGX",
+                  "legalName": "EXT AUTO SUPPLY SDN BHD",
                   "url": "https://www.dragx.asia/"
                 }
               }))

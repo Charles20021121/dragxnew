@@ -24,6 +24,11 @@ export const metadata = {
   metadataBase: new URL(getBaseUrl()),
   title: "DRAGX",
   description: "Car Accessories",
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/logo.webp',
+  },
 };
 
 // 添加 Cloudinary 配置到 metadata
@@ -46,7 +51,7 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-GKHQ6L6YMD');
           `
         }} />
-        {/* JSON-LD for WebSite, Organization, and LocalBusiness */}
+        {/* JSON-LD for WebSite and Organization (Brand Level) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -69,8 +74,11 @@ export default function RootLayout({ children }) {
                   "@type": "Organization",
                   "@id": "https://www.dragx.asia/#organization",
                   "name": "DRAGX",
+                  "legalName": "EXT AUTO SUPPLY SDN BHD",
                   "url": "https://www.dragx.asia/",
-                  "logo": "https://www.dragx.asia/logo.png",
+                  "logo": "https://www.dragx.asia/logo.webp",
+                  "email": "dragxhq@gmail.com",
+                  "description": "Malaysia's leading car accessories and automotive solutions provider. Specializing in Android players, ambient lights, power boots, 360 cameras, and soundproofing across multiple locations in Malaysia.",
                   "contactPoint": {
                     "@type": "ContactPoint",
                     "telephone": "+60192776056",
@@ -79,48 +87,8 @@ export default function RootLayout({ children }) {
                     "availableLanguage": ["English", "Malay", "Chinese"]
                   },
                   "sameAs": [
-                    "https://www.facebook.com/dragx.asia",
-                    "https://www.instagram.com/dragx.asia"
-                  ]
-                },
-                {
-                  "@type": "AutoPartsStore",
-                  "@id": "https://www.dragx.asia/#store",
-                  "name": "DRAGX - Malaysia's #1 Car Accessories",
-                  "url": "https://www.dragx.asia/",
-                  "telephone": "+60192776056",
-                  "logo": "https://www.dragx.asia/logo.png",
-                  "image": "https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/dragx/dragx/epz5butosofn5h6jxvqu.webp",
-                  "description": "Malaysia's leading car accessories and automotive solutions provider. Specializing in Android players, ambient lights, power boots, 360 cameras, and soundproofing.",
-                  "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "28, Jalan Jejaka 9, Maluri",
-                    "addressLocality": "Cheras",
-                    "addressRegion": "Kuala Lumpur",
-                    "postalCode": "55100",
-                    "addressCountry": "MY"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 3.1278,
-                    "longitude": 101.7289
-                  },
-                  "openingHoursSpecification": [
-                    {
-                      "@type": "OpeningHoursSpecification",
-                      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-                      "opens": "10:00",
-                      "closes": "19:00"
-                    }
-                  ],
-                  "areaServed": {
-                    "@type": "Country",
-                    "name": "Malaysia"
-                  },
-                  "priceRange": "$$",
-                  "sameAs": [
-                    "https://www.facebook.com/dragx.asia",
-                    "https://www.instagram.com/dragx.asia"
+                    "https://www.facebook.com/people/DragX-ZhenZhen/61553220925855/",
+                    "https://www.tiktok.com/@yaphongzhen"
                   ]
                 }
               ]
