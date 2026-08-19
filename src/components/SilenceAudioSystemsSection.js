@@ -7,56 +7,26 @@ const brands = [
   {
     id: 'ALPINE',
     name: 'ALPINE',
-    logo: (
-      <svg viewBox="0 0 160 32" className="h-6 sm:h-7 md:h-9 w-auto">
-        {/* 5 Alpine Stripes */}
-        <path d="M4 24 L11 7 L15 7 L8 24 Z" fill="#0055b8" />
-        <path d="M14 24 L21 7 L25 7 L18 24 Z" fill="#0055b8" />
-        <path d="M24 24 L31 7 L35 7 L28 24 Z" fill="#0055b8" />
-        <path d="M34 24 L41 7 L45 7 L38 24 Z" fill="#0055b8" />
-        <path d="M44 24 L51 7 L55 7 L48 24 Z" fill="#0055b8" />
-        {/* ALPINE Text */}
-        <text x="60" y="22" fill="#0055b8" fontFamily="Arial, Helvetica, sans-serif" fontWeight="900" fontSize="21" letterSpacing="1.5">ALPINE.</text>
-      </svg>
-    )
+    logoSrc: '/silence/audio logo/ALPINE.webp',
+    scaleClass: 'scale-95 sm:scale-100'
   },
   {
     id: 'RAINBOW',
     name: 'RAINBOW',
-    logo: (
-      <svg viewBox="0 0 150 32" className="h-6 sm:h-7 md:h-9 w-auto">
-        {/* Rainbow Waves Icon */}
-        <circle cx="16" cy="16" r="12" stroke="#b8860b" strokeWidth="2.5" fill="none" strokeDasharray="20 20" transform="rotate(-45 16 16)" />
-        <circle cx="16" cy="16" r="7.5" stroke="#b8860b" strokeWidth="2.5" fill="none" strokeDasharray="12 12" transform="rotate(-45 16 16)" />
-        {/* Rainbow Text */}
-        <text x="36" y="23" fill="#b8860b" fontFamily="Arial, Helvetica, sans-serif" fontWeight="bold" fontSize="22" letterSpacing="0.5">rainbow</text>
-      </svg>
-    )
+    logoSrc: '/silence/audio logo/RAINBOW.webp',
+    scaleClass: 'scale-100 sm:scale-105'
   },
   {
     id: 'ADAMDIGITAL',
     name: 'ADAMDIGITAL',
-    logo: (
-      <svg viewBox="0 0 170 32" className="h-6 sm:h-7 md:h-9 w-auto">
-        {/* Adams Digital Crest Shield */}
-        <path d="M16 2 L28 7 L28 17 Q28 27 16 30 Q4 27 4 17 L4 7 Z" fill="#222" stroke="#d4af37" strokeWidth="1.5" />
-        <path d="M10 8 L22 23 M22 8 L10 23" stroke="#d90429" strokeWidth="2.5" strokeLinecap="round" />
-        {/* Adams Digital Text */}
-        <text x="34" y="21" fill="#1c5434" fontFamily="Arial, Helvetica, sans-serif" fontWeight="bold" fontSize="15" letterSpacing="0.8">ADAMS DIGITAL</text>
-      </svg>
-    )
+    logoSrc: '/silence/audio logo/ADAMS DIGITAL.webp',
+    scaleClass: 'scale-130 sm:scale-140 md:scale-145'
   },
   {
     id: 'CROSSFIRE',
     name: 'CROSSFIRE',
-    logo: (
-      <svg viewBox="0 0 160 32" className="h-6 sm:h-7 md:h-9 w-auto">
-        {/* Crossfire Emblem X */}
-        <path d="M6 5 L24 27 M24 5 L6 27" stroke="#00a843" strokeWidth="4" strokeLinecap="round" />
-        {/* Crossfire Text */}
-        <text x="32" y="22" fill="#00a843" fontFamily="Arial, Helvetica, sans-serif" fontWeight="900" fontSize="18" letterSpacing="1.5">CROSSFIRE</text>
-      </svg>
-    )
+    logoSrc: '/silence/audio logo/CROSSFIRE.webp',
+    scaleClass: 'scale-130 sm:scale-140 md:scale-145'
   }
 ]
 
@@ -171,9 +141,13 @@ export default function SilenceAudioSystemsSection({ products = [] }) {
                   onClick={() => setActiveBrand(brand.id)}
                   className="relative flex flex-col items-center justify-center w-full group cursor-pointer px-1 pt-1 pb-2.5"
                 >
-                  {/* 品牌 Logo 图标 (精致适配，防止碰撞挤压) */}
-                  <div className="flex items-center justify-center mb-1.5 h-4 sm:h-6 md:h-8 transition-transform group-hover:scale-105 max-w-[72px] sm:max-w-[110px] md:max-w-[140px] w-full">
-                    {brand.logo}
+                  {/* 品牌 Logo 图标 (使用官方原版 WebP Logo，按比例平衡放大) */}
+                  <div className="flex items-center justify-center mb-1.5 h-6 sm:h-8 md:h-10 max-w-[90px] sm:max-w-[130px] md:max-w-[160px] w-full">
+                    <img
+                      src={brand.logoSrc}
+                      alt={brand.name}
+                      className={`max-h-full max-w-full object-contain transition-transform duration-200 group-hover:scale-110 ${brand.scaleClass || ''}`}
+                    />
                   </div>
 
                   {/* 品牌名称 */}

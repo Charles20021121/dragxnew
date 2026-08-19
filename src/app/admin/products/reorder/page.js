@@ -245,29 +245,50 @@ export default function ReorderProducts() {
           </p>
 
           {/* Categories Tabs */}
-          <div 
-            className="flex gap-2 overflow-x-auto pb-4 mb-4 scroll-smooth" 
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            <style dangerouslySetInnerHTML={{__html: `
-              div::-webkit-scrollbar { display: none; }
-            `}} />
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => {
-                  setActiveTab(cat);
-                  setSearchTerm(''); // Reset search on tab change
-                }}
-                className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${
-                  activeTab === cat 
-                    ? 'bg-[#1c5434] text-white' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                {formatCategoryName(cat)}
-              </button>
-            ))}
+          <div className="mb-6">
+            <div 
+              className="reorder-category-scroll flex gap-2 overflow-x-auto pb-3 pt-1 scroll-smooth cursor-grab active:cursor-grabbing" 
+              style={{ 
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#94a3b8 #f1f5f9'
+              }}
+            >
+              <style dangerouslySetInnerHTML={{__html: `
+                .reorder-category-scroll::-webkit-scrollbar {
+                  height: 8px;
+                }
+                .reorder-category-scroll::-webkit-scrollbar-track {
+                  background: #f1f5f9;
+                  border-radius: 9999px;
+                }
+                .reorder-category-scroll::-webkit-scrollbar-thumb {
+                  background: #cbd5e1;
+                  border-radius: 9999px;
+                  transition: background-color 0.2s;
+                }
+                .reorder-category-scroll::-webkit-scrollbar-thumb:hover {
+                  background: #1c5434;
+                }
+              `}} />
+              <div className="flex gap-2 min-w-max pb-1">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setActiveTab(cat);
+                      setSearchTerm(''); // Reset search on tab change
+                    }}
+                    className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer ${
+                      activeTab === cat 
+                        ? 'bg-[#1c5434] text-white shadow-sm' 
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {formatCategoryName(cat)}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Search Bar */}
