@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import HeroSection from "@/components/HeroSection"
 import SilenceLuxurySection from '@/components/SilenceLuxurySection'
 import SilenceProtectionSection from '@/components/SilenceProtectionSection'
@@ -22,8 +23,40 @@ export default function SilencePage() {
         <img src="/silence/Phone/premium.webp" alt="Silence Intro 1 Mobile" className="w-full h-auto block md:hidden" />
         
         {/* Banner 2: Car Audio Enhancement */}
-        <img src="/silence/New folder/DX Silence PC 2-03.webp" alt="Silence Intro 2" className="w-full h-auto hidden md:block" />
-        <img src="/silence/Phone/car audio.webp" alt="Silence Intro 2 Mobile" className="w-full h-auto block md:hidden" />
+        <div className="relative w-full hidden md:block">
+          <img src="/silence/New folder/DX Silence PC 2-03.webp" alt="Silence Intro 2" className="w-full h-auto" />
+          <div className="absolute top-[52%] right-[4%] w-[38%] flex justify-center z-10">
+            <Link
+              href="/products/silence"
+              className="inline-flex items-center justify-center gap-2 font-bold tracking-wider uppercase transition-all duration-300 rounded-full border border-[#8ce0e7]/60 text-black bg-[#8ce0e7] hover:bg-[#a6edf3] hover:shadow-[0_0_25px_rgba(140,224,231,0.6)] hover:scale-105 active:scale-95 cursor-pointer"
+              style={{
+                fontFamily: 'Geometos, sans-serif',
+                padding: '0.65vw 1.8vw',
+                fontSize: '1vw',
+              }}
+            >
+              <span>Learn More</span>
+              <svg className="w-[1vw] h-[1vw]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+        <div className="relative w-full block md:hidden">
+          <img src="/silence/Phone/car audio.webp" alt="Silence Intro 2 Mobile" className="w-full h-auto" />
+          <div className="absolute top-[62%] right-[4%] w-[48%] flex justify-center z-10">
+            <Link
+              href="/products/silence"
+              className="inline-flex items-center justify-center gap-1.5 py-1.5 px-3.5 rounded-full bg-[#8ce0e7] hover:bg-[#a6edf3] text-black font-bold text-[10px] tracking-wider uppercase shadow-[0_0_15px_rgba(140,224,231,0.5)] active:scale-95 transition-all duration-200"
+              style={{ fontFamily: 'Geometos, sans-serif' }}
+            >
+              <span>Learn More</span>
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
 
         {/* Banner 3: Why Upgrade Your Car Audio? */}
         <img src="/silence/New%20folder%20(2)/DX%20Silence%20PAGE%20FA%203-04.webp" alt="Why Upgrade Your Car Audio" className="w-full h-auto hidden md:block" />
