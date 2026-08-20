@@ -4,10 +4,64 @@ import pool from '@/lib/db';
 import { notFound } from "next/navigation";
 
 export const revalidate = 3600;
+export const dynamicParams = true;
 
 // Helper: name → URL slug
 const toSlug = (name) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+export async function generateStaticParams() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const [rows] = await connection.query(`
+      SELECT categories, Name
+      FROM products
+      WHERE Name IS NOT NULL AND Name != ''
+        AND (same IS NULL OR same = '' OR same = Id)
+        AND Url IS NOT NULL AND Url != ''
+    `);
+
+    const params = [];
+    const seen = new Set();
+
+    for (const row of rows) {
+      if (!row.categories || !row.Name) continue;
+      const slug = toSlug(row.Name);
+      if (!slug) continue;
+
+      const cat = row.categories.toLowerCase().trim();
+      const key = `${cat}:${slug}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        params.push({ category: cat, slug });
+      }
+
+      // If category is silence or soundproof, alias both
+      if (cat === 'silence') {
+        const soundproofKey = `soundproof:${slug}`;
+        if (!seen.has(soundproofKey)) {
+          seen.add(soundproofKey);
+          params.push({ category: 'soundproof', slug });
+        }
+      } else if (cat === 'soundproof') {
+        const silenceKey = `silence:${slug}`;
+        if (!seen.has(silenceKey)) {
+          seen.add(silenceKey);
+          params.push({ category: 'silence', slug });
+        }
+      }
+    }
+    return params;
+  } catch (error) {
+    console.warn('generateStaticParams fallback for products:', error?.message);
+    return [];
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
 
 // Helper: format additional_images string → array
 const parseAdditionalImages = (str) =>

@@ -4,6 +4,53 @@ import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
 export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const [rows] = await connection.query(`
+      SELECT categories, Name
+      FROM gallery
+      WHERE Name IS NOT NULL AND Name != ''
+        AND (same IS NULL OR same = '' OR same = Id)
+        AND Url IS NOT NULL AND Url != ''
+    `);
+
+    const params = [];
+    const seen = new Set();
+
+    for (const row of rows) {
+      if (!row.categories || !row.Name) continue;
+      const productSlug = row.Name.toLowerCase().replace(/\s+/g, '-');
+      if (!productSlug) continue;
+
+      const cat = row.categories.toLowerCase().trim();
+      const key = `${cat}:${productSlug}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        params.push({ category: cat, product: productSlug });
+      }
+
+      if (cat === 'alphard' || cat === 'vellfire') {
+        const combKey = `alphard-vellfire:${productSlug}`;
+        if (!seen.has(combKey)) {
+          seen.add(combKey);
+          params.push({ category: 'alphard-vellfire', product: productSlug });
+        }
+      }
+    }
+    return params;
+  } catch (error) {
+    console.warn('generateStaticParams fallback for gallery products:', error?.message);
+    return [];
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
 
 // Cached fetcher to deduplicate queries between metadata and page render
 const getGalleryProductBySlug = cache(async (category, productSlug) => {

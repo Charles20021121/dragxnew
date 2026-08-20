@@ -2,8 +2,39 @@ import ProductCategoryPage from "@/components/ProductCategoryPage";
 import pool from "@/lib/db";
 import { notFound } from "next/navigation";
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const [rows] = await connection.query(`
+      SELECT DISTINCT categories 
+      FROM products 
+      WHERE categories IS NOT NULL AND categories != ''
+    `);
+    const params = [];
+    const seen = new Set();
+    for (const row of rows) {
+      const cat = row.categories.toLowerCase().trim();
+      if (!seen.has(cat)) {
+        seen.add(cat);
+        params.push({ category: cat });
+      }
+    }
+    if (!seen.has('silence')) params.push({ category: 'silence' });
+    if (!seen.has('soundproof')) params.push({ category: 'soundproof' });
+    return params;
+  } catch (error) {
+    console.warn('generateStaticParams fallback for product categories:', error?.message);
+    return [];
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
 
 export default async function CategoryProducts({ params }) {
   const { category } = await params;

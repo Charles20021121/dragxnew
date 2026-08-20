@@ -3,6 +3,37 @@ import pool from '@/lib/db'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const [rows] = await connection.query(`
+      SELECT DISTINCT categories 
+      FROM gallery 
+      WHERE categories IS NOT NULL AND categories != ''
+    `);
+    const params = [];
+    const seen = new Set();
+    for (const row of rows) {
+      const cat = row.categories.toLowerCase().trim();
+      if (!seen.has(cat)) {
+        seen.add(cat);
+        params.push({ category: cat });
+      }
+    }
+    if (!seen.has('alphard-vellfire')) params.push({ category: 'alphard-vellfire' });
+    return params;
+  } catch (error) {
+    console.warn('generateStaticParams fallback for gallery categories:', error?.message);
+    return [];
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
 
 export default async function GalleryCategory({ params }) {
   const { category } = await params;
