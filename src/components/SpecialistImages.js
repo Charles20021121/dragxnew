@@ -62,7 +62,7 @@ export default function SpecialistImages() {
                 <Image src="/aboutus/DRAGX LOGO-01.png" alt="DragX Logo" fill className="object-contain object-left" />
               </div>
               <p className="text-gray-200 text-justify mb-[1.5vw] pr-[5%]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.05vw', lineHeight: '1.6' }}>
-                Welcome to DragX! We're passionate about car customization, offering a wide range of high-quality accessories including interior upgrades, exterior enhancements, performance boosters, electronics, and entertainment systems. Our mission is to empower you to personalize your vehicle, elevating its aesthetics, comfort, and performance.
+                Welcome to DragX! We're passionate about car customization, offering a wide range of high-quality accessories including, interior upgrades, exterior enhancements, performance boosters, electronics, and entertainment systems. Our mission is to empower you to personalize your vehicle, elevating its aesthetics, comfort, and performance.
               </p>
               <p className="text-gray-200 text-justify mb-[1.5vw] pr-[5%]" style={{ fontFamily: 'Gotham-Book, Gotham, sans-serif', fontSize: '1.05vw', lineHeight: '1.6' }}>
                 At DragX, we prioritize excellence in both products and services. Whether you're looking to enhance your car's sleekness, upgrade its interior for comfort, or boost its performance, we have the expertise and selection to meet your needs. Join us on a journey to transform your car into a true reflection of your style and personality.
