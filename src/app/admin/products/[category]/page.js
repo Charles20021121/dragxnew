@@ -7,6 +7,7 @@ import Link from 'next/link'
 import CategoryManagerModal from '@/components/CategoryManagerModal';
 import SilenceAdminManager from '@/components/SilenceAdminManager';
 import LynoAdminManager from '@/components/LynoAdminManager';
+import { uploadAdminImage } from '@/lib/imageCompressor';
 
 export default function CategoryProducts({ params: paramsPromise }) {
   const params = use(paramsPromise);
@@ -120,24 +121,14 @@ export default function CategoryProducts({ params: paramsPromise }) {
 
       // 如果有選擇文件，先上傳图片到 R2
       if (selectedFile) {
-        setUploadProgress(1);
-        const imageFormData = new FormData();
-        imageFormData.append('file', selectedFile);
-
-        const uploadRes = await fetch('/api/admin/upload', {
-          method: 'POST',
-          body: imageFormData
-        });
-
-        if (!uploadRes.ok) throw new Error('Upload to R2 failed');
-
-        const uploadData = await uploadRes.json();
+        setUploadProgress(10);
+        const uploadData = await uploadAdminImage(selectedFile);
         setUploadProgress(100);
 
         // 更新表單數據中的圖片相關字段
         updatedFormData = {
           ...updatedFormData,
-          Url: uploadData.secure_url,
+          Url: uploadData.secure_url || uploadData.url,
           publicId: uploadData.public_id
         };
       }

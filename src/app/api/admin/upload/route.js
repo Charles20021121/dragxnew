@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import sharp from 'sharp';
 
 const ACCOUNT_ID = "0ec9e4b9094d340d1e3b9530f8a07bcc"; 
 const ACCESS_KEY_ID = "c3137344dab444cc7d472e85a295c86c";
@@ -25,44 +24,43 @@ export async function POST(request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    console.log('Upload request - name:', file.name, 'size:', file.size, 'type:', file.type);
+    console.log('Upload stream request - name:', file.name, 'size:', file.size, 'type:', file.type);
 
     const buffer = Buffer.from(await file.arrayBuffer());
     
-    // 生成随机 Public ID 或使用时间戳
+    // 生成随机 Public ID
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(7);
     const publicId = `dragx_${timestamp}_${randomStr}`;
 
-    // 使用 Sharp 将上传的图片转换为 WebP 并压缩
-    let webpBuffer;
-    try {
-      webpBuffer = await sharp(buffer)
-        .webp({ quality: 80 })
-        .toBuffer();
-    } catch (sharpError) {
-      console.error('Sharp conversion error:', sharpError.message);
-      return NextResponse.json({ 
-        error: `图片格式不支持或文件损坏: ${sharpError.message}` 
-      }, { status: 400 });
+    // 智能识别扩展名与 MIME 类型
+    let contentType = file.type || 'image/webp';
+    let ext = 'webp';
+
+    if (contentType.includes('gif')) {
+      ext = 'gif';
+    } else if (contentType.includes('png')) {
+      ext = 'png';
+    } else if (contentType.includes('jpeg') || contentType.includes('jpg')) {
+      ext = 'jpg';
+    } else if (contentType.includes('svg')) {
+      ext = 'svg';
     }
 
-    console.log('Converted to WebP, size:', webpBuffer.length, 'bytes');
-
-    const objectKey = `dragx/dragx/${publicId}.webp`;
+    const objectKey = `dragx/dragx/${publicId}.${ext}`;
 
     const command = new PutObjectCommand({
       Bucket: BUCKET_NAME,
       Key: objectKey,
-      Body: webpBuffer,
-      ContentType: "image/webp",
+      Body: buffer,
+      ContentType: contentType,
     });
 
     await s3Client.send(command);
 
     const r2Url = `https://pub-332f16c726da4f048f11221d7baacb53.r2.dev/${objectKey}`;
 
-    console.log('Upload success:', r2Url);
+    console.log('Upload success (0 CPU stream):', r2Url);
 
     return NextResponse.json({
       success: true,

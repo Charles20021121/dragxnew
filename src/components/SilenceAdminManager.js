@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { uploadAdminImage } from '@/lib/imageCompressor'
 
 const CAR_TYPES = ['HATCHBACK', 'SEDAN', 'SUV', 'MPV']
 const TOP_PACKAGES = ['BASIC', 'STANDARD', 'PRO']
@@ -133,14 +134,7 @@ export default function SilenceAdminManager({
     setUploadingKey(key)
 
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const res = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData
-      })
-      const data = await res.json()
+      const data = await uploadAdminImage(file)
       const uploadedUrl = data.url || data.secure_url
 
       if (data.success && uploadedUrl) {
@@ -342,18 +336,18 @@ export default function SilenceAdminManager({
 
       // 1. Upload new main image if selected
       if (modalFile) {
-        const formData = new FormData()
-        formData.append('file', modalFile)
-        const uploadRes = await fetch('/api/admin/upload', {
-          method: 'POST',
-          body: formData
-        })
-        const uploadData = await uploadRes.json()
-        if (uploadData.success && (uploadData.url || uploadData.secure_url)) {
-          mainImageUrl = uploadData.url || uploadData.secure_url
-          mainPublicId = uploadData.public_id || ''
-        } else {
-          showToast('error', 'Failed to upload main image')
+        try {
+          const uploadData = await uploadAdminImage(modalFile)
+          if (uploadData.success && (uploadData.url || uploadData.secure_url)) {
+            mainImageUrl = uploadData.url || uploadData.secure_url
+            mainPublicId = uploadData.public_id || ''
+          } else {
+            showToast('error', 'Failed to upload main image')
+            setIsModalSaving(false)
+            return
+          }
+        } catch (uploadErr) {
+          showToast('error', uploadErr.message || 'Failed to upload main image')
           setIsModalSaving(false)
           return
         }
@@ -403,30 +397,28 @@ export default function SilenceAdminManager({
         // 2. Upload any additional gallery images
         if (newExtraFiles.length > 0 && mainId) {
           for (const file of newExtraFiles) {
-            const extraFormData = new FormData()
-            extraFormData.append('file', file)
-            const upRes = await fetch('/api/admin/upload', {
-              method: 'POST',
-              body: extraFormData
-            })
-            const upData = await upRes.json()
-            if (upData.success && (upData.url || upData.secure_url)) {
-              await fetch('/api/admin/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  categories: 'silence',
-                  Name: modalForm.Name.trim(),
-                  price: modalForm.price,
-                  filter: modalForm.filter,
-                  filter1: modalForm.filter1,
-                  custom_filter: modalForm.custom_filter,
-                  Url: upData.url || upData.secure_url,
-                  publicId: upData.public_id || '',
-                  same: mainId,
-                  date: new Date().toISOString().replace('T', ' ').split('.')[0]
+            try {
+              const upData = await uploadAdminImage(file)
+              if (upData.success && (upData.url || upData.secure_url)) {
+                await fetch('/api/admin/products', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    categories: 'silence',
+                    Name: modalForm.Name.trim(),
+                    price: modalForm.price,
+                    filter: modalForm.filter,
+                    filter1: modalForm.filter1,
+                    custom_filter: modalForm.custom_filter,
+                    Url: upData.url || upData.secure_url,
+                    publicId: upData.public_id || '',
+                    same: mainId,
+                    date: new Date().toISOString().replace('T', ' ').split('.')[0]
+                  })
                 })
-              })
+              }
+            } catch (extraErr) {
+              console.error('Error uploading extra file:', extraErr)
             }
           }
         }

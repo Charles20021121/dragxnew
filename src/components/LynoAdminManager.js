@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { uploadAdminImage } from '@/lib/imageCompressor'
 
 export default function LynoAdminManager() {
   const [loading, setLoading] = useState(true)
@@ -137,26 +138,21 @@ export default function LynoAdminManager() {
   // Upload image handler to Cloudflare R2
   const handleUploadImage = async (file, type) => {
     if (!file) return
-    const formData = new FormData()
-    formData.append('file', file)
 
     try {
       if (type === 'screen') setUploadingScreenImg(true)
       if (type === 'product') setUploadingProductImg(true)
       if (type === 'newModel') setUploadingNewModelImg(true)
 
-      const res = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData
-      })
-      const data = await res.json()
-      if (data.url) {
+      const data = await uploadAdminImage(file)
+      if (data.url || data.secure_url) {
+        const uploadedUrl = data.url || data.secure_url
         if (type === 'screen') {
-          setModalScreenImage(data.url)
+          setModalScreenImage(uploadedUrl)
         } else if (type === 'product') {
-          setEditProductImage(data.url)
+          setEditProductImage(uploadedUrl)
         } else if (type === 'newModel') {
-          setNewModelImage(data.url)
+          setNewModelImage(uploadedUrl)
         }
         showToast('success', 'Image uploaded successfully!')
       } else {

@@ -4,6 +4,7 @@ import GalleryCategoryPage from '@/components/GalleryCategoryPage'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { uploadAdminImage } from '@/lib/imageCompressor'
 
 export default function GalleryCategory() {
   const params = useParams()
@@ -78,19 +79,9 @@ export default function GalleryCategory() {
 
       // 上傳圖片到 R2
       if (selectedFile) {
-        const uploadFormData = new FormData()
-        uploadFormData.append('file', selectedFile)
-        
-        const uploadResponse = await fetch('/api/admin/upload', {
-          method: 'POST',
-          body: uploadFormData
-        })
-
-        if (!uploadResponse.ok) throw new Error('Image upload to R2 failed')
-        
-        const uploadData = await uploadResponse.json()
+        const uploadData = await uploadAdminImage(selectedFile)
         imageData = {
-          Url: uploadData.secure_url,
+          Url: uploadData.secure_url || uploadData.url,
           publicId: uploadData.public_id
         }
       }

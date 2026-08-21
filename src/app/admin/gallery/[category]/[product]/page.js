@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence, Reorder } from 'framer-motion'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import { uploadAdminImage } from '@/lib/imageCompressor'
 
 export default function GalleryProductPage() {
   const params = useParams()
@@ -310,16 +311,7 @@ export default function GalleryProductPage() {
         const item = selectedNewImages[index];
         const file = item.file; // Access .file property
 
-        const uploadFormData = new FormData();
-        uploadFormData.append('file', file);
-
-        const uploadRes = await fetch('/api/admin/upload', {
-          method: 'POST',
-          body: uploadFormData
-        });
-
-        if (!uploadRes.ok) throw new Error('Failed to upload image to R2');
-        const uploadData = await uploadRes.json();
+        const uploadData = await uploadAdminImage(file);
 
         // Default logic: New uploads get current time.
         // Since we sort ASC (Oldest First), new uploads (Now) will be > Old uploads.
@@ -383,16 +375,7 @@ export default function GalleryProductPage() {
 
     setIsUploading(true);
     try {
-      const uploadFormData = new FormData();
-      uploadFormData.append('file', file);
-
-      const uploadRes = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: uploadFormData
-      });
-
-      if (!uploadRes.ok) throw new Error('Failed to upload new image to R2');
-      const uploadData = await uploadRes.json();
+      const uploadData = await uploadAdminImage(file);
 
       // 2. Call PATCH API to replace image and delete old one
       const response = await fetch(`/api/admin/gallery/${params.category}/${params.product}`, {

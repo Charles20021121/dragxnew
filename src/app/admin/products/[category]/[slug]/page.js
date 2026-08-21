@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { useRouter } from 'next/navigation';
 import CategoryManagerModal from '@/components/CategoryManagerModal';
+import { uploadAdminImage } from '@/lib/imageCompressor';
 
 export default function ProductPage({ params: paramsPromise }) {
   const router = useRouter();
@@ -300,21 +301,12 @@ export default function ProductPage({ params: paramsPromise }) {
       let completedFiles = 0;
       const uploadedImages = [];
 
-      // 順序上傳到 Cloudinary，實時更新進度
+      // 順序上傳到 R2，實時更新進度
       for (const file of selectedFiles) {
-        const uploadFormData = new FormData();
-        uploadFormData.append('file', file);
-
-        const res = await fetch('/api/admin/upload', {
-          method: 'POST',
-          body: uploadFormData
-        });
-
-        if (!res.ok) throw new Error('Upload to R2 failed');
-        const data = await res.json();
+        const data = await uploadAdminImage(file);
 
         uploadedImages.push({
-          Url: data.secure_url,
+          Url: data.secure_url || data.url,
           publicId: data.public_id
         });
 

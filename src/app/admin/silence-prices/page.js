@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { uploadAdminImage } from '@/lib/imageCompressor'
 
 export default function SilencePricesAdminPage() {
   const [prices, setPrices] = useState([])
@@ -65,17 +66,9 @@ export default function SilencePricesAdminPage() {
     setError(null)
 
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const res = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData
-      })
-
-      const data = await res.json()
-      if (data.success && data.url) {
-        updateItemField(category, carType, field, data.url)
+      const data = await uploadAdminImage(file)
+      if (data.success && (data.url || data.secure_url)) {
+        updateItemField(category, carType, field, data.url || data.secure_url)
       } else {
         setError(data.error || 'Image upload failed')
       }
